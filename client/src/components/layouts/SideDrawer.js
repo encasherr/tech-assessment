@@ -17,6 +17,7 @@ const MenuItems = [
     { routeName: 'dashboard', routeCaption: 'Dashboard' },
     { routeName: 'mcq', routeCaption: 'Questions' },
     { routeName: 'categories', routeCaption: 'Categories' },
+    { routeName: 'candidates', routeCaption: 'Candidates' },
     { routeName: 'users', routeCaption: 'Users' }
 ];
 

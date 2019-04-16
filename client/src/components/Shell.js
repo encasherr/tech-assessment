@@ -2,33 +2,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
-// import Drawer from '@material-ui/core/Drawer';
-// import AppBar from '@material-ui/core/AppBar';
-// import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
-// import IconButton from '@material-ui/core/IconButton';
-// import MenuIcon from '@material-ui/icons/Menu';
-// import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-// import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-// import ListItem from '@material-ui/core/ListItem';
-// import ListItemIcon from '@material-ui/core/ListItemIcon';
-// import ListItemText from '@material-ui/core/ListItemText';
-// import InboxIcon from '@material-ui/icons/MoveToInbox';
-// import MailIcon from '@material-ui/icons/Mail';
 import { Route, Link, BrowserRouter as Router } from 'react-router-dom'
 
 import Header from './layouts/Header';
 import SideDrawer from './layouts/SideDrawer';
 
-import McqComponent from './Mcq/McqList';
-import AddMcqComponent from './Mcq/AddMcq';
-import CategoriesComponent from './Categories/CategoryList';
-import AddCategoryComponent from './Categories/AddCategory';
-import DashboardComponent from './Dashboard';
-import UsersComponent from './Users';
+// import McqComponent from './Mcq/McqList';
+// import AddMcqComponent from './Mcq/AddMcq';
+// import CategoriesComponent from './Categories/CategoryList';
+// import AddCategoryComponent from './Categories/AddCategory';
+// import DashboardComponent from './Dashboard';
+// import UsersComponent from './Users';
+import Routes from './Routes';
 
 const drawerWidth = 240;
 
@@ -124,13 +113,14 @@ class Shell extends React.Component {
         <main className={classes.content}>
           <div className={classes.toolbar} />
             <div>
-            <Route exact path="/" component={DashboardComponent} />
+              <Routes />
+            {/* <Route exact path="/" component={DashboardComponent} />
             <Route path="/dashboard" component={DashboardComponent} />
             <Route path="/mcq" component={McqComponent} />
             <Route path="/addMcq" component={AddMcqComponent} />
             <Route path="/categories" component={CategoriesComponent} />
             <Route path="/addCategory" component={AddCategoryComponent} />
-            <Route path="/users" component={UsersComponent} />
+            <Route path="/users" component={UsersComponent} /> */}
             </div>
         </main>
         </Router>

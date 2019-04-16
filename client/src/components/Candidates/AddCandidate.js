@@ -17,7 +17,7 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import { CardHeader } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 
-class AddCategory extends Component {
+class AddCandidate extends Component {
     constructor(props) {
         super(props);
     }
@@ -36,7 +36,7 @@ class AddCategory extends Component {
                         +
                         </Avatar>
                     }
-                    title="Add Category">
+                    title="Add Candidate">
                     </CardHeader>
                     <CardContent>
                     <FormControl variant="outlined" style={{width:"30%"}}>
@@ -102,4 +102,4 @@ const styles = theme => ({
         marginTop: theme.spacing.unit * 2,
       },
 });
-export default AddCategory;
+export default AddCandidate;
