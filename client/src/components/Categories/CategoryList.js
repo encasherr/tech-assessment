@@ -1,20 +1,17 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Card from '@material-ui/core/Card';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import { CardHeader, CardContent, CardActions, IconButton } from '@material-ui/core';
+import { CardHeader, CardContent, IconButton } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import ListIcon from '@material-ui/icons/ViewHeadline';
 import SearchIcon from '@material-ui/icons/Search';
 import CloseIcon from '@material-ui/icons/Close';
 import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField'
-import Hidden from '@material-ui/core/Hidden';
 import Collapse from '@material-ui/core/Collapse';
-import Zoom from '@material-ui/core/Zoom';
 
 const CategoryList = (props) => {
         console.log(props);

@@ -1,8 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import AddMcqComponent from '../components/Mcq/AddMcq';
-import AddAnswerOptionComponent from '../components/Mcq/AddAnswerOption';
-import CategoryList from '../components/Categories/CategoryList';
 import {    AddMcq, FetchMcqs, UpdateMcq, FetchCategories, FetchSkills, 
             CloseSnackbar, CurrentMcqFieldChange, CurrentAnswerFieldChange,
             OpenSnackbar, SelectMcq, AddAnswerChoice,

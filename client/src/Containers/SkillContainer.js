@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import AddSkillComponent from '../components/Skills/AddSkill';
 import SkillList from '../components/Skills/SkillList';

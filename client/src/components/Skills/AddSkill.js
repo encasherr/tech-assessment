@@ -1,32 +1,14 @@
-import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+import React from 'react';
 import TextField from '@material-ui/core/TextField'
-import ReduxTextField from '@material-ui/core/TextField'
-import Input from '@material-ui/core/Input';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
-import FilledInput from '@material-ui/core/FilledInput';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
 import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import CardActionArea from '@material-ui/core/CardActionArea';
 import { CardHeader, Typography } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Loading from '../lib/LoadingComponent';
-import { connect } from 'react-redux';
-import { reduxForm } from 'redux-form';
-import { AddCategory } from '../../actions/CategoryActions';
-import { Link } from 'react-router-dom';
 import AddIcon from '@material-ui/icons/Add';
-import EditIcon from '@material-ui/icons/Edit';
-import IconButton from '@material-ui/core/IconButton';
-import classnames from 'classnames';
-
 
 const AddSkillComponent = (props) => {
     let { model } = props;

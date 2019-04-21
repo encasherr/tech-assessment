@@ -1,6 +1,5 @@
 import axios from 'axios';
 import config from '../config';
-import { log } from 'util';
 
 export const ADD_CATEGORY_BEGIN = 'ADD_CATEGORY_BEGIN';
 export const ADD_CATEGORY_SUCCESS = 'ADD_CATEGORY_SUCCESS';

@@ -1,13 +1,10 @@
 import React from 'react';
-import McqComponent from './Mcq/McqList';
-import AddMcqComponent from './Mcq/AddMcq';
-import CategoriesComponent from './Categories/CategoryList';
 import AddCategoryComponent from './Categories/AddCategory';
 import CandidatesComponent from './Candidates/CandidateList';
 import AddCandidateComponent from './Candidates/AddCandidate';
 import DashboardComponent from './Dashboard';
 import UsersComponent from './Users';
-import { Route, Link, BrowserRouter as Router } from 'react-router-dom'
+import { Route } from 'react-router-dom'
 import CategoriesContainer from '../Containers/CategoryContainer';
 import SkillsContainer from '../Containers/SkillContainer';
 import McqContainer from '../Containers/McqContainer';
