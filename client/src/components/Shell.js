@@ -105,24 +105,15 @@ class Shell extends React.Component {
         <Header classes={classes} 
                 openState={this.state.open} 
                 onDrawerOpen={this.handleDrawerOpen}/>
-          <Router>
-        <SideDrawer classes={classes} 
-                openState={this.state.open} 
-                onDrawerClose={this.handleDrawerClose}
-                theme={theme}/>
-        <main className={classes.content}>
-          <div className={classes.toolbar} />
-            <div>
-              <Routes />
-            {/* <Route exact path="/" component={DashboardComponent} />
-            <Route path="/dashboard" component={DashboardComponent} />
-            <Route path="/mcq" component={McqComponent} />
-            <Route path="/addMcq" component={AddMcqComponent} />
-            <Route path="/categories" component={CategoriesComponent} />
-            <Route path="/addCategory" component={AddCategoryComponent} />
-            <Route path="/users" component={UsersComponent} /> */}
-            </div>
-        </main>
+        <Router>
+          <SideDrawer classes={classes} 
+                  openState={this.state.open} 
+                  onDrawerClose={this.handleDrawerClose}
+                  theme={theme}/>
+          <main className={classes.content}>
+            <div className={classes.toolbar} />
+                <Routes />
+          </main>
         </Router>
       </div>
     );

@@ -18,135 +18,134 @@ import { CardHeader } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Grid from '@material-ui/core/Grid';
 import AnswerOptions from './AnswerOptions';
+import AddAnswerOptionComponent from './AddAnswerOption';
 import SelectExperience from './SelectExperience';
+import LoadingComponent from '../lib/LoadingComponent';
+import AddIcon from '@material-ui/icons/Add';
 
-class AddMcq extends Component {
-    constructor(props) {
-        super(props);
-    }
+const AddMcq = (props) => {
+        let { model } = props;
 
-    handleChange = (ctl) => {
-
-    }
-
-    render = () => {
- 
         return (
-            <Grid container spacing={0}>
-                <Grid item xs={6} sm={6}>
-
-                    <Card style={{padding: "2%"}}>
+            <Card>
+        {!model && <LoadingComponent />} 
+        {model &&    
                         <form  noValidate autoComplete="off">
                             <CardHeader avatar={
-                                <Avatar aria-label="Recipe">
-                                +
+                                <Avatar aria-label="Recipe" style={styles.avatar}>
+                                    <AddIcon />
                                 </Avatar>
                             }
                             title="Add MCQ"
                             subheader="Multiple Choice Question">
                             </CardHeader>
                             <CardContent>
-                            <FormControl variant="outlined" style={{width:"80%"}}>
-                            <TextField
-                                id="outlined-name"
-                                label="Title"
-                                className={styles.dense}
-                                value=""
-                                onChange={this.handleChange('title')}
-                                margin="normal"
-                                variant="outlined"
-                            />
-                            </FormControl>
-                            <br></br>
-                            <FormControl variant="outlined" style={{width:"80%"}}>
-                            <TextField
-                                id="outlined-name"
-                                label="Description"
-                                multiline
-                                rows="4"
-                                className={styles.dense}
-                                onChange={this.handleChange('description')}
-                                margin="normal"
-                                variant="outlined"
-                            />
-                            </FormControl>
-                            <br></br>
-                            <br></br>
-                            <FormControl variant="outlined" style={{width:"50%"}}>
-                                <InputLabel
-                                    ref={ref => {
-                                    this.InputLabelRef = ref;
-                                    }}
-                                    
-                                    htmlFor="outlined-age-simple"
-                                >
-                                    Category
-                                </InputLabel>
-                                <Select
-                                    onChange={this.handleChange}
-                                    input={
-                                    <OutlinedInput
-                                        name="age"
-                                        id="outlined-age-simple"
+                                <FormControl variant="outlined" style={{width:"50%"}}>
+                                    <InputLabel htmlFor="outlined-category-simple">
+                                        Category
+                                    </InputLabel>
+                                    <Select
+                                        onChange={(e) => props.onFieldChange(e.target.value, 'category', props.model)}
+                                        value={model.category}
+                                        input={
+                                        <OutlinedInput
+                                            labelWidth={65}
+                                            name="category"
+                                            id="outlined-category-simple"
+                                        />
+                                        }>
+                                        <MenuItem value="">
+                                        <em>None</em>
+                                        </MenuItem>
+                                        {props.categories && props.categories.length > 0 &&
+                                            props.categories.map((item, index) => {
+                                            return (
+                                                <MenuItem key={index} value={item.title}>{item.title}</MenuItem>
+                                            )
+                                        })}
+                                    </Select>
+                                </FormControl>
+                                <br></br>
+                                <FormControl variant="outlined" style={{width:"80%"}}>
+                                    <TextField
+                                        id="outlined-name"
+                                        label="Question"
+                                        className={styles.dense}
+                                        value={model.question}
+                                        onChange={(e) => props.onFieldChange(e.target.value, 'question', props.model)}
+                                        margin="normal"
+                                        variant="outlined"
                                     />
-                                    }
-                                >
-                                    <MenuItem value="">
-                                    <em>None</em>
-                                    </MenuItem>
-                                    <MenuItem value={10}>Ten</MenuItem>
-                                    <MenuItem value={20}>Twenty</MenuItem>
-                                    <MenuItem value={30}>Thirty</MenuItem>
-                                </Select>
-                            </FormControl>
-                            <br></br>
-                            <br></br>
-                            <FormControl variant="outlined" style={{width:"50%"}}>
-                            <SelectExperience />
-                            </FormControl>
+                                </FormControl>
+                                <br></br>
+                                <FormControl variant="outlined" style={{width:"80%"}}>
+                                    <TextField
+                                        id="outlined-name"
+                                        label="Description"
+                                        multiline
+                                        rows="4"
+                                        className={styles.dense}
+                                        onChange={(e) => props.onFieldChange(e.target.value, 'description', props.model)}
+                                        margin="normal"
+                                        variant="outlined"
+                                    />
+                                </FormControl>
+                                <br></br>
+                                <br></br>
+                                <FormControl variant="outlined" style={{width:"50%"}}>
+                                    <InputLabel
+                                        htmlFor="outlined-skill-simple">
+                                        Skill
+                                    </InputLabel>
+                                    <Select
+                                        onChange={(e) => props.onFieldChange(e.target.value, 'skill', props.model)}
+                                        value={model.skill}
+                                        input={
+                                        <OutlinedInput
+                                            labelWidth={30}
+                                            name="skill"
+                                            id="outlined-skill-simple"
+                                        />
+                                        }>
+                                        <MenuItem value="">
+                                        <em>None</em>
+                                        </MenuItem>
+                                        {props.skills && props.skills.map((item, index) => {
+                                            return (
+                                                <MenuItem key={index} value={item.skill}>{item.skill}</MenuItem>
+                                            )
+                                        })}
+                                    </Select>
+                                </FormControl>
+                                <br></br>
+                                <br></br>
+                                <FormControl variant="outlined" style={{width:"50%"}}>
+                                    <SelectExperience />
+                                </FormControl>
+                                <br></br>
+                                <br></br>
+                                <AddAnswerOptionComponent>
+                                    {props}
+                                </AddAnswerOptionComponent>
                             </CardContent>
                             <CardActions>
-                            <Button variant="contained" size="large" color="primary">
+                            <Button variant="contained" size="large" color="primary" 
+                                    onClick={ () => props.onSubmit(props.model)}>
                                 Submit
                             </Button>
                             </CardActions>
                         </form>
+        }
                     </Card>
-
-                </Grid>
-                <Grid item xs={6} sm={6}>
-
-                    <AnswerOptions />
-                    
-                </Grid>
-            </Grid>
+                   
         );
-    }
 }
 const styles = theme => ({
-    container: {
-    //   display: 'flex',
-    //   flexWrap: 'wrap',
-    //   flex: 2
-    padding: "20%"
+    formControl: {
+        width: '70%',
     },
-    textField: {
-    //   marginLeft: theme.spacing.unit,
-    //   marginRight: theme.spacing.unit,
-    },
-    dense: {
-      marginTop: "16px",
-      marginLeft: "30px"
-    },
-    root: {
-        display: 'flex',
-        flexWrap: 'wrap',
-      },
-      formControl: {
-        width: 320,
-      },
-      selectEmpty: {
-        marginTop: theme.spacing.unit * 2,
-      },
+    avatar: {
+        backgroundColor: '#555'
+    }
 });
 export default AddMcq;

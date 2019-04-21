@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import TextField from '@material-ui/core/TextField'
+import ReduxTextField from '@material-ui/core/TextField'
 import Input from '@material-ui/core/Input';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import FilledInput from '@material-ui/core/FilledInput';
@@ -14,68 +15,199 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardActionArea from '@material-ui/core/CardActionArea';
-import { CardHeader } from '@material-ui/core';
+import { CardHeader, Typography } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
+import Loading from '../lib/LoadingComponent';
+import { connect } from 'react-redux';
+import { reduxForm } from 'redux-form';
+import { AddCategory } from '../../actions/CategoryActions';
+import { Link } from 'react-router-dom';
+import AddIcon from '@material-ui/icons/Add';
+import EditIcon from '@material-ui/icons/Edit';
+import IconButton from '@material-ui/core/IconButton';
+import classnames from 'classnames';
 
-class AddCategory extends Component {
+
+const AddCategoryComponent = (props) => {
+    let { model } = props;
+    let display = (props && props.editMode) ? 'block' : 'none';
+    return (
+        <Card style={{padding: "4%"}}>
+        {!model && <Loading />} 
+        {model &&    
+            <form  noValidate autoComplete="off">
+                <CardHeader 
+                avatar={
+                    <Avatar aria-label="Recipe" style={styles.avatar}>
+                        {!props.editMode && <AddIcon />}
+                        {props.editMode && <EditIcon />}
+                    </Avatar>
+                    }
+                    action={
+                        <Button style={{display: display}} onClick={() => props.onAdd()}>Add New</Button>
+                    }
+                    title={props.editMode ? 
+                            "Edit Category" :
+                            "Add Category"} 
+                            >
+                </CardHeader>
+                <CardContent>
+                    <FormControl variant="outlined" style={styles.formControl}>
+                        <TextField
+                            id="outlined-name"
+                            label="Title"
+                            value={model.title}
+                            onChange={(e) => props.onFieldChange(e.target.value, 'title', props.model)}
+                            margin="normal"
+                            variant="outlined"
+                        />
+                    </FormControl>
+                    <br></br>
+                    <FormControl variant="outlined" style={styles.formControl}>
+                        <TextField
+                            id="outlined-name"
+                            label="Description"
+                            multiline
+                            rows="4"
+                            value={model.description}
+                            onChange={(e) => props.onFieldChange(e.target.value, 'description', props.model)}
+                            margin="normal"
+                            variant="outlined"
+                        />
+                    </FormControl>
+                    <br></br>
+                    <br></br>
+                </CardContent>
+                <CardActions style={styles.actionButton}>
+                    <Button variant="contained" size="large" color="primary" 
+                                onClick={ () => props.onSubmit(props.model) }>
+                        {props.editMode ? 'Update' : 'Submit'}
+                    </Button>
+                </CardActions>
+            </form>}
+        </Card>
+    );
+}
+export default AddCategoryComponent;
+const styles={
+    formControl: {
+        width: '90%'
+    },
+    actionButton: {
+        marginLeft: '70%'
+    },
+    avatar: {
+        backgroundColor: '#555'
+    }
+}
+/*
+class AddCategoryComponent extends Component {
+    // model = {}; 
     constructor(props) {
         super(props);
+        // this.state = {
+        //     model: {
+        //         title: '',
+        //         description: ''
+        //     }
+        // }
     }
 
-    handleChange = (ctl) => {
-
+    handleChange = (event, ctl) => {
+        this.props.onFieldChange(event.target.value, ctl, this.props.model);
+        console.log('sending model to parent');
+        console.log(this.props.model);
+        // switch(ctl)
+        // {
+        //     case 'title':
+        //     {
+        //         this.model.title = event.target.value;
+        //         break;
+        //     }
+        //     case 'description':
+        //     {
+        //         this.model.description = event.target.value;
+        //         break;
+        //     }
+        // }
+        // this.setState({
+        //     model: this.model
+        // });
     }
+
+    onSubmit = () => {
+        console.log('model to save');
+        console.log(this.props.model);
+
+        // this.props.onSubmit(this.state.model);
+        this.props.onSubmit(this.props.model);
+    }
+
+    
 
     render = () => {
- 
+        let { model } = this.props;
         return (
             <Card style={{padding: "4%"}}>
+            {!model && <Loading />} 
+            {model &&    
                 <form  noValidate autoComplete="off">
                     <CardHeader avatar={
                         <Avatar aria-label="Recipe">
                         +
                         </Avatar>
-                    }
-                    title="Add Category">
+                        }
+                        title="Add Category">
                     </CardHeader>
                     <CardContent>
-                    <FormControl variant="outlined" style={{width:"30%"}}>
-                    <TextField
-                        id="outlined-name"
-                        label="Title"
-                        className={styles.dense}
-                        value=""
-                        onChange={this.handleChange('title')}
-                        margin="normal"
-                        variant="outlined"
-                    />
-                    </FormControl>
-                    <br></br>
-                    <FormControl variant="outlined" style={{width:"30%"}}>
-                    <TextField
-                        id="outlined-name"
-                        label="Description"
-                        multiline
-                        rows="4"
-                        className={styles.dense}
-                        onChange={this.handleChange('description')}
-                        margin="normal"
-                        variant="outlined"
-                    />
-                    </FormControl>
-                    <br></br>
-                    <br></br>
+                        <FormControl variant="outlined" style={{width:"70%"}}>
+                            <TextField
+                                id="outlined-name"
+                                label="Title"
+                                className={styles.dense}
+                                value={model.title}
+                                onChange={(e) => this.handleChange(e, 'title')}
+                                margin="normal"
+                                variant="outlined"
+                            />
+                        </FormControl>
+                        <br></br>
+                        <FormControl variant="outlined" style={{width:"70%"}}>
+                            <TextField
+                                id="outlined-name"
+                                label="Description"
+                                multiline
+                                rows="4"
+                                value={model.description}
+                                className={styles.dense}
+                                onChange={(e) => this.handleChange(e, 'description')}
+                                margin="normal"
+                                variant="outlined"
+                            />
+                        </FormControl>
+                        <br></br>
+                        <br></br>
                     </CardContent>
                     <CardActions>
-                    <Button variant="contained" size="large" color="primary">
-                        Submit
-                    </Button>
+                        <Button variant="contained" size="large" color="primary" 
+                                    onClick={ () => this.onSubmit() }>
+                            Submit
+                        </Button>
                     </CardActions>
-                </form>
+                </form>}
             </Card>
         );
     }
 }
+// const mapStateToProps = state => ({
+//     ...state
+// });
+// const mapDispatchToProps = dispatch => ({
+//     AddCategory: (model) => dispatch(AddCategory(model))
+// });
+// export default connect(mapStateToProps, mapDispatchToProps)(AddCategoryComponent);
+export default AddCategoryComponent;
+
 const styles = theme => ({
     container: {
     //   display: 'flex',
@@ -102,4 +234,4 @@ const styles = theme => ({
         marginTop: theme.spacing.unit * 2,
       },
 });
-export default AddCategory;
+*/

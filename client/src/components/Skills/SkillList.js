@@ -15,8 +15,9 @@ import TextField from '@material-ui/core/TextField'
 import Hidden from '@material-ui/core/Hidden';
 import Collapse from '@material-ui/core/Collapse';
 import Zoom from '@material-ui/core/Zoom';
+import Chip from '@material-ui/core/Chip';
 
-const CategoryList = (props) => {
+const SkillList = (props) => {
         console.log(props);
         return (
             <Card style={{padding: "4%"}}>
@@ -27,13 +28,12 @@ const CategoryList = (props) => {
                         </Avatar>
                     }    
                     action={
-                        // !props.searchEnabled && 
                         <IconButton onClick={() => props.onSearchEnable()}>
                             {!props.searchEnabled && <SearchIcon />}
                             {props.searchEnabled && <CloseIcon />}
                         </IconButton>
                     }            
-                    title={`Categories ${props.categories ? "("+props.categories.length+")" : "" }`}>
+                    title={`Skills ${props.skills ? "("+props.skills.length+")" : "" }`}>
                 </CardHeader>
                 <CardContent>
                     {
@@ -44,7 +44,7 @@ const CategoryList = (props) => {
                                 label="Search"
                                 placeholder="Enter search text here"
                                 value={props.searchTerm}
-                                onChange={(e) => props.onSearchCategory(e.target.value)}
+                                onChange={(e) => props.onSearchSkill(e.target.value)}
                                 margin="normal"
                                 variant="outlined"
                             />
@@ -52,31 +52,30 @@ const CategoryList = (props) => {
                         </Collapse>
                     }
                     <List dense={true}>
-                        {props.categories && props.categories.length > 0
-                        && props.categories.map((item, index) => {
+                        {props.skills && props.skills.length > 0
+                        && props.skills.map((item, index) => {
                             return(
-                            <ListItem key={index}
-                                divider={true}
-                                button={true} onClick={ () => props.onCategorySelect(item) }
-                            >
-                            <ListItemText
-                                primary={item.title}
-                                secondary={item.description}
-                                />
-                            </ListItem>)
+                            <Chip label={item.skill} key={index}
+                                style={styles.chip}
+                                avatar={
+                                    <Avatar>
+                                        {item.skill[0]}
+                                    </Avatar>   
+                                }/>
+                            )
                         })}
                         
                     </List>
-                {(!props.categories || props.categories.length === 0) &&
+                {(!props.skills || props.skills.length === 0) &&
                 <Typography variant="h6" align="center">
-                    There are currently no categories added
+                    There are currently no skills added
                 </Typography>}
                 </CardContent>
             </Card>
         );
 }
 
-export default CategoryList;
+export default SkillList;
 
 const styles = {
     avatar: {
@@ -84,5 +83,8 @@ const styles = {
     },
     formControl: {
         width: '70%'
+    },
+    chip: {
+        margin: 10
     }
 }

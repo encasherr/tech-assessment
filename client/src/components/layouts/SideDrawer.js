@@ -9,17 +9,26 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
+import { Dashboard, QuestionAnswer, ViewQuilt, PermIdentity, SupervisorAccount, Polymer  } from '@material-ui/icons';
 import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
 import { Route, Link, BrowserRouter as Router } from 'react-router-dom'
 
 const MenuItems = [
-    { routeName: 'dashboard', routeCaption: 'Dashboard' },
-    { routeName: 'mcq', routeCaption: 'Questions' },
-    { routeName: 'categories', routeCaption: 'Categories' },
-    { routeName: 'candidates', routeCaption: 'Candidates' },
-    { routeName: 'users', routeCaption: 'Users' }
+    { routeName: 'dashboard', routeCaption: 'Dashboard', icon: Dashboard },
+    { routeName: 'mcq', routeCaption: 'Questions', icon: QuestionAnswer },
+    { routeName: 'categories', routeCaption: 'Categories', icon: ViewQuilt },
+    { routeName: 'skills', routeCaption: 'Skills', icon: Polymer },
+    { routeName: 'candidates', routeCaption: 'Candidates', icon: SupervisorAccount },
+    { routeName: 'users', routeCaption: 'Users', icon: PermIdentity }
 ];
+
+const getIcon = (menuItem) => {
+    let icon = menuItem.icon;
+    return (
+        React.createElement(icon)
+    )
+}
 
 const SideDrawer = (props) => {
     const { classes, openState, theme } = props;
@@ -48,8 +57,9 @@ const SideDrawer = (props) => {
             {MenuItems.map((menuItem, index) => (
                 <Link to={"/" + menuItem.routeName} key={index}>
                     <ListItem button key={menuItem.routeCaption}>
-                    <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                    <ListItemText primary={menuItem.routeCaption} />
+                    {/* <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon> */}
+                    <ListItemIcon>{getIcon(menuItem)}</ListItemIcon>
+                    <ListItemText style={{textDecoration: 'none'}} primary={menuItem.routeCaption} />
                     </ListItem>
                 </Link>
             ))}

@@ -14,78 +14,83 @@ import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardActionArea from '@material-ui/core/CardActionArea';
-import { CardHeader } from '@material-ui/core';
+import { CardHeader, Grid } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
+import Typography from '@material-ui/core/Typography';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import Chip from '@material-ui/core/Chip';
+import Divider from '@material-ui/core/Divider';
+import AnswerOptions from './AnswerOptions';
+import Switch from '@material-ui/core/Switch';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
-class AddAnswerOption extends Component {
-    constructor(props) {
-        super(props);
-    }
 
-    handleChange = (ctl) => {
-
-    }
-
-    render = () => {
- 
+const AddAnswerOption = (props) => {
+        let { currentAnswer, onAnswerFieldChange, onAnswerAdd, model } = props.children;
+        console.log('add option (model):');
+        console.log(model);
         return (
-            <Card style={{padding: "4%"}}>
-                <form  noValidate autoComplete="off">
-                    <CardHeader avatar={
-                        <Avatar aria-label="Recipe">
-                        +
-                        </Avatar>
+            <ExpansionPanel>
+                <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                <Grid container spacing={16}>
+                    <Grid item xs={6} sm={6}>
+                        <Typography variant="h6">Answer Choices</Typography>
+                    </Grid>
+                    <Grid item xs={5} sm={5}>
+                    </Grid>
+                    <Grid item xs={1} sm={1}>
+                        <Typography variant="subtitle1" >Add Choice</Typography>
+                    </Grid>
+                </Grid>
+                </ExpansionPanelSummary>
+                <ExpansionPanelDetails>
+                    <div style={styles.formControl}>
+                    {currentAnswer && 
+                        <FormControl variant="outlined" style={styles.formControl}>
+                            <TextField
+                                id="outlined-name"
+                                label="Description"
+                                multiline
+                                rows="6"
+                                value={currentAnswer.content}
+                                onChange={ (e) => onAnswerFieldChange(e.target.value, 'content', currentAnswer) }
+                                margin="normal"
+                                variant="outlined"
+                            />
+                        </FormControl>
                     }
-                    title="Add Answer Option">
-                    </CardHeader>
-                    <CardContent>
-                    <FormControl variant="outlined" style={{width:"30%"}}>
-                    <TextField
-                        id="outlined-name"
-                        label="Option Text"
-                        className={styles.dense}
-                        value=""
-                        onChange={this.handleChange('title')}
-                        margin="normal"
-                        variant="outlined"
-                    />
-                    </FormControl>
-                    <br></br>
-                    </CardContent>
-                    <CardActions>
-                    <Button variant="contained" size="large" color="primary">
-                        Add
-                    </Button>
-                    </CardActions>
-                </form>
-            </Card>
+
+                    {currentAnswer && 
+                        <FormControlLabel style={styles.formControl}
+                            control={
+                            <Switch
+                                // checked={currentAnswer.isCorrect}
+                                onChange={ (e) => onAnswerFieldChange(e.target.checked, 'isCorrect', currentAnswer) }
+                                value={currentAnswer.isCorrect}
+                            />
+                            }
+                            label="Is Correct"
+                        /> 
+                    }
+                    </div>
+                    <AnswerOptions choices={model.choices} />
+                </ExpansionPanelDetails>
+                <Divider />
+                <ExpansionPanelActions>
+                <Button variant="outlined" size="small" color="primary" onClick={ () => onAnswerAdd(currentAnswer) } >
+                    Add
+                </Button>
+                </ExpansionPanelActions>
+            </ExpansionPanel>
         );
+}
+export default AddAnswerOption;
+const styles = {
+    formControl: {
+        width: '70%'
     }
 }
-const styles = theme => ({
-    container: {
-    //   display: 'flex',
-    //   flexWrap: 'wrap',
-    //   flex: 2
-    padding: "20%"
-    },
-    textField: {
-    //   marginLeft: theme.spacing.unit,
-    //   marginRight: theme.spacing.unit,
-    },
-    dense: {
-      marginTop: "16px",
-      marginLeft: "30px"
-    },
-    root: {
-        display: 'flex',
-        flexWrap: 'wrap',
-      },
-      formControl: {
-        width: 320,
-      },
-      selectEmpty: {
-        marginTop: theme.spacing.unit * 2,
-      },
-});
-export default AddAnswerOption;

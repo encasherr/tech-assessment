@@ -58,8 +58,8 @@ class SelectExperience extends Component{
                   onChange={this.handleChange('age')}
                   input={<Input id="age-native-simple" />}
                 >
-                {experienceLevel.map((item) => {
-                  return <MenuItem value={item}>{item}</MenuItem>
+                {experienceLevel.map((item, index) => {
+                  return <MenuItem key={index} value={item}>{item}</MenuItem>
                 })}
                   {/* <MenuItem value="">
                     <em>None</em>
@@ -76,8 +76,8 @@ class SelectExperience extends Component{
                   onChange={this.handleChange('age')}
                   input={<Input id="age-simple" />}
                 >
-                {experienceLevel.map((item) => {
-                  return <MenuItem value={item}>{item}</MenuItem>
+                {experienceLevel.map((item, index) => {
+                  return <MenuItem key={index} value={item}>{item}</MenuItem>
                 })}
                   {/* <MenuItem value="">
                     <em>None</em>
