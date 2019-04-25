@@ -10,11 +10,14 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 
-const experienceLevel = [
+const years = [
     0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20
 ];
+const months = [
+    0,1,2,3,4,5,6,7,8,9,10,11
+];
 
-class SelectExperience extends Component{
+class SelectCandidateExperience extends Component{
 
     state = {
         open: false,
@@ -24,27 +27,25 @@ class SelectExperience extends Component{
       super(props);
       this.state = {
         open: false,
-        min: 0,
-        max: 10
+        years: 0,
+        months: 0
       };
     }
 
-    // handleChange = (name, event) => {
       handleChange = name => event => {
-        // this.setState({ [name]: Number(event.target.value) });
         switch(name)
         {
-          case 'min':
+          case 'years':
           {
             this.setState({
-              min: event.target.value
+              years: event.target.value
             });
             break;
           }
-          case 'max':
+          case 'months':
           {
             this.setState({
-              max: event.target.value
+              months: event.target.value
             });
             break;
           }
@@ -61,15 +62,14 @@ class SelectExperience extends Component{
     };
 
     handleSubmit = () => {
-      console.log('submit called');
       this.handleClose();
-      this.props.onSubmitExperience(this.state.min, this.state.max);
+      this.props.onSubmitExperience(this.state.years, this.state.months);
     }
 
     render = () => {
     return (
         <div>
-        <Button variant="outlined" onClick={this.handleClickOpen}>Experience Level: {this.state.min} - {this.state.max}</Button>
+        <Button variant="outlined" onClick={this.handleClickOpen}>Experience: {this.state.years} - {this.state.months}</Button>
         <Dialog
           disableBackdropClick
           disableEscapeKeyDown
@@ -82,25 +82,25 @@ class SelectExperience extends Component{
                 <br></br>
                 <br></br>
               <FormControl style={styles.formControl} variant="outlined" >
-                <InputLabel htmlFor="min-simple">Minimum</InputLabel>
+                <InputLabel htmlFor="years-simple">Years</InputLabel>
                 <Select
-                  value={this.state.min}
-                  onChange={this.handleChange('min')}
-                  input={<Input id="min-simple" />}
+                  value={this.state.years}
+                  onChange={this.handleChange('years')}
+                  input={<Input id="years-simple" />}
                 >
-                {experienceLevel.map((item, index) => {
+                {years.map((item, index) => {
                   return <MenuItem key={index} value={item}>{item}</MenuItem>
                 })}
                 </Select>
               </FormControl>
               <FormControl style={styles.formControl} variant="outlined" >
-                <InputLabel htmlFor="max-simple">Maximum</InputLabel>
+                <InputLabel htmlFor="months-simple">Months</InputLabel>
                 <Select
-                  value={this.state.max}
-                  onChange={this.handleChange('max')}
-                  input={<Input id="max-simple" />}
+                  value={this.state.months}
+                  onChange={this.handleChange('months')}
+                  input={<Input id="months-simple" />}
                 >
-                {experienceLevel.map((item, index) => {
+                {months.map((item, index) => {
                   return <MenuItem key={index} value={item}>{item}</MenuItem>
                 })}
                 </Select>
@@ -128,4 +128,4 @@ const styles = {
       }
     
 };
-export default SelectExperience;
+export default SelectCandidateExperience;

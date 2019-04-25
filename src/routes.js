@@ -1,5 +1,6 @@
 import express  from 'express';
-import { McqController, CategoryController, SkillController } from './Controllers/admin';
+import { McqController, CategoryController, SkillController,
+         CandidateController } from './Controllers/admin';
 
 let api = express.Router();
 
@@ -20,5 +21,11 @@ api.delete('/admin/category', CategoryController.Delete);
 api.get('/admin/getAllSkills', SkillController.GetAll);
 api.post('/admin/skill', SkillController.Add);
 api.delete('/admin/category', SkillController.Delete);
+
+/* candidate endpoints */
+api.get('/admin/getAllCandidates', CandidateController.GetAll);
+api.post('/admin/candidate', CandidateController.Add);
+api.put('/admin/candidate', CandidateController.Update);
+api.delete('/admin/candidate', CandidateController.Delete);
 
 export default api;

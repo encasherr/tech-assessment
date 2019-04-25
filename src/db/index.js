@@ -15,6 +15,8 @@ function databaseInitialize() {
   var users = db.getCollection("users");
   var skills = db.getCollection("skills");
   var mcqs = db.getCollection("mcqs");
+  var candidates = db.getCollection("candidates");
+
 
   // Add our main example collection if this is first run.
   // This collection will save into a partition named quickstart3.db.0 (collection 0)  
@@ -29,8 +31,14 @@ function databaseInitialize() {
   }
   
   if (skills === null) {
-    users = db.addCollection("skills");
+    skills = db.addCollection("skills");
     // messages.insert({ txt: "i will only insert into this collection during databaseInitialize" });
+  }
+  if(mcqs === null) {
+    mcqs = db.addCollection("mcqs");
+  }
+  if(candidates === null) {
+    mcqs = db.addCollection("candidates");
   }
 }
 
@@ -48,15 +56,19 @@ function runProgramLogic() {
 //   console.log("new number of categories in database : " + categoryCount);
 //   console.log("");
 //   categories.clear();
+  // var mcqs = db.getCollection("mcqs");
+  // if(mcqs){
+  //   mcqs.clear();
+  // }
   // manually save
-//   db.saveDatabase(function(err) {
-//     if (err) {
-//       console.log(err);
-//     }
-//     else {
-//       console.log("saved... it can now be loaded or reloaded with up to date data");
-//     }
-//   });
+   db.saveDatabase(function(err) {
+    if (err) {
+      console.log(err);
+    }
+    else {
+      console.log("saved... it can now be loaded or reloaded with up to date data");
+    }
+  });
 }
 
 console.log("");

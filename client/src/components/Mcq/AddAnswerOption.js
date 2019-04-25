@@ -17,8 +17,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 const AddAnswerOption = (props) => {
         let { currentAnswer, onAnswerFieldChange, onAnswerAdd, model } = props.children;
-        console.log('add option (model):');
-        console.log(model);
+        // console.log('add option (model):');
+        // console.log(model);
         return (
             <ExpansionPanel>
                 <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>

@@ -7,11 +7,16 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import { CardHeader } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
+import SelectCandidateExperience from './SelectCandidateExperience';
 
-class AddCandidate extends React.Component {
+const AddCandidate = (props) => {
+        let { model } = props;
 
-    render = () => {
- 
+        const onSubmitExperience = (years, months) => {
+            props.onFieldChange(years, 'experienceYears', props.model)
+            props.onFieldChange(months, 'experienceMonths', props.model)
+        }
+
         return (
             <Card style={{padding: "4%"}}>
                 <form  noValidate autoComplete="off">
@@ -23,31 +28,45 @@ class AddCandidate extends React.Component {
                     title="Add Candidate">
                     </CardHeader>
                     <CardContent>
-                    <FormControl variant="outlined" style={{width:"30%"}}>
-                    <TextField
-                        id="outlined-name"
-                        label="Title"
-                        className={styles.dense}
-                        value=""
-                        onChange={this.handleChange('title')}
-                        margin="normal"
-                        variant="outlined"
-                    />
+                    <FormControl variant="outlined" style={{width:"80%"}}>
+                        <TextField
+                            id="outlined-name"
+                            label="Full Name"
+                            className={styles.dense}
+                            value={model.fullName}
+                            onChange={(e) => props.onFieldChange(e.target.value, 'fullName', props.model)}
+                            margin="normal"
+                            variant="outlined"
+                        />
                     </FormControl>
                     <br></br>
-                    <FormControl variant="outlined" style={{width:"30%"}}>
-                    <TextField
-                        id="outlined-name"
-                        label="Description"
-                        multiline
-                        rows="4"
-                        className={styles.dense}
-                        onChange={this.handleChange('description')}
-                        margin="normal"
-                        variant="outlined"
-                    />
+                    <FormControl variant="outlined" style={{width:"80%"}}>
+                        <TextField
+                            id="outlined-email"
+                            label="Email"
+                            className={styles.dense}
+                            value={model.email}
+                            onChange={(e) => props.onFieldChange(e.target.value, 'email', props.model)}
+                            margin="normal"
+                            variant="outlined"
+                        />
                     </FormControl>
                     <br></br>
+                    <FormControl variant="outlined" style={{width:"80%"}}>
+                        <TextField
+                            id="outlined-contactno"
+                            label="Contact Number"
+                            className={styles.dense}
+                            value={model.contactno}
+                            onChange={(e) => props.onFieldChange(e.target.value, 'contactno', props.model)}
+                            margin="normal"
+                            variant="outlined"
+                        />
+                    </FormControl>
+                    <br></br>
+                    <FormControl variant="outlined" style={{width:"80%"}}>
+                        <SelectCandidateExperience onSubmitExperience={ (years, months) => onSubmitExperience(years, months) } />
+                    </FormControl>
                     <br></br>
                     </CardContent>
                     <CardActions>
@@ -58,32 +77,13 @@ class AddCandidate extends React.Component {
                 </form>
             </Card>
         );
-    }
 }
 const styles = theme => ({
-    container: {
-    //   display: 'flex',
-    //   flexWrap: 'wrap',
-    //   flex: 2
-    padding: "20%"
+    formControl: {
+        width: '70%',
     },
-    textField: {
-    //   marginLeft: theme.spacing.unit,
-    //   marginRight: theme.spacing.unit,
-    },
-    dense: {
-      marginTop: "16px",
-      marginLeft: "30px"
-    },
-    root: {
-        display: 'flex',
-        flexWrap: 'wrap',
-      },
-      formControl: {
-        width: 320,
-      },
-      selectEmpty: {
-        marginTop: theme.spacing.unit * 2,
-      },
+    avatar: {
+        backgroundColor: '#555'
+    }
 });
 export default AddCandidate;

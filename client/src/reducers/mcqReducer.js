@@ -25,7 +25,8 @@ switch(action.type) {
                description:'',
                category: '',
                skill: '',
-               answerId: 0,
+               minimumExperience: 0,
+               maximumExperience: 10,
                choices: []
             },
            success_message: 'MCQ added successfully'
@@ -58,7 +59,8 @@ switch(action.type) {
                 description:'',
                 category: '',
                 skill: '',
-                answerId: 0,
+                minimumExperience: 0,
+                maximumExperience: 10,
                 choices: []
            },
            success_message: 'MCQ Updated Successfully'
@@ -72,7 +74,7 @@ switch(action.type) {
        return {
            ...state,
            field_updated: true,
-           current_MCQ: action.payload
+           current_mcq: action.payload
        }
    }
    case CURRENT_MCQ_FIELD_CHANGE_END:
@@ -104,6 +106,8 @@ switch(action.type) {
                 description:'',
                 category: '',
                 skill: '',
+                minimumExperience: 0,
+                maximumExperience: 10,
                 choices: []
            },
            success_message: '',

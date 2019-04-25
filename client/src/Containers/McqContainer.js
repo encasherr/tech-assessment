@@ -11,12 +11,12 @@ import SnackbarComponent from '../components/lib/SnackbarComponent';
 class McqContainer extends React.Component {
 
     componentDidMount = () => {
-        console.log('did mount');
+        // console.log('did mount');
         this.reload();
     }
 
     componentWillUpdate = () => {
-     console.log('container updated');
+    //  console.log('container updated');
         if(this.props.success_message !== '') {
             this.props.FetchCategories();
             // this.props.FetchMcqs();
@@ -24,11 +24,12 @@ class McqContainer extends React.Component {
     }
 
     componentWillReceiveProps = (newprops, oldprops) => {
-        console.log('receiving props');
-        console.log(newprops);
+        // console.log('receiving props');
+        // console.log(newprops);
         if(newprops.success_message !== '') {
             //this.props.FetchCategories();
             this.props.OpenSnackbar();
+            this.props.history.push('/mcqs');
         }
     }
 
@@ -38,9 +39,13 @@ class McqContainer extends React.Component {
             // this.props.FetchMcqs();
     }
 
+    onAddMcq = (model) => {
+        this.props.AddMcq(model, this.props.editMode);
+    }
+
     render = () => {
-        console.log('container render');
-        console.log(this.props);
+        // console.log('container render');
+        // console.log(this.props);
         // let categories = [];
         // if(this.props.search_enabled) {
         //     categories = this.props.filteredCategories;
@@ -52,14 +57,13 @@ class McqContainer extends React.Component {
             <Grid container spacing={16}>
                 <Grid item xs={12} sm={12}>
                     <AddMcqComponent 
-                        onSubmit={ (model) => this.props.AddMcq(model, this.props.editMode) }
+                        onSubmit={ (model) => this.onAddMcq(model) }
                         onAnswerAdd={ (model) => this.props.AddAnswerChoice(model, this.props.current_mcq) }
                         model={this.props.current_mcq}
                         categories={this.props.categories}
                         skills={this.props.skills}
                         currentAnswer={this.props.currentAnswer}
                         editMode={this.props.editMode}
-                        onAdd={() => this.reload()}
                         onFieldChange={ (val, field, model) => this.props.CurrentMcqFieldChange(val, field, model) } 
                         onAnswerFieldChange={ (val, field, model) => this.props.CurrentAnswerFieldChange(val, field, model) } 
                         />

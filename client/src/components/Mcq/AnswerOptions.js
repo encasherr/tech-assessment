@@ -2,10 +2,12 @@ import React from 'react';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import { Typography } from '@material-ui/core';
 
 const AnswerOptions = (props) => {
         return (
             <div>
+                <Typography variant="caption">Choices</Typography>
                 <List dense={true}>
                         {props.choices && props.choices.length > 0
                         && props.choices.map((item, index) => {

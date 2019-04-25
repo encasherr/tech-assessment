@@ -1,8 +1,6 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField'
-import Input from '@material-ui/core/Input';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
-import FilledInput from '@material-ui/core/FilledInput';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
@@ -20,6 +18,12 @@ import AddIcon from '@material-ui/icons/Add';
 
 const AddMcq = (props) => {
         let { model } = props;
+
+        const onSubmitExperience = (min, max) => {
+            console.log('add mcq handler for experience called');
+            props.onFieldChange(min, 'minimumExperience', props.model)
+            props.onFieldChange(max, 'maximumExperience', props.model)
+        }
 
         return (
             <Card>
@@ -115,7 +119,9 @@ const AddMcq = (props) => {
                                 <br></br>
                                 <br></br>
                                 <FormControl variant="outlined" style={{width:"50%"}}>
-                                    <SelectExperience />
+                                    <SelectExperience 
+                                    // min={item.minimumExperience} max={item.maximumExperience} 
+                                        onSubmitExperience={ (min, max) => onSubmitExperience(min, max) } />
                                 </FormControl>
                                 <br></br>
                                 <br></br>

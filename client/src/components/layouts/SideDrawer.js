@@ -15,7 +15,7 @@ import { Link } from 'react-router-dom'
 
 const MenuItems = [
     { routeName: 'dashboard', routeCaption: 'Dashboard', icon: Dashboard },
-    { routeName: 'mcq', routeCaption: 'Questions', icon: QuestionAnswer },
+    { routeName: 'mcqs', routeCaption: 'Questions', icon: QuestionAnswer },
     { routeName: 'categories', routeCaption: 'Categories', icon: ViewQuilt },
     { routeName: 'skills', routeCaption: 'Skills', icon: Polymer },
     { routeName: 'candidates', routeCaption: 'Candidates', icon: SupervisorAccount },

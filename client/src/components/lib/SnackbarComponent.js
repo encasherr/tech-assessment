@@ -7,7 +7,7 @@ import Button from '@material-ui/core/Button';
 import { Typography } from '@material-ui/core';
 
 const SnackbarComponent = (props) => {
-    console.log('snack render: ' + props.snackMessage);
+    // console.log('snack render: ' + props.snackMessage);
     let openSnack = props.openSnack;
     return (
         <Snackbar

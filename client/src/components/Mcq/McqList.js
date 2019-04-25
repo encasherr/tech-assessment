@@ -1,21 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import AddMcqComponent from './AddMcq';
-import {    AddMcq, FetchMcqs, UpdateMcq, FetchCategories, FetchSkills, 
-            CloseSnackbar, CurrentMcqFieldChange, CurrentAnswerFieldChange,
-            OpenSnackbar, SelectMcq, AddAnswerChoice,
+import {    FetchMcqs, 
+            CloseSnackbar,
+            OpenSnackbar, 
             BeginSearch, SearchMcq } from '../../actions/McqActions';
 import { Link } from 'react-router-dom';
-import { FormControl, Grid, Card, CardHeader, Button, CardContent, List, ListItem, ListItemText } from '@material-ui/core';
-import Avatar from '@material-ui/core/Avatar';
+import { FormControl, Grid, Card, CardHeader, Button, CardContent, List, ListItem } from '@material-ui/core';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import Chip from '@material-ui/core/Chip';
-import Divider from '@material-ui/core/Divider';
 import AnswerOptions from './AnswerOptions';
 
 class McqList extends Component {
@@ -52,8 +48,11 @@ class McqList extends Component {
                                             <Grid item xs={3} sm={3}>
                                                 <Typography variant="subtitle1" >{item.category}</Typography>
                                             </Grid>
-                                            <Grid item xs={3} sm={3}>
+                                            <Grid item xs={2} sm={2}>
                                                 <Typography variant="subtitle1" >{item.skill}</Typography>
+                                            </Grid>
+                                            <Grid item xs={1} sm={1}>
+                                                <Typography variant="subtitle1" >{item.minimumExperience + '-'+item.maximumExperience}</Typography>
                                             </Grid>
                                         </Grid>
                                         </ExpansionPanelSummary>

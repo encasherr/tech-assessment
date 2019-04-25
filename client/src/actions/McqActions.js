@@ -65,6 +65,27 @@ export const CurrentMcqFieldChange = (val, field, model) => dispatch => {
             });
             break;
         }
+        case 'minimumExperience':
+        {
+            model.minimumExperience = val;
+            dispatch({
+                type: CURRENT_MCQ_FIELD_CHANGE,
+                payload: model
+            });
+            break;
+        }
+        case 'maximumExperience':
+        {
+            model.maximumExperience = val;
+            dispatch({
+                type: CURRENT_MCQ_FIELD_CHANGE,
+                payload: model
+            });
+            break;
+        }
+        default:
+        {
+        }
     }
     dispatch({
         type: CURRENT_MCQ_FIELD_CHANGE_END
@@ -94,9 +115,12 @@ export const CurrentAnswerFieldChange = (val, field, model) => dispatch => {
             });
             break;
         }
+        default:
+        {
+        }
     }
     dispatch({
-        type: CURRENT_MCQ_FIELD_CHANGE_END
+        type: CURRENT_ANSWER_FIELD_CHANGE_END
     });
 }
 
