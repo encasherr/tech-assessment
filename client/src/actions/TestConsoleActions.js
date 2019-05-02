@@ -21,8 +21,8 @@ export const ADD_QUESTION_TO_TEST = 'ADD_QUESTION_TO_TEST';
 // export const FETCH_QUESTION_FAIL = 'FETCH_QUESTION_FAIL';
 // export const FETCH_SKILLS_SUCCESS = 'FETCH_SKILLS_SUCCESS';
 // export const FETCH_SKILLS_FAIL = 'FETCH_SKILLS_FAIL';
-// export const CLOSE_SNACKBAR = 'CLOSE_SNACKBAR';
-// export const OPEN_SNACKBAR = 'OPEN_SNACKBAR';
+export const CLOSE_SNACKBAR = 'CLOSE_SNACKBAR';
+export const OPEN_SNACKBAR = 'OPEN_SNACKBAR';
 
 // export const CurrentTestFieldChange = (val, field, model) => dispatch => {
 //     console.log('test field change: ' + field);
