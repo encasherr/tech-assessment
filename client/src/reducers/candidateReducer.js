@@ -7,7 +7,7 @@ import { ADD_CANDIDATE_SUCCESS, ADD_CANDIDATE_FAIL, SELECT_CANDIDATE,
     CURRENT_CANDIDATE_FIELD_CHANGE_END, 
     CANDIDATE_SEARCH_BEGIN,
     CANDIDATE_SEARCH_SUCCESS
-} from "../actions/McqActions";
+} from "../actions/CandidateActions";
 import { FETCH_SKILLS_SUCCESS } from "../actions/SkillActions";
 
 export default (state = {}, action) => {
@@ -78,17 +78,9 @@ switch(action.type) {
            field_updated: false
        }
    }
-   case CURRENT_ANSWER_FIELD_CHANGE:
-   {
-       return {
-           ...state,
-           field_updated: !state.field_updated,
-           currentAnswer: action.payload
-       }
-   }
    case FETCH_CANDIDATE_SUCCESS:
    {
-       console.log('fetch mcq reducer');
+       console.log('fetch candidate reducer');
        console.log(action.payload);
        
        return {
@@ -104,7 +96,7 @@ switch(action.type) {
            },
            success_message: '',
            search_enabled: false,
-           mcqs: action.payload
+           candidates: action.payload
        }
    }
    case FETCH_SKILLS_SUCCESS:
@@ -114,6 +106,13 @@ switch(action.type) {
         
         return {
             ...state,
+            current_candidate: { 
+                 fullName:'',
+                 email:'',
+                 contactno: '',
+                 experienceYears: 0,
+                 experienceMonths: 10
+            },
             skills: action.payload
         }
    }

@@ -5,7 +5,9 @@ import {    FetchMcqs,
             OpenSnackbar, 
             BeginSearch, SearchMcq } from '../../actions/McqActions';
 import { Link } from 'react-router-dom';
-import { FormControl, Grid, Card, CardHeader, Button, CardContent, List, ListItem } from '@material-ui/core';
+import { FormControl, Grid, Card, CardHeader, Button, CardContent, 
+         List, ListItem, ListItemText, ListItemSecondaryAction,
+         Checkbox } from '@material-ui/core';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
@@ -18,6 +20,10 @@ class McqList extends Component {
 
     componentDidMount = () => {
         this.props.FetchMcqs();
+    }
+
+    onAddMcqToTest = (mcqId) => {
+        this.props.AddMcqToTest(mcqId);
     }
 
     render = () => {
@@ -39,7 +45,18 @@ class McqList extends Component {
                           mcqs.map((item, index) => {
                             return (
                                 <ListItem divider={false} key={index} >
-                                    <ExpansionPanel style={{width:'100%'}}>
+                                    <ListItemText primary={`${item.question}`} 
+                                        secondary={`${item.category} - ${item.skill}`}/>
+                                    <ListItemSecondaryAction>
+                                        <Button variant="contained" color="secondary"
+                                        onClick={() => this.onAddMcqToTest(item.$loki)}
+                                        >Add to test</Button>
+                                        {/* <Checkbox
+                                            onChange={this.handleToggle(value)}
+                                            checked={this.state.checked.indexOf(value) !== -1}
+                                        /> */}
+                                    </ListItemSecondaryAction>
+                                    {/* <ExpansionPanel style={{width:'100%'}}>
                                         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                                         <Grid container spacing={16}>
                                             <Grid item xs={6} sm={6}>
@@ -68,13 +85,12 @@ class McqList extends Component {
                                                 <AnswerOptions choices={item.choices} />
                                             </div>
                                         </ExpansionPanelDetails>
-                                        {/* <Divider /> */}
                                         <ExpansionPanelActions>
                                         <Button variant="outlined" size="small" color="primary" >
                                             Edit
                                         </Button>
                                         </ExpansionPanelActions>
-                                    </ExpansionPanel>
+                                    </ExpansionPanel> */}
                                 </ListItem>
                             )
                         } )}
@@ -86,7 +102,8 @@ class McqList extends Component {
 }
 
 const mapStateToProps = state => ({
-    ...state.mcqReducer
+    ...state.mcqReducer,
+    ...state.testConsoleReducer
 });
 const mapDispatchToProps = dispatch => ({
     FetchMcqs: () => dispatch(FetchMcqs()),

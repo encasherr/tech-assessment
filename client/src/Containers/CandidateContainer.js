@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import AddCandidateComponent from '../components/Candidates/AddCandidate';
-import {    AddCandidate, UpdateCandidate,  
+import {    AddCandidate, UpdateCandidate, FetchSkills,  
             CloseSnackbar, CurrentCandidateFieldChange,
             OpenSnackbar } from '../actions/CandidateActions';
 import Grid from '@material-ui/core/Grid';
@@ -14,14 +14,18 @@ class CandidateContainer extends React.Component {
     }
 
     componentWillReceiveProps = (newprops, oldprops) => {
-        if(newprops.success_message !== '') {
+        if(newprops.success_message !== '' && newprops.success_message !== undefined) {
+            console.log('newprops.success_message');
+            console.log(newprops.success_message);
             this.props.OpenSnackbar();
-            this.props.history.push('/candidates');
+            setTimeout(() => {
+                this.props.history.push('/candidates');
+            }, 1000);
         }
     }
 
     reload = () => {
-        // this.props.FetchSkills();
+        this.props.FetchSkills();
     }
 
     onAddCandidate = (model) => {
@@ -29,6 +33,8 @@ class CandidateContainer extends React.Component {
     }
 
     render = () => {
+        console.log('this.props.current_candidate');
+        console.log(this.props.snack_open);
         return(
             <Grid container spacing={16}>
                 <Grid item xs={12} sm={12}>
@@ -55,6 +61,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     AddCandidate: (model, editMode) => dispatch(AddCandidate(model, editMode)),
     UpdateCandidate: (model) => dispatch(UpdateCandidate(model)),
+    FetchSkills: () => dispatch(FetchSkills()),
     CloseSnackbar: () => dispatch(CloseSnackbar()),
     OpenSnackbar: () => dispatch(OpenSnackbar()),
     CurrentCandidateFieldChange: (val, field, model) => dispatch(CurrentCandidateFieldChange(val, field, model))

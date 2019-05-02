@@ -24,7 +24,7 @@ class McqContainer extends React.Component {
     }
 
     componentWillReceiveProps = (newprops, oldprops) => {
-        // console.log('receiving props');
+        console.log('mcq container: receiving props');
         // console.log(newprops);
         if(newprops.success_message !== '') {
             //this.props.FetchCategories();

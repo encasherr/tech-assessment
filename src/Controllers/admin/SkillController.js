@@ -13,6 +13,7 @@ class SkillController {
         console.log(req.body);
         let skills = this.initializeCollection();
         skills.insert(req.body);
+        db.saveDatabase();
         resp.send(JSON.stringify(req.body));
     }
 

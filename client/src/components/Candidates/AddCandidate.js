@@ -8,6 +8,7 @@ import CardContent from '@material-ui/core/CardContent';
 import { CardHeader } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import SelectCandidateExperience from './SelectCandidateExperience';
+import LoadingComponent from '../lib/LoadingComponent';
 
 const AddCandidate = (props) => {
         let { model } = props;
@@ -18,7 +19,9 @@ const AddCandidate = (props) => {
         }
 
         return (
-            <Card style={{padding: "4%"}}>
+            <Card>
+            {!model && <LoadingComponent /> } 
+            {model &&    
                 <form  noValidate autoComplete="off">
                     <CardHeader avatar={
                         <Avatar aria-label="Recipe">
@@ -70,11 +73,13 @@ const AddCandidate = (props) => {
                     <br></br>
                     </CardContent>
                     <CardActions>
-                    <Button variant="contained" size="large" color="primary">
+                    <Button variant="contained" size="large" color="primary"
+                                    onClick={ () => props.onSubmit(props.model)}>
                         Submit
                     </Button>
                     </CardActions>
                 </form>
+            }
             </Card>
         );
 }

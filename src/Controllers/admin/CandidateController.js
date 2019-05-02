@@ -13,6 +13,7 @@ class CandidateController {
         console.log(req.body);
         let candidates = this.initializeCollection();
         candidates.insert(req.body);
+        db.saveDatabase();
         resp.send(JSON.stringify(req.body));
     }
 

@@ -13,6 +13,7 @@ class McqController {
         console.log(req.body);
         let mcqs = this.initializeCollection();
         mcqs.insert(req.body);
+        db.saveDatabase();
         resp.send(JSON.stringify(req.body));
     }
 

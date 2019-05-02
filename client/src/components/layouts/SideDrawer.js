@@ -8,14 +8,15 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 // import MailIcon from '@material-ui/icons/Mail';
-import { Dashboard, QuestionAnswer, ViewQuilt, PermIdentity, SupervisorAccount, Polymer  } from '@material-ui/icons';
+import { Dashboard, Book, Assessment, ViewQuilt, PermIdentity, SupervisorAccount, Polymer  } from '@material-ui/icons';
 import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
 import { Link } from 'react-router-dom'
 
 const MenuItems = [
     { routeName: 'dashboard', routeCaption: 'Dashboard', icon: Dashboard },
-    { routeName: 'mcqs', routeCaption: 'Questions', icon: QuestionAnswer },
+    { routeName: 'tests', routeCaption: 'Tests', icon: Assessment },
+    { routeName: 'mcqs', routeCaption: 'Library', icon: Book },
     { routeName: 'categories', routeCaption: 'Categories', icon: ViewQuilt },
     { routeName: 'skills', routeCaption: 'Skills', icon: Polymer },
     { routeName: 'candidates', routeCaption: 'Candidates', icon: SupervisorAccount },

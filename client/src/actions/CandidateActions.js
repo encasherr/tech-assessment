@@ -1,5 +1,6 @@
 import axios from 'axios';
 import config from '../config';
+import { FETCH_SKILLS_BEGIN, FETCH_SKILLS_FAIL, FETCH_SKILLS_SUCCESS } from './SkillActions';
 
 export const ADD_CANDIDATE_BEGIN = 'ADD_CANDIDATE_BEGIN';
 export const ADD_CANDIDATE_SUCCESS = 'ADD_CANDIDATE_SUCCESS';
@@ -18,8 +19,8 @@ export const CHOICE_ADDED_TO_CANDIDATE = 'CHOICE_ADDED_TO_CANDIDATE';
 export const FETCH_CANDIDATE_BEGIN = 'FETCH_CANDIDATE_BEGIN';
 export const FETCH_CANDIDATE_SUCCESS = 'FETCH_CANDIDATE_SUCCESS';
 export const FETCH_CANDIDATE_FAIL = 'FETCH_CANDIDATE_FAIL';
-export const FETCH_SKILLS_SUCCESS = 'FETCH_SKILLS_SUCCESS';
-export const FETCH_SKILLS_FAIL = 'FETCH_SKILLS_FAIL';
+// export const FETCH_SKILLS_SUCCESS = 'FETCH_SKILLS_SUCCESS';
+// export const FETCH_SKILLS_FAIL = 'FETCH_SKILLS_FAIL';
 export const CLOSE_SNACKBAR = 'CLOSE_SNACKBAR';
 export const OPEN_SNACKBAR = 'OPEN_SNACKBAR';
 
@@ -175,23 +176,26 @@ export const BeginSearch = () => dispatch => {
         });
 }
 
-// export const FetchSkills = () => dispatch => {
-//     let url = config.adminApiUrl + 'getAllSkills';
-//     axios.get(url)
-//         .then((res) => {
-//             console.log('skills fetched');
-//             dispatch({
-//                 type: FETCH_SKILLS_SUCCESS,
-//                 payload: res.data
-//             });
-//         })
-//         .catch((err) => {
-//             dispatch({
-//                 type: FETCH_SKILLS_FAIL,
-//                 payload: err
-//             });
-//         });
-// }
+export const FetchSkills = () => dispatch => {
+    dispatch({
+        type: FETCH_SKILLS_BEGIN
+    });
+    let url = config.adminApiUrl + 'getAllSkills';
+    axios.get(url)
+        .then((res) => {
+            console.log('skills fetched');
+            dispatch({
+                type: FETCH_SKILLS_SUCCESS,
+                payload: res.data
+            });
+        })
+        .catch((err) => {
+            dispatch({
+                type: FETCH_SKILLS_FAIL,
+                payload: err
+            });
+        });
+}
 
 export const SelectCandidate = (candidateModel) => dispatch => {
     dispatch({

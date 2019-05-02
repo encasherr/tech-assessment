@@ -19,10 +19,10 @@ const months = [
 
 class SelectCandidateExperience extends Component{
 
-    state = {
-        open: false,
-        min: '',
-    };
+    // state = {
+    //     open: false,
+    //     min: '',
+    // };
     constructor(props) {
       super(props);
       this.state = {
@@ -67,6 +67,7 @@ class SelectCandidateExperience extends Component{
     }
 
     render = () => {
+      let { isTestAdmin } = this.props; 
     return (
         <div>
         <Button variant="outlined" onClick={this.handleClickOpen}>Experience: {this.state.years} - {this.state.months}</Button>
@@ -93,7 +94,7 @@ class SelectCandidateExperience extends Component{
                 })}
                 </Select>
               </FormControl>
-              <FormControl style={styles.formControl} variant="outlined" >
+              {!isTestAdmin && <FormControl style={styles.formControl} variant="outlined" >
                 <InputLabel htmlFor="months-simple">Months</InputLabel>
                 <Select
                   value={this.state.months}
@@ -104,7 +105,7 @@ class SelectCandidateExperience extends Component{
                   return <MenuItem key={index} value={item}>{item}</MenuItem>
                 })}
                 </Select>
-              </FormControl>
+              </FormControl> }
             </form>
           </DialogContent>
           <DialogActions>

@@ -13,6 +13,7 @@ class CategoryController {
         console.log(req.body);
         let categories = this.initializeCollection();
         categories.insert(req.body);
+        db.saveDatabase();
         resp.send(JSON.stringify(req.body));
     }
 

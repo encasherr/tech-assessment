@@ -16,6 +16,7 @@ function databaseInitialize() {
   var skills = db.getCollection("skills");
   var mcqs = db.getCollection("mcqs");
   var candidates = db.getCollection("candidates");
+  var tests = db.getCollection("tests");
 
 
   // Add our main example collection if this is first run.
@@ -38,7 +39,10 @@ function databaseInitialize() {
     mcqs = db.addCollection("mcqs");
   }
   if(candidates === null) {
-    mcqs = db.addCollection("candidates");
+    candidates = db.addCollection("candidates");
+  }
+  if(tests === null) {
+    tests = db.addCollection("tests");
   }
 }
 
@@ -61,14 +65,14 @@ function runProgramLogic() {
   //   mcqs.clear();
   // }
   // manually save
-   db.saveDatabase(function(err) {
-    if (err) {
-      console.log(err);
-    }
-    else {
-      console.log("saved... it can now be loaded or reloaded with up to date data");
-    }
-  });
+  //  db.saveDatabase(function(err) {
+  //   if (err) {
+  //     console.log(err);
+  //   }
+  //   else {
+  //     console.log("saved... it can now be loaded or reloaded with up to date data");
+  //   }
+  // });
 }
 
 console.log("");
