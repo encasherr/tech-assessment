@@ -12,6 +12,7 @@ import CandidatesContainer from '../Containers/CandidateContainer';
 import AdminTestContainer from '../Containers/AdminTestContainer';
 import McqList from '../components/Mcq/McqList';
 import CandidateList from '../components/Candidates/CandidateList';
+import InviteConsoleContainer from '../Containers/InviteConsole/InviteConsoleContainer';
 
 const Routes = (props) => {
     return (
@@ -20,6 +21,7 @@ const Routes = (props) => {
             <Route path="/dashboard" component={DashboardComponent} />
             <Route path="/tests" component={AdminTestContainer} />
             <Route path="/testConsole" component={TestConsoleContainer} />
+            <Route path="/inviteConsole" component={InviteConsoleContainer} />
             <Route path="/mcqs" component={McqList} />
             <Route path="/addMcq" component={McqContainer} />
             <Route path="/categories" component={CategoriesContainer} />

@@ -7,8 +7,8 @@ import Button from '@material-ui/core/Button';
 import { Typography } from '@material-ui/core';
 
 const SnackbarComponent = (props) => {
-    // console.log('snack render: ' + props.snackMessage);
-    let openSnack = props.openSnack;
+    console.log('snack render: ' + props.openSnack);
+    let { openSnack } = props;
     return (
         <Snackbar
           anchorOrigin={{

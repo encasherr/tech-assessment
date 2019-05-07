@@ -10,44 +10,33 @@ console.log('dbpath: ' + dbPath);
 var db = new loki(dbPath);
 
 // set up an initialize function for first load (when db hasn't been created yet)
-function databaseInitialize() {
-  var categories = db.getCollection("categories");
-  var users = db.getCollection("users");
-  var skills = db.getCollection("skills");
-  var mcqs = db.getCollection("mcqs");
-  var candidates = db.getCollection("candidates");
-  var tests = db.getCollection("tests");
+const databaseInitialize = () => {
 
-
-  // Add our main example collection if this is first run.
-  // This collection will save into a partition named quickstart3.db.0 (collection 0)  
-  if (categories === null) {
-    // first time run so add and configure collection with some arbitrary options
-    categories = db.addCollection("categories");
-  }
-
-  if (users === null) {
-    users = db.addCollection("users");
-    // messages.insert({ txt: "i will only insert into this collection during databaseInitialize" });
-  }
-  
-  if (skills === null) {
-    skills = db.addCollection("skills");
-    // messages.insert({ txt: "i will only insert into this collection during databaseInitialize" });
-  }
-  if(mcqs === null) {
-    mcqs = db.addCollection("mcqs");
-  }
-  if(candidates === null) {
-    candidates = db.addCollection("candidates");
-  }
-  if(tests === null) {
-    tests = db.addCollection("tests");
-  }
+  entities.map((item, index) => {
+    let dbCollection = db.getCollection(item);
+    if(dbCollection === null) {
+      db.addCollection(item);
+    }
+  });
+  console.log('initialized all entities');
 }
+
+const dataCleanup = () => {
+  entitiesToDelete.map((item, index) => {
+    let dbCollection = db.getCollection(item);
+    if(dbCollection !== null) {
+      dbCollection.clear();
+    }
+  })
+  console.log('deleted all entities');
+}
+
 
 // place any bootstrap logic which needs to be run after loadDatabase has completed
 function runProgramLogic() {
+  databaseInitialize();
+  // dataCleanup();
+  db.saveDatabase();
 //   var categories = db.getCollection("categories");
 //   var categoryCount = categories.count();
 //   var now = new Date();
@@ -87,6 +76,11 @@ db.loadDatabase({}, function(err) {
 });
 
 console.log("wait for it...");
-
+const entities = [
+  "categories", "users", "skills", "candidates", "mcqs", "tests"
+];
+const entitiesToDelete = [
+  "categories", "users", "skills", "candidates", "mcqs", "tests"
+];
 
 export default db;

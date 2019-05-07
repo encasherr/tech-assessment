@@ -6,7 +6,6 @@ import {    AddTest, UpdateTest, FetchSkills, FetchTests,
             OpenSnackbar } from '../actions/AdminTestActions';
 import Grid from '@material-ui/core/Grid';
 import SnackbarComponent from '../components/lib/SnackbarComponent';
-import TabControl from '../components/lib/TabControl';
 import { Button, Card, CardHeader } from '@material-ui/core';
 import TestList from '../components/AdminTest/TestList';
 

@@ -1,6 +1,6 @@
 import { ADD_TEST_SUCCESS, ADD_TEST_FAIL, SELECT_TEST,
-    UPDATE_TEST_SUCCESS, UPDATE_TEST_FAIL, FETCH_TEST_FAIL,
-    FETCH_TEST_SUCCESS, 
+    UPDATE_TEST_SUCCESS, UPDATE_TEST_FAIL, FETCH_TESTS_FAIL,
+    FETCH_TESTS_SUCCESS, 
     OPEN_SNACKBAR, 
     CLOSE_SNACKBAR, 
     CURRENT_TEST_FIELD_CHANGE,
@@ -86,7 +86,7 @@ switch(action.type) {
            currentAnswer: action.payload
        }
    }
-   case FETCH_TEST_SUCCESS:
+   case FETCH_TESTS_SUCCESS:
    {
        console.log('fetch tests reducer');
        console.log(action.payload);
@@ -99,7 +99,8 @@ switch(action.type) {
                 skill:'',
                 testName:'',
                 duration: 90,
-                experienceYears: 5
+                experienceYears: 5,
+                status: 'draft'
            },
            success_message: '',
            search_enabled: false,
@@ -169,7 +170,7 @@ switch(action.type) {
            filteredCategories: action.payload.filteredCategories
        }
    }
-   case FETCH_TEST_FAIL:
+   case FETCH_TESTS_FAIL:
    {
        return {
            ...state,

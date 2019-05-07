@@ -7,7 +7,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { PersonAdd } from '@material-ui/icons';
 import LoadingComponent from '../lib/LoadingComponent';
-import { Typography } from '@material-ui/core';
+import { Typography, IconButton } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 
 const TestList = (props) => {
@@ -21,6 +21,7 @@ const TestList = (props) => {
             <TableHead>
             <TableRow>
                 <CustomTableCell>Test</CustomTableCell>
+                <CustomTableCell align="left">Status</CustomTableCell>
                 <CustomTableCell align="right">Not Attempted</CustomTableCell>
                 <CustomTableCell align="right">Completed</CustomTableCell>
                 <CustomTableCell align="right">To Evaluate</CustomTableCell>
@@ -35,11 +36,14 @@ const TestList = (props) => {
                         {test.testName}
                     </Link>
                 </CustomTableCell>
+                <CustomTableCell align="left"><Typography variant="subtitle2" >{test.status.toUpperCase()}</Typography></CustomTableCell>
                 <CustomTableCell align="right">{test.pendingAttempt}</CustomTableCell>
                 <CustomTableCell align="right">{test.completed}</CustomTableCell>
                 <CustomTableCell align="right">{test.toEvaluate}</CustomTableCell>
                 <CustomTableCell align="right" scope="row" component="th">
-                    <PersonAdd />
+                    <Link to={ {pathname: "/inviteConsole", state: { testId: test.$loki } }}>
+                        <PersonAdd />
+                    </Link>
                 </CustomTableCell>
                 </TableRow>
             ))}

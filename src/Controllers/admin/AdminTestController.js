@@ -35,17 +35,23 @@ class AdminTestController {
         console.log('update test called');
         console.log(req.body);
         let tests = this.initializeCollection();
-        let categoryToUpdate = tests.find({ '$loki': req.body.$loki });
-        if(categoryToUpdate && categoryToUpdate.length > 0) {
-            categoryToUpdate[0].title = req.body.title;
-            categoryToUpdate[0].description = req.body.description;
-            tests.update(categoryToUpdate[0]);
+        let testId = req.body.$loki;
+        let filteredTests = tests.where((item) => {
+            console.log(`item: ${item['$loki']}, testId: ${testId}, result: ${item['$loki'] == testId}`); 
+            return item['$loki'] == testId;    
+        });
+        console.log(testId);
+        if(filteredTests && filteredTests.length > 0) {
+            let testToUpdate = filteredTests[0];
+            let entityToUpdate = this.replaceEntity(testToUpdate, req.body);
+            tests.update(entityToUpdate);
+            db.saveDatabase();
+            resp.send(entityToUpdate);
         }
         else {
             console.log('nothing to update');
+            resp.send('nothing to update');
         }
-        console.log(categoryToUpdate);
-        resp.send(JSON.stringify(req.body));
     }
 
     Delete = (req, resp) => {
@@ -59,6 +65,17 @@ class AdminTestController {
             tests = db.addCollection('tests');
         }
         return tests;
+    }
+
+    replaceEntity = (oldEntity, newEntity) => {
+        if(oldEntity != null){
+            for (var property in newEntity) {
+                if (newEntity.hasOwnProperty(property) && property !== "$loki" && property !== 'meta') {
+                    oldEntity[property] = newEntity[property];
+                }
+            }
+        }
+        return oldEntity;
     }
 }
 

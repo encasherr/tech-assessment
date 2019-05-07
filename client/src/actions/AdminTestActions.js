@@ -17,8 +17,8 @@ export const CURRENT_ANSWER_FIELD_CHANGE = 'CURRENT_ANSWER_FIELD_CHANGE';
 export const CURRENT_ANSWER_FIELD_CHANGE_END = 'CURRENT_ANSWER_FIELD_CHANGE_END';
 export const CHOICE_ADDED_TO_TEST = 'CHOICE_ADDED_TO_TEST';
 export const FETCH_TEST_BEGIN = 'FETCH_TEST_BEGIN';
-export const FETCH_TEST_SUCCESS = 'FETCH_TEST_SUCCESS';
-export const FETCH_TEST_FAIL = 'FETCH_TEST_FAIL';
+export const FETCH_TESTS_SUCCESS = 'FETCH_TESTS_SUCCESS';
+export const FETCH_TESTS_FAIL = 'FETCH_TESTS_FAIL';
 export const FETCH_SKILLS_SUCCESS = 'FETCH_SKILLS_SUCCESS';
 export const FETCH_SKILLS_FAIL = 'FETCH_SKILLS_FAIL';
 export const CLOSE_SNACKBAR = 'CLOSE_SNACKBAR';
@@ -74,26 +74,6 @@ export const CurrentTestFieldChange = (val, field, model) => dispatch => {
     });
 }
 
-export const FetchTest = (testId) => dispatch => {
-    console.log('fetch test: ' + testId);
-    let url = config.adminApiUrl + 'getTest' + '?testId=' + testId;
-    axios.get(url)
-        .then((res) => {
-            console.log('test fetched: ');
-            console.log(res);
-            dispatch({
-                type: FETCH_TEST_SUCCESS,
-                payload: res.data
-            });
-        })
-        .catch((err) => {
-            dispatch({
-                type: ADD_TEST_FAIL,
-                payload: err
-            });
-        });
-}
-
 export const CurrentAnswerFieldChange = (val, field, model) => dispatch => {
     console.log('test answer field change: ' + field);
     console.log(val);
@@ -146,71 +126,23 @@ export const AddTest = (testModel, editMode) => dispatch => {
     let url = config.adminApiUrl + 'test';
     console.log('action model');
     console.log(testModel);
-    // if(!editMode) {
-        axios.post(url, testModel)
-            .then((res) => {
-                console.log('test saved: ' + res);
-                dispatch({
-                    type: ADD_TEST_SUCCESS,
-                    payload: res.data
-                });
-            })
-            .catch((err) => {
-                dispatch({
-                    type: ADD_TEST_FAIL,
-                    payload: err
-                });
+    testModel.status = 'draft';
+    axios.post(url, testModel)
+        .then((res) => {
+            console.log('test saved: ' + res);
+            dispatch({
+                type: ADD_TEST_SUCCESS,
+                payload: res.data
             });
+        })
+        .catch((err) => {
+            dispatch({
+                type: ADD_TEST_FAIL,
+                payload: err
+            });
+        });
     
 }
-
-export const BeginSearch = () => dispatch => {
-    dispatch({
-        type: TEST_SEARCH_BEGIN
-    });
-}
-
- export const SearchTest = (searchTerm, testList) => dispatch => {
-//     console.log(`search term: ${searchTerm}, list length: ${testList ? testList.length : 0}`);
-//     if(testList && testList.length > 0) {
-//         let filteredCategories = testList.filter((item) => {
-//             return (
-//                     item.title &&
-//                     item.title.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1
-//                     ) ||
-//                     (
-//                         item.description &&
-//                         item.description.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1);
-//         });
-//         if(filteredCategories && filteredCategories.length > 0) {
-//             dispatch({
-//                 type: TEST_SEARCH_SUCCESS,
-//                 payload: {
-//                     filteredCategories,
-//                     searchTerm
-//                 }
-//             });
-//         }
-//         else {
-//             dispatch({
-//                 type: TEST_SEARCH_SUCCESS,
-//                 payload: {
-//                     filteredCategories: [],
-//                     searchTerm
-//                 }
-//             });
-//         }
-//     }
-//     else {
-//         dispatch({
-//             type: TEST_SEARCH_SUCCESS,
-//             payload: {
-//                 filteredCategories: [],
-//                 searchTerm
-//             }
-//         });
-//     }
- }
 
  export const FetchCategories = () => dispatch => {
     // dispatch({
@@ -286,13 +218,13 @@ export const FetchTests = () => dispatch => {
         .then((res) => {
             console.log('TEST fetched');
             dispatch({
-                type: FETCH_TEST_SUCCESS,
+                type: FETCH_TESTS_SUCCESS,
                 payload: res.data
             });
         })
         .catch((err) => {
             dispatch({
-                type: FETCH_TEST_FAIL,
+                type: FETCH_TESTS_FAIL,
                 payload: err
             });
         });

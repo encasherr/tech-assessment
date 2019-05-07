@@ -19,7 +19,7 @@ const MenuItems = [
     { routeName: 'mcqs', routeCaption: 'Library', icon: Book },
     { routeName: 'categories', routeCaption: 'Categories', icon: ViewQuilt },
     { routeName: 'skills', routeCaption: 'Skills', icon: Polymer },
-    { routeName: 'candidates', routeCaption: 'Candidates', icon: SupervisorAccount },
+    { routeName: 'candidates', routeCaption: 'Invite Candidates', icon: SupervisorAccount },
     { routeName: 'users', routeCaption: 'Users', icon: PermIdentity }
 ];
 

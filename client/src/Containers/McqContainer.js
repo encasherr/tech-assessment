@@ -11,32 +11,27 @@ import SnackbarComponent from '../components/lib/SnackbarComponent';
 class McqContainer extends React.Component {
 
     componentDidMount = () => {
-        // console.log('did mount');
         this.reload();
     }
 
     componentWillUpdate = () => {
-    //  console.log('container updated');
         if(this.props.success_message !== '') {
             this.props.FetchCategories();
-            // this.props.FetchMcqs();
         }
     }
 
     componentWillReceiveProps = (newprops, oldprops) => {
-        console.log('mcq container: receiving props');
-        // console.log(newprops);
+        // console.log('mcq container: receiving props');
         if(newprops.success_message !== '') {
-            //this.props.FetchCategories();
-            this.props.OpenSnackbar();
-            this.props.history.push('/mcqs');
+            setTimeout(() => {
+                this.props.history.push('/mcqs');
+            }, 1000);
         }
     }
 
     reload = () => {
         this.props.FetchCategories();
         this.props.FetchSkills();
-            // this.props.FetchMcqs();
     }
 
     onAddMcq = (model) => {
@@ -44,15 +39,7 @@ class McqContainer extends React.Component {
     }
 
     render = () => {
-        // console.log('container render');
-        // console.log(this.props);
-        // let categories = [];
-        // if(this.props.search_enabled) {
-        //     categories = this.props.filteredCategories;
-        // }
-        // else {
-        //     categories = this.props.categoryList;
-        // }
+        console.log('mcq container render snack open: ' + this.props.snack_open);
         return(
             <Grid container spacing={16}>
                 <Grid item xs={12} sm={12}>

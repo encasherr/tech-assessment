@@ -26,6 +26,7 @@ api.delete('/admin/category', SkillController.Delete);
 api.get('/admin/getAllCandidates', CandidateController.GetAll);
 api.post('/admin/candidate', CandidateController.Add);
 api.put('/admin/candidate', CandidateController.Update);
+api.post('/admin/sendInvite', CandidateController.SendInvite);
 api.delete('/admin/candidate', CandidateController.Delete);
 
 /* Admin Test endpoints */

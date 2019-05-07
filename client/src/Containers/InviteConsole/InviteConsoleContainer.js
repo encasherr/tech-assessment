@@ -3,14 +3,16 @@ import { connect } from 'react-redux';
 // import AddTestComponent from '../components/AdminTest/AddTest';
 import {    FetchTest, AddMcqToTest, PublishTest, CloseSnackbar,
             OpenSnackbar } from '../../actions/TestConsoleActions';            
+import {    SendInvite } from '../../actions/InviteConsoleActions';            
 import Grid from '@material-ui/core/Grid';
 import SnackbarComponent from '../../components/lib/SnackbarComponent';
-import TestConsoleTabs from './TestConsoleTabs';
+// import TestConsoleTabs from './TestConsoleTabs';
 import { Button, Card, CardHeader } from '@material-ui/core';
-import TestConsoleQuestions from './TestConsoleQuestions';
+// import TestConsoleQuestions from './TestConsoleQuestions';
 import LoadingComponent from '../../components/lib/LoadingComponent';
+import SendTestInvite from './SendTestInvite';
 
-class TestConsoleContainer extends React.Component {
+class InviteConsoleContainer extends React.Component {
     
     componentDidMount = () => {
         this.reload();
@@ -32,22 +34,13 @@ class TestConsoleContainer extends React.Component {
         }
     }
 
-    onAddTest = (model) => {
-        this.props.AddTest(model, this.props.editMode)
-    }
-
-    onAddMcqToTest = (mcqItem) => {
-        console.log('container: mcq added to test');
-        this.props.AddMcqToTest(mcqItem, this.props.current_test);
-    }
-
-    onPublish = () => {
-        this.props.PublishTest(this.props.current_test);
+    onSendInvite = (testInfo, inviteInfo) => {
+        this.props.SendInvite(testInfo, inviteInfo);
     }
 
     render = () => {
         let { current_test } = this.props;
-        console.log('container: render');
+        console.log('invite container: render');
         console.log(current_test);
         if(current_test && current_test.selectedMcqs) {
             console.log(current_test.selectedMcqs);
@@ -58,19 +51,12 @@ class TestConsoleContainer extends React.Component {
                 {!current_test && <LoadingComponent />}
                 {current_test &&
                 <Card>
-                    <CardHeader action={
-                        current_test.status=='draft' &&
-                        <Button variant="contained" color="primary"
-                                onClick={this.onPublish}
-                        >Publish</Button>
-                        
-                    }
-                    title={current_test.testName}
-                     subheader={current_test.status!=='draft' ? 'Published' : 'draft'}
+                    <CardHeader 
+                        title="Send Test Invites"
+                        subheader={current_test.testName}
                     />
-                    <TestConsoleTabs 
-                        tabs={tabs} 
-                        onAddMcqToTest={(mcqId) => this.onAddMcqToTest(mcqId) }
+                    <SendTestInvite
+                        onSendInvite={(testInfo, inviteInfo) => this.onSendInvite(testInfo, inviteInfo) }
                         selectedMcqs={current_test.selectedMcqs} 
                         currentTest={current_test}
                         />
@@ -86,28 +72,17 @@ class TestConsoleContainer extends React.Component {
     }
 }
 const mapStateToProps = state => ({
-    ...state.testConsoleReducer
+    ...state.inviteConsoleReducer
 });
 const mapDispatchToProps = dispatch => ({
     // AddTest: (model, editMode) => dispatch(AddTest(model, editMode)),
     // UpdateTest: (model) => dispatch(UpdateTest(model)),
     // FetchSkills: () => dispatch(FetchSkills()),
-    AddMcqToTest: (mcqItem, testModel) => dispatch(AddMcqToTest(mcqItem, testModel)),
-    PublishTest: (testModel) => dispatch(PublishTest(testModel)),
+    SendInvite: (inviteInfo, testModel) => dispatch(SendInvite(inviteInfo, testModel)),
+    // PublishTest: (testModel) => dispatch(PublishTest(testModel)),
     FetchTest: (testId) => dispatch(FetchTest(testId)),
     CloseSnackbar: () => dispatch(CloseSnackbar()),
     OpenSnackbar: () => dispatch(OpenSnackbar()),
-    // CurrentTestFieldChange: (val, field, model) => dispatch(CurrentTestFieldChange(val, field, model))
+    // CurrentInviteFieldChange: (val, field, model) => dispatch(CurrentInviteFieldChange(val, field, model))
 });
-const tabs = [
-    {key: 0, content: '<Button variant="container" color="primary">Page {index}</Button>'},
-    {key: 1, content: <TestConsoleQuestions /> },
-    {key: 2, content: getButton}
-]
-const getButton = (index) => {
-    return 'abc'+index;
-    // (
-        // <Button variant="container" color="primary">Page {index}</Button>
-    // );
-}
-export default connect(mapStateToProps, mapDispatchToProps)(TestConsoleContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(InviteConsoleContainer);

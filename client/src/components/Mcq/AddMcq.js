@@ -39,7 +39,7 @@ const AddMcq = (props) => {
                             subheader="Multiple Choice Question">
                             </CardHeader>
                             <CardContent>
-                                <FormControl variant="outlined" style={{width:"50%"}}>
+                                <FormControl variant="outlined" style={styles.formControl}>
                                     <InputLabel htmlFor="outlined-category-simple">
                                         Category
                                     </InputLabel>
@@ -64,11 +64,10 @@ const AddMcq = (props) => {
                                         })}
                                     </Select>
                                 </FormControl>
-                                <br></br>
-                                <FormControl variant="outlined" style={{width:"80%"}}>
+                                <FormControl variant="outlined" style={styles.formControl}>
                                     <TextField
                                         id="outlined-name"
-                                        label="Question"
+                                        label="Title"
                                         className={styles.dense}
                                         value={model.question}
                                         onChange={(e) => props.onFieldChange(e.target.value, 'question', props.model)}
@@ -76,22 +75,7 @@ const AddMcq = (props) => {
                                         variant="outlined"
                                     />
                                 </FormControl>
-                                <br></br>
-                                <FormControl variant="outlined" style={{width:"80%"}}>
-                                    <TextField
-                                        id="outlined-name"
-                                        label="Description"
-                                        multiline
-                                        rows="4"
-                                        className={styles.dense}
-                                        onChange={(e) => props.onFieldChange(e.target.value, 'description', props.model)}
-                                        margin="normal"
-                                        variant="outlined"
-                                    />
-                                </FormControl>
-                                <br></br>
-                                <br></br>
-                                <FormControl variant="outlined" style={{width:"50%"}}>
+                                <FormControl variant="outlined" style={styles.formControl}>
                                     <InputLabel
                                         htmlFor="outlined-skill-simple">
                                         Skill
@@ -116,15 +100,22 @@ const AddMcq = (props) => {
                                         })}
                                     </Select>
                                 </FormControl>
-                                <br></br>
-                                <br></br>
-                                <FormControl variant="outlined" style={{width:"50%"}}>
+                                <FormControl variant="outlined" style={styles.formControl}>
                                     <SelectExperience 
-                                    // min={item.minimumExperience} max={item.maximumExperience} 
                                         onSubmitExperience={ (min, max) => onSubmitExperience(min, max) } />
                                 </FormControl>
-                                <br></br>
-                                <br></br>
+                                <FormControl variant="outlined" style={styles.formControl}>
+                                    <TextField
+                                        id="outlined-name"
+                                        label="Question Description"
+                                        multiline
+                                        rows="4"
+                                        className={styles.dense}
+                                        onChange={(e) => props.onFieldChange(e.target.value, 'description', props.model)}
+                                        margin="normal"
+                                        variant="outlined"
+                                    />
+                                </FormControl>
                                 <AddAnswerOptionComponent>
                                     {props}
                                 </AddAnswerOptionComponent>
@@ -141,12 +132,13 @@ const AddMcq = (props) => {
                    
         );
 }
-const styles = theme => ({
+const styles = {
     formControl: {
         width: '70%',
+        marginBottom: '1%'
     },
     avatar: {
         backgroundColor: '#555'
     }
-});
+};
 export default AddMcq;

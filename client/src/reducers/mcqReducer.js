@@ -18,18 +18,19 @@ switch(action.type) {
    case ADD_MCQ_SUCCESS:
    {
        return {
-           ...state,
-           error: null,
-           current_mcq: { 
-               question:'',
-               description:'',
-               category: '',
-               skill: '',
-               minimumExperience: 0,
-               maximumExperience: 10,
-               choices: []
-            },
-           success_message: 'MCQ added successfully'
+            ...state,
+            error: null,
+            current_mcq: { 
+                question:'',
+                description:'',
+                category: '',
+                skill: '',
+                minimumExperience: 0,
+                maximumExperience: 10,
+                choices: []
+                },
+            snack_open: true,
+            success_message: 'MCQ added successfully'
        }
    }
    case UPDATE_MCQ_FAIL:
@@ -100,7 +101,7 @@ switch(action.type) {
        return {
            ...state,
            error: null,
-           editMode: false,
+        //    editMode: false,
            current_mcq: { 
                 question:'',
                 description:'',
@@ -111,7 +112,7 @@ switch(action.type) {
                 choices: []
            },
            success_message: '',
-           search_enabled: false,
+        //    search_enabled: false,
            mcqs: action.payload
        }
    }

@@ -49,7 +49,6 @@ class AddTest extends Component {
             {!model && <LoadingComponent /> } 
             {model && 
             <Card>   
-                {/* <CardHeader action={ */}
                     <Button variant="contained" color="primary" onClick={this.handleClickOpen}>Create Test</Button>
                 
                 <Dialog

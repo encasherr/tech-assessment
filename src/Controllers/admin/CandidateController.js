@@ -1,4 +1,5 @@
 import db from '../../db';
+import EmailHelper from '../../commons/EmailHelper';
 
 class CandidateController {
     GetAll = (req, resp) => {
@@ -32,6 +33,19 @@ class CandidateController {
         }
         console.log(candidateToUpdate);
         resp.send(JSON.stringify(req.body));
+    }
+
+    SendInvite = (req, resp) => {
+        console.log('send invite called');
+        console.log(req.body);
+        let emailInfo = {
+            to: 'alok_j10@yahoo.co.in',
+            subject: 'Tech Test Email',
+            text: 'Please confirm the receipt of this email'
+        };
+        let emailHelper = new EmailHelper();
+        emailHelper.SendEmail(emailInfo);
+        resp.send('Email Sent');
     }
 
     Delete = (req, resp) => {

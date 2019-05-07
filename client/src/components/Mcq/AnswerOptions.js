@@ -14,7 +14,7 @@ const AnswerOptions = (props) => {
                             return(
                             <ListItem key={index}
                                 divider={true}
-                                button={true} onClick={ () => props.onChoiceSelect(item) }
+                                button={false} onClick={ () => props.onChoiceSelect && props.onChoiceSelect(item) }
                             >
                             <ListItemText
                                 primary={item.content}
