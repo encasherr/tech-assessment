@@ -2,12 +2,14 @@ import express from 'express';
 import http from 'http';
 import routes from './routes';
 import bodyParser from 'body-parser';
+import path from 'path';
 
 let port_number = process.env.PORT || 3001;
 let app = express();
 
 app.server = http.createServer(app);
 app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname)));
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -18,6 +20,11 @@ app.use(function(req, res, next) {
 });
 
 app.use('/api', routes);
+app.get('/home', function (req, res) {
+    let fileName = path.resolve(__dirname + '/index.html');
+    console.log(fileName);
+    res.sendFile(fileName);
+});
 
 app.listen(port_number, () => {
     console.log('Tech Assess API runnning on ' + port_number);

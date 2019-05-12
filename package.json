@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "babel src -s -D -d wwwroot --presets es2015,stage-0",
-    "start": "npm run build && node wwwroot/app.js"
+    "uibuild": "cd client && npm run build && xcopy build \"../wwwroot\" /s",
+    "start": "npm run uibuild && npm run build && node wwwroot/app.js"
   },
   "author": "Alok Jha",
   "license": "ISC",
