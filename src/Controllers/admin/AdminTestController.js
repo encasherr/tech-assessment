@@ -34,8 +34,30 @@ class AdminTestController {
     Update = (req, resp) => {
         console.log('update test called');
         console.log(req.body);
-        let tests = this.initializeCollection();
         let testId = req.body.$loki;
+        let entity = this.UpdateTest(testId, req.body);
+        resp.send(entity);
+        
+        // let filteredTests = tests.where((item) => {
+        //     console.log(`item: ${item['$loki']}, testId: ${testId}, result: ${item['$loki'] == testId}`); 
+        //     return item['$loki'] == testId;    
+        // });
+        // console.log(testId);
+        // if(filteredTests && filteredTests.length > 0) {
+        //     let testToUpdate = filteredTests[0];
+        //     let entityToUpdate = this.replaceEntity(testToUpdate, req.body);
+        //     tests.update(entityToUpdate);
+        //     db.saveDatabase();
+        //     resp.send(entityToUpdate);
+        // }
+        // else {
+        //     console.log('nothing to update');
+        //     resp.send('nothing to update');
+        // }
+    }
+
+    UpdateTest = (testId, newEntity) => {
+        let tests = this.initializeCollection();
         let filteredTests = tests.where((item) => {
             console.log(`item: ${item['$loki']}, testId: ${testId}, result: ${item['$loki'] == testId}`); 
             return item['$loki'] == testId;    
@@ -43,14 +65,28 @@ class AdminTestController {
         console.log(testId);
         if(filteredTests && filteredTests.length > 0) {
             let testToUpdate = filteredTests[0];
-            let entityToUpdate = this.replaceEntity(testToUpdate, req.body);
+            if(newEntity && newEntity.invitations && newEntity.invitations.length > 0) {
+                let invitations = [];
+                newEntity.invitations.map((invitation, index) => {
+                    let filteredInvitations = invitations.filter((item,id) => {
+                        return item.emailTo === invitation.emailTo;
+                    });
+                    if(filteredInvitations && filteredInvitations.length > 0) {
+                    } else {
+                        invitations.push(invitation);
+                    }
+                });
+                newEntity.invitations = [];
+                newEntity.invitations = invitations;
+            }
+            let entityToUpdate = this.replaceEntity(testToUpdate, newEntity);
             tests.update(entityToUpdate);
             db.saveDatabase();
-            resp.send(entityToUpdate);
+            return entityToUpdate;
         }
         else {
             console.log('nothing to update');
-            resp.send('nothing to update');
+            return null;
         }
     }
 

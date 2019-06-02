@@ -3,6 +3,7 @@ import CategoryController from './CategoryController';
 import SkillController from './SkillController';
 import CandidateController from './CandidateController';
 import AdminTestController from './AdminTestController';
+// import InviteController from './InviteController';
 
 export {
     McqController,
@@ -10,4 +11,5 @@ export {
     SkillController,
     CandidateController,
     AdminTestController
+    // InviteController
 }

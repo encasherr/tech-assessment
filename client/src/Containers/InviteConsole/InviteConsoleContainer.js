@@ -1,14 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
-// import AddTestComponent from '../components/AdminTest/AddTest';
+import { Link } from 'react-router-dom';
 import {    FetchTest, AddMcqToTest, PublishTest, CloseSnackbar,
             OpenSnackbar } from '../../actions/TestConsoleActions';            
-import {    SendInvite } from '../../actions/InviteConsoleActions';            
+import {    SendInvite,
+            InviteInfoFieldChange } from '../../actions/InviteConsoleActions';            
 import Grid from '@material-ui/core/Grid';
 import SnackbarComponent from '../../components/lib/SnackbarComponent';
-// import TestConsoleTabs from './TestConsoleTabs';
-import { Button, Card, CardHeader } from '@material-ui/core';
-// import TestConsoleQuestions from './TestConsoleQuestions';
+import { Button, Card, CardHeader, CardContent, CardActions } from '@material-ui/core';
 import LoadingComponent from '../../components/lib/LoadingComponent';
 import SendTestInvite from './SendTestInvite';
 
@@ -22,6 +21,11 @@ class InviteConsoleContainer extends React.Component {
         if(newprops.success_message !== '' && newprops.success_message !== undefined) {
             // this.props.OpenSnackbar();
         }
+        if(newprops.inviteAdded === 'yes') {
+            this.props.history.push({
+                pathname:  '/tests'
+            });
+        }
     }
 
     reload = () => {
@@ -34,12 +38,13 @@ class InviteConsoleContainer extends React.Component {
         }
     }
 
-    onSendInvite = (testInfo, inviteInfo) => {
-        this.props.SendInvite(testInfo, inviteInfo);
+    onSendInvite = () => {
+        let { current_test, inviteInfo } = this.props;
+        this.props.SendInvite(current_test, inviteInfo);
     }
 
     render = () => {
-        let { current_test } = this.props;
+        let { current_test, inviteInfo, inviteAdded } = this.props;
         console.log('invite container: render');
         console.log(current_test);
         if(current_test && current_test.selectedMcqs) {
@@ -47,7 +52,7 @@ class InviteConsoleContainer extends React.Component {
         }
         return(
             <Grid container spacing={16}>
-                <Grid item xs={12} sm={12}>
+                <Grid item xs={12} sm={12} md={8}>
                 {!current_test && <LoadingComponent />}
                 {current_test &&
                 <Card>
@@ -55,17 +60,27 @@ class InviteConsoleContainer extends React.Component {
                         title="Send Test Invites"
                         subheader={current_test.testName}
                     />
-                    <SendTestInvite
-                        onSendInvite={(testInfo, inviteInfo) => this.onSendInvite(testInfo, inviteInfo) }
-                        selectedMcqs={current_test.selectedMcqs} 
-                        currentTest={current_test}
+                    <CardContent>
+                        <SendTestInvite
+                            // onSendInvite={(testInfo, inviteInfo) => this.onSendInvite(testInfo, inviteInfo) }
+                            selectedMcqs={current_test.selectedMcqs} 
+                            currentTest={current_test}
+                            inviteInfo={inviteInfo}
+                            onFieldChange={(val, field) => this.props.InviteInfoFieldChange(val, field, inviteInfo)}
                         />
+                    </CardContent>
+                    <CardActions style={styles.actionButton}>
+                        <Button variant="contained" size="large" color="primary"
+                                onClick={() => this.onSendInvite() }>
+                            Send Invite
+                        </Button>
+                    </CardActions>
                 </Card>
                 }
                 <SnackbarComponent 
                     openSnack={this.props.snack_open} handleClose={() => this.props.CloseSnackbar()} 
                     snackMessage={"Data Saved Successfully!"} 
-                    /> 
+                /> 
                 </Grid>
             </Grid>
         );
@@ -83,6 +98,11 @@ const mapDispatchToProps = dispatch => ({
     FetchTest: (testId) => dispatch(FetchTest(testId)),
     CloseSnackbar: () => dispatch(CloseSnackbar()),
     OpenSnackbar: () => dispatch(OpenSnackbar()),
-    // CurrentInviteFieldChange: (val, field, model) => dispatch(CurrentInviteFieldChange(val, field, model))
+    InviteInfoFieldChange: (val, field, inviteInfo) => dispatch(InviteInfoFieldChange(val, field, inviteInfo))
 });
 export default connect(mapStateToProps, mapDispatchToProps)(InviteConsoleContainer);
+const styles = {
+    actionButton: {
+        marginLeft: '80%'
+    }
+}

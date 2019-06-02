@@ -20,29 +20,54 @@ export const SEND_TEST_INVITE = 'SEND_TEST_INVITE';
 // export const FETCH_QUESTION_FAIL = 'FETCH_QUESTION_FAIL';
 export const SEND_TEST_INVITE_SUCCESS = 'SEND_TEST_INVITE_SUCCESS';
 export const SEND_TEST_INVITE_FAIL = 'SEND_TEST_INVITE_FAIL';
+export const INVITE_INFO_FIELD_CHANGE = 'INVITE_INFO_FIELD_CHANGE';
 
-export const SendInvite = (inviteInfo, testModel) => dispatch => {
+export const SendInvite = (testModel, inviteInfo) => dispatch => {
     let url = config.adminApiUrl + 'sendInvite';
     
     if(!testModel.invitations){
         testModel.invitations = [];
     }
     testModel.invitations.push(inviteInfo);
-    axios.put(url, testModel)
+    console.log('testmodel invite sent', testModel);
+    axios.post(url, testModel)
         .then((res) => {
             console.log('invitation sent');
             console.log(res);
             dispatch({
                 type: SEND_TEST_INVITE_SUCCESS,
-                payload: res.data
+                // payload: res.data
             });
         })
         .catch((err) => {
             console.log(err);
             dispatch({
                 type: SEND_TEST_INVITE_FAIL,
-                payload: err
+                // payload: err
             });
-        })
+        });
     
+}
+export const InviteInfoFieldChange = (val, field, model) => dispatch => {
+    switch(field)
+    {
+        case 'emailTo':
+        {
+            model.emailTo = val;
+            dispatch({
+                type: INVITE_INFO_FIELD_CHANGE,
+                payload: model
+            });
+            break;
+        }
+        case 'emailSubject':
+        {
+            model.emailSubject = val;
+            dispatch({
+                type: INVITE_INFO_FIELD_CHANGE,
+                payload: model
+            });
+            break;
+        }
+    }
 }

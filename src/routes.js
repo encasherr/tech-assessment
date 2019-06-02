@@ -1,10 +1,11 @@
 import express  from 'express';
 import { McqController, CategoryController, SkillController,
-         CandidateController, AdminTestController } from './Controllers/admin';
+         CandidateController, AdminTestController, InviteController } from './Controllers/admin';
+import { TestInviteController } from './Controllers/candidate';
 
 let api = express.Router();
 
-
+/* Admin Routes */
 /* mcq endpoints */
 api.get('/admin/getAllMcqs', McqController.GetAll);
 api.post('/admin/mcq', McqController.Add);
@@ -36,5 +37,8 @@ api.post('/admin/test', AdminTestController.Add);
 api.put('/admin/test', AdminTestController.Update);
 api.delete('/admin/test', AdminTestController.Delete);
 
+/* Candidate Routes */
+/* Test Invite endpoints */
+api.post('/candidate/startTest', TestInviteController.StartTest);
 
 export default api;

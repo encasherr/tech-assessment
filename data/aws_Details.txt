@@ -1,0 +1,7 @@
+git clone https://github.com/encasherr/tech-assessment.git
+
+ec2-18-221-221-15.us-east-2.compute.amazonaws.com
+
+ec2-user
+
+http://ec2-18-221-221-15.us-east-2.compute.amazonaws.com:3001/skills

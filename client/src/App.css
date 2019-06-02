@@ -1,3 +1,24 @@
+.rdw-link-decorator-wrapper {
+  position: relative;
+  background-color: #2ec866;
+  padding: 2%;
+  text-decoration: none !important;
+  border-radius: 4px;
+  color: #fff;
+  margin-left: 30%;
+}
+.rdw-link-decorator-wrapper a span {
+  color: #fff;    
+  font-family: 'Avenir','Segoe UI','Ubuntu','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;
+  font-size: 16px;
+  font-weight: bold
+}
+A {
+  text-decoration: none;
+}
+.public-DraftStyleDefault-block .public-DraftStyleDefault-ltr{
+  margin-left: 30%;
+}
 .App {
   text-align: center;
 }

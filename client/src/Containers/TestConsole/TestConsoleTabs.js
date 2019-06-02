@@ -36,7 +36,12 @@ class TestConsoleTabs extends Component {
                             currentTest={currentTest}
                             /> 
             </TabContainer>}
-            {value === 1 && <TabContainer><TestConsoleCandidates /> </TabContainer>}
+            {value === 1 && 
+            <TabContainer>
+                <TestConsoleCandidates 
+                    currentTest={currentTest}
+                /> 
+            </TabContainer>}
             {value === 2 && <TabContainer><TestConsoleSettings /> </TabContainer>}
         </div>
         );
