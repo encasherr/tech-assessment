@@ -58,7 +58,7 @@ const SideDrawer = (props) => {
                 <Link to={"/" + menuItem.routeName} key={index}>
                     <ListItem button key={menuItem.routeCaption}>
                     {/* <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon> */}
-                    <ListItemIcon>{getIcon(menuItem)}</ListItemIcon>
+                    <ListItemIcon title={menuItem.routeCaption}>{getIcon(menuItem)}</ListItemIcon>
                     <ListItemText style={{textDecoration: 'none'}} primary={menuItem.routeCaption} />
                     </ListItem>
                 </Link>

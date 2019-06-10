@@ -1,5 +1,6 @@
 import axios from 'axios';
 import config from '../config';
+import repository from '../repository';
 import { FETCH_CATEGORIES_SUCCESS, FETCH_CATEGORIES_FAIL } from './CategoryActions';
 
 export const ADD_TEST_BEGIN = 'ADD_TEST_BEGIN';
@@ -214,20 +215,42 @@ export const FetchTests = () => dispatch => {
         type: FETCH_TEST_BEGIN
     });
     let url = config.adminApiUrl + 'getAllTests';
-    axios.get(url)
+    repository.getData(url)
         .then((res) => {
-            console.log('TEST fetched');
+            console.log('promise resolved');
             dispatch({
                 type: FETCH_TESTS_SUCCESS,
                 payload: res.data
             });
         })
         .catch((err) => {
+            console.log('promise rejected');
             dispatch({
                 type: FETCH_TESTS_FAIL,
-                payload: err
+                payload: { errorStatus: '401' }
             });
         });
+    // let accessToken = localStorage.getItem("auth-token");
+    // let options = {
+    //     headers: {
+    //       "x-access-token": accessToken
+    //     }
+    // };
+    // let url = config.adminApiUrl + 'getAllTests';
+    // axios.get(url, options)
+    //     .then((res) => {
+    //         console.log('TEST fetched');
+    //         dispatch({
+    //             type: FETCH_TESTS_SUCCESS,
+    //             payload: res.data
+    //         });
+    //     })
+    //     .catch((err) => {
+    //         dispatch({
+    //             type: FETCH_TESTS_FAIL,
+    //             payload: err
+    //         });
+    //     });
 }
 
 export const CloseSnackbar = () => dispatch => {

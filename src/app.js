@@ -3,6 +3,9 @@ import http from 'http';
 import routes from './routes';
 import bodyParser from 'body-parser';
 import path from 'path';
+import cors from 'cors';
+import p from './passport';
+import passport from 'passport';
 
 let port_number = process.env.PORT || 3001;
 let app = express();
@@ -10,6 +13,16 @@ let app = express();
 app.server = http.createServer(app);
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname)));
+
+app.use(passport.initialize());
+
+var corsOption = {
+    origin: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+    exposedHeaders: ['x-auth-token']
+};
+app.use(cors(corsOption));
 
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");

@@ -2,10 +2,10 @@ import db from '../../db';
 
 class AdminTestController {
     GetAll = (req, resp) => {
-        console.log('get all tests called');
+        console.log('get all tests called', req.user);
         let tests = this.initializeCollection();
         console.log(tests.data.length);
-        resp.send(tests.data);
+        resp.status(200).json(tests.data);
     }
 
     GetTest = (req, resp) => {

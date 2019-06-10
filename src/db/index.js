@@ -80,7 +80,9 @@ const entities = [
   "categories", "users", "skills", "candidates", "mcqs", "tests"
 ];
 const entitiesToDelete = [
-  "categories", "users", "skills", "candidates", "mcqs", "tests"
+  //"categories", 
+  "users", 
+  /*"skills", "candidates", "mcqs", "tests"*/
 ];
 
 export default db;

@@ -90,21 +90,27 @@ switch(action.type) {
    {
        console.log('fetch tests reducer');
        console.log(action.payload);
-       
+       let arr = [];
+       if(action.payload && action.payload.length > 0) {
+           action.payload.map((item, index) => {
+               arr.push(item);
+           })
+       }
        return {
            ...state,
            error: null,
-           editMode: false,
+           editMode: !state.editMode,
            current_test: { 
                 skill:'',
                 testName:'',
                 duration: 90,
                 experienceYears: 5,
-                status: 'draft'
-           },
+                status: 'draft',
+                search_enabled: !state.search_enabled,
+            },
            success_message: '',
-           search_enabled: false,
-           tests: action.payload
+           search_enabled: !state.search_enabled,
+           tests: arr
        }
    }
    case FETCH_SKILLS_SUCCESS:
@@ -170,8 +176,47 @@ switch(action.type) {
            filteredCategories: action.payload.filteredCategories
        }
    }
+   case FETCH_TESTS_SUCCESS:
+   {
+       console.log('fetch tests reducer');
+       console.log(action.payload);
+       let arr = [];
+       if(action.payload && action.payload.length > 0) {
+           action.payload.map((item, index) => {
+               arr.push(item);
+           })
+       }
+       return {
+           ...state,
+           error: null,
+           editMode: !state.editMode,
+           current_test: { 
+                skill:'',
+                testName:'',
+                duration: 90,
+                experienceYears: 5,
+                status: 'draft',
+                search_enabled: !state.search_enabled,
+            },
+           success_message: '',
+           search_enabled: !state.search_enabled,
+           tests: arr
+       }
+   }
    case FETCH_TESTS_FAIL:
    {
+        console.log('fetch test fail', action.payload);       
+        let payload = action.payload;
+        if(payload && payload.errorStatus === '401') {
+            console.log('return fetch test fail', action.payload);       
+            return {
+                ...state,
+                tests: [],
+                skills: [],
+                state_changed: !state.state_changed,
+                error: payload
+            }
+        }
        return {
            ...state,
            current_mcq: { 
@@ -182,7 +227,7 @@ switch(action.type) {
                 answerId: 0,
                 choices: []
             },
-           error: action.payload
+           error: null
        }
    }
    case OPEN_SNACKBAR:

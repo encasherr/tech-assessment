@@ -34,7 +34,16 @@ class AdminTestContainer extends React.Component {
     }
 
     componentWillUpdate = () => {
-        console.log('adm in test container: component will update');
+        console.log('adm in test container: component will update', this.props);
+        if(this.props.error) {
+                console.log('error status 401 - 11');
+                if(this.props.error.errorStatus === '401') {
+                console.log('error status 401 - 22');
+                this.props.history.push({
+                    pathname: '/dashboard'
+                });
+            }
+        }
         if(this.props.snack_open) {
             console.log('snack_open: component will update');
             // this.props.history.push('/testConsole');
@@ -48,7 +57,7 @@ class AdminTestContainer extends React.Component {
     }
 
     reload = () => {
-        this.props.FetchSkills();
+        // this.props.FetchSkills();
         this.props.FetchTests();
     }
 
