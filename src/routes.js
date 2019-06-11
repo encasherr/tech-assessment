@@ -12,39 +12,39 @@ let api = express.Router();
 
 /* Admin Routes */
 /* mcq endpoints */
-api.get('/admin/getAllMcqs', McqController.GetAll);
-api.post('/admin/mcq', McqController.Add);
-api.put('/admin/mcq', McqController.Update);
-api.delete('/admin/mcq', McqController.Delete);
+api.get('/admin/getAllMcqs', auth, McqController.GetAll);
+api.post('/admin/mcq', auth, McqController.Add);
+api.put('/admin/mcq', auth, McqController.Update);
+api.delete('/admin/mcq', auth, McqController.Delete);
 
 /* category endpoints */
-api.get('/admin/getAllCategories', CategoryController.GetAll);
-api.post('/admin/category', CategoryController.Add);
-api.put('/admin/category', CategoryController.Update);
-api.delete('/admin/category', CategoryController.Delete);
+api.get('/admin/getAllCategories', auth, CategoryController.GetAll);
+api.post('/admin/category', auth, CategoryController.Add);
+api.put('/admin/category', auth, CategoryController.Update);
+api.delete('/admin/category', auth, CategoryController.Delete);
 
 /* skill endpoints */
-api.get('/admin/getAllSkills', SkillController.GetAll);
-api.post('/admin/skill', SkillController.Add);
-api.delete('/admin/category', SkillController.Delete);
+api.get('/admin/getAllSkills', auth, SkillController.GetAll);
+api.post('/admin/skill', auth, SkillController.Add);
+api.delete('/admin/category', auth, SkillController.Delete);
 
 /* candidate endpoints */
-api.get('/admin/getAllCandidates', CandidateController.GetAll);
-api.post('/admin/candidate', CandidateController.Add);
-api.put('/admin/candidate', CandidateController.Update);
-api.post('/admin/sendInvite', CandidateController.SendInvite);
-api.delete('/admin/candidate', CandidateController.Delete);
+api.get('/admin/getAllCandidates', auth, CandidateController.GetAll);
+api.post('/admin/candidate', auth, CandidateController.Add);
+api.put('/admin/candidate', auth, CandidateController.Update);
+api.post('/admin/sendInvite', auth, CandidateController.SendInvite);
+api.delete('/admin/candidate', auth, CandidateController.Delete);
 
 /* Admin Test endpoints */
-api.get('/admin/getAllTests',  AdminTestController.GetAll);
-api.get('/admin/getTest', AdminTestController.GetTest);
-api.post('/admin/test', AdminTestController.Add);
-api.put('/admin/test', AdminTestController.Update);
-api.delete('/admin/test', AdminTestController.Delete);
+api.get('/admin/getAllTests', auth,  AdminTestController.GetAll);
+api.get('/admin/getTest', auth, AdminTestController.GetTest);
+api.post('/admin/test', auth, AdminTestController.Add);
+api.put('/admin/test', auth, AdminTestController.Update);
+api.delete('/admin/test', auth, AdminTestController.Delete);
 
 /* Candidate Routes */
 /* Test Invite endpoints */
-api.post('/candidate/startTest', TestInviteController.StartTest);
+api.post('/candidate/startTest', auth, TestInviteController.StartTest);
 
 api.get('/admin/auth/google',
   passport.authenticate('google-token', { session: false, scope: ['https://www.googleapis.com/auth/plus.login'] }),
