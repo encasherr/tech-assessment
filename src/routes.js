@@ -36,7 +36,7 @@ api.post('/admin/sendInvite', CandidateController.SendInvite);
 api.delete('/admin/candidate', CandidateController.Delete);
 
 /* Admin Test endpoints */
-api.get('/admin/getAllTests', auth, AdminTestController.GetAll);
+api.get('/admin/getAllTests',  AdminTestController.GetAll);
 api.get('/admin/getTest', AdminTestController.GetTest);
 api.post('/admin/test', AdminTestController.Add);
 api.put('/admin/test', AdminTestController.Update);

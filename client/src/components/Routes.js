@@ -3,6 +3,7 @@ import AddCategoryComponent from './Categories/AddCategory';
 import AddCandidateComponent from './Candidates/AddCandidate';
 import DashboardComponent from './Dashboard';
 import UsersComponent from './Users';
+import LoginComponent from './lib/LoginComponent';
 import { Route } from 'react-router-dom'
 import CategoriesContainer from '../Containers/CategoryContainer';
 import SkillsContainer from '../Containers/SkillContainer';
@@ -13,14 +14,17 @@ import AdminTestContainer from '../Containers/AdminTestContainer';
 import McqList from '../components/Mcq/McqList';
 import CandidateList from '../components/Candidates/CandidateList';
 import InviteConsoleContainer from '../Containers/InviteConsole/InviteConsoleContainer';
+import PrivateRoute from '../components/lib/PrivateRoute';
 
 const Routes = (props) => {
     return (
         <div>
             <Route exact path="/" component={DashboardComponent} />
+            <Route path="/login" component={LoginComponent} />
             <Route path="/dashboard" component={DashboardComponent} />
             <Route path="/tests" component={AdminTestContainer} />
-            <Route path="/testConsole" component={TestConsoleContainer} />
+            {/* <Route path="/testConsole" component={TestConsoleContainer} /> */}
+            <PrivateRoute path="/testConsole" component={TestConsoleContainer} />
             <Route path="/inviteConsole" component={InviteConsoleContainer} />
             <Route path="/mcqs" component={McqList} />
             <Route path="/addMcq" component={McqContainer} />
