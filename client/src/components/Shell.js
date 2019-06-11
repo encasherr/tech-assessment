@@ -14,6 +14,7 @@ import SideDrawer from './layouts/SideDrawer';
 // import DashboardComponent from './Dashboard';
 // import UsersComponent from './Users';
 import Routes from './Routes';
+import AuthHelper from '../AuthHelper';
 
 const drawerWidth = 240;
 
@@ -101,7 +102,7 @@ class Shell extends React.Component {
         <Header classes={classes} 
                 openState={this.state.open} 
                 onDrawerOpen={this.handleDrawerOpen}/>
-        <Router>
+        {AuthHelper.isLoggedIn() && <Router>
           <SideDrawer classes={classes} 
                   openState={this.state.open} 
                   onDrawerClose={this.handleDrawerClose}
@@ -111,6 +112,7 @@ class Shell extends React.Component {
                 <Routes />
           </main>
         </Router>
+        }
       </div>
     );
   }
