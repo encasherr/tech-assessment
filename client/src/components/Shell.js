@@ -102,7 +102,7 @@ class Shell extends React.Component {
         <Header classes={classes} 
                 openState={this.state.open} 
                 onDrawerOpen={this.handleDrawerOpen}/>
-        {AuthHelper.isLoggedIn() && <Router>
+        <Router>
           <SideDrawer classes={classes} 
                   openState={this.state.open} 
                   onDrawerClose={this.handleDrawerClose}
@@ -112,7 +112,6 @@ class Shell extends React.Component {
                 <Routes />
           </main>
         </Router>
-        }
       </div>
     );
   }

@@ -1,11 +1,18 @@
 const AuthHelper = {
-isLoggedIn = () => {
-let token = local storage.getItem('auth-token');
-if(token) {
-return true;
-}
+    isLoggedIn: () => {
+        let token = localStorage.getItem('auth-token');
+        // console.log('token', token);
+        if(token) {
+            return true;
+        }
 
-return false;
-}
+        return false;
+    },
+    LogOut: () => {
+        console.log('remove token');
+        localStorage.removeItem('auth-token');
+        // let token = localStorage.getItem('auth-token');
+        // console.log('token', token);
+    }
 }
 export default AuthHelper;

@@ -12,8 +12,10 @@ import { Dashboard, Book, Assessment, ViewQuilt, PermIdentity, SupervisorAccount
 import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
 import { Link } from 'react-router-dom'
+import AuthHelper from '../../AuthHelper';
 
 const MenuItems = [
+    { routeName: 'login', routeCaption: 'Login', icon: Polymer },
     { routeName: 'dashboard', routeCaption: 'Dashboard', icon: Dashboard },
     { routeName: 'tests', routeCaption: 'Tests', icon: Assessment },
     { routeName: 'mcqs', routeCaption: 'Library', icon: Book },
@@ -32,6 +34,7 @@ const getIcon = (menuItem) => {
 
 const SideDrawer = (props) => {
     const { classes, openState, theme } = props;
+    console.log('Menuitems', MenuItems);
     return (
             <Drawer
             variant="permanent"
@@ -55,13 +58,25 @@ const SideDrawer = (props) => {
             <Divider />
             <List>
             {MenuItems.map((menuItem, index) => (
-                <Link to={"/" + menuItem.routeName} key={index}>
-                    <ListItem button key={menuItem.routeCaption}>
-                    {/* <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon> */}
-                    <ListItemIcon title={menuItem.routeCaption}>{getIcon(menuItem)}</ListItemIcon>
-                    <ListItemText style={{textDecoration: 'none'}} primary={menuItem.routeCaption} />
-                    </ListItem>
-                </Link>
+                <div>
+                    {AuthHelper.isLoggedIn() && menuItem.routeName !== 'login' &&
+                    <Link to={"/" + menuItem.routeName} key={index}>
+                        <ListItem button key={menuItem.routeCaption}>
+                            {/* <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon> */}
+                            <ListItemIcon title={menuItem.routeCaption}>{getIcon(menuItem)}</ListItemIcon>
+                            <ListItemText style={{textDecoration: 'none'}} primary={menuItem.routeCaption} />
+                        </ListItem>
+                    </Link>
+                    }
+                    {!AuthHelper.isLoggedIn() && menuItem.routeName === 'login' &&
+                    <Link to={"/" + menuItem.routeName} key={index}>
+                        <ListItem button key={menuItem.routeCaption}>
+                            <ListItemIcon title={menuItem.routeCaption}>{getIcon(menuItem)}</ListItemIcon>
+                            <ListItemText style={{textDecoration: 'none'}} primary={menuItem.routeCaption} />
+                        </ListItem>
+                    </Link>
+                    }
+            </div>
             ))}
             </List>
             {/* <Divider />
