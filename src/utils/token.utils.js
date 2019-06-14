@@ -6,7 +6,10 @@ import { AuthConfig } from '../commons/ServerConfig';
 const createToken = (auth) => {
     console.log('creating token');
     return jwt.sign({
-            id: auth.googleId
+            googleId: auth.googleId,
+            emailId: auth.emailId,
+            role: auth.role,
+            name: auth.name
         }, AuthConfig.myPrivateKey,
     // }, 'my-secret',
         {

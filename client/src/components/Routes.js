@@ -2,7 +2,8 @@ import React from 'react';
 import AddCategoryComponent from './Categories/AddCategory';
 import AddCandidateComponent from './Candidates/AddCandidate';
 import DashboardComponent from './Dashboard';
-import UsersComponent from './Users';
+// import UsersComponent from './Users';
+import UsersComponent from '../Containers/User/UserContainer';
 import LoginComponent from './lib/LoginComponent';
 import { Route } from 'react-router-dom'
 import CategoriesContainer from '../Containers/CategoryContainer';

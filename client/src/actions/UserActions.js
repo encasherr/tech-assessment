@@ -1,5 +1,6 @@
 import axios from 'axios';
 import config from '../config';
+import repository from '../repository';
 import { FETCH_SKILLS_BEGIN, FETCH_SKILLS_FAIL, FETCH_SKILLS_SUCCESS } from './SkillActions';
 
 export const ADD_USER_BEGIN = 'ADD_USER_BEGIN';
@@ -56,17 +57,17 @@ export const CurrentUserFieldChange = (val, field, model) => dispatch => {
     });
 }
 
-export const AddCandidate = (userModel, editMode) => dispatch => {
+export const AddUser = (userModel, editMode) => dispatch => {
     dispatch({
         type: ADD_USER_BEGIN
     });
-    let url = config.adminApiUrl + 'candidate';
+    let url = config.adminApiUrl + 'user';
     console.log('action model');
     console.log(userModel);
     // if(!editMode) {
         axios.post(url, userModel)
             .then((res) => {
-                console.log('CANDIDATE saved: ' + res);
+                console.log('user saved: ' + res);
                 dispatch({
                     type: ADD_USER_SUCCESS,
                     payload: res.data
@@ -133,18 +134,19 @@ export const BeginSearch = () => dispatch => {
     //     type: FETCH_USERS_BEGIN
     // });
     let url = config.adminApiUrl + 'getAllUsers';
-    axios.get(url)
+    repository.getData(url)
         .then((res) => {
-            console.log('Users fetched');
+            console.log('promise resolved');
             dispatch({
                 type: FETCH_USER_SUCCESS,
                 payload: res.data
             });
         })
         .catch((err) => {
+            console.log('promise rejected');
             dispatch({
                 type: FETCH_USER_FAIL,
-                payload: err
+                payload: { errorStatus: '401' }
             });
         });
 }

@@ -1,6 +1,7 @@
 import express  from 'express';
 import { McqController, CategoryController, SkillController,
-         CandidateController, AdminTestController, InviteController } from './Controllers/admin';
+        CandidateController, AdminTestController, InviteController,
+        UserController } from './Controllers/admin';
 import { TestInviteController } from './Controllers/candidate';
 
 import { generateToken, sendToken } from './utils/token.utils';
@@ -41,6 +42,11 @@ api.get('/admin/getTest', auth, AdminTestController.GetTest);
 api.post('/admin/test', auth, AdminTestController.Add);
 api.put('/admin/test', auth, AdminTestController.Update);
 api.delete('/admin/test', auth, AdminTestController.Delete);
+
+/* User endpoints */
+api.get('/admin/getAllUsers', auth,  UserController.GetAll);
+api.post('/admin/user', auth, UserController.Add);
+
 
 /* Candidate Routes */
 /* Test Invite endpoints */

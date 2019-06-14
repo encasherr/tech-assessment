@@ -1,4 +1,7 @@
 const AuthHelper = {
+    getToken: () => {
+        return localStorage.getItem('auth-token');
+    },
     isLoggedIn: () => {
         let token = localStorage.getItem('auth-token');
         // console.log('token', token);

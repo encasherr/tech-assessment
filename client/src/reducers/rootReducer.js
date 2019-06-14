@@ -6,6 +6,7 @@ import candidateReducer from './candidateReducer';
 import adminTestReducer from './adminTestReducer';
 import testConsoleReducer from './testConsoleReducer';
 import inviteConsoleReducer from './inviteConsoleReducer';
+import userReducer from './userReducer';
 
 export default combineReducers({
     categoryReducer,
@@ -14,5 +15,6 @@ export default combineReducers({
     candidateReducer,
     adminTestReducer,
     testConsoleReducer,
-    inviteConsoleReducer
+    inviteConsoleReducer,
+    userReducer
 });

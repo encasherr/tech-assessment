@@ -1,4 +1,7 @@
-import { ADD_USER_SUCCESS, ADD_USER_FAIL, SELECT_USER,
+import { 
+    ADD_USER_SUCCESS, 
+    ADD_USER_FAIL, 
+    SELECT_USER,
     UPDATE_USER_SUCCESS, UPDATE_USER_FAIL, FETCH_USER_FAIL,
     FETCH_USER_SUCCESS, 
     OPEN_SNACKBAR, 
@@ -7,7 +10,7 @@ import { ADD_USER_SUCCESS, ADD_USER_FAIL, SELECT_USER,
     CURRENT_USER_FIELD_CHANGE_END, 
     USER_SEARCH_BEGIN,
     USER_SEARCH_SUCCESS
-} from "../actions/CandidateActions";
+} from "../actions/UserActions";
 import { FETCH_SKILLS_SUCCESS } from "../actions/SkillActions";
 
 export default (state = {}, action) => {
@@ -83,7 +86,7 @@ switch(action.type) {
            ...state,
            error: null,
            editMode: false,
-           current_USER: { 
+           current_user: { 
                 emailId: '',
                 role: 'guest'
            },

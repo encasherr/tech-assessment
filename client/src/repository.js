@@ -1,4 +1,5 @@
 import axios from 'axios';
+import AuthHelper from './AuthHelper';
 
 axios.interceptors.response.use(response => {
         return response;
@@ -16,7 +17,7 @@ axios.interceptors.response.use(response => {
  });
 
 const getData = (url) => {
-    let accessToken = localStorage.getItem("auth-token");
+    let accessToken = AuthHelper.getToken(); //localStorage.getItem("auth-token");
     let options = {
         headers: {
           "x-access-token": accessToken
