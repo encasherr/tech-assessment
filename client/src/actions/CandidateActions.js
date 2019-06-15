@@ -1,5 +1,7 @@
 import axios from 'axios';
 import config from '../config';
+import repository from '../repository';
+
 import { FETCH_SKILLS_BEGIN, FETCH_SKILLS_FAIL, FETCH_SKILLS_SUCCESS } from './SkillActions';
 
 export const ADD_CANDIDATE_BEGIN = 'ADD_CANDIDATE_BEGIN';
@@ -91,7 +93,7 @@ export const AddCandidate = (candidateModel, editMode) => dispatch => {
     console.log('action model');
     console.log(candidateModel);
     // if(!editMode) {
-        axios.post(url, candidateModel)
+        repository.saveData(url, candidateModel)
             .then((res) => {
                 console.log('CANDIDATE saved: ' + res);
                 dispatch({
@@ -160,7 +162,7 @@ export const BeginSearch = () => dispatch => {
     //     type: FETCH_CANDIDATES_BEGIN
     // });
     let url = config.adminApiUrl + 'getAllCandidates';
-    axios.get(url)
+    repository.getData(url)
         .then((res) => {
             console.log('CANDIDATES fetched');
             dispatch({
@@ -181,7 +183,7 @@ export const FetchSkills = () => dispatch => {
         type: FETCH_SKILLS_BEGIN
     });
     let url = config.adminApiUrl + 'getAllSkills';
-    axios.get(url)
+    repository.getData(url)
         .then((res) => {
             console.log('skills fetched');
             dispatch({
@@ -209,7 +211,7 @@ export const UpdateCandidate = (candidateModel) => dispatch => {
         type: UPDATE_CANDIDATE_BEGIN
     });
     let url = config.adminApiUrl + 'candidate';
-    axios.put(url, candidateModel)
+    repository.updateData(url, candidateModel)
         .then((res) => {
             dispatch({
                 type: UPDATE_CANDIDATE_SUCCESS

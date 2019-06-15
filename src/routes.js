@@ -27,14 +27,14 @@ api.delete('/admin/category', auth, CategoryController.Delete);
 /* skill endpoints */
 api.get('/admin/getAllSkills', auth, SkillController.GetAll);
 api.post('/admin/skill', auth, SkillController.Add);
-api.delete('/admin/category', auth, SkillController.Delete);
+api.delete('/admin/skill', auth, SkillController.Delete);
 
 /* candidate endpoints */
-api.get('/admin/getAllCandidates', auth, CandidateController.GetAll);
-api.post('/admin/candidate', auth, CandidateController.Add);
-api.put('/admin/candidate', auth, CandidateController.Update);
+// api.get('/admin/getAllCandidates', auth, CandidateController.GetAll);
+// api.post('/admin/candidate', auth, CandidateController.Add);
+// api.put('/admin/candidate', auth, CandidateController.Update);
 api.post('/admin/sendInvite', auth, CandidateController.SendInvite);
-api.delete('/admin/candidate', auth, CandidateController.Delete);
+// api.delete('/admin/candidate', auth, CandidateController.Delete);
 
 /* Admin Test endpoints */
 api.get('/admin/getAllTests', auth,  AdminTestController.GetAll);
@@ -46,6 +46,7 @@ api.delete('/admin/test', auth, AdminTestController.Delete);
 /* User endpoints */
 api.get('/admin/getAllUsers', auth,  UserController.GetAll);
 api.post('/admin/user', auth, UserController.Add);
+api.put('/admin/user', auth, UserController.Update);
 
 
 /* Candidate Routes */

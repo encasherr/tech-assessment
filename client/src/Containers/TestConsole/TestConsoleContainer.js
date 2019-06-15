@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 // import AddTestComponent from '../components/AdminTest/AddTest';
-import {    FetchTest, AddMcqToTest, PublishTest, CloseSnackbar,
+import {    FetchTest, AddMcqToTest, PublishTest, CloseSnackbar, SetHistory,
             OpenSnackbar } from '../../actions/TestConsoleActions';            
 import Grid from '@material-ui/core/Grid';
 import SnackbarComponent from '../../components/lib/SnackbarComponent';
@@ -12,7 +12,12 @@ import LoadingComponent from '../../components/lib/LoadingComponent';
 
 class TestConsoleContainer extends React.Component {
     
+    componentWillMount = () => {
+    }
+
     componentDidMount = () => {
+        console.log('this.props.history', this.props.history);
+        this.props.SetHistory(this.props.history);
         this.reload();
     }
 
@@ -28,7 +33,7 @@ class TestConsoleContainer extends React.Component {
         console.log('reload: location state');
         console.log(state);
         if(state){
-            this.props.FetchTest(state.testId);
+            this.props.FetchTest(state.testId, this.props.history);
         }
     }
 
@@ -91,10 +96,10 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     // AddTest: (model, editMode) => dispatch(AddTest(model, editMode)),
     // UpdateTest: (model) => dispatch(UpdateTest(model)),
-    // FetchSkills: () => dispatch(FetchSkills()),
+    SetHistory: (history) => dispatch(SetHistory(history)),
     AddMcqToTest: (mcqItem, testModel) => dispatch(AddMcqToTest(mcqItem, testModel)),
     PublishTest: (testModel) => dispatch(PublishTest(testModel)),
-    FetchTest: (testId) => dispatch(FetchTest(testId)),
+    FetchTest: (testId, history) => dispatch(FetchTest(testId, history)),
     CloseSnackbar: () => dispatch(CloseSnackbar()),
     OpenSnackbar: () => dispatch(OpenSnackbar()),
     // CurrentTestFieldChange: (val, field, model) => dispatch(CurrentTestFieldChange(val, field, model))

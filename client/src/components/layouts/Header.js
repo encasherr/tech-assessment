@@ -6,7 +6,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Typography from '@material-ui/core/Typography';
 import classNames from 'classnames';
 import { Button, Menu, MenuItem } from '@material-ui/core';
-import { AccountCircle } from '@material-ui/icons';
+import { PowerSettingsNew } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import AuthHelper from '../../AuthHelper';
 
@@ -14,8 +14,10 @@ const Header = (props) => {
     // const classes = useStyles();
     const { classes, openState } = props;
     const logout = () => {
-        AuthHelper.LogOut();
+        props.onLogout();
     }
+    let userInfo = AuthHelper.GetUserInfo();
+    // console.log('header props', userInfo.name);
     return (
         <AppBar
             position="fixed"
@@ -37,10 +39,27 @@ const Header = (props) => {
             <Typography variant="h6" color="inherit" noWrap>
                 Technical Assessment Admin
             </Typography>
+            {userInfo && 
+            <Typography variant="subtitle1" color="inherit" noWrap style={styles.welcomeMessage}>
+                {userInfo.name} ({userInfo.role})
+            </Typography>
+            }
             {AuthHelper.isLoggedIn() && 
-                <Button style={styles.menuButton}
+                // <Button style={styles.menuButton}
+                //     onClick={logout}
+                // color="inherit">Logout</Button>
+                <IconButton 
                     onClick={logout}
-                color="inherit">Logout</Button>
+                    style={styles.menuButton}
+                    edge="end"
+                    aria-label="Account of current user"
+                    // aria-controls={menuId}
+                    aria-haspopup="true"
+                    // onClick={handleProfileMenuOpen}
+                    color="inherit"
+                    >
+                    <PowerSettingsNew />
+                </IconButton>
             }
             </Toolbar>
         </AppBar>
@@ -49,6 +68,9 @@ const Header = (props) => {
 export default Header;
 const styles = {
     menuButton: {
-        right: 0
+        marginLeft: '20%'
+    },
+    welcomeMessage: {
+        marginLeft: '40%'
     }
 }

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import config from '../config';
+import repository from '../repository';
 
 export const SEND_TEST_INVITE = 'SEND_TEST_INVITE';
 // export const ADD_QUESTION_SUCCESS = 'ADD_QUESTION_SUCCESS';
@@ -30,7 +31,7 @@ export const SendInvite = (testModel, inviteInfo) => dispatch => {
     }
     testModel.invitations.push(inviteInfo);
     console.log('testmodel invite sent', testModel);
-    axios.post(url, testModel)
+    repository.saveData(url, testModel)
         .then((res) => {
             console.log('invitation sent');
             console.log(res);

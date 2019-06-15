@@ -9,9 +9,13 @@ import {
     CURRENT_USER_FIELD_CHANGE,
     CURRENT_USER_FIELD_CHANGE_END, 
     USER_SEARCH_BEGIN,
-    USER_SEARCH_SUCCESS
+    USER_SEARCH_SUCCESS,
+    SET_USER_INFO_LOCAL,
+    LOGOUT_CURRENT_USER
 } from "../actions/UserActions";
 import { FETCH_SKILLS_SUCCESS } from "../actions/SkillActions";
+import { UNAUTHORIZED_ACCESS } from "../actions/TestConsoleActions";
+import { stat } from "fs";
 
 export default (state = {}, action) => {
 switch(action.type) {
@@ -49,6 +53,7 @@ switch(action.type) {
    }
    case UPDATE_USER_SUCCESS:
    {
+       console.log('user updated successfully');
        return {
            ...state,
            editMode: false,
@@ -56,6 +61,7 @@ switch(action.type) {
                 emailId:'',
                 role: 'guest'
            },
+           snack_open: true,
            success_message: 'User Updated Successfully'
        }
    }
@@ -124,6 +130,20 @@ switch(action.type) {
                 experienceMonths: 10
             },
            error: action.payload
+       }
+   }
+   case SET_USER_INFO_LOCAL:
+   {
+       return {
+           ...state,
+           currentUserLocal: action.payload
+       }
+   }
+   case LOGOUT_CURRENT_USER:
+   {
+       return {
+           ...state,
+           currentUserLocal: null
        }
    }
    case OPEN_SNACKBAR:

@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { BrowserRouter as Router } from 'react-router-dom'
+import { connect } from 'react-redux';
+import { SetUserInfo, LogoutCurrentUser } from '../actions/UserActions';
 
 import Header from './layouts/Header';
 import SideDrawer from './layouts/SideDrawer';
@@ -92,21 +94,35 @@ class Shell extends React.Component {
   handleDrawerClose = () => {
     this.setState({ open: false });
   };
+  
+  componentDidMount = () => {
+    console.log('shell this.props.history', this.props.history);
+    // this.props.SetUserInfo(AuthHelper.GetUserInfo());
+  }
+  Logout = () => {
+    this.props.LogoutCurrentUser();
+    AuthHelper.GetHistory().push({
+      pathname: '/login'
+    });
+  }
 
   render() {
     const { classes, theme } = this.props;
-
+    console.log('shell props', this.props);
     return (
       <div className={classes.root}>
         <CssBaseline />
         <Header classes={classes} 
                 openState={this.state.open} 
-                onDrawerOpen={this.handleDrawerOpen}/>
+                onDrawerOpen={this.handleDrawerOpen}
+                onLogout={() => this.Logout()}
+                />
         <Router>
           <SideDrawer classes={classes} 
                   openState={this.state.open} 
                   onDrawerClose={this.handleDrawerClose}
-                  theme={theme}/>
+                  theme={theme}
+                  />
           <main className={classes.content}>
             <div className={classes.toolbar} />
                 <Routes />
@@ -122,4 +138,19 @@ Shell.propTypes = {
   theme: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles, { withTheme: true })(Shell);
+const mapStateToProps = state => ({
+  ...state.userReducer
+});
+const mapDispatchToProps = dispatch => ({
+  SetUserInfo: (userInfo) => dispatch(SetUserInfo(userInfo)),
+  LogoutCurrentUser: () => dispatch(LogoutCurrentUser())
+  // AddTest: (model, editMode) => dispatch(AddTest(model, editMode)),
+  // UpdateTest: (model) => dispatch(UpdateTest(model)),
+  // FetchSkills: () => dispatch(FetchSkills()),
+  // FetchTests: () => dispatch(FetchTests()),
+  // CloseSnackbar: () => dispatch(CloseSnackbar()),
+  // OpenSnackbar: () => dispatch(OpenSnackbar()),
+  // CurrentTestFieldChange: (val, field, model) => dispatch(CurrentTestFieldChange(val, field, model))
+});
+export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(Shell));
+// export default withStyles(styles, { withTheme: true })(Shell);

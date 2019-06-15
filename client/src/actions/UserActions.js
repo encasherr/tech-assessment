@@ -2,6 +2,7 @@ import axios from 'axios';
 import config from '../config';
 import repository from '../repository';
 import { FETCH_SKILLS_BEGIN, FETCH_SKILLS_FAIL, FETCH_SKILLS_SUCCESS } from './SkillActions';
+import AuthHelper from '../AuthHelper';
 
 export const ADD_USER_BEGIN = 'ADD_USER_BEGIN';
 export const ADD_USER_SUCCESS = 'ADD_USER_SUCCESS';
@@ -20,10 +21,17 @@ export const CHOICE_ADDED_TO_USER = 'CHOICE_ADDED_TO_USER';
 export const FETCH_USER_BEGIN = 'FETCH_USER_BEGIN';
 export const FETCH_USER_SUCCESS = 'FETCH_USER_SUCCESS';
 export const FETCH_USER_FAIL = 'FETCH_USER_FAIL';
-// export const FETCH_SKILLS_SUCCESS = 'FETCH_SKILLS_SUCCESS';
+export const SET_USER_INFO_LOCAL = 'SET_USER_INFO_LOCAL';
+export const LOGOUT_CURRENT_USER = 'LOGOUT_CURRENT_USER';
 // export const FETCH_SKILLS_FAIL = 'FETCH_SKILLS_FAIL';
 export const CLOSE_SNACKBAR = 'CLOSE_SNACKBAR';
 export const OPEN_SNACKBAR = 'OPEN_SNACKBAR';
+
+
+var history = {};
+export const SetHistory = (propsHistory) => dispatch => {
+    history = propsHistory;
+}
 
 export const CurrentUserFieldChange = (val, field, model) => dispatch => {
     console.log('USER field change: ' + field);
@@ -64,8 +72,7 @@ export const AddUser = (userModel, editMode) => dispatch => {
     let url = config.adminApiUrl + 'user';
     console.log('action model');
     console.log(userModel);
-    // if(!editMode) {
-        axios.post(url, userModel)
+    repository.saveData(url, userModel, history)
             .then((res) => {
                 console.log('user saved: ' + res);
                 dispatch({
@@ -81,60 +88,9 @@ export const AddUser = (userModel, editMode) => dispatch => {
             });
 }
 
-export const BeginSearch = () => dispatch => {
-    dispatch({
-        type: USER_SEARCH_BEGIN
-    });
-}
-
- export const SearchCandidate = (searchTerm, candidateList) => dispatch => {
-//     console.log(`search term: ${searchTerm}, list length: ${CANDIDATEList ? CANDIDATEList.length : 0}`);
-//     if(CANDIDATEList && CANDIDATEList.length > 0) {
-//         let filteredCANDIDATES = CANDIDATEList.filter((item) => {
-//             return (
-//                     item.title &&
-//                     item.title.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1
-//                     ) ||
-//                     (
-//                         item.description &&
-//                         item.description.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1);
-//         });
-//         if(filteredCANDIDATES && filteredCANDIDATES.length > 0) {
-//             dispatch({
-//                 type: USER_SEARCH_SUCCESS,
-//                 payload: {
-//                     filteredCANDIDATES,
-//                     searchTerm
-//                 }
-//             });
-//         }
-//         else {
-//             dispatch({
-//                 type: USER_SEARCH_SUCCESS,
-//                 payload: {
-//                     filteredCANDIDATES: [],
-//                     searchTerm
-//                 }
-//             });
-//         }
-//     }
-//     else {
-//         dispatch({
-//             type: USER_SEARCH_SUCCESS,
-//             payload: {
-//                 filteredCANDIDATES: [],
-//                 searchTerm
-//             }
-//         });
-//     }
- }
-
- export const FetchUsers = () => dispatch => {
-    // dispatch({
-    //     type: FETCH_USERS_BEGIN
-    // });
+export const FetchUsers = () => dispatch => {
     let url = config.adminApiUrl + 'getAllUsers';
-    repository.getData(url)
+    repository.getData(url, history)
         .then((res) => {
             console.log('promise resolved');
             dispatch({
@@ -151,51 +107,40 @@ export const BeginSearch = () => dispatch => {
         });
 }
 
-export const FetchSkills = () => dispatch => {
-    dispatch({
-        type: FETCH_SKILLS_BEGIN
-    });
-    let url = config.adminApiUrl + 'getAllSkills';
-    axios.get(url)
-        .then((res) => {
-            console.log('skills fetched');
-            dispatch({
-                type: FETCH_SKILLS_SUCCESS,
-                payload: res.data
-            });
-        })
-        .catch((err) => {
-            dispatch({
-                type: FETCH_SKILLS_FAIL,
-                payload: err
-            });
-        });
-}
-
-export const SelectCandidate = (userModel) => dispatch => {
-    dispatch({
-        type: SELECT_USER,
-        payload: userModel
-    })
-}
-
 export const UpdateUser = (userModel) => dispatch => {
-    dispatch({
-        type: UPDATE_USER_BEGIN
-    });
     let url = config.adminApiUrl + 'user';
-    axios.put(url, userModel)
+    let model ={
+        user: userModel
+    };
+    repository.updateData(url, model, history)
         .then((res) => {
+            console.log('promise resolved');
             dispatch({
                 type: UPDATE_USER_SUCCESS
             });
         })
         .catch((err) => {
+            console.log('promise rejected');
             dispatch({
-                type: UPDATE_USER_FAIL,
-                payload: err
+                type: UPDATE_USER_SUCCESS,
+                payload: { errorStatus: '401' }
             });
         });
+}
+
+export const SetUserInfo = (res) => dispatch => {
+    AuthHelper.Login(res);
+    let userInfo = AuthHelper.GetUserInfo();
+    dispatch({
+        type: SET_USER_INFO_LOCAL,
+        payload: userInfo
+    })
+}
+export const LogoutCurrentUser = () => dispatch => {
+    AuthHelper.LogOut();
+    dispatch({
+        type: LOGOUT_CURRENT_USER
+    })
 }
 
 export const CloseSnackbar = () => dispatch => {

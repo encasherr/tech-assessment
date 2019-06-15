@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { GoogleLogin } from 'react-google-login';
 import config from '../../config';
 import axios from 'axios';
+import AuthHelper from '../../AuthHelper';
+import { SetUserInfo } from '../../actions/UserActions';
+import { connect } from 'react-redux';
 
 class LoginComponent extends Component {
     constructor(props){
@@ -28,7 +31,7 @@ class LoginComponent extends Component {
             console.log('res',res);
             const token = res.headers['x-auth-token'];
             if(token) {
-                localStorage.setItem("auth-token", token);
+                this.props.SetUserInfo(res);
                 this.props.history.push({
                     pathname: '/dashboard'
                 });
@@ -59,10 +62,16 @@ class LoginComponent extends Component {
         );
     }
 }
-export default LoginComponent;
 const styles = {
     container: {
         top: '20%',
         left: '25%'
     }
 }
+const mapStateToProps = state => ({
+    ...state.userReducer
+});
+const mapDispatchToProps = dispatch => ({
+    SetUserInfo: (userInfo) => dispatch(SetUserInfo(userInfo)),
+});
+export default connect(mapStateToProps, mapDispatchToProps)(LoginComponent);

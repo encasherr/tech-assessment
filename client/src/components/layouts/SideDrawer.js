@@ -15,13 +15,13 @@ import { Link } from 'react-router-dom'
 import AuthHelper from '../../AuthHelper';
 
 const MenuItems = [
-    { routeName: 'login', routeCaption: 'Login', icon: Polymer },
+    // { routeName: 'login', routeCaption: 'Login', icon: Polymer },
     { routeName: 'dashboard', routeCaption: 'Dashboard', icon: Dashboard },
     { routeName: 'tests', routeCaption: 'Tests', icon: Assessment },
     { routeName: 'mcqs', routeCaption: 'Library', icon: Book },
     { routeName: 'categories', routeCaption: 'Categories', icon: ViewQuilt },
     { routeName: 'skills', routeCaption: 'Skills', icon: Polymer },
-    { routeName: 'candidates', routeCaption: 'Invite Candidates', icon: SupervisorAccount },
+    // { routeName: 'candidates', routeCaption: 'Invite Candidates', icon: SupervisorAccount },
     { routeName: 'users', routeCaption: 'Users', icon: PermIdentity }
 ];
 
@@ -34,7 +34,7 @@ const getIcon = (menuItem) => {
 
 const SideDrawer = (props) => {
     const { classes, openState, theme } = props;
-    console.log('Menuitems', MenuItems);
+    // console.log('Menuitems', MenuItems);
     return (
             <Drawer
             variant="permanent"
@@ -58,7 +58,7 @@ const SideDrawer = (props) => {
             <Divider />
             <List>
             {MenuItems.map((menuItem, index) => (
-                <div>
+                <div key={index}>
                     {AuthHelper.isLoggedIn() && menuItem.routeName !== 'login' &&
                     <Link to={"/" + menuItem.routeName} key={index}>
                         <ListItem button key={menuItem.routeCaption}>

@@ -5,6 +5,7 @@ import config from '../../config';
 import axios from 'axios';
 import McqItem from './McqItem';
 import { Close } from '@material-ui/icons';
+import repository from '../../repository';
 
 const Transition = (props) => {
     return <Slide direction="left" {...props} />
@@ -24,7 +25,7 @@ class McqSelector extends Component {
     componentDidMount = () => {
             
         let url = config.adminApiUrl + 'getAllMcqs';
-        axios.get(url)
+        repository.getData(url)
             .then((res) => {
                 console.log('MCQ fetched');
                 this.setState({

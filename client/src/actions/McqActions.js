@@ -1,5 +1,6 @@
 import axios from 'axios';
 import config from '../config';
+import repository from '../repository';
 import { FETCH_CATEGORIES_SUCCESS, FETCH_CATEGORIES_FAIL } from './CategoryActions';
 
 export const ADD_MCQ_BEGIN = 'ADD_MCQ_BEGIN';
@@ -145,7 +146,7 @@ export const AddMcq = (mcqModel, editMode) => dispatch => {
     console.log('action model');
     console.log(mcqModel);
     // if(!editMode) {
-        axios.post(url, mcqModel)
+        repository.saveData(url, mcqModel)
             .then((res) => {
                 console.log('mcq saved: ' + res);
                 dispatch({
@@ -218,7 +219,7 @@ export const BeginSearch = () => dispatch => {
     //     type: FETCH_CATEGORIES_BEGIN
     // });
     let url = config.adminApiUrl + 'getAllCategories';
-    axios.get(url)
+    repository.getData(url)
         .then((res) => {
             console.log('categories fetched');
             dispatch({
@@ -236,7 +237,7 @@ export const BeginSearch = () => dispatch => {
 
 export const FetchSkills = () => dispatch => {
     let url = config.adminApiUrl + 'getAllSkills';
-    axios.get(url)
+    repository.getData(url)
         .then((res) => {
             console.log('skills fetched');
             dispatch({
@@ -264,7 +265,7 @@ export const UpdateMcq = (mcqModel) => dispatch => {
         type: UPDATE_MCQ_BEGIN
     });
     let url = config.adminApiUrl + 'mcq';
-    axios.put(url, mcqModel)
+    repository.updateData(url, mcqModel)
         .then((res) => {
             dispatch({
                 type: UPDATE_MCQ_SUCCESS
@@ -283,7 +284,7 @@ export const FetchMcqs = () => dispatch => {
         type: FETCH_MCQ_BEGIN
     });
     let url = config.adminApiUrl + 'getAllMcqs';
-    axios.get(url)
+    repository.getData(url)
         .then((res) => {
             console.log('MCQ fetched');
             dispatch({
@@ -297,6 +298,20 @@ export const FetchMcqs = () => dispatch => {
                 payload: err
             });
         });
+    // repository.getData(url)
+    //     .then((res) => {
+    //         console.log('MCQ fetched');
+    //         dispatch({
+    //             type: FETCH_MCQ_SUCCESS,
+    //             payload: res.data
+    //         });
+    //     })
+    //     .catch((err) => {
+    //         dispatch({
+    //             type: FETCH_MCQ_FAIL,
+    //             payload: err
+    //         });
+    //     });
 }
 
 export const CloseSnackbar = () => dispatch => {

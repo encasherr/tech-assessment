@@ -1,5 +1,6 @@
 import axios from 'axios';
 import config from '../config';
+import repository from '../repository';
 
 export const ADD_CATEGORY_BEGIN = 'ADD_CATEGORY_BEGIN';
 export const ADD_CATEGORY_SUCCESS = 'ADD_CATEGORY_SUCCESS';
@@ -53,7 +54,7 @@ export const AddCategory = (categoryModel, editMode) => dispatch => {
     console.log('action model');
     console.log(categoryModel);
     if(!editMode) {
-        axios.post(url, categoryModel)
+        repository.saveData(url, categoryModel)
             .then((res) => {
                 console.log('category saved: ' + res);
                 dispatch({
@@ -134,7 +135,7 @@ export const UpdateCategory = (categoryModel) => dispatch => {
         type: UPDATE_CATEGORY_BEGIN
     });
     let url = config.adminApiUrl + 'category';
-    axios.put(url, categoryModel)
+    repository.updateData(url, categoryModel)
         .then((res) => {
             dispatch({
                 type: UPDATE_CATEGORY_SUCCESS
@@ -153,7 +154,7 @@ export const FetchCategories = () => dispatch => {
         type: FETCH_CATEGORIES_BEGIN
     });
     let url = config.adminApiUrl + 'getAllCategories';
-    axios.get(url)
+    repository.getData(url)
         .then((res) => {
             console.log('categories fetched');
             dispatch({

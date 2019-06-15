@@ -128,7 +128,7 @@ export const AddTest = (testModel, editMode) => dispatch => {
     console.log('action model');
     console.log(testModel);
     testModel.status = 'draft';
-    axios.post(url, testModel)
+    repository.saveData(url, testModel)
         .then((res) => {
             console.log('test saved: ' + res);
             dispatch({
@@ -150,7 +150,7 @@ export const AddTest = (testModel, editMode) => dispatch => {
     //     type: FETCH_CATEGORIES_BEGIN
     // });
     let url = config.adminApiUrl + 'getAllCategories';
-    axios.get(url)
+    repository.getData(url)
         .then((res) => {
             console.log('categories fetched');
             dispatch({
@@ -168,7 +168,7 @@ export const AddTest = (testModel, editMode) => dispatch => {
 
 export const FetchSkills = () => dispatch => {
     let url = config.adminApiUrl + 'getAllSkills';
-    axios.get(url)
+    repository.getData(url)
         .then((res) => {
             console.log('skills fetched');
             dispatch({
@@ -196,7 +196,7 @@ export const UpdateTest = (testModel) => dispatch => {
         type: UPDATE_TEST_BEGIN
     });
     let url = config.adminApiUrl + 'test';
-    axios.put(url, testModel)
+    repository.updateData(url, testModel)
         .then((res) => {
             dispatch({
                 type: UPDATE_TEST_SUCCESS
@@ -237,7 +237,7 @@ export const FetchTests = () => dispatch => {
     //     }
     // };
     // let url = config.adminApiUrl + 'getAllTests';
-    // axios.get(url, options)
+    // repository.getData(url, options)
     //     .then((res) => {
     //         console.log('TEST fetched');
     //         dispatch({

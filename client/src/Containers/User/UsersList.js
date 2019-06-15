@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -9,6 +9,7 @@ import { PersonAdd } from '@material-ui/icons';
 import LoadingComponent from '../../components/lib/LoadingComponent';
 import { Typography, IconButton } from '@material-ui/core';
 import { Link } from 'react-router-dom';
+import EditUser from './EditUser';
 
 const UsersList = (props) => {
     let { users } = props;
@@ -22,20 +23,27 @@ const UsersList = (props) => {
             <TableRow>
                 <CustomTableCell>Email</CustomTableCell>
                 <CustomTableCell align="left">Display Name</CustomTableCell>
-                <CustomTableCell align="right">Role</CustomTableCell>
+                <CustomTableCell align="left">Role</CustomTableCell>
+                <CustomTableCell>Edit</CustomTableCell>
             </TableRow>
             </TableHead>
             <TableBody>
             {users.map((user, index) => (
-                <TableRow key={index}>
-                    <CustomTableCell component="th" scope="row">
-                        <Link to={ {pathname: "/editUser", state: { userId: user.$loki } }}>
-                            {user.emailId}
-                        </Link>
+                <Fragment key={index}>
+                <TableRow >
+                    <CustomTableCell align="left"><Typography variant="subtitle2" >{user.emailId}</Typography></CustomTableCell>
+                    <CustomTableCell align="left"><Typography variant="subtitle2" >{user.name}</Typography></CustomTableCell>
+                    <CustomTableCell align="left">{user.role.toUpperCase()}</CustomTableCell>
+                    {/* <CustomTableCell align="right">Edit</CustomTableCell> */}
+                    <CustomTableCell align="left">
+                        <EditUser 
+                            model={user} 
+                            onFieldChange={ (val, field, model) => props.onFieldChange(val, field, model) } 
+                            onUpdateUser={ (model) => props.onUpdateUser(model) }
+                        />
                     </CustomTableCell>
-                    <CustomTableCell align="left"><Typography variant="subtitle2" >{user.displayName}</Typography></CustomTableCell>
-                    <CustomTableCell align="right">{user.role.toUpperCase()}</CustomTableCell>
                 </TableRow>
+                </Fragment>
             ))}
             </TableBody>
         </Table>

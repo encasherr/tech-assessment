@@ -9,6 +9,7 @@ import './App.css';
 import { Provider } from "react-redux";
 import configureStore from "./store";
 import config from './config';
+import AuthHelper from './AuthHelper';
 
 class App extends Component {
 
@@ -21,6 +22,7 @@ class App extends Component {
     };
   }
 
+
   googleResponse = (response) => {
     console.log('response', response);
     const tokenBlob = new Blob([JSON.stringify({access_token: response.accessToken}, null, 2)], {type : 'application/json'});
@@ -31,7 +33,7 @@ class App extends Component {
         cache: 'default'
     };
     let url = config.adminApiUrl + 'auth/google';
-    axios.get(url, {
+    axios.getData(url, {
       headers: {
         access_token: response.accessToken
       }

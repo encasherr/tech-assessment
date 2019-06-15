@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import {    FetchUsers, AddUser, CloseSnackbar,
+import {    FetchUsers, AddUser, CurrentUserFieldChange,
+            UpdateUser, CloseSnackbar,
             OpenSnackbar } from '../../actions/UserActions';            
 import Grid from '@material-ui/core/Grid';
 import SnackbarComponent from '../../components/lib/SnackbarComponent';
@@ -42,7 +43,11 @@ class UserContainer extends React.Component {
                     <CardHeader 
                     title="Users"
                     />
-                    <UsersList users={users} />
+                    <UsersList 
+                        users={users} 
+                        onFieldChange={ (val, field, model) => this.props.CurrentUserFieldChange(val, field, model) } 
+                        onUpdateUser={ (model) => this.props.UpdateUser(model) }
+                    />
                 </Card>
                 }
                 <SnackbarComponent 
@@ -59,12 +64,12 @@ const mapStateToProps = state => ({
 });
 const mapDispatchToProps = dispatch => ({
     // AddTest: (model, editMode) => dispatch(AddTest(model, editMode)),
-    // UpdateTest: (model) => dispatch(UpdateTest(model)),
+    UpdateUser: (model) => dispatch(UpdateUser(model)),
     // FetchSkills: () => dispatch(FetchSkills()),
     AddUser: (userModel) => dispatch(AddUser(userModel)),
     FetchUsers: () => dispatch(FetchUsers()),
     CloseSnackbar: () => dispatch(CloseSnackbar()),
     OpenSnackbar: () => dispatch(OpenSnackbar()),
-    // CurrentTestFieldChange: (val, field, model) => dispatch(CurrentTestFieldChange(val, field, model))
+    CurrentUserFieldChange: (val, field, model) => dispatch(CurrentUserFieldChange(val, field, model))
 });
 export default connect(mapStateToProps, mapDispatchToProps)(UserContainer);

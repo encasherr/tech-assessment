@@ -34,19 +34,28 @@ class Users {
             //console.log(`item: ${item['$loki']}, testId: ${testId}, result: ${item['$loki'] == testId}`); 
             return item['emailId'] == emailId;    
         });
-        console.log(emailId);
+        console.log('updating', emailId);
         if(filteredUsers && filteredUsers.length > 0) {
             let userToUpdate = filteredUsers[0];
             
             let entityToUpdate = this.replaceEntity(userToUpdate, newEntity);
             users.update(entityToUpdate);
             db.saveDatabase();
+            console.log('user updated');
             return entityToUpdate;
         }
         else {
             console.log('nothing to update');
             return null;
         }
+    }
+
+    
+    UserRoles = {
+        recruiter: 'recruiter',
+        admin: 'admin',
+        candidate: 'candidate',
+        guest: 'guest'
     }
 
     replaceEntity = (oldEntity, newEntity) => {

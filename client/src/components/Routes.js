@@ -5,6 +5,7 @@ import DashboardComponent from './Dashboard';
 // import UsersComponent from './Users';
 import UsersComponent from '../Containers/User/UserContainer';
 import LoginComponent from './lib/LoginComponent';
+import User401 from '../Containers/User/User401';
 import { Route } from 'react-router-dom'
 import CategoriesContainer from '../Containers/CategoryContainer';
 import SkillsContainer from '../Containers/SkillContainer';
@@ -20,21 +21,22 @@ import PrivateRoute from '../components/lib/PrivateRoute';
 const Routes = (props) => {
     return (
         <div>
-            <Route exact path="/" component={DashboardComponent} />
+            <PrivateRoute exact path="/" component={DashboardComponent} />
             <Route path="/login" component={LoginComponent} />
-            <Route path="/dashboard" component={DashboardComponent} />
-            <Route path="/tests" component={AdminTestContainer} />
+            <Route path="/unauthorizedUser" component={User401} />
+            <PrivateRoute path="/dashboard" component={DashboardComponent} />
+            <PrivateRoute path="/tests" component={AdminTestContainer} />
             {/* <Route path="/testConsole" component={TestConsoleContainer} /> */}
             <PrivateRoute path="/testConsole" component={TestConsoleContainer} />
-            <Route path="/inviteConsole" component={InviteConsoleContainer} />
-            <Route path="/mcqs" component={McqList} />
-            <Route path="/addMcq" component={McqContainer} />
-            <Route path="/categories" component={CategoriesContainer} />
-            <Route path="/skills" component={SkillsContainer} />
-            <Route path="/addCategory" component={AddCategoryComponent} />
-            <Route path="/candidates" component={CandidateList} />
-            <Route path="/addCandidate" component={CandidatesContainer} />
-            <Route path="/users" component={UsersComponent} />
+            <PrivateRoute path="/inviteConsole" component={InviteConsoleContainer} />
+            <PrivateRoute path="/mcqs" component={McqList} />
+            <PrivateRoute path="/addMcq" component={McqContainer} />
+            <PrivateRoute path="/categories" component={CategoriesContainer} />
+            <PrivateRoute path="/skills" component={SkillsContainer} />
+            <PrivateRoute path="/addCategory" component={AddCategoryComponent} />
+            {/* <Route path="/candidates" component={CandidateList} /> */}
+            {/* <Route path="/addCandidate" component={CandidatesContainer} /> */}
+            <PrivateRoute path="/users" component={UsersComponent} />
         </div>
     );
 }

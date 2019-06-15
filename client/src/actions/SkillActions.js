@@ -1,5 +1,6 @@
 import axios from 'axios';
 import config from '../config';
+import repository from '../repository';
 
 export const ADD_SKILL_BEGIN = 'ADD_SKILL_BEGIN';
 export const ADD_SKILL_SUCCESS = 'ADD_SKILL_SUCCESS';
@@ -39,7 +40,7 @@ export const AddSkill = (skillModel) => dispatch => {
     let url = config.adminApiUrl + 'skill';
     console.log('action model');
     console.log(skillModel);
-    axios.post(url, skillModel)
+    repository.saveData(url, skillModel)
         .then((res) => {
             console.log('skill saved: ' + res);
             dispatch({
@@ -106,7 +107,7 @@ export const FetchSkills = () => dispatch => {
         type: FETCH_SKILLS_BEGIN
     });
     let url = config.adminApiUrl + 'getAllSkills';
-    axios.get(url)
+    repository.getData(url)
         .then((res) => {
             console.log('skills fetched');
             dispatch({
