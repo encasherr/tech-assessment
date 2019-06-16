@@ -23,7 +23,8 @@ export const FETCH_USER_SUCCESS = 'FETCH_USER_SUCCESS';
 export const FETCH_USER_FAIL = 'FETCH_USER_FAIL';
 export const SET_USER_INFO_LOCAL = 'SET_USER_INFO_LOCAL';
 export const LOGOUT_CURRENT_USER = 'LOGOUT_CURRENT_USER';
-// export const FETCH_SKILLS_FAIL = 'FETCH_SKILLS_FAIL';
+export const DELETE_USER_SUCCESS = 'DELETE_USER_SUCCESS';
+export const DELETE_USER_FAIL = 'DELETE_USER_FAIL';
 export const CLOSE_SNACKBAR = 'CLOSE_SNACKBAR';
 export const OPEN_SNACKBAR = 'OPEN_SNACKBAR';
 
@@ -65,16 +66,37 @@ export const CurrentUserFieldChange = (val, field, model) => dispatch => {
     });
 }
 
-export const AddUser = (userModel, editMode) => dispatch => {
-    dispatch({
-        type: ADD_USER_BEGIN
-    });
+export const DeleteUser = (userModel) => dispatch => {
+    let model ={
+        user: userModel
+    };
     let url = config.adminApiUrl + 'user';
-    console.log('action model');
-    console.log(userModel);
-    repository.saveData(url, userModel, history)
+    console.log('action model', userModel);
+    repository.deleteData(url, model)
             .then((res) => {
-                console.log('user saved: ' + res);
+                console.log('user deleted: ' + res);
+                dispatch({
+                    type: DELETE_USER_SUCCESS,
+                    payload: res.data
+                });
+            })
+            .catch((err) => {
+                dispatch({
+                    type: DELETE_USER_FAIL,
+                    payload: err
+                });
+            });
+}
+
+export const AddUser = (userModel) => dispatch => {
+    let model ={
+        user: userModel
+    };
+    let url = config.adminApiUrl + 'user';
+    console.log('action model', userModel);
+    repository.saveData(url, model)
+            .then((res) => {
+                console.log('user added: ' + res);
                 dispatch({
                     type: ADD_USER_SUCCESS,
                     payload: res.data

@@ -22,16 +22,14 @@ switch(action.type) {
    case ADD_USER_SUCCESS:
    {
        return {
-           ...state,
-           error: null,
-           current_USER: { 
-               fullName:'',
-               email:'',
-               contactno: '',
-               experienceYears: 0,
-               experienceMonths: 10
+            ...state,
+            error: null,
+            current_USER: { 
+               emailId:'',
+               role: 'guest'
             },
-           success_message: 'CANDIDATE added successfully'
+            snack_open: true,
+            success_message: 'User added successfully'
        }
    }
    case UPDATE_USER_FAIL:

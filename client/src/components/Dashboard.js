@@ -16,64 +16,64 @@ class Dashboard extends Component {
             <div>
                 <Grid container>
                     <Grid item xs={5} sm={5}>
-                        <Card>
-                            <CardHeader title="Active Tests">
+                        <Card style={styles.card}>
+                            <CardHeader title="Active Tests" style={styles.cardHeader}>
                             </CardHeader>
                             <CardContent>
                                 <Typography variant="subtitle1">
                                     You have no active tests. Start Creating.
                                 </Typography>
                             </CardContent>
-                            <CardActions>
-                                <Button size="large" color="inherit">View All</Button>
+                            <CardActions style={styles.cardAction}>
+                                <Button variant="contained" size="small" color="primary">View All</Button>
                             </CardActions>
                             
                         </Card>
                     </Grid>
-                    <Grid item xs={2} sm={2} />
+                    <Grid item xs={1} sm={1} />
                     <Grid item xs={5} sm={5}>
-                        <Card>
-                            <CardHeader title="MCQ Library">
+                        <Card style={styles.card}>
+                            <CardHeader title="MCQ Library" style={styles.cardHeader}>
                             </CardHeader>
                             <CardContent>
                                 <Typography variant="subtitle1">
                                     You have 10 MCQs in library. Keep adding.
                                 </Typography>
                             </CardContent>
-                            <CardActions>
-                                <Button size="large" color="inherit">Start Adding</Button>
+                            <CardActions style={styles.cardAction}>
+                                <Button variant="contained" size="small" color="primary">Start Adding</Button>
                             </CardActions>
                             
                         </Card>
                     </Grid>
                     <br></br><br></br>
                     <Grid item xs={5} sm={5} style={{marginTop: '5%'}}>
-                        <Card>
-                            <CardHeader title="Candidates">
+                        <Card style={styles.card}>
+                            <CardHeader title="Candidates" style={styles.cardHeader}>
                             </CardHeader>
                             <CardContent>
                                 <Typography variant="subtitle1">
                                     Your 2 candidates are yet to take test.
                                 </Typography>
                             </CardContent>
-                            <CardActions>
-                                <Button size="large" color="inherit">Go to Tests</Button>
+                            <CardActions style={styles.cardAction}>
+                                <Button variant="contained" size="small" color="primary">Go to Tests</Button>
                             </CardActions>
                             
                         </Card>
                     </Grid>
-                    <Grid item xs={2} sm={2} />
+                    <Grid item xs={1} sm={1} />
                     <Grid item xs={5} sm={5} style={{marginTop: '5%'}}>
-                        <Card>
-                            <CardHeader title="Skills">
+                        <Card style={styles.card}>
+                            <CardHeader title="Skills" style={styles.cardHeader}>
                             </CardHeader>
                             <CardContent>
                                 <Typography variant="subtitle1">
                                     You have defined 25 skill sets for your hiring. Keep it updated.
                                 </Typography>
                             </CardContent>
-                            <CardActions>
-                                <Button size="large" color="inherit">View All</Button>
+                            <CardActions style={styles.cardAction}>
+                                <Button variant="contained" size="small" color="primary">View All</Button>
                             </CardActions>
                             
                         </Card>
@@ -91,3 +91,16 @@ const mapDispatchToProps = dispatch => ({
     SetUserInfo: (userInfo) => dispatch(SetUserInfo(userInfo)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
+const styles = {
+    card: {
+        textAlign: 'center'
+    },
+    cardAction: {
+        float: 'right'
+    },
+    cardHeader: {
+        borderBottom: '1px solid #3f51b5',
+        // backgroundColor: '#3f51b5',
+        color: '#fff'
+    }
+}

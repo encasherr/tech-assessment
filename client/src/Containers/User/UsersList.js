@@ -5,7 +5,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { PersonAdd } from '@material-ui/icons';
+import { PersonAdd, Delete } from '@material-ui/icons';
 import LoadingComponent from '../../components/lib/LoadingComponent';
 import { Typography, IconButton } from '@material-ui/core';
 import { Link } from 'react-router-dom';
@@ -24,7 +24,8 @@ const UsersList = (props) => {
                 <CustomTableCell>Email</CustomTableCell>
                 <CustomTableCell align="left">Display Name</CustomTableCell>
                 <CustomTableCell align="left">Role</CustomTableCell>
-                <CustomTableCell>Edit</CustomTableCell>
+                <CustomTableCell>Edit Role</CustomTableCell>
+                <CustomTableCell></CustomTableCell>
             </TableRow>
             </TableHead>
             <TableBody>
@@ -41,6 +42,15 @@ const UsersList = (props) => {
                             onFieldChange={ (val, field, model) => props.onFieldChange(val, field, model) } 
                             onUpdateUser={ (model) => props.onUpdateUser(model) }
                         />
+                    </CustomTableCell>
+                    <CustomTableCell>
+                        <IconButton 
+                            onClick={() => props.onDeleteUser(user)}
+                            edge="end"
+                            color="inherit"
+                            >
+                            <Delete />
+                        </IconButton>
                     </CustomTableCell>
                 </TableRow>
                 </Fragment>

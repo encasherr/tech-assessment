@@ -41,9 +41,12 @@ class LoginComponent extends Component {
                 });    
             }
         }).catch((err) => {
-            this.setState({
-                errorMessage: 'Something went wrong. Please try again later.'
-            })
+            this.props.history.push({
+                pathname: '/userForbidden'
+            });
+            // this.setState({
+            //     errorMessage: 'Something went wrong. Please try again later.'
+            // })
         });
     }
     

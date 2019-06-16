@@ -50,6 +50,18 @@ class Users {
         }
     }
 
+    DeleteUser = (emailId) => {
+        let users = this.initializeCollection();
+        let userToDelete = users.where((item) => {
+            return item['emailId'] == emailId;
+        });
+        if(userToDelete && userToDelete.length > 0) {
+            users.remove(userToDelete[0]);
+            db.saveDatabase();
+            console.log('user deleted', emailId);
+        }
+    }
+
     
     UserRoles = {
         recruiter: 'recruiter',

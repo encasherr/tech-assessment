@@ -30,6 +30,9 @@ const AuthHelper = {
 
         return false;
     },
+    UserRoles: () => {
+        return [ "guest", "recruiter", "candidate", "admin" ];
+    },
     LogOut: () => {
         console.log('remove token');
         localStorage.removeItem('auth-token');

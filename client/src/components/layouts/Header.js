@@ -9,6 +9,7 @@ import { Button, Menu, MenuItem } from '@material-ui/core';
 import { PowerSettingsNew } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
 import AuthHelper from '../../AuthHelper';
+import config from '../../config';
 
 const Header = (props) => {
     // const classes = useStyles();
@@ -37,7 +38,9 @@ const Header = (props) => {
                 <MenuIcon />
             </IconButton>
             <Typography variant="h6" color="inherit" noWrap>
-                Technical Assessment Admin
+                    <a href={config.domainUrl} style={{color: '#fff'}}>
+                        Technical Assessment Admin
+                    </a>
             </Typography>
             {userInfo && 
             <Typography variant="subtitle1" color="inherit" noWrap style={styles.welcomeMessage}>

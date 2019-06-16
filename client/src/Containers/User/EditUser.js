@@ -9,6 +9,7 @@ import CardContent from '@material-ui/core/CardContent';
 import { CardHeader } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import LoadingComponent from '../../components/lib/LoadingComponent';
+import AuthHelper from '../../AuthHelper';
 
 const EditUser = (props) => {
         let { model } = props;
@@ -44,8 +45,8 @@ const EditUser = (props) => {
                                         <MenuItem value="">
                                         <em>None</em>
                                         </MenuItem>
-                                        {UserRoles && UserRoles.length > 0 &&
-                                            UserRoles.map((item, index) => {
+                                        {AuthHelper.UserRoles() && AuthHelper.UserRoles().length > 0 &&
+                                            AuthHelper.UserRoles().map((item, index) => {
                                             return (
                                                 <MenuItem key={index} value={item}>{item}</MenuItem>
                                             )
@@ -94,5 +95,5 @@ const styles = theme => ({
         backgroundColor: '#555'
     }
 });
-const UserRoles = [ "guest", "recruiter", "candidate", "admin" ];
+// const UserRoles = [ "guest", "recruiter", "candidate", "admin" ];
 export default EditUser;

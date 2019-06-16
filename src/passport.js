@@ -15,16 +15,22 @@ passport.use('google-token',new GoogleTokenStrategy({
         let emailId = profile.emails[0].value;
         let existingUser = users.GetUser(emailId);
         if(existingUser !== null) {
+            let userEntity = {
+                emailId: emailId,
+                name: profile.displayName,
+                role: existingUser.role
+            };
+            users.UpdateUser(emailId, userEntity);
             return done(null, existingUser);
         }
         const newUser = {
             emailId: emailId,
             googleId: profile.id,
-            status: 'pending approval',
+            status: 'not found',
             name: profile.displayName,
             role: 'guest'
         }
-        users.Add(newUser);
+        // users.Add(newUser);
         done(null, newUser);
     }
     catch(err) {

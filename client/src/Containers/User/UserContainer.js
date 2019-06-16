@@ -1,13 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {    FetchUsers, AddUser, CurrentUserFieldChange,
-            UpdateUser, CloseSnackbar,
+            UpdateUser, DeleteUser, CloseSnackbar,
             OpenSnackbar } from '../../actions/UserActions';            
 import Grid from '@material-ui/core/Grid';
 import SnackbarComponent from '../../components/lib/SnackbarComponent';
 import { Button, Card, CardHeader } from '@material-ui/core';
 import LoadingComponent from '../../components/lib/LoadingComponent';
 import UsersList from './UsersList';
+import AddUserComponent from './AddUser';
 
 class UserContainer extends React.Component {
     
@@ -26,7 +27,7 @@ class UserContainer extends React.Component {
     }
 
     onAddUser = (model) => {
-        this.props.AddUser(model, this.props.editMode)
+        this.props.AddUser(model)
     }
 
     render = () => {
@@ -40,13 +41,20 @@ class UserContainer extends React.Component {
                 {!current_user && <LoadingComponent />}
                 {current_user &&
                 <Card>
-                    <CardHeader 
+                    <CardHeader action={
+                    <AddUserComponent 
+                        onSubmit={ (model) => this.onAddUser(model) }
+                        model={this.props.current_user}
+                        onFieldChange={ (val, field, model) => this.props.CurrentUserFieldChange(val, field, model) } 
+                        />
+                    }
                     title="Users"
                     />
                     <UsersList 
                         users={users} 
                         onFieldChange={ (val, field, model) => this.props.CurrentUserFieldChange(val, field, model) } 
                         onUpdateUser={ (model) => this.props.UpdateUser(model) }
+                        onDeleteUser={ (model) => this.props.DeleteUser(model) }
                     />
                 </Card>
                 }
@@ -65,7 +73,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     // AddTest: (model, editMode) => dispatch(AddTest(model, editMode)),
     UpdateUser: (model) => dispatch(UpdateUser(model)),
-    // FetchSkills: () => dispatch(FetchSkills()),
+    DeleteUser: (model) => dispatch(DeleteUser(model)),
     AddUser: (userModel) => dispatch(AddUser(userModel)),
     FetchUsers: () => dispatch(FetchUsers()),
     CloseSnackbar: () => dispatch(CloseSnackbar()),

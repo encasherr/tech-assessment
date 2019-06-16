@@ -22,5 +22,12 @@ class UserController {
         resp.status(200).send(dbuser);
     }
 
+    Delete = (req, resp) => {
+        console.log('delete user called');
+        let userObj = req.body.user;
+        userModel.DeleteUser(userObj.emailId);
+        resp.status(200).send('success');
+    }
+
 }
 export default new UserController();

@@ -6,26 +6,24 @@ axios.interceptors.response.use(response => {
         return response;
     }, error => {
     if (error.response.status === 401) {
-        //place your reentry code
         console.log('intercept 401', error.response);
-        RedirectFromAction(History, 'unauthorizedUser');
-
-        if(History) {
-            // RedirectFromAction(History, 'unauthorizedUser');
-        } else {
-            return {
-                status: 401,
-                message: error.response.data,
-                statusText: error.response.statusText
-            }
-        }
+        RedirectFromAction('unauthorizedUser');
+    }
+    else if (error.response.status === 403) {
+        console.log('intercept 403', error.response);
+        RedirectFromAction('userForbidden');
+        // return {
+        //         status: 403,
+        //         message: error.response.data,
+        //         statusText: error.response.statusText
+        //     }
     }
     return error;
  });
 
 const getData = (url) => {
     // History = history;
-    let accessToken = AuthHelper.getToken(); //localStorage.getItem("auth-token");
+    let accessToken = AuthHelper.getToken(); //AuthHelper.getToken();
     let options = {
         headers: {
           "x-access-token": accessToken
@@ -51,7 +49,7 @@ const getData = (url) => {
 
 const saveData = (url, model) => {
     // History = history;
-    let accessToken = localStorage.getItem("auth-token");
+    let accessToken = AuthHelper.getToken();
     let options = {
         headers: {
           "x-access-token": accessToken
@@ -62,7 +60,7 @@ const saveData = (url, model) => {
 
 const updateData = (url, model) => {
     // History = history;
-    let accessToken = localStorage.getItem("auth-token");
+    let accessToken = AuthHelper.getToken();
     let options = {
         headers: {
           "x-access-token": accessToken
@@ -71,8 +69,22 @@ const updateData = (url, model) => {
     return axios.put(url, model, options);
 }
 
+const deleteData = (url, model) => {
+    // History = history;
+    let accessToken = AuthHelper.getToken();
+    let options = {
+        headers: {
+          "x-access-token": accessToken
+        },
+        data: model
+    };
+    console.log('delete options', options);
+    return axios.delete(url, options);
+}
+
 export default {
     getData,
     saveData,
-    updateData
+    updateData,
+    deleteData
 };

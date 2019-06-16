@@ -47,6 +47,7 @@ api.delete('/admin/test', auth, AdminTestController.Delete);
 api.get('/admin/getAllUsers', auth,  UserController.GetAll);
 api.post('/admin/user', auth, UserController.Add);
 api.put('/admin/user', auth, UserController.Update);
+api.delete('/admin/user', auth, UserController.Delete);
 
 
 /* Candidate Routes */
@@ -58,6 +59,9 @@ api.get('/admin/auth/google',
     (req, res, next) => {
         console.log('res next');
         req.auth = req.user;
+        if(req.user.status === 'not found') {
+            return res.status(403).send('User Not Found');
+        }
         next();
     }, generateToken, sendToken);
 

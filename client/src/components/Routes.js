@@ -6,6 +6,7 @@ import DashboardComponent from './Dashboard';
 import UsersComponent from '../Containers/User/UserContainer';
 import LoginComponent from './lib/LoginComponent';
 import User401 from '../Containers/User/User401';
+import UserForbidden from '../Containers/User/UserForbidden';
 import { Route } from 'react-router-dom'
 import CategoriesContainer from '../Containers/CategoryContainer';
 import SkillsContainer from '../Containers/SkillContainer';
@@ -24,6 +25,7 @@ const Routes = (props) => {
             <PrivateRoute exact path="/" component={DashboardComponent} />
             <Route path="/login" component={LoginComponent} />
             <Route path="/unauthorizedUser" component={User401} />
+            <Route path="/userForbidden" component={UserForbidden} />
             <PrivateRoute path="/dashboard" component={DashboardComponent} />
             <PrivateRoute path="/tests" component={AdminTestContainer} />
             {/* <Route path="/testConsole" component={TestConsoleContainer} /> */}

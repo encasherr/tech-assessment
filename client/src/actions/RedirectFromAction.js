@@ -3,9 +3,9 @@ import AuthHelper from "../AuthHelper";
 // import createHistory from 'history/createBrowserHistory';
 
 
-const RedirectFromAction = (history, page) => {
+const RedirectFromAction = (page) => {
     let hist = AuthHelper.GetHistory();
-    console.log('redirect to 401 called', hist);
+    console.log('redirect called', hist);
     hist.push('/' + page);
 }
 // let history = createHistory();
