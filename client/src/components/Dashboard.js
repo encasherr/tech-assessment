@@ -26,6 +26,7 @@ class Dashboard extends Component {
                             </CardContent>
                             <CardActions style={styles.cardAction}>
                                 <Button variant="contained" size="small" color="primary">View All</Button>
+                                <a href="#">Click Here</a>
                             </CardActions>
                             
                         </Card>

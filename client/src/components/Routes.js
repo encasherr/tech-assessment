@@ -12,6 +12,7 @@ import CategoriesContainer from '../Containers/CategoryContainer';
 import SkillsContainer from '../Containers/SkillContainer';
 import TestConsoleContainer from '../Containers/TestConsole/TestConsoleContainer';
 import McqContainer from '../Containers/McqContainer';
+import BulkMcq from '../components/Mcq/BulkUpload';
 import CandidatesContainer from '../Containers/CandidateContainer';
 import AdminTestContainer from '../Containers/AdminTestContainer';
 import McqList from '../components/Mcq/McqList';
@@ -33,6 +34,7 @@ const Routes = (props) => {
             <PrivateRoute path="/inviteConsole" component={InviteConsoleContainer} />
             <PrivateRoute path="/mcqs" component={McqList} />
             <PrivateRoute path="/addMcq" component={McqContainer} />
+            <PrivateRoute path="/bulkMcq" component={BulkMcq} />
             <PrivateRoute path="/categories" component={CategoriesContainer} />
             <PrivateRoute path="/skills" component={SkillsContainer} />
             <PrivateRoute path="/addCategory" component={AddCategoryComponent} />

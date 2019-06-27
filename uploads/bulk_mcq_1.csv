@@ -1,0 +1,2 @@
+Category,Skill,Title,Description,Min,Max,Score,Answer,A,B,C,D
+Programming,C#,Generics,What is the use of Generics in C#?,3,9,10,B,To Implement interfaces,To support multiple types at runtime,For array operations,For memory management

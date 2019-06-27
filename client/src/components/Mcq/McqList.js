@@ -33,9 +33,14 @@ class McqList extends Component {
             <Card>
                 <CardHeader
                     action={
-                        <Link to="/addMcq" >
-                            <Button variant="contained" color="primary">Add Mcq</Button>
-                        </Link>
+                        <div>
+                            <Link to="/addMcq" >
+                                <Button variant="contained" color="primary">Add Mcq</Button>
+                            </Link>
+                            <Link to="/bulkMcq" >
+                                <Button variant="contained" color="primary">Bulk Upload Mcq</Button>
+                            </Link>
+                        </div>
                     }
                     title="MCQ List"
                     subheader="Multiple Choice Questions">
