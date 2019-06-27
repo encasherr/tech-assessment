@@ -11,17 +11,39 @@ class BulkUpload extends React.Component {
             mcqs: []
         };
         let headers = [];
-        matrixArray.map((itemArray, rowIndex) => {
-            if(rowIndex === 0) {
-                itemArray.map((item, columnIndex) => {
+let firstRow = matrixArray[0];
+firstRow.map((item, columnIndex) => {
                     headers.push(item);
                 });
+                if(!this.validateHeaders(headers)) {
+                  console.log("invalid headers");
+                  return;
+                }
+        matrixArray.map((itemArray, rowIndex) => {
+            if(rowIndex === 0) {
+                
             }
             else {
                 let mcq = {};
-                
+                itemArray.map((colValue,colIndex) =>{
+                    mcq[headers [colIndex]] = colValue;
+                });
+                finalJson.mcqs.push(mcq);
             }
         });
+    }
+
+    validateHeaders = (headers) => {
+       const validHeaders = [
+         "Category", "Skill","Title","Description","Score","Min","Max","Answer","A","B","C","D","E"
+       ];
+       let isValid = true;
+       headers.map((item, idx) => {
+          if(!validHeaders.includes(item)){
+              isValid = false;
+            }
+        });
+       return isValid;
     }
 
     handleError = (error) => {
