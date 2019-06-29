@@ -1,7 +1,15 @@
 import React, { Component } from 'react';
 import CSVReader from 'react-csv-reader';
+import { Typography } from '@material-ui/core';
 
 class BulkUpload extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            message: ""
+        };
+    }
 
     handleFileLoaded = (content, fileName) => {
         console.log('fileName', fileName);
@@ -11,22 +19,25 @@ class BulkUpload extends React.Component {
             mcqs: []
         };
         let headers = [];
-let firstRow = matrixArray[0];
-firstRow.map((item, columnIndex) => {
-                    headers.push(item);
-                });
-                if(!this.validateHeaders(headers)) {
-                  console.log("invalid headers");
-                  return;
-                }
+        let firstRow = matrixArray[0];
+        firstRow.map((item, columnIndex) => {
+            headers.push(item);
+        });
+        if (!this.validateHeaders(headers)) {
+            console.log("invalid headers");
+            this.setState({
+                message: "Invalid Headers. Please check the file format and try again"
+            });
+            return;
+        }
         matrixArray.map((itemArray, rowIndex) => {
-            if(rowIndex === 0) {
-                
+            if (rowIndex === 0) {
+
             }
             else {
                 let mcq = {};
-                itemArray.map((colValue,colIndex) =>{
-                    mcq[headers [colIndex]] = colValue;
+                itemArray.map((colValue, colIndex) => {
+                    mcq[headers[colIndex]] = colValue;
                 });
                 finalJson.mcqs.push(mcq);
             }
@@ -34,16 +45,16 @@ firstRow.map((item, columnIndex) => {
     }
 
     validateHeaders = (headers) => {
-       const validHeaders = [
-         "Category", "Skill","Title","Description","Score","Min","Max","Answer","A","B","C","D","E"
-       ];
-       let isValid = true;
-       headers.map((item, idx) => {
-          if(!validHeaders.includes(item)){
-              isValid = false;
+        const validHeaders = [
+            "Category", "Skill", "Title", "Description", "Score", "Min", "Max", "Answer", "A", "B", "C", "D", "E"
+        ];
+        let isValid = true;
+        headers.map((item, idx) => {
+            if (!validHeaders.includes(item)) {
+                isValid = false;
             }
         });
-       return isValid;
+        return isValid;
     }
 
     handleError = (error) => {
@@ -51,6 +62,7 @@ firstRow.map((item, columnIndex) => {
     }
 
     render = () => {
+        const { message } = this.state;
         return (
             <div>
                 Bulk Upload
@@ -62,6 +74,8 @@ firstRow.map((item, columnIndex) => {
                     inputId="bulkmcq"
                     inputStyle={{color: 'red'}}
                 />
+                <br></br>
+                <Typography variant="subtitle1">{message}</Typography>
             </div>
         );
     }
