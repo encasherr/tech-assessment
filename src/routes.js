@@ -17,6 +17,7 @@ api.get('/admin/getAllMcqs', auth, McqController.GetAll);
 api.post('/admin/mcq', auth, McqController.Add);
 api.put('/admin/mcq', auth, McqController.Update);
 api.delete('/admin/mcq', auth, McqController.Delete);
+api.post('/admin/bulkMcq', auth, McqController.BulkMcq);
 
 /* category endpoints */
 api.get('/admin/getAllCategories', auth, CategoryController.GetAll);

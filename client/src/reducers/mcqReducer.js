@@ -1,11 +1,12 @@
 import { ADD_MCQ_SUCCESS, ADD_MCQ_FAIL, SELECT_MCQ,
     UPDATE_MCQ_SUCCESS, UPDATE_MCQ_FAIL, FETCH_MCQ_FAIL,
+    DELETE_MCQ_SUCCESS, DELETE_MCQ_FAIL,
     FETCH_MCQ_SUCCESS, 
     OPEN_SNACKBAR, 
     CLOSE_SNACKBAR, 
     CURRENT_MCQ_FIELD_CHANGE,
     CURRENT_MCQ_FIELD_CHANGE_END, 
-    MCQ_SEARCH_BEGIN,
+    MCQ_SEARCH_BEGIN, MCQ_SEARCH_END,
     MCQ_SEARCH_SUCCESS,
     CHOICE_ADDED_TO_MCQ, 
     CURRENT_ANSWER_FIELD_CHANGE
@@ -33,6 +34,7 @@ switch(action.type) {
             success_message: 'MCQ added successfully'
        }
    }
+   case DELETE_MCQ_FAIL:
    case UPDATE_MCQ_FAIL:
    case ADD_MCQ_FAIL:
    {
@@ -67,6 +69,24 @@ switch(action.type) {
            success_message: 'MCQ Updated Successfully'
        }
    }
+   case DELETE_MCQ_SUCCESS:
+   {
+       return {
+           ...state,
+           editMode: false,
+           snack_open: true,
+           current_mcq: { 
+                question:'',
+                description:'',
+                category: '',
+                skill: '',
+                minimumExperience: 0,
+                maximumExperience: 10,
+                choices: []
+           },
+           success_message: 'MCQ Deleted Successfully'
+       }
+   }
    case CURRENT_MCQ_FIELD_CHANGE:
    {
        console.log('field change reducer');
@@ -99,21 +119,20 @@ switch(action.type) {
        console.log(action.payload);
        
        return {
-           ...state,
-           error: null,
-        //    editMode: false,
-           current_mcq: { 
-                question:'',
-                description:'',
-                category: '',
-                skill: '',
-                minimumExperience: 0,
-                maximumExperience: 10,
-                choices: []
-           },
-           success_message: '',
-        //    search_enabled: false,
-           mcqs: action.payload
+            ...state,
+            error: null,
+            current_mcq: { 
+                    question:'',
+                    description:'',
+                    category: '',
+                    skill: '',
+                    minimumExperience: 0,
+                    maximumExperience: 10,
+                    choices: []
+            },
+            snack_open: true,
+            success_message: action.payload.message,
+            mcqs: action.payload.data
        }
    }
    case FETCH_SKILLS_SUCCESS:
@@ -168,7 +187,16 @@ switch(action.type) {
            ...state,
            search_enabled: !state.search_enabled,
            search_term: '',
-           filteredCategories: state.categoryList
+           //filteredCategories: state.categoryList
+       }
+   }
+   case MCQ_SEARCH_END:
+   {
+       return {
+           ...state,
+           search_enabled: !state.search_enabled,
+           search_term: '',
+           //filteredCategories: state.categoryList
        }
    }
    case MCQ_SEARCH_SUCCESS:

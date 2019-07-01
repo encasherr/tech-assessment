@@ -18,6 +18,7 @@ import AdminTestContainer from '../Containers/AdminTestContainer';
 import McqList from '../components/Mcq/McqList';
 import CandidateList from '../components/Candidates/CandidateList';
 import InviteConsoleContainer from '../Containers/InviteConsole/InviteConsoleContainer';
+import SimulatorConsoleContainer from '../Containers/Simulator/SimulatorConsoleContainer';
 import PrivateRoute from '../components/lib/PrivateRoute';
 
 const Routes = (props) => {
@@ -41,6 +42,8 @@ const Routes = (props) => {
             {/* <Route path="/candidates" component={CandidateList} /> */}
             {/* <Route path="/addCandidate" component={CandidatesContainer} /> */}
             <PrivateRoute path="/users" component={UsersComponent} />
+
+            <PrivateRoute path="/simulator" component={SimulatorConsoleContainer} />
         </div>
     );
 }

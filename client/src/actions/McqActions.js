@@ -6,11 +6,14 @@ import { FETCH_CATEGORIES_SUCCESS, FETCH_CATEGORIES_FAIL } from './CategoryActio
 export const ADD_MCQ_BEGIN = 'ADD_MCQ_BEGIN';
 export const ADD_MCQ_SUCCESS = 'ADD_MCQ_SUCCESS';
 export const ADD_MCQ_FAIL = 'ADD_MCQ_FAIL';
+export const MCQ_SEARCH_END = 'MCQ_SEARCH_END';
 export const MCQ_SEARCH_BEGIN = 'MCQ_SEARCH_BEGIN';
 export const MCQ_SEARCH_SUCCESS = 'MCQ_SEARCH_SUCCESS';
 export const UPDATE_MCQ_BEGIN = 'UPDATE_MCQ_BEGIN';
 export const UPDATE_MCQ_SUCCESS = 'UPDATE_MCQ_SUCCESS';
 export const UPDATE_MCQ_FAIL = 'UPDATE_MCQ_FAIL';
+export const DELETE_MCQ_SUCCESS = 'DELETE_MCQ_SUCCESS';
+export const DELETE_MCQ_FAIL = 'DELETE_MCQ_FAIL';
 export const SELECT_MCQ = 'SELECT_MCQ';
 export const CURRENT_MCQ_FIELD_CHANGE = 'CURRENT_MCQ_FIELD_CHANGE';
 export const CURRENT_MCQ_FIELD_CHANGE_END = 'CURRENT_MCQ_FIELD_CHANGE_END';
@@ -145,7 +148,7 @@ export const AddMcq = (mcqModel, editMode) => dispatch => {
     let url = config.adminApiUrl + 'mcq';
     console.log('action model');
     console.log(mcqModel);
-    // if(!editMode) {
+    if(!editMode) {
         repository.saveData(url, mcqModel)
             .then((res) => {
                 console.log('mcq saved: ' + res);
@@ -160,10 +163,46 @@ export const AddMcq = (mcqModel, editMode) => dispatch => {
                     payload: err
                 });
             });
-    // }
-    // else {
-    //     dispatch(UpdateMcq(mcqModel));
-    // }
+    }
+    else {
+        dispatch(UpdateMcq(mcqModel));
+    }
+}
+
+export const UpdateMcq = (mcqModel) => dispatch => {
+    dispatch({
+        type: UPDATE_MCQ_BEGIN
+    });
+    let url = config.adminApiUrl + 'mcq';
+    repository.updateData(url, mcqModel)
+        .then((res) => {
+            dispatch({
+                type: UPDATE_MCQ_SUCCESS
+            });
+        })
+        .catch((err) => {
+            dispatch({
+                type: UPDATE_MCQ_FAIL,
+                payload: err
+            });
+        });
+}
+
+export const DeleteMcq = (mcqModel) => dispatch => {
+    let url = config.adminApiUrl + 'mcq';
+    repository.deleteData(url, mcqModel)
+        .then((res) => {
+            dispatch(FetchMcqs(true));
+            // dispatch({
+            //     type: DELETE_MCQ_SUCCESS
+            // });
+        })
+        .catch((err) => {
+            dispatch({
+                type: DELETE_MCQ_FAIL,
+                payload: err
+            });
+        });
 }
 
 export const BeginSearch = () => dispatch => {
@@ -172,46 +211,52 @@ export const BeginSearch = () => dispatch => {
     });
 }
 
+export const EndSearch = () => dispatch => {
+    dispatch({
+        type: MCQ_SEARCH_END
+    });
+}
+
  export const SearchMcq = (searchTerm, mcqList) => dispatch => {
-//     console.log(`search term: ${searchTerm}, list length: ${mcqList ? mcqList.length : 0}`);
-//     if(mcqList && mcqList.length > 0) {
-//         let filteredCategories = mcqList.filter((item) => {
-//             return (
-//                     item.title &&
-//                     item.title.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1
-//                     ) ||
-//                     (
-//                         item.description &&
-//                         item.description.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1);
-//         });
-//         if(filteredCategories && filteredCategories.length > 0) {
-//             dispatch({
-//                 type: MCQ_SEARCH_SUCCESS,
-//                 payload: {
-//                     filteredCategories,
-//                     searchTerm
-//                 }
-//             });
-//         }
-//         else {
-//             dispatch({
-//                 type: MCQ_SEARCH_SUCCESS,
-//                 payload: {
-//                     filteredCategories: [],
-//                     searchTerm
-//                 }
-//             });
-//         }
-//     }
-//     else {
-//         dispatch({
-//             type: MCQ_SEARCH_SUCCESS,
-//             payload: {
-//                 filteredCategories: [],
-//                 searchTerm
-//             }
-//         });
-//     }
+    console.log(`search term: ${searchTerm}, list length: ${mcqList ? mcqList.length : 0}`);
+    if(mcqList && mcqList.length > 0) {
+        let filteredCategories = mcqList.filter((item) => {
+            return (
+                    item.question &&
+                    item.question.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1
+                    ) ||
+                    (
+                        item.description &&
+                        item.description.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1);
+        });
+        if(filteredCategories && filteredCategories.length > 0) {
+            dispatch({
+                type: MCQ_SEARCH_SUCCESS,
+                payload: {
+                    filteredCategories,
+                    searchTerm
+                }
+            });
+        }
+        else {
+            dispatch({
+                type: MCQ_SEARCH_SUCCESS,
+                payload: {
+                    filteredCategories: [],
+                    searchTerm
+                }
+            });
+        }
+    }
+    else {
+        dispatch({
+            type: MCQ_SEARCH_SUCCESS,
+            payload: {
+                filteredCategories: [],
+                searchTerm
+            }
+        });
+    }
  }
 
  export const FetchCategories = () => dispatch => {
@@ -260,26 +305,8 @@ export const SelectMcq = (mcqModel) => dispatch => {
     })
 }
 
-export const UpdateMcq = (mcqModel) => dispatch => {
-    dispatch({
-        type: UPDATE_MCQ_BEGIN
-    });
-    let url = config.adminApiUrl + 'mcq';
-    repository.updateData(url, mcqModel)
-        .then((res) => {
-            dispatch({
-                type: UPDATE_MCQ_SUCCESS
-            });
-        })
-        .catch((err) => {
-            dispatch({
-                type: UPDATE_MCQ_FAIL,
-                payload: err
-            });
-        });
-}
 
-export const FetchMcqs = () => dispatch => {
+export const FetchMcqs = (isDeleted) => dispatch => {
     dispatch({
         type: FETCH_MCQ_BEGIN
     });
@@ -287,9 +314,16 @@ export const FetchMcqs = () => dispatch => {
     repository.getData(url)
         .then((res) => {
             console.log('MCQ fetched');
+            let payload = {
+                data: res.data,
+                message: 'MCQs fetched successfully'
+            };
+            if(isDeleted) {
+                payload.message = 'MCQ deleted successfully';
+            }
             dispatch({
                 type: FETCH_MCQ_SUCCESS,
-                payload: res.data
+                payload: payload
             });
         })
         .catch((err) => {

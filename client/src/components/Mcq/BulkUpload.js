@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 import CSVReader from 'react-csv-reader';
-import { Typography } from '@material-ui/core';
+import { Typography, Button } from '@material-ui/core';
+import repository from '../../repository';
+import config from '../../config';
 
 class BulkUpload extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            message: ""
+            message: "",
+            finalJson: {}
         };
     }
 
@@ -26,7 +29,14 @@ class BulkUpload extends React.Component {
         if (!this.validateHeaders(headers)) {
             console.log("invalid headers");
             this.setState({
-                message: "Invalid Headers. Please check the file format and try again"
+                message: "Invalid Headers. Please check the file format and try again."
+            });
+            return;
+        }
+        if (!this.validCount(matrixArray)) {
+            console.log("Invalid number of records");
+            this.setState({
+                message: `Invalid number of records. Min: ${config.minBulkCount}, Max: ${config.maxBulkCount}`
             });
             return;
         }
@@ -36,25 +46,79 @@ class BulkUpload extends React.Component {
             }
             else {
                 let mcq = {};
+                mcq.choices = [];
+                let correctAnswer = "";
                 itemArray.map((colValue, colIndex) => {
-                    mcq[headers[colIndex]] = colValue;
+                    let filteredHeaders = config.validHeaders.filter((item) => {
+                        return item.name === headers[colIndex];
+                    });
+
+                    if(filteredHeaders && filteredHeaders.length > 0) {
+                        let prop = filteredHeaders[0].prop;
+                        if(prop.startsWith("choice")) {
+                            mcq.choices.push({
+                                content: colValue,
+                                isCorrect: correctAnswer 
+                            });
+                        }
+                        else if(prop === "correctAnswer") {
+                            correctAnswer = colValue;
+                        }
+                        else {
+                            mcq[prop] = colValue;
+                        }
+                        //mcq[filteredHeaders[0].prop] = colValue;
+                    }
+                    // mcq[headers[colIndex]] = colValue;
                 });
-                finalJson.mcqs.push(mcq);
+                if(mcq.question && mcq.question !== '') {
+                    finalJson.mcqs.push(mcq);
+                }
             }
+        });
+        this.setState({
+            finalJson: finalJson
         });
     }
 
+    onUpload = () => {
+        let { finalJson } = this.state;
+        let url = config.adminApiUrl + 'bulkMcq';
+        repository.saveData(url, finalJson)
+            .then((res) => {
+                this.setState({
+                    message: "Successfully uploaded.",
+                    finalJson: {}
+                });
+            })
+            .catch((error) => {
+                this.setState({
+                    message: "Error in uploading file. Please try again."
+                });
+            })
+    }
+
     validateHeaders = (headers) => {
-        const validHeaders = [
-            "Category", "Skill", "Title", "Description", "Score", "Min", "Max", "Answer", "A", "B", "C", "D", "E"
-        ];
+        
         let isValid = true;
         headers.map((item, idx) => {
-            if (!validHeaders.includes(item)) {
+            let filteredHeaders = config.validHeaders.filter((vh) => {
+                return vh.name === item;
+            });
+            if(filteredHeaders && filteredHeaders.length > 0) {
+            } else {
                 isValid = false;
             }
         });
         return isValid;
+    }
+    
+    validCount = (matrix) => {
+        let matrixLength = matrix.length;
+        if(matrixLength < config.minBulkCount || matrixLength > config.maxBulkCount) {
+            return false;
+        }
+        return true;
     }
 
     handleError = (error) => {
@@ -62,10 +126,9 @@ class BulkUpload extends React.Component {
     }
 
     render = () => {
-        const { message } = this.state;
+        const { message, finalJson } = this.state;
         return (
             <div>
-                Bulk Upload
                 <CSVReader
                     cssClass="csv-reader-input"
                     label="Select CSV with Multiple Choice Questions"
@@ -75,7 +138,18 @@ class BulkUpload extends React.Component {
                     inputStyle={{color: 'red'}}
                 />
                 <br></br>
-                <Typography variant="subtitle1">{message}</Typography>
+                <Typography color="primary" variant="subtitle1">{message}</Typography>
+                {finalJson && finalJson.mcqs && finalJson.mcqs.length > 0 &&
+                <Button color="primary" variant="contained" 
+                        size="large"
+                        onClick={this.onUpload}
+                        >Upload</Button>
+                }
+                {message === "Successfully uploaded." && 
+                    <Button color="primary" variant="contained" 
+                    size="small"
+                    onClick={() => this.props.history.goBack()}
+                    >Go Back</Button>}
             </div>
         );
     }

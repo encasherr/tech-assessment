@@ -11,6 +11,10 @@ const resources = [
         allowedRoles: [ 'admin', 'recruiter' ] 
     },
     { 
+        resource: '/admin/bulkMcq',
+        allowedRoles: [ 'admin', 'recruiter' ] 
+    },
+    { 
         resource: '/admin/getAllCategories',
         allowedRoles: [ 'admin', 'recruiter' ] 
     },

@@ -10,6 +10,7 @@ import SnackbarComponent from '../../components/lib/SnackbarComponent';
 import { Button, Card, CardHeader, CardContent, CardActions } from '@material-ui/core';
 import LoadingComponent from '../../components/lib/LoadingComponent';
 import SendTestInvite from './SendTestInvite';
+import { KeyboardBackspace } from '@material-ui/icons';
 
 class InviteConsoleContainer extends React.Component {
     
@@ -57,6 +58,12 @@ class InviteConsoleContainer extends React.Component {
                 {current_test &&
                 <Card>
                     <CardHeader 
+                        action={
+                        <Button color="primary" size="large" variant="outlined"
+                                onClick={() => this.props.history.goBack() }>
+                            <KeyboardBackspace />
+                        </Button>
+                        }
                         title="Send Test Invites"
                         subheader={current_test.testName}
                     />

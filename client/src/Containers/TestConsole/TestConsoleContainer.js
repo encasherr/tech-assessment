@@ -9,6 +9,7 @@ import TestConsoleTabs from './TestConsoleTabs';
 import { Button, Card, CardHeader } from '@material-ui/core';
 import TestConsoleQuestions from './TestConsoleQuestions';
 import LoadingComponent from '../../components/lib/LoadingComponent';
+import { KeyboardBackspace } from '@material-ui/icons';
 
 class TestConsoleContainer extends React.Component {
     
@@ -64,11 +65,16 @@ class TestConsoleContainer extends React.Component {
                 {current_test &&
                 <Card>
                     <CardHeader action={
-                        current_test.status=='draft' &&
+                        <div>
+                        {current_test.status=='draft' &&
                         <Button variant="contained" color="primary"
                                 onClick={this.onPublish}
-                        >Publish</Button>
-                        
+                        >Publish</Button>}
+                        <Button color="primary" size="large" variant="outlined"
+                                onClick={() => this.props.history.goBack() }>
+                            <KeyboardBackspace />
+                        </Button>
+                        </div>
                     }
                     title={current_test.testName}
                      subheader={current_test.status!=='draft' ? 'Published' : 'draft'}

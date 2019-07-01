@@ -15,9 +15,11 @@ import AddAnswerOptionComponent from './AddAnswerOption';
 import SelectExperience from './SelectExperience';
 import LoadingComponent from '../lib/LoadingComponent';
 import AddIcon from '@material-ui/icons/Add';
+import { withRouter } from 'react-router-dom';
+import { KeyboardBackspace } from '@material-ui/icons';
 
 const AddMcq = (props) => {
-        let { model } = props;
+        let { model, editMode } = props;
 
         const onSubmitExperience = (min, max) => {
             console.log('add mcq handler for experience called');
@@ -35,7 +37,13 @@ const AddMcq = (props) => {
                                     <AddIcon />
                                 </Avatar>
                             }
-                            title="Add MCQ"
+                            action={
+                                <Button color="primary" size="large" variant="outlined"
+                                        onClick={() => props.history.goBack() }>
+                                    <KeyboardBackspace />
+                                </Button>
+                            }
+                            title={editMode ? "Edit MCQ" : "Add MCQ"}
                             subheader="Multiple Choice Question">
                             </CardHeader>
                             <CardContent>
@@ -110,6 +118,7 @@ const AddMcq = (props) => {
                                         label="Question Description"
                                         multiline
                                         rows="4"
+                                        value={model.description}
                                         className={styles.dense}
                                         onChange={(e) => props.onFieldChange(e.target.value, 'description', props.model)}
                                         margin="normal"

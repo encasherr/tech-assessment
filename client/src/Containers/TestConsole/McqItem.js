@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import { Card, CardContent, CardActions, ListItem, ListItemText, 
         ListItemSecondaryAction, IconButton, Slide,
         Dialog, DialogTitle, DialogContent, Divider,
-        Typography } from '@material-ui/core';
-import { AddBox, Close, Remove } from '@material-ui/icons';
+        Typography, 
+        DialogActions,
+        Button} from '@material-ui/core';
+import { AddBox, Close, Remove, Edit, Delete } from '@material-ui/icons';
 import AnswerOptions from '../../components/Mcq/AnswerOptions';
 
 const Transition = (props) => {
@@ -26,6 +28,11 @@ class McqItem extends Component {
         console.log('handle close');
         this.setState({ open: false });
     };
+
+    handleDelete = () => {
+        this.props.onDeleteMcq();
+        this.setState({ open: false });
+    }
 
     render = () => {
         let { mcq, isSelectable } = this.props; 
@@ -50,6 +57,12 @@ class McqItem extends Component {
                             }
                         </IconButton>
                     </ListItemSecondaryAction>}
+                    {!isSelectable && 
+                    <ListItemSecondaryAction>
+                        <IconButton onClick={() => this.props.onEditClick(mcq)}>
+                            <Edit fontSize="small" color="secondary" />
+                        </IconButton>
+                    </ListItemSecondaryAction>}
                 </ListItem>
                 <Dialog
                     TransitionComponent={Transition}
@@ -71,6 +84,11 @@ class McqItem extends Component {
                         <p>{mcq.description}</p>
                         <AnswerOptions choices={mcq.choices}/>
                     </DialogContent>
+                    <DialogActions>
+                        <Button variant="contained" color="secondary" onClick={this.handleDelete} >
+                            Delete
+                        </Button>
+                    </DialogActions>
 
                 </Dialog>
             </div>
