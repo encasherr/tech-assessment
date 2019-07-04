@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import CSVReader from 'react-csv-reader';
+// import CSVReader from 'react-csv-reader';
 import { Typography, Button } from '@material-ui/core';
 import repository from '../../repository';
 import config from '../../config';
@@ -129,14 +129,14 @@ class BulkUpload extends React.Component {
         const { message, finalJson } = this.state;
         return (
             <div>
-                <CSVReader
+                {/* <CSVReader
                     cssClass="csv-reader-input"
                     label="Select CSV with Multiple Choice Questions"
                     onFileLoaded={this.handleFileLoaded}
                     onError={this.handleError}
                     inputId="bulkmcq"
                     inputStyle={{color: 'red'}}
-                />
+                /> */}
                 <br></br>
                 <Typography color="primary" variant="subtitle1">{message}</Typography>
                 {finalJson && finalJson.mcqs && finalJson.mcqs.length > 0 &&
