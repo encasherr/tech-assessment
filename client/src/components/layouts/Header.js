@@ -18,7 +18,7 @@ const Header = (props) => {
         props.onLogout();
     }
     let userInfo = AuthHelper.GetUserInfo();
-    // console.log('header props', userInfo.name);
+    //console.log('header props', userInfo.name);
     return (
         <AppBar
             position="fixed"

@@ -96,7 +96,7 @@ class Shell extends React.Component {
   };
   
   componentDidMount = () => {
-    console.log('shell this.props.history', this.props.history);
+    console.log('shell userinfo', AuthHelper.GetUserInfo());
     // this.props.SetUserInfo(AuthHelper.GetUserInfo());
   }
   Logout = () => {

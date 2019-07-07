@@ -12,7 +12,7 @@ import { Provider } from "react-redux";
 import configureStore from "./store";
 import config from './config';
 import AuthHelper from './AuthHelper';
-import { Paper, Grid, Button, IconButton } from '@material-ui/core';
+import { Paper, Grid, Button, IconButton, Typography } from '@material-ui/core';
 import { DeveloperMode } from '@material-ui/icons';
 
 class App extends Component {
@@ -37,7 +37,7 @@ class App extends Component {
         cache: 'default'
     };
     let url = config.adminApiUrl + 'auth/google';
-    axios.getData(url, {
+    axios.get(url, {
       headers: {
         access_token: response.accessToken
       }
@@ -57,8 +57,8 @@ class App extends Component {
     //         r.json().then(user => {
     //             if (token) {
     //                 this.setState({
-    //                   isAuthenticated: true, 
-    //                   user, 
+    //                   isAuthenticated: true,
+    //                   user,
     //                   token
     //                 });
     //             }
@@ -73,34 +73,33 @@ client_secret="nMaeSsEr8e9-j26dstZ6VAJc"
     const { isAuthenticated, user } = this.state;
     console.log('user', user);
     return (
-      <Provider store={configureStore()}>
-      {/* {isAuthenticated && <div>Logged In</div>} */}
-      {(!isAuthenticated || !user) &&
-      <div style={styles.grid}> 
-      <Grid container spacing={16} >
-        <Grid item sm={6} xs={6} md={6}>
-            <DeveloperMode className="large-svg"/>
-        </Grid>
-        <Grid item sm={6} xs={6} md={6}>
-          <div style={{marginBottom: '2%'}}>
-          <GoogleLogin
-                            clientId="350931387343-l9s3gs4fnmbj4rk4r4nfvh5siega0s5g.apps.googleusercontent.com"
-                            buttonText="Login with Google"
-                            onSuccess={this.googleResponse}
-                            onFailure={this.googleResponse}
-                            cookiePolicy={'single_host_origin'}
-                        />
-          </div>
-        </Grid>
-      </Grid>
-      </div>
-      }
-      { isAuthenticated &&
+      //(!isAuthenticated || !user) &&
+      // <div style={styles.grid}>
+      // <Grid container spacing={16} >
+      //   <Grid item sm={6} xs={6} md={6}>
+      //       <DeveloperMode className="large-svg"/>
+      //   </Grid>
+      //   <Grid style={styles.rightGrid} item sm={6} xs={6} md={6}>
+      //       <div style={{textAlign: 'center'}}>
+      //           <Typography variant="h6" noWrap style={{color: '#831057'}} >Tech Assessment</Typography>
+      //       </div>
+      //     <div style={{marginBottom: '0%', textAlign: 'center'}}>
+      //         <GoogleLogin
+      //                           clientId="350931387343-l9s3gs4fnmbj4rk4r4nfvh5siega0s5g.apps.googleusercontent.com"
+      //                           buttonText="Login with Google"
+      //                           onSuccess={this.googleResponse}
+      //                           onFailure={this.googleResponse}
+      //                           cookiePolicy={'single_host_origin'}
+      //                       />
+      //     </div>
+      //   </Grid>
+      // </Grid>
+      // </div>
+       /*isAuthenticated &&
         user && (user.role === "admin" || user.role === "recruiter") &&
-        <Shell /> }
-      { isAuthenticated &&
-        user && (user.role === "candidate") &&
-        <SimulatorShell /> }
+      <Shell />*/ 
+      <Provider store={configureStore()}>
+        <Shell />
       </Provider>
     );
   }
@@ -110,13 +109,18 @@ export default App;
 
 const styles = {
   grid: {
-    marginTop: '10%', 
+    marginTop: '10%',
     marginLeft: '20%',
     marginRight: '20%',
+    marginBottom: '20%',
     border: '3px solid #831057',
-    borderRadius: '7px',
-    width: '40%',
-    height: '60%',
-    padding: '10%'
+    borderRadius: '10px',
+    // width: '40%',
+    // height: '60%',
+    padding: '10%',
+    paddingTop: '14%'
+  },
+  rightGrid: {
+    // background: '#394'
   }
 }

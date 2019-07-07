@@ -54,6 +54,7 @@ A {
 }
 
 .large-svg {
-  transform: scale(9.8);
+  transform: scale(12.8);
   color: #831057;
+  margin-bottom: 0
 }
