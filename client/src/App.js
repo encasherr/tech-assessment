@@ -37,6 +37,8 @@ class App extends Component {
         cache: 'default'
     };
     let url = config.adminApiUrl + 'auth/google';
+    console.log('url', url);
+    console.log('access_token', response.access_token);
     axios.get(url, {
       headers: {
         access_token: response.accessToken
