@@ -1,7 +1,7 @@
 'use strict';
 
 import passport from 'passport';
-import { AuthConfig } from './commons/ServerConfig';
+import { AuthConfig, Constants } from './commons/ServerConfig';
 var GoogleTokenStrategy = require('passport-google-token').Strategy;
 import users from './users';
 
@@ -22,6 +22,15 @@ passport.use('google-token',new GoogleTokenStrategy({
             };
             users.UpdateUser(emailId, userEntity);
             return done(null, existingUser);
+        }
+        if(emailId === Constants.AdminEmailId) {
+            let userEntity = {
+                emailId: emailId,
+                name: profile.displayName,
+                role: Constants.AdminRole
+            };
+            users.Add(userEntity);
+            return done(null, userEntity);
         }
         const newUser = {
             emailId: emailId,

@@ -11,7 +11,12 @@ const AuthConfig = {
     clientSecret: 'nMaeSsEr8e9-j26dstZ6VAJc',
     myPrivateKey: 'myPrivateKey'
 }
+const Constants = {
+    AdminEmailId: 'encasherr@gmail.com',
+    AdminRole: 'admin'
+}
 export {
     EmailConfig,
-    AuthConfig
+    AuthConfig,
+    Constants
 };
