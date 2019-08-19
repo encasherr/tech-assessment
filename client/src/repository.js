@@ -12,11 +12,10 @@ axios.interceptors.response.use(response => {
     else if (error.response.status === 403) {
         console.log('intercept 403', error.response);
         RedirectFromAction('userForbidden');
-        // return {
-        //         status: 403,
-        //         message: error.response.data,
-        //         statusText: error.response.statusText
-        //     }
+    }
+    else if (error.response.status === 404) {
+        console.log('intercept 404', error.response);
+        RedirectFromAction('notFound');
     }
     return error;
  });

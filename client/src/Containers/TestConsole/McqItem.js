@@ -35,7 +35,7 @@ class McqItem extends Component {
     }
 
     render = () => {
-        let { mcq, isSelectable } = this.props; 
+        let { mcq, isSelectable, isEditable } = this.props; 
         return (
             <div>
                 
@@ -57,7 +57,7 @@ class McqItem extends Component {
                             }
                         </IconButton>
                     </ListItemSecondaryAction>}
-                    {!isSelectable && 
+                    {isEditable && 
                     <ListItemSecondaryAction>
                         <IconButton onClick={() => this.props.onEditClick(mcq)}>
                             <Edit fontSize="small" color="secondary" />
@@ -84,12 +84,13 @@ class McqItem extends Component {
                         <p>{mcq.description}</p>
                         <AnswerOptions choices={mcq.choices}/>
                     </DialogContent>
+                    {isEditable &&
                     <DialogActions>
                         <Button variant="contained" color="secondary" onClick={this.handleDelete} >
                             Delete
                         </Button>
                     </DialogActions>
-
+                    }
                 </Dialog>
             </div>
         );  

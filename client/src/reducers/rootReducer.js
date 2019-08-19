@@ -7,6 +7,7 @@ import adminTestReducer from './adminTestReducer';
 import testConsoleReducer from './testConsoleReducer';
 import inviteConsoleReducer from './inviteConsoleReducer';
 import userReducer from './userReducer';
+import questionSimulatorConsoleReducer from './questionSimulatorConsoleReducer';
 
 export default combineReducers({
     categoryReducer,
@@ -16,5 +17,6 @@ export default combineReducers({
     adminTestReducer,
     testConsoleReducer,
     inviteConsoleReducer,
-    userReducer
+    userReducer,
+    questionSimulatorConsoleReducer
 });

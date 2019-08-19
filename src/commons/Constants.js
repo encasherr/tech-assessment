@@ -1,8 +1,9 @@
 const Constants = {
     CandidateTestStatus : {
-        Started: 'started',
-        Passed: 'passed',
-        Failed: 'failed'
+        Started: 'STARTED',
+        Passed: 'PASSED',
+        Failed: 'FAILED',
+        NotStarted: 'NOT STARTED'
     }
 }
 

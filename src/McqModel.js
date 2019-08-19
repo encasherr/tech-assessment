@@ -55,6 +55,19 @@ class McqModel {
     Add = (entity) => {
       return new Promise((resolve, reject) => {
           console.log('mcq insert called', this.entities.data.length);
+          let correctOptions = ['A','B','C','D','E','F'];
+          if(entity.correctAnswer && correctOptions.indexOf(entity.correctAnswer) > -1) {
+                if(entity.choices && entity.choices.length > 0) {
+                    entity.choices.map((choice, chIndex) => {
+                        if(chIndex === correctOptions.indexOf(entity.correctAnswer)) {
+                            choice.isCorrect = true;              
+                        }
+                        else {
+                            choice.isCorrect = false;
+                        }
+                    })
+                }
+          }
           this.entities.insert(entity);
           db.saveDatabase();
           console.log('save db called');

@@ -56,14 +56,16 @@ class BulkUpload extends React.Component {
                     if(filteredHeaders && filteredHeaders.length > 0) {
                         let prop = filteredHeaders[0].prop;
                         if(prop.startsWith("choice")) {
-                            mcq.choices.push({
-                                content: colValue,
-                                isCorrect: correctAnswer 
-                            });
+                            if(colValue) {
+                                mcq.choices.push({
+                                    content: colValue,
+                                    isCorrect: correctAnswer 
+                                });
+                            }
                         }
-                        else if(prop === "correctAnswer") {
-                            correctAnswer = colValue;
-                        }
+                        // else if(prop === "correctAnswer") {
+                        //     mcq['answer'] = colValue;
+                        // }
                         else {
                             mcq[prop] = colValue;
                         }

@@ -34,7 +34,6 @@ api.delete('/admin/skill', auth, SkillController.Delete);
 // api.get('/admin/getAllCandidates', auth, CandidateController.GetAll);
 // api.post('/admin/candidate', auth, CandidateController.Add);
 // api.put('/admin/candidate', auth, CandidateController.Update);
-api.post('/admin/sendInvite', auth, CandidateController.SendInvite);
 // api.delete('/admin/candidate', auth, CandidateController.Delete);
 
 /* Admin Test endpoints */
@@ -50,13 +49,14 @@ api.post('/admin/user', auth, UserController.Add);
 api.put('/admin/user', auth, UserController.Update);
 api.delete('/admin/user', auth, UserController.Delete);
 
-
 /* Candidate Routes */
 /* Test Invite endpoints */
+api.post('/candidate/sendInvite', auth, TestInviteController.SendInvite);
 api.post('/candidate/startTest', auth, TestInviteController.StartTest);
 
+
 api.get('/admin/auth/google',
-  passport.authenticate('google-token', { session: false, scope: ['https://www.googleapis.com/auth/plus.login'] }),
+    passport.authenticate('google-token', { session: false, scope: ['https://www.googleapis.com/auth/plus.login'] }),
     (req, res, next) => {
         console.log('res next');
         req.auth = req.user;

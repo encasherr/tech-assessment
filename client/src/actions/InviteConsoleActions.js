@@ -24,7 +24,7 @@ export const SEND_TEST_INVITE_FAIL = 'SEND_TEST_INVITE_FAIL';
 export const INVITE_INFO_FIELD_CHANGE = 'INVITE_INFO_FIELD_CHANGE';
 
 export const SendInvite = (testModel, inviteInfo) => dispatch => {
-    let url = config.adminApiUrl + 'sendInvite';
+    let url = config.candidateApiUrl + 'sendInvite';
     
     if(!testModel.invitations){
         testModel.invitations = [];

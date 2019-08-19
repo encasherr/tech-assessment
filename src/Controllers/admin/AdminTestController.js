@@ -56,7 +56,7 @@ class AdminTestController {
         // }
     }
 
-    UpdateTest = (testId, newEntity) => {
+    UpdateTest = (testId, newEntity, test_link) => {
         let tests = this.initializeCollection();
         let filteredTests = tests.where((item) => {
             console.log(`item: ${item['$loki']}, testId: ${testId}, result: ${item['$loki'] == testId}`); 
@@ -73,6 +73,7 @@ class AdminTestController {
                     });
                     if(filteredInvitations && filteredInvitations.length > 0) {
                     } else {
+                        invitation.test_link = test_link;
                         invitations.push(invitation);
                     }
                 });

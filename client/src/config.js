@@ -1,5 +1,5 @@
 var domain = 'http://localhost:3001';
-domain = '';
+//domain = '';
 var domainUrl = 'http://localhost:3000';
 const validHeaders = [
     { prop: "category", name: "Category" },
@@ -19,6 +19,7 @@ const validHeaders = [
 
 export default {
     adminApiUrl: domain + '/api/admin/',
+    candidateApiUrl: domain + '/api/candidate/',
     domainUrl: domainUrl,
     minBulkCount: 1,
     maxBulkCount: 30,

@@ -1,2 +1,5 @@
 Category,Skill,Title,Description,Min,Max,Score,Answer,A,B,C,D
 Programming,C#,Generics,What is the use of Generics in C#?,3,9,10,B,To Implement interfaces,To support multiple types at runtime,For array operations,For memory management
+Programming,C#,List,We can have items of multiple types in List.,3,9,10,B,FALSE,TRUE,,
+Programming,C#,List,List is a reference type.,3,9,10,A,TRUE,FALSE,,
+Programming,C#,List,List variables are stored on stack memory,3,9,10,A,FALSE,TRUE,,

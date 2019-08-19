@@ -99,7 +99,8 @@ class McqSelector extends Component {
                             return (
                             <McqItem    mcq={item} key={index}
                                         onAddMcqToTest={() => this.props.onSelectMcq(item) } 
-                                        isSelectable={true} />
+                                        isSelectable={true}
+                                        isEditable={false} />
                             );
                         })}
                     </List>

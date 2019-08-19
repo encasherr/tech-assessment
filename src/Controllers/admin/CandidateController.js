@@ -42,35 +42,35 @@ class CandidateController {
         resp.send('get all candidates called');
     }
 
-    SendInvite = (req, resp) => {
-        console.log('send invite called');
-        console.log(req.body);
-        let { invitations, testId, testName } = req.body;
-        let test_link = this.generate_test_link(testId);
-        AdminTestController.UpdateTest(testId, req.body);
-        if(invitations && invitations.length > 0) {
-            let sentEmailIds = [];
-            invitations.map((inviteInfo, index) => {
-                if(!sentEmailIds.includes(inviteInfo.emailTo)) {
-                    let emailInfo = {
-                        to: inviteInfo.emailTo,
-                        subject: inviteInfo.emailSubject,
-                        testName: testName,
-                        testLink: test_link
-                    };
-                    let emailHelper = new EmailHelper();
-                    emailHelper.SendEmail(emailInfo);
-                    sentEmailIds.push(inviteInfo.emailTo);
-                }
-            })
-        }
-        resp.send('Email Sent');
-    }
+    // SendInvite = (req, resp) => {
+    //     console.log('send invite called');
+    //     console.log(req.body);
+    //     let { invitations, testId, testName } = req.body;
+    //     let test_link = this.generate_test_link(testId);
+    //     AdminTestController.UpdateTest(testId, req.body, test_link);
+    //     if(invitations && invitations.length > 0) {
+    //         let sentEmailIds = [];
+    //         invitations.map((inviteInfo, index) => {
+    //             if(!sentEmailIds.includes(inviteInfo.emailTo)) {
+    //                 let emailInfo = {
+    //                     to: inviteInfo.emailTo,
+    //                     subject: inviteInfo.emailSubject,
+    //                     testName: testName,
+    //                     testLink: test_link
+    //                 };
+    //                 let emailHelper = new EmailHelper();
+    //                 emailHelper.SendEmail(emailInfo);
+    //                 sentEmailIds.push(inviteInfo.emailTo);
+    //             }
+    //         })
+    //     }
+    //     resp.send('Email Sent');
+    // }
 
-    generate_test_link = (testId) => {
-        let link = EmailConfig.testLinkPrefix + testId;
-        return link;
-    }
+    // generate_test_link = (testId) => {
+    //     let link = EmailConfig.testLinkPrefix + testId;
+    //     return link;
+    // }
 
     initializeCollection = () => {
         let candidates = db.getCollection('candidates');

@@ -8,7 +8,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 // import MailIcon from '@material-ui/icons/Mail';
-import { Dashboard, Book, Assessment, ViewQuilt, PermIdentity, SupervisorAccount, Polymer  } from '@material-ui/icons';
+import { Dashboard, Book, Assessment, ViewQuilt, PermIdentity, SupervisorAccount, Polymer, Airplay  } from '@material-ui/icons';
 import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
 import { Link } from 'react-router-dom'
@@ -22,7 +22,8 @@ const MenuItems = [
     { routeName: 'categories', routeCaption: 'Categories', icon: ViewQuilt },
     { routeName: 'skills', routeCaption: 'Skills', icon: Polymer },
     // { routeName: 'candidates', routeCaption: 'Invite Candidates', icon: SupervisorAccount },
-    { routeName: 'users', routeCaption: 'Users', icon: PermIdentity }
+    { routeName: 'users', routeCaption: 'Users', icon: PermIdentity },
+    { routeName: 'simulator', routeCaption: 'Simulator', icon: Airplay }
 ];
 
 const getIcon = (menuItem) => {

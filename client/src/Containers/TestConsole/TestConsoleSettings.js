@@ -4,7 +4,7 @@ class TestConsoleSettings extends Component {
 
     render = () => {
         return (
-            <div>TestConsoleSettings</div>
+            <div>WIP</div>
         );
     }
 }

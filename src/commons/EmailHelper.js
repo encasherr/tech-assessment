@@ -204,9 +204,9 @@ hr {
 </style>
 <body>
 <span class="MuiTypography-root-69 MuiTypography-headline-74 MuiCardHeader-title-1042">$$test_name$$</span>
-<h6 class="MuiTypography-root-69 MuiTypography-subtitle1-87 MuiTypography-alignCenter-92">
+<h3 class="MuiTypography-root-69 MuiTypography-subtitle1-87 MuiTypography-alignCenter-92">
 You have been invited to attend the Junior C# developer challenge. We wish you all the best!
-</h6>
+</h3>
 <div style="margin-top: 2%;">
 <span class="MuiTypography-root-69 MuiTypography-button-80 MuiTypography-alignCenter-92">
 Duration: 90 mins

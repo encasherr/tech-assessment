@@ -101,7 +101,8 @@ class McqList extends Component {
                                 <McqItem    mcq={item} key={index}
                                             onEditClick={(mcq) => this.onEditClick(mcq)}
                                             onDeleteMcq={() => this.onDeleteMcq(item)}
-                                            isSelectable={false} />
+                                            isSelectable={false} 
+                                            isEditable={true} />
                             )
                         } )}
                     </List>

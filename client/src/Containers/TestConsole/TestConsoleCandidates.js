@@ -25,34 +25,39 @@ class TestConsoleCandidates extends Component {
     render = () => {
         // const classes = useStyles();
         let { currentTest } = this.props;
+
+        if(currentTest && currentTest.invitations && currentTest.invitations.length > 0){
+            return (
+                <div>
+                {/* <Card>
+                    <CardContent> */}
+                    <Table>
+                        <TableHead>
+                        <TableRow>
+                            <CustomTableCell>Email</CustomTableCell>
+                            <CustomTableCell align="left">Status</CustomTableCell>
+                        </TableRow>
+                        </TableHead>
+                        <TableBody>
+                        {currentTest.invitations.map((inviteInfo, index) => (
+                            <TableRow key={index}>
+                            <CustomTableCell align="left"><Typography variant="subtitle2" >{inviteInfo.emailTo}</Typography></CustomTableCell>
+                            <CustomTableCell align="left"><Typography variant="subtitle2" >{inviteInfo.testStatus}</Typography></CustomTableCell>
+                            </TableRow>
+                        ))}
+                        </TableBody>
+                    </Table>
+                    {/* </CardContent>
+                </Card> */}
+                </div>
+            );
+        }
+
         return (
             <div>
-            {/* {currentTest &&
-            <Typography variant="subtitle1">No Invitations Sent</Typography> 
-             } */}
-            {currentTest && currentTest.invitations && currentTest.invitations.length > 0 && 
-            <Card>
-                <CardContent>
-                <Table>
-                    <TableHead>
-                    <TableRow>
-                        <CustomTableCell>Email</CustomTableCell>
-                        <CustomTableCell align="left">Status</CustomTableCell>
-                    </TableRow>
-                    </TableHead>
-                    <TableBody>
-                    {currentTest.invitations.map((inviteInfo, index) => (
-                        <TableRow key={index}>
-                        <CustomTableCell align="left"><Typography variant="subtitle2" >{inviteInfo.emailTo}</Typography></CustomTableCell>
-                        <CustomTableCell align="left"><Typography variant="subtitle2" >{inviteInfo.status}</Typography></CustomTableCell>
-                        </TableRow>
-                    ))}
-                    </TableBody>
-                </Table>
-                </CardContent>
-            </Card>}
-            </div>
-        );
+                <Typography variant="subtitle1">No Invitations Sent</Typography> 
+            </div> 
+        )
 
         // return (
         //     <Paper className={classes.root}>

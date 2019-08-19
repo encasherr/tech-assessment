@@ -42,6 +42,9 @@ class InviteConsoleContainer extends React.Component {
     onSendInvite = () => {
         let { current_test, inviteInfo } = this.props;
         this.props.SendInvite(current_test, inviteInfo);
+        this.props.history.push({
+            pathname: '/testConsole', state: { testId: current_test.testId }
+        })
     }
 
     render = () => {

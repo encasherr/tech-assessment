@@ -7,6 +7,7 @@ import UsersComponent from '../Containers/User/UserContainer';
 import LoginComponent from './lib/LoginComponent';
 import User401 from '../Containers/User/User401';
 import UserForbidden from '../Containers/User/UserForbidden';
+import ResourceNotFound from '../Containers/User/ResourceNotFound';
 import { Route } from 'react-router-dom'
 import CategoriesContainer from '../Containers/CategoryContainer';
 import SkillsContainer from '../Containers/SkillContainer';
@@ -28,6 +29,7 @@ const Routes = (props) => {
             <Route path="/login" component={LoginComponent} />
             <Route path="/unauthorizedUser" component={User401} />
             <Route path="/userForbidden" component={UserForbidden} />
+            <Route path="/notFound" component={ResourceNotFound} />
             <PrivateRoute path="/dashboard" component={DashboardComponent} />
             <PrivateRoute path="/tests" component={AdminTestContainer} />
             {/* <Route path="/testConsole" component={TestConsoleContainer} /> */}

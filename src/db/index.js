@@ -35,7 +35,7 @@ const dataCleanup = () => {
 // place any bootstrap logic which needs to be run after loadDatabase has completed
 function runProgramLogic() {
   databaseInitialize();
-  // dataCleanup();
+  dataCleanup();
   db.saveDatabase();
 //   var categories = db.getCollection("categories");
 //   var categoryCount = categories.count();
@@ -80,9 +80,12 @@ const entities = [
   "categories", "users", "skills", "candidates", "mcqs", "tests"
 ];
 const entitiesToDelete = [
-  //"categories", 
-  "users", 
-  /*"skills", "candidates", "mcqs", "tests"*/
+  // "categories", 
+  // "users", 
+  // "skills", 
+  // "mcqs", 
+  // "tests",
+  // "candidates", 
 ];
 
 export default db;

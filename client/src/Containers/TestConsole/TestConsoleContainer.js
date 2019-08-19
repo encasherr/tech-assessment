@@ -49,6 +49,7 @@ class TestConsoleContainer extends React.Component {
 
     onPublish = () => {
         this.props.PublishTest(this.props.current_test);
+        this.reload();
     }
 
     render = () => {
@@ -66,7 +67,7 @@ class TestConsoleContainer extends React.Component {
                 <Card>
                     <CardHeader action={
                         <div>
-                        {current_test.status=='draft' &&
+                        {current_test.status=='draft' && current_test.selectedMcqs && current_test.selectedMcqs.length > 0 &&
                         <Button variant="contained" color="primary"
                                 onClick={this.onPublish}
                         >Publish</Button>}
