@@ -2,7 +2,7 @@
 
 # dependencies
 /node_modules
-/wwwroot
+# /wwwroot
 /.pnp
 .pnp.js
 

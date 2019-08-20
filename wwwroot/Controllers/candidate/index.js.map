@@ -1,0 +1,1 @@
+{"version":3,"sources":["../../../src/Controllers/candidate/index.js"],"names":["TestInviteController"],"mappings":";;;;;;;AAAA;;;;;;QAGIA,oB,GAAAA,8B","file":"index.js","sourcesContent":["import TestInviteController from './TestInviteController';\r\n\r\nexport {\r\n    TestInviteController\r\n}"]}
