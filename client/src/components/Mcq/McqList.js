@@ -22,6 +22,13 @@ import { Add, Search, Cancel } from '@material-ui/icons';
 
 class McqList extends Component {
 
+    constructor (props) {
+       super(props);
+       this.state = {
+          selectedMcqs: []
+       }
+    }
+
     componentDidMount = () => {
         this.props.FetchMcqs();
     }
@@ -42,6 +49,16 @@ class McqList extends Component {
     onDeleteMcq = (mcq) => {
         this.props.DeleteMcq(mcq);
         // this.props.FetchMcqs();
+    }
+
+    onMcqCheckChanged = (isChecked, mcq) => {
+        let { selectedMcqs } = this.state;
+        let filteredMcqs = selectedMcqs.filter((item)=>{
+            return item.id === item.id;
+        });
+        if(filteredMcqs && filteredMcqs.length > 0) {
+        
+        }
     }
 
     render = () => {
