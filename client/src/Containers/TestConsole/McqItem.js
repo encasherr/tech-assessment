@@ -4,7 +4,8 @@ import { Card, CardContent, CardActions, ListItem, ListItemText,
         Dialog, DialogTitle, DialogContent, Divider,
         Typography, 
         DialogActions,
-        Button} from '@material-ui/core';
+        Button,
+        Checkbox} from '@material-ui/core';
 import { AddBox, Close, Remove, Edit, Delete } from '@material-ui/icons';
 import AnswerOptions from '../../components/Mcq/AnswerOptions';
 
@@ -34,8 +35,12 @@ class McqItem extends Component {
         this.setState({ open: false });
     }
 
+    handleChange = (mcq) => {
+        console.log('selected', mcq);
+    }
+
     render = () => {
-        let { mcq, isSelectable, isEditable } = this.props; 
+        let { mcq, isSelectable, isEditable, isChecked } = this.props; 
         return (
             <div>
                 
@@ -59,6 +64,7 @@ class McqItem extends Component {
                     </ListItemSecondaryAction>}
                     {isEditable && 
                     <ListItemSecondaryAction>
+                        <Checkbox checked={isChecked} onChange={() => this.handleChange(mcq)} value="checkedA" />
                         <IconButton onClick={() => this.props.onEditClick(mcq)}>
                             <Edit fontSize="small" color="secondary" />
                         </IconButton>

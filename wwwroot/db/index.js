@@ -90,11 +90,13 @@ db.loadDatabase({}, function (err) {
 console.log("wait for it...");
 var entities = ["categories", "users", "skills", "candidates", "mcqs", "tests"];
 var entitiesToDelete = [
-// "categories", 
-// "users", 
-// "skills", 
-// "mcqs", 
-"tests", "candidates"];
+  // "categories", 
+  // "users", 
+  // "skills", 
+  // "mcqs", 
+  // "tests",
+  // "candidates", 
+];
 
 exports.default = db;
 //# sourceMappingURL=index.js.map

@@ -89,7 +89,7 @@ module.exports = function (req, res, next) {
         }
     } catch (ex) {
         console.log('exception in authorization', req.user);
-        res.status(400).send("Invalid token.");
+        res.status(401).send("Invalid token.");
     }
 };
 //# sourceMappingURL=auth.js.map

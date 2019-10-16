@@ -3,6 +3,25 @@ import users from './users';
 
 class McqModel {
     entities = {};
+    entityModel = (dbObject) => {
+        let model = {
+            id: dbObject['$loki'],
+            author: dbObject.addedBy,
+            category: dbObject.category,
+            choices: [],
+            correctAnswer: dbObject.correctAnswer,
+            description: dbObject.description,
+            minimumExperience: dbObject.minimumExperience,
+            maximumExperience: dbObject.maximumExperience,
+            question: dbObject.question,
+            score: dbObject.score,
+            skill: dbObject.skill
+        };
+        dbObject.choices.map((choice, index) => {
+            model.choices.push(choice);
+        });
+        return model;
+    };
 
     constructor() {
       this.initializeCollection();
@@ -14,7 +33,12 @@ class McqModel {
             // let mcqs = this.initializeCollection();
             if(userEntity && userEntity.role === users.UserRoles.admin) {
                 console.log(this.entities.data.length);
-                resolve(this.entities.data);
+                let entityModelCollection = [];
+                this.entities.data.map((mcq, index) => {
+                    let entityModel = this.entityModel(mcq);
+                    entityModelCollection.push(entityModel);
+                });
+                resolve(entityModelCollection);
             }
             else {
                 this.GetMcqsByUser(userEntity);
@@ -28,7 +52,13 @@ class McqModel {
               return item.addedBy = userEntity.emailId;
           });
           console.log(filteredMcqs.length);
-          return filteredMcqs;
+          let entityModelCollection = [];
+          filteredMcqs.map((mcq, index) => {
+              let entityModel = this.entityModel(mcq);
+              entityModelCollection.push(entityModel);
+          });
+            return entityModelCollection;
+            // return filteredMcqs;
         }
         return [];
     }

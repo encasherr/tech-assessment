@@ -1,5 +1,5 @@
 var domain = 'http://localhost:3001';
-//domain = '';
+domain = '';
 var domainUrl = 'http://localhost:3000';
 const validHeaders = [
     { prop: "category", name: "Category" },

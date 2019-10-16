@@ -23,13 +23,38 @@ var McqModel = function McqModel() {
 
     this.entities = {};
 
+    this.entityModel = function (dbObject) {
+        var model = {
+            id: dbObject['$loki'],
+            author: dbObject.addedBy,
+            category: dbObject.category,
+            choices: [],
+            correctAnswer: dbObject.correctAnswer,
+            description: dbObject.description,
+            minimumExperience: dbObject.minimumExperience,
+            maximumExperience: dbObject.maximumExperience,
+            question: dbObject.question,
+            score: dbObject.score,
+            skill: dbObject.skill
+        };
+        dbObject.choices.map(function (choice, index) {
+            model.choices.push(choice);
+        });
+        return model;
+    };
+
     this.GetAll = function (userEntity) {
         return new Promise(function (resolve, reject) {
             // console.log('get all mcqs called', req.user);
             // let mcqs = this.initializeCollection();
             if (userEntity && userEntity.role === _users2.default.UserRoles.admin) {
                 console.log(_this.entities.data.length);
-                resolve(_this.entities.data);
+                var entityModelCollection = [];
+                _this.entities.data.map(function (mcq, index) {
+                    var entityModel = _this.entityModel(mcq);
+                    entityModelCollection.push(entityModel);
+                });
+                resolve(entityModelCollection);
             } else {
                 _this.GetMcqsByUser(userEntity);
             }
@@ -42,7 +67,13 @@ var McqModel = function McqModel() {
                 return item.addedBy = userEntity.emailId;
             });
             console.log(filteredMcqs.length);
-            return filteredMcqs;
+            var entityModelCollection = [];
+            filteredMcqs.map(function (mcq, index) {
+                var entityModel = _this.entityModel(mcq);
+                entityModelCollection.push(entityModel);
+            });
+            return entityModelCollection;
+            // return filteredMcqs;
         }
         return [];
     };
