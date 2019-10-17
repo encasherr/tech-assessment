@@ -37,6 +37,7 @@ class McqItem extends Component {
 
     handleChange = (mcq) => {
         console.log('selected', mcq);
+        this.props.markForDeletion(mcq);
     }
 
     render = () => {

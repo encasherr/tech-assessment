@@ -51,24 +51,41 @@ class McqList extends Component {
         // this.props.FetchMcqs();
     }
 
-    onMcqCheckChanged = (isChecked, mcq) => {
+    bulkDeleteMcq = () => {
+        let { selectedMcqs } = this.state;
+        if(selectedMcqs && selectedMcqs.length > 0) {
+            console.log('deleting mcqs', selectedMcqs);
+            selectedMcqs.map((item, index) => {
+                this.onDeleteMcq(item);
+            });
+        }        
+    }
+
+    markForDeletion = (mcq) => {
         let { selectedMcqs } = this.state;
         let filteredMcqs = selectedMcqs.filter((item)=>{
-            return item.id === item.id;
+            return item.id === mcq.id;
         });
         if(filteredMcqs && filteredMcqs.length > 0) {
-        
+        } else {
+            selectedMcqs.push(mcq);
+            this.setState({selectedMcqs});
         }
     }
 
     render = () => {
         let { mcqs, search_term, filteredCategories, search_enabled } = this.props;
+        let { selectedMcqs } = this.state;
         let mcqToDisplay = filteredCategories ? filteredCategories : mcqs;
         return (
             <Card>
                 <CardHeader
                     action={
                         <div>
+                            {selectedMcqs && selectedMcqs.length > 0 &&
+                            <Button color="primary" onClick={() => this.props.BeginSearch()} size="small">
+                                Delete
+                            </Button>}
                             {!search_enabled &&
                             <Button color="primary" onClick={() => this.props.BeginSearch()} size="small">
                                 <Search />
@@ -118,6 +135,7 @@ class McqList extends Component {
                                 <McqItem    mcq={item} key={index}
                                             onEditClick={(mcq) => this.onEditClick(mcq)}
                                             onDeleteMcq={() => this.onDeleteMcq(item)}
+                                            markForDeletion={(mcq) => this.markForDeletion(mcq)}
                                             isSelectable={false} 
                                             isEditable={true} />
                             )
