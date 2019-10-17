@@ -83,7 +83,7 @@ class McqList extends Component {
                     action={
                         <div>
                             {selectedMcqs && selectedMcqs.length > 0 &&
-                            <Button color="primary" onClick={() => this.props.BeginSearch()} size="small">
+                            <Button color="primary" onClick={() => this.bulkDeleteMcq()} size="small">
                                 Delete
                             </Button>}
                             {!search_enabled &&
