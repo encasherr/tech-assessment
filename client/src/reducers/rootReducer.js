@@ -9,6 +9,8 @@ import inviteConsoleReducer from './inviteConsoleReducer';
 import userReducer from './userReducer';
 import questionSimulatorConsoleReducer from './questionSimulatorConsoleReducer';
 
+import rmaReducer from '../HiTech/rmaReducer';
+
 export default combineReducers({
     categoryReducer,
     skillReducer,
@@ -18,5 +20,6 @@ export default combineReducers({
     testConsoleReducer,
     inviteConsoleReducer,
     userReducer,
-    questionSimulatorConsoleReducer
+    questionSimulatorConsoleReducer,
+    rmaReducer
 });

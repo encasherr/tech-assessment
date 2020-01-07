@@ -46,6 +46,10 @@ const Routes = (props) => {
             <PrivateRoute path="/users" component={UsersComponent} />
 
             <PrivateRoute path="/simulator" component={SimulatorConsoleContainer} />
+
+            {/* Routes for HiTech*/}
+            <Route path="/rma" component={RmaRequest} />
+
         </div>
     );
 }
