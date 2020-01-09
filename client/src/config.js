@@ -20,6 +20,7 @@ const validHeaders = [
 export default {
     adminApiUrl: domain + '/api/admin/',
     candidateApiUrl: domain + '/api/candidate/',
+    hitechApiUrl: domain + '/api/hitech/',
     domainUrl: domainUrl,
     minBulkCount: 1,
     maxBulkCount: 30,
