@@ -97,7 +97,7 @@ export const AddRmaRequest = (rmaRequestModel) => dispatch => {
     dispatch({
         type: ADD_RMAREQUESTS_BEGIN
     });
-    let url = config.adminApiUrl + 'rmaRequest';
+    let url = config.hitechApiUrl + 'rmaRequest';
     console.log('action model');
     console.log(rmaRequestModel);
     repository.saveData(url, rmaRequestModel)
@@ -120,7 +120,7 @@ export const UpdateRmaRequest = (rmaRequestModel) => dispatch => {
     dispatch({
         type: UPDATE_RMAREQUESTS_BEGIN
     });
-    let url = config.adminApiUrl + 'rmaRequest';
+    let url = config.hitechApiUrl + 'rmaRequest';
     repository.updateData(url, rmaRequestModel)
         .then((res) => {
             dispatch({
@@ -139,7 +139,7 @@ export const FetchRmaRequests = () => dispatch => {
     dispatch({
         type: FETCH_RMAREQUESTS_BEGIN
     });
-    let url = config.adminApiUrl + 'rmaRequests';
+    let url = config.hitechApiUrl + 'rmaRequests';
     repository.getData(url)
         .then((res) => {
             console.log('rma requests fetched');
