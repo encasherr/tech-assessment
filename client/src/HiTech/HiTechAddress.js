@@ -1,12 +1,15 @@
 import React from 'react';
+import { Typography } from '@material-ui/core';
 
 const HiTechAddress = (props) => {
     return (
-        <div>
-            Highness Microelectronics Pvt. Ltd.
-            RMA Department (RMA#XXXXXXXX)
-            8-C, 1 st Floor, New Tejpal Industrial Estate.,
-            Kurla Andheri Road, Sakinaka, Mumbai - 400072.
+        <div className="divContainer">
+            <Typography variant="caption">
+            Highness Microelectronics Pvt. Ltd.<br></br>
+            RMA Department (RMA#XXXXXXXX)</Typography>
+            <Typography variant="body2">
+            8-C, 1 st Floor, New Tejpal Industrial Estate.,<br></br>
+            Kurla Andheri Road, Sakinaka, Mumbai - 400072.</Typography><br></br>
         </div>
     );
 }

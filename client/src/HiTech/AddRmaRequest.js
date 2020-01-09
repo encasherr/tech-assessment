@@ -5,118 +5,79 @@ import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import { CardHeader } from '@material-ui/core';
+import { CardHeader, Typography } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
-import Loading from '../lib/LoadingComponent';
+import Loading from '../components/lib/LoadingComponent';
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
-
+import RmaCustomerDetails from './RmaCustomerDetails';
+import RmaProductList from './RmaProductList';
+import RmaVendorDetails from './RmaVendorDetails';
+import RmaTermsAndConditions from './RmaTermsAndConditions';
+import HiTechAddress from './HiTechAddress';
+import Book from '@material-ui/icons/Book';
 
 const AddRmaRequestComponent = (props) => {
     let { model } = props;
+    model.customerDetails = !model.customerDetails ? {} : model.customerDetails;
+    model.productList = !model.productList ? [] : model.productList;
+    model.current_product = !model.current_product ? {} : model.current_product;
+    model.vendorDetails = !model.vendorDetails ? {} : model.vendorDetails;
+    
     let display = (props) ? 'block' : 'none';
     return (
-        <Card style={{padding: "4%"}}>
-        {!model && <Loading />} 
-        {model &&    
-            <form  noValidate autoComplete="off">
-                <CardHeader 
-                avatar={
-                    <Avatar aria-label="Recipe" style={styles.avatar}>
-                        <AddIcon />
-                    </Avatar>
-                    }
-                    title="Add RMA Request">
-                </CardHeader>
+        <Card style={{padding: "1%"}}>
+                    <CardHeader 
+                        avatar={
+                            <Avatar aria-label="Recipe" style={styles.avatar}>
+                                <Book />
+                            </Avatar>
+                            }
+                            title="Create RMA Request">
+                    </CardHeader>
                 <CardContent>
-                    <FormControl variant="outlined" style={styles.formControl}>
-                        <TextField
-                            id="outlined-name"
-                            label="Customer Name"
-                            value={model.customerName}
-                            onChange={(e) => props.onFieldChange(e.target.value, 'customerName', props.model)}
-                            margin="normal"
-                            variant="outlined"
-                        />
-                    </FormControl>
-                    <FormControl variant="outlined" style={styles.formControl}>
-                        <TextField
-                            id="outlined-name"
-                            label="Address"
-                            value={model.address}
-                            onChange={(e) => props.onFieldChange(e.target.value, 'address', props.model)}
-                            margin="normal"
-                            variant="outlined"
-                        />
-                    </FormControl>
-                    <FormControl variant="outlined" style={styles.formControl}>
-                        <TextField
-                            id="outlined-name"
-                            label="Tel"
-                            value={model.telephone}
-                            onChange={(e) => props.onFieldChange(e.target.value, 'telephone', props.model)}
-                            margin="normal"
-                            variant="outlined"
-                        />
-                    </FormControl>
-                    <FormControl variant="outlined" style={styles.formControl}>
-                        <TextField
-                            id="outlined-name"
-                            label="Fax"
-                            value={model.fax}
-                            onChange={(e) => props.onFieldChange(e.target.value, 'fax', props.model)}
-                            margin="normal"
-                            variant="outlined"
-                        />
-                    </FormControl>
-                    <FormControl variant="outlined" style={styles.formControl}>
-                        <TextField
-                            id="outlined-name"
-                            label="Email"
-                            value={model.email}
-                            onChange={(e) => props.onFieldChange(e.target.value, 'email', props.model)}
-                            margin="normal"
-                            variant="outlined"
-                        />
-                    </FormControl>
-                    <FormControl variant="outlined" style={styles.formControl}>
-                        <TextField
-                            id="outlined-name"
-                            label="Contact Person"
-                            value={model.contactPerson}
-                            onChange={(e) => props.onFieldChange(e.target.value, 'contactPerson', props.model)}
-                            margin="normal"
-                            variant="outlined"
-                        />
-                    </FormControl>
-                    <RmaProductList 
+                    <RmaCustomerDetails
+                        model={model.customerDetails}
+                        onFieldChange={(val, field, model) => props.onFieldChange(val, field, model)}
+                    />
+                    <br></br>
+                    <RmaProductList
+                        current_product={model.current_product}
                         productList={model.productList}
-                        onAddProduct={(productItem) => props.onAddProduct(productItem)}
+                        onProductFieldChange={(val, field) => props.onProductFieldChange(val, field, model)}
+                        onAddRmaProduct={(productItem) => props.onAddRmaProduct(productItem, model)}
                         />
+                    <br></br>
                     <RmaVendorDetails
-                        vendorDetails={model.vendorDetails}
-                        onFieldChange={(e, field) => props.onVendorDetailsFieldChange(e.target.value, field)}
+                        model={model.vendorDetails}
+                        onFieldChange={(e, field) => props.onVendorDetailsFieldChange(e.target.value, field, model)}
                         />
                     <RmaTermsAndConditions />
                     <HiTechAddress />
                 </CardContent>
                 <CardActions style={styles.actionButton}>
                     <Button variant="contained" size="large" color="primary" 
-                                onClick={ () => props.onSubmit(props.model) }>
-                        {props.editMode ? 'Update' : 'Submit'}
+                                onClick={ () => props.onSubmit(model) }>
+                                Submit
                     </Button>
                 </CardActions>
-            </form>}
         </Card>
     );
 }
 export default AddRmaRequestComponent;
 const styles={
-    formControl: {
-        width: '90%'
+    fullWidth: {
+        width: '100%',
+        paddingLeft: '2%',
+        // paddingRight: '2%'
+    },
+    width50: {
+        width: '40%',
+        paddingLeft: '2%',
+        paddingRight: '2%'
     },
     actionButton: {
-        marginLeft: '70%'
+        // marginLeft: '70%'
     },
     avatar: {
         backgroundColor: '#555'

@@ -16,14 +16,17 @@ import AuthHelper from '../../AuthHelper';
 
 const MenuItems = [
     // { routeName: 'login', routeCaption: 'Login', icon: Polymer },
-    { routeName: 'dashboard', routeCaption: 'Dashboard', icon: Dashboard },
-    { routeName: 'tests', routeCaption: 'Tests', icon: Assessment },
-    { routeName: 'mcqs', routeCaption: 'Library', icon: Book },
-    { routeName: 'categories', routeCaption: 'Categories', icon: ViewQuilt },
-    { routeName: 'skills', routeCaption: 'Skills', icon: Polymer },
+    { routeName: 'dashboard', routeCaption: 'Dashboard', icon: Dashboard, app: 'TeachAssesment' },
+    { routeName: 'tests', routeCaption: 'Tests', icon: Assessment, app: 'TeachAssesment' },
+    { routeName: 'mcqs', routeCaption: 'Library', icon: Book, app: 'TeachAssesment' },
+    { routeName: 'categories', routeCaption: 'Categories', icon: ViewQuilt, app: 'TeachAssesment' },
+    { routeName: 'skills', routeCaption: 'Skills', icon: Polymer, app: 'TeachAssesment' },
     // { routeName: 'candidates', routeCaption: 'Invite Candidates', icon: SupervisorAccount },
-    { routeName: 'users', routeCaption: 'Users', icon: PermIdentity },
-    { routeName: 'simulator', routeCaption: 'Simulator', icon: Airplay }
+    { routeName: 'users', routeCaption: 'Users', icon: PermIdentity, app: 'TeachAssesment' },
+    { routeName: 'simulator', routeCaption: 'Simulator', icon: Airplay, app: 'TeachAssesment' },
+
+    /* HiTech Routes */
+    { routeName: 'rmaRequests', routeCaption: 'RMA', icon: Book, app: 'Hitech' },
 ];
 
 const getIcon = (menuItem) => {
@@ -77,6 +80,13 @@ const SideDrawer = (props) => {
                         </ListItem>
                     </Link>
                     }
+                    {menuItem.app === 'Hitech' &&
+                    <Link to={"/" + menuItem.routeName} key={index}>
+                        <ListItem button key={menuItem.routeCaption}>
+                            <ListItemIcon title={menuItem.routeCaption}>{getIcon(menuItem)}</ListItemIcon>
+                            <ListItemText style={{textDecoration: 'none'}} primary={menuItem.routeCaption} />
+                        </ListItem>
+                    </Link>}
             </div>
             ))}
             </List>

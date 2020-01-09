@@ -20,6 +20,10 @@ import McqList from '../components/Mcq/McqList';
 import CandidateList from '../components/Candidates/CandidateList';
 import InviteConsoleContainer from '../Containers/InviteConsole/InviteConsoleContainer';
 import SimulatorConsoleContainer from '../Containers/Simulator/SimulatorConsoleContainer';
+
+import AddRmaRequest from '../HiTech/AddRmaRequestContainer';
+import RmaRequestList from '../HiTech/RmaRequestListContainer';
+
 import PrivateRoute from '../components/lib/PrivateRoute';
 
 const Routes = (props) => {
@@ -48,7 +52,8 @@ const Routes = (props) => {
             <PrivateRoute path="/simulator" component={SimulatorConsoleContainer} />
 
             {/* Routes for HiTech*/}
-            <Route path="/rma" component={RmaRequest} />
+            <Route path="/rmaRequests" component={RmaRequestList} />
+            <Route path="/rmaAdd" component={AddRmaRequest} />
 
         </div>
     );

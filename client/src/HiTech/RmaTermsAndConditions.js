@@ -1,12 +1,13 @@
 import React from 'react';
+import { Typography } from '@material-ui/core';
 
 const RmaTermsAndConditions = (props) => {
     return (
-        <div>
-        <li> All Accessories including cables &amp; power supply must only be returned back along with the product unless otherwise specified by us. </li>
-        <li> Warranty claim may be rejected if product is physically damaged. </li>
-        <li> All road tax, Octroi or any entry tax is payable by customer. </li>
-        <li> Customer should send the product to our warehouse address mentioned below on freight prepaid basis. </li>
+        <div className="divContainer">
+        <Typography variant="body1">1) All Accessories including cables &amp; power supply must only be returned back along with the product unless otherwise specified by us. </Typography>
+        <Typography variant="body1">2) Warranty claim may be rejected if product is physically damaged. </Typography>
+        <Typography variant="body1">3) All road tax, Octroi or any entry tax is payable by customer. </Typography>
+        <Typography variant="body1">4) Customer should send the product to our warehouse address mentioned below on freight prepaid basis. </Typography>
         </div>
     );
 }
