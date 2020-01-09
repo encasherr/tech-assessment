@@ -4,6 +4,8 @@ import { McqController, CategoryController, SkillController,
         UserController } from './Controllers/admin';
 import { TestInviteController } from './Controllers/candidate';
 
+import { RmaRequestController } from './Controllers/hitech';
+
 import { generateToken, sendToken } from './utils/token.utils';
 import passport from 'passport';
 import auth from './utils/auth';
@@ -30,9 +32,9 @@ api.get('/admin/getAllSkills', auth, SkillController.GetAll);
 api.post('/admin/skill', auth, SkillController.Add);
 api.delete('/admin/skill', auth, SkillController.Delete);
 
-/* candidate endpoints */
-// api.get('/admin/getAllCandidates', auth, CandidateController.GetAll);
-// api.post('/admin/candidate', auth, CandidateController.Add);
+/* hitech endpoints */
+api.get('/hitech/rmaRequests', RmaRequestController.GetAll);
+api.post('/hitech/rmaRequest', RmaRequestController.Add);
 // api.put('/admin/candidate', auth, CandidateController.Update);
 // api.delete('/admin/candidate', auth, CandidateController.Delete);
 
