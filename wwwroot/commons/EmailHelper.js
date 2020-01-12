@@ -10,9 +10,15 @@ var _nodemailer2 = _interopRequireDefault(_nodemailer);
 
 var _ServerConfig = require('./ServerConfig');
 
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var fs = require('fs');
 
 var EmailHelper = function EmailHelper() {
     var _this = this;
@@ -51,16 +57,229 @@ var EmailHelper = function EmailHelper() {
     };
 
     this.CreateHtml = function (emailInfo) {
-        var html = htmlTemplate;
-        html = html.replace('$$test_name$$', emailInfo.testName + ' Challenge');
-        html = html.replace('$$test_link$$', emailInfo.testLink);
+        var html = _this.GetHtmlTemplateByType(emailInfo);
+        if (emailInfo.notificationType === 'test') {
+            html = html.replace('$$test_name$$', emailInfo.testName + ' Challenge');
+            html = html.replace('$$test_link$$', emailInfo.testLink);
+        }
+        if (emailInfo.notificationType === 'rma') {
+            if (emailInfo.rmaRequest.customerDetails) {
+                html = html.replace('$$customer_name$$', emailInfo.rmaRequest.customerDetails.customerName);
+                html = html.replace('$$telephone$$', emailInfo.rmaRequest.customerDetails.telephone);
+                html = html.replace('$$contact_person$$', emailInfo.rmaRequest.customerDetails.contactPerson);
+                html = html.replace('$$rma_link$$', emailInfo.rmaLink);
+            }
+        }
+        return html;
+    };
 
+    this.GetHtmlTemplateByType = function (emailInfo) {
+        var html = '';
+
+        switch (emailInfo.notificationType) {
+            case 'test':
+                {
+                    var file = _path2.default.resolve(__dirname + '/testinvitationTemplate.html');
+                    console.log('template path', file);
+                    html = fs.readFileSync(file, { encoding: 'utf8' });
+                    break;
+                }
+            case 'rma':
+                {
+                    var _file = _path2.default.resolve(__dirname + '/rmatemplate.html');
+                    console.log('template path', _file);
+                    html = fs.readFileSync(_file, { encoding: 'utf8' });
+                    break;
+                }
+        }
         return html;
     };
 };
 
 exports.default = EmailHelper;
 
-
-var htmlTemplate = '\n<style>\n.MuiTypography-subtitle1-87 {\n    color: rgba(0, 0, 0, 0.87);\n    font-size: 1rem;\n    font-family: "Roboto", "Helvetica", "Arial", sans-serif;\n    font-weight: 400;\n    line-height: 1.75;\n    letter-spacing: 0.00938em;\n}\n.MuiTypography-alignCenter-92 {\n    text-align: center;\n}\n.MuiTypography-root-69 {\n    margin: 0;\n    display: block;\n}\n.MuiTypography-button-80 {\n    color: rgba(0, 0, 0, 0.87);\n    font-size: 0.875rem;\n    font-weight: 500;\n    font-family: "Roboto", "Helvetica", "Arial", sans-serif;\n    text-transform: uppercase;\n}\n.MuiDivider-root-117 {\n    height: 1px;\n    margin: 0;\n    border: none;\n    flex-shrink: 0;\n    background-color: rgba(0, 0, 0, 0.12);\n}\n.MuiButton-sizeLarge-1131 {\n    padding: 8px 24px;\n    font-size: 0.9375rem;\n}\n.MuiButton-contained-1118 {\n    color: rgba(0, 0, 0, 0.87);\n    box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 3px 1px -2px rgba(0,0,0,0.12);\n    background-color: #e0e0e0;\n}\n.MuiButton-root-1107 {\n    color: rgba(0, 0, 0, 0.87);\n    padding: 6px 16px;\n    font-size: 0.875rem;\n    min-width: 64px;\n    box-sizing: border-box;\n    transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;\n    line-height: 1.75;\n    font-weight: 500;\n    font-family: "Roboto", "Helvetica", "Arial", sans-serif;\n    border-radius: 4px;\n    text-transform: uppercase;\n}\n.MuiButtonBase-root-57 {\n    color: inherit;\n    border: 0;\n    margin: 0;\n    cursor: pointer;\n    display: inline-flex;\n    outline: none;\n    padding: 0;\n    position: relative;\n    align-items: center;\n    user-select: none;\n    border-radius: 0;\n    vertical-align: middle;\n    justify-content: center;\n    -moz-appearance: none;\n    text-decoration: none;\n    background-color: transparent;\n    -webkit-appearance: none;\n    -webkit-tap-highlight-color: transparent;\n}\n.MuiButton-label-1108 {\n    width: 100%;\n    display: inherit;\n    align-items: inherit;\n    justify-content: inherit;\n}\n.MuiTouchRipple-root-259 {\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%;\n    display: block;\n    z-index: 0;\n    position: absolute;\n    overflow: hidden;\n    border-radius: inherit;\n    pointer-events: none;\n}\n.MuiButton-containedSecondary-1120 {\n    color: #fff;\n    background-color: #f50057;\n    border-radius: 4px;\n    padding: 1%;\n}\na {\n    text-decoration: none;\n}\nbutton {\n    align-items: flex-start;\n    text-align: center;\n    cursor: default;\n    color: buttontext;\n    background-color: buttonface;\n    box-sizing: border-box;\n    padding: 2px 6px 3px;\n    border-width: 2px;\n    border-style: outset;\n    border-color: buttonface;\n    border-image: initial;\n}\nbutton {\n    -webkit-writing-mode: horizontal-tb !important;\n}\n.MuiDivider-root-117 {\n    height: 1px;\n    margin: 0;\n    border: none;\n    flex-shrink: 0;\n    background-color: rgba(0, 0, 0, 0.12);\n}\nhr {\n    display: block;\n    unicode-bidi: isolate;\n    margin-block-start: 0.5em;\n    margin-block-end: 0.5em;\n    margin-inline-start: auto;\n    margin-inline-end: auto;\n    overflow: hidden;\n    border-style: inset;\n    border-width: 1px;\n}\n.MuiTypography-gutterBottom-96 {\n    margin-bottom: 0.35em;\n}\n.MuiTypography-alignCenter-92 {\n    text-align: center;\n}\n.MuiTypography-subtitle2-88 {\n    color: rgba(0, 0, 0, 0.87);\n    font-size: 0.875rem;\n    font-family: "Roboto", "Helvetica", "Arial", sans-serif;\n    font-weight: 500;\n    line-height: 1.57;\n    letter-spacing: 0.00714em;\n}\n.MuiTypography-headline-74 {\n    color: rgba(0, 0, 0, 0.87);\n    font-size: 1.9rem;\n    font-weight: 600;\n    font-family: "Roboto", "Helvetica", "Arial", sans-serif;\n    line-height: 1.65417em;\n    text-align: center;\n    padding: 2%;\n}\n</style>\n<body>\n<span class="MuiTypography-root-69 MuiTypography-headline-74 MuiCardHeader-title-1042">$$test_name$$</span>\n<h3 class="MuiTypography-root-69 MuiTypography-subtitle1-87 MuiTypography-alignCenter-92">\nYou have been invited to attend the Junior C# developer challenge. We wish you all the best!\n</h3>\n<div style="margin-top: 2%;">\n<span class="MuiTypography-root-69 MuiTypography-button-80 MuiTypography-alignCenter-92">\nDuration: 90 mins\n<br><br>\n<a href="$$test_link$$" style="margin-top: 2%;">\n<button class="MuiButtonBase-root-57 MuiButton-root-1107 MuiButton-contained-1118 MuiButton-containedSecondary-1120 MuiButton-raised-1121 MuiButton-raisedSecondary-1123 MuiButton-sizeLarge-1131" tabindex="0" type="button" align="center">\n<span class="MuiButton-label-1108">\nStart Challenge\n</span>\n<span class="MuiTouchRipple-root-259"></span>\n</button>\n</a>\n</span>\n</div>\n<hr class="MuiDivider-root-117" style="margin-top: 2%;">\n<h6 class="MuiTypography-root-69 MuiTypography-subtitle2-88 MuiTypography-gutterBottom-96 MuiTypography-alignCenter-92" style="margin-top: 2%;">\nFor any technical queries, please refer to <a href="#">FAQ</a> or email us at support@techassessment.com\n</h6>\n</body>\n';
+/*const htmlTemplate = `
+<style>
+.MuiTypography-subtitle1-87 {
+    color: rgba(0, 0, 0, 0.87);
+    font-size: 1rem;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-weight: 400;
+    line-height: 1.75;
+    letter-spacing: 0.00938em;
+}
+.MuiTypography-alignCenter-92 {
+    text-align: center;
+}
+.MuiTypography-root-69 {
+    margin: 0;
+    display: block;
+}
+.MuiTypography-button-80 {
+    color: rgba(0, 0, 0, 0.87);
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    text-transform: uppercase;
+}
+.MuiDivider-root-117 {
+    height: 1px;
+    margin: 0;
+    border: none;
+    flex-shrink: 0;
+    background-color: rgba(0, 0, 0, 0.12);
+}
+.MuiButton-sizeLarge-1131 {
+    padding: 8px 24px;
+    font-size: 0.9375rem;
+}
+.MuiButton-contained-1118 {
+    color: rgba(0, 0, 0, 0.87);
+    box-shadow: 0px 1px 5px 0px rgba(0,0,0,0.2), 0px 2px 2px 0px rgba(0,0,0,0.14), 0px 3px 1px -2px rgba(0,0,0,0.12);
+    background-color: #e0e0e0;
+}
+.MuiButton-root-1107 {
+    color: rgba(0, 0, 0, 0.87);
+    padding: 6px 16px;
+    font-size: 0.875rem;
+    min-width: 64px;
+    box-sizing: border-box;
+    transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    line-height: 1.75;
+    font-weight: 500;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+.MuiButtonBase-root-57 {
+    color: inherit;
+    border: 0;
+    margin: 0;
+    cursor: pointer;
+    display: inline-flex;
+    outline: none;
+    padding: 0;
+    position: relative;
+    align-items: center;
+    user-select: none;
+    border-radius: 0;
+    vertical-align: middle;
+    justify-content: center;
+    -moz-appearance: none;
+    text-decoration: none;
+    background-color: transparent;
+    -webkit-appearance: none;
+    -webkit-tap-highlight-color: transparent;
+}
+.MuiButton-label-1108 {
+    width: 100%;
+    display: inherit;
+    align-items: inherit;
+    justify-content: inherit;
+}
+.MuiTouchRipple-root-259 {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    z-index: 0;
+    position: absolute;
+    overflow: hidden;
+    border-radius: inherit;
+    pointer-events: none;
+}
+.MuiButton-containedSecondary-1120 {
+    color: #fff;
+    background-color: #f50057;
+    border-radius: 4px;
+    padding: 1%;
+}
+a {
+    text-decoration: none;
+}
+button {
+    align-items: flex-start;
+    text-align: center;
+    cursor: default;
+    color: buttontext;
+    background-color: buttonface;
+    box-sizing: border-box;
+    padding: 2px 6px 3px;
+    border-width: 2px;
+    border-style: outset;
+    border-color: buttonface;
+    border-image: initial;
+}
+button {
+    -webkit-writing-mode: horizontal-tb !important;
+}
+.MuiDivider-root-117 {
+    height: 1px;
+    margin: 0;
+    border: none;
+    flex-shrink: 0;
+    background-color: rgba(0, 0, 0, 0.12);
+}
+hr {
+    display: block;
+    unicode-bidi: isolate;
+    margin-block-start: 0.5em;
+    margin-block-end: 0.5em;
+    margin-inline-start: auto;
+    margin-inline-end: auto;
+    overflow: hidden;
+    border-style: inset;
+    border-width: 1px;
+}
+.MuiTypography-gutterBottom-96 {
+    margin-bottom: 0.35em;
+}
+.MuiTypography-alignCenter-92 {
+    text-align: center;
+}
+.MuiTypography-subtitle2-88 {
+    color: rgba(0, 0, 0, 0.87);
+    font-size: 0.875rem;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-weight: 500;
+    line-height: 1.57;
+    letter-spacing: 0.00714em;
+}
+.MuiTypography-headline-74 {
+    color: rgba(0, 0, 0, 0.87);
+    font-size: 1.9rem;
+    font-weight: 600;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    line-height: 1.65417em;
+    text-align: center;
+    padding: 2%;
+}
+</style>
+<body>
+<span class="MuiTypography-root-69 MuiTypography-headline-74 MuiCardHeader-title-1042">$$test_name$$</span>
+<h3 class="MuiTypography-root-69 MuiTypography-subtitle1-87 MuiTypography-alignCenter-92">
+You have been invited to attend the Junior C# developer challenge. We wish you all the best!
+</h3>
+<div style="margin-top: 2%;">
+<span class="MuiTypography-root-69 MuiTypography-button-80 MuiTypography-alignCenter-92">
+Duration: 90 mins
+<br><br>
+<a href="$$test_link$$" style="margin-top: 2%;">
+<button class="MuiButtonBase-root-57 MuiButton-root-1107 MuiButton-contained-1118 MuiButton-containedSecondary-1120 MuiButton-raised-1121 MuiButton-raisedSecondary-1123 MuiButton-sizeLarge-1131" tabindex="0" type="button" align="center">
+<span class="MuiButton-label-1108">
+Start Challenge
+</span>
+<span class="MuiTouchRipple-root-259"></span>
+</button>
+</a>
+</span>
+</div>
+<hr class="MuiDivider-root-117" style="margin-top: 2%;">
+<h6 class="MuiTypography-root-69 MuiTypography-subtitle2-88 MuiTypography-gutterBottom-96 MuiTypography-alignCenter-92" style="margin-top: 2%;">
+For any technical queries, please refer to <a href="#">FAQ</a> or email us at support@techassessment.com
+</h6>
+</body>
+`;
+*/
 //# sourceMappingURL=EmailHelper.js.map

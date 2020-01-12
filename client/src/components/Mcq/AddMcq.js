@@ -15,7 +15,7 @@ import AddAnswerOptionComponent from './AddAnswerOption';
 import SelectExperience from './SelectExperience';
 import LoadingComponent from '../lib/LoadingComponent';
 import AddIcon from '@material-ui/icons/Add';
-import { withRouter } from 'react-router-dom';
+// import { withRouter } from 'react-router-dom';
 import { KeyboardBackspace } from '@material-ui/icons';
 
 const AddMcq = (props) => {

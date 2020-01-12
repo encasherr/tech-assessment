@@ -13,9 +13,9 @@ import {
     SET_USER_INFO_LOCAL,
     LOGOUT_CURRENT_USER
 } from "../actions/UserActions";
-import { FETCH_SKILLS_SUCCESS } from "../actions/SkillActions";
-import { UNAUTHORIZED_ACCESS } from "../actions/TestConsoleActions";
-import { stat } from "fs";
+// import { FETCH_SKILLS_SUCCESS } from "../actions/SkillActions";
+// import { UNAUTHORIZED_ACCESS } from "../actions/TestConsoleActions";
+// import { stat } from "fs";
 
 export default (state = {}, action) => {
 switch(action.type) {

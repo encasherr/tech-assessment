@@ -1,17 +1,14 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Typography, Card, CardHeader, CardContent, FormControl,
-         FormControlLabel, FormLabel, FormGroup, Checkbox, CardActions,
+         FormLabel, CardActions,
          Button } from '@material-ui/core';
-import { connect } from 'react-redux';
 import AuthHelper from '../../AuthHelper';
 import LoadingComponent from '../../components/lib/LoadingComponent';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import Divider from '@material-ui/core/Divider';
 import InboxIcon from '@material-ui/icons/Inbox';
-import DraftsIcon from '@material-ui/icons/Drafts';
 
 class QuestionSimulatorConsoleContainer extends React.Component {
     constructor(props) {
@@ -41,7 +38,7 @@ class QuestionSimulatorConsoleContainer extends React.Component {
     render = () => {
         let { model } = this.props;
         console.log('question simulator', model);
-        let { mcq, selectedAnswers } = this.state;
+        let { selectedAnswers } = this.state;
         let qEntity = {};
         if(model && model.selectedMcqs && model.selectedMcqs.length > 0) {
             qEntity = model.selectedMcqs[0];
@@ -51,7 +48,7 @@ class QuestionSimulatorConsoleContainer extends React.Component {
                 <LoadingComponent />
             )
         }
-        let itemIndex = 0;
+        // let itemIndex = 0;
         return (
             <Card>
                 <CardHeader 

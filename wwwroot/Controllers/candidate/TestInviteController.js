@@ -79,7 +79,8 @@ var TestInviteController = function TestInviteController() {
                         to: inviteInfo.emailTo,
                         subject: inviteInfo.emailSubject,
                         testName: testName,
-                        testLink: test_link
+                        testLink: test_link,
+                        notificationType: 'test'
                     };
                     var emailHelper = new _EmailHelper2.default();
                     emailHelper.SendEmail(emailInfo);

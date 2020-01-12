@@ -7,7 +7,7 @@ import {    AddMcq, FetchMcqs, UpdateMcq, FetchCategories, FetchSkills,
             BeginSearch, SearchMcq } from '../actions/McqActions';
 import Grid from '@material-ui/core/Grid';
 import SnackbarComponent from '../components/lib/SnackbarComponent';
-import McqList from '../components/Mcq/McqList';
+// import McqList from '../components/Mcq/McqList';
 
 class McqContainer extends React.Component {
 

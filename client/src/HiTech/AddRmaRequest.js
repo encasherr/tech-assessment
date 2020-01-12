@@ -38,7 +38,7 @@ const AddRmaRequestComponent = (props) => {
                 <CardContent>
                     <RmaCustomerDetails
                         model={model.customerDetails}
-                        onFieldChange={(val, field, model) => props.onFieldChange(val, field, model)}
+                        onFieldChange={(val, field) => props.onFieldChange(val, field, model)}
                     />
                     <br></br>
                     <RmaProductList
@@ -50,7 +50,7 @@ const AddRmaRequestComponent = (props) => {
                     <br></br>
                     <RmaVendorDetails
                         model={model.vendorDetails}
-                        onFieldChange={(e, field) => props.onVendorDetailsFieldChange(e.target.value, field, model)}
+                        onFieldChange={(val, field) => props.onVendorDetailsFieldChange(val, field, model)}
                         />
                     <RmaTermsAndConditions />
                     <HiTechAddress />

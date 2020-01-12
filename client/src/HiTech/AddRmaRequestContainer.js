@@ -26,6 +26,23 @@ class AddRmaRequestContainer extends React.Component {
         this.props.InitializeRmaFields();
     }
 
+    componentWillUpdate = () => {
+        console.log('component updated');
+        if(this.props.success_message) {
+            console.log('this.props.success_message');
+            this.props.history.push({
+                pathname: '/rmaRequests'
+            });
+        }
+    }
+
+    componentWillReceiveProps = () => {
+        console.log('component will receive props');
+        if(this.props.success_message) {
+            console.log('receive props this.props.success_message');
+        }
+    }
+
     render = () => {
         return(
             <div>
@@ -39,10 +56,16 @@ class AddRmaRequestContainer extends React.Component {
                         onProductFieldChange={(val, field, model) => this.props.ProductFieldChange(val, field, model)}
                         />
                 }
-                <SnackbarComponent 
-                    openSnack={this.props.snack_open} handleClose={() => this.props.CloseSnackbar()} 
-                    snackMessage={"RMA request Saved Successfully!"} /> 
-                
+                {this.props.success_message && !this.props.saving && 
+                    <SnackbarComponent 
+                        openSnack={true} handleClose={() => this.props.CloseSnackbar()} 
+                        snackMessage={"RMA request Saved Successfully!"} /> 
+                }
+                {this.props.saving && 
+                    <SnackbarComponent 
+                        openSnack={true} handleClose={() => this.props.CloseSnackbar()} 
+                        snackMessage={"Saving..."} /> 
+                }
             </div>
         );
     }

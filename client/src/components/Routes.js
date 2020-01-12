@@ -23,6 +23,7 @@ import SimulatorConsoleContainer from '../Containers/Simulator/SimulatorConsoleC
 
 import AddRmaRequest from '../HiTech/AddRmaRequestContainer';
 import RmaRequestList from '../HiTech/RmaRequestListContainer';
+import ViewRmaRequest from '../HiTech/ViewRmaRequest';
 
 import PrivateRoute from '../components/lib/PrivateRoute';
 
@@ -53,7 +54,8 @@ const Routes = (props) => {
 
             {/* Routes for HiTech*/}
             <Route path="/rmaRequests" component={RmaRequestList} />
-            <Route path="/rmaAdd" component={AddRmaRequest} />
+            <Route path="/createRma" component={AddRmaRequest} />
+            <Route path="/viewRma" component={ViewRmaRequest} />
 
         </div>
     );

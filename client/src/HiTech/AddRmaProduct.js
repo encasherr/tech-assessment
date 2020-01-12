@@ -34,7 +34,7 @@ class AddRmaProduct extends Component {
     
     render = () => {
         let { model } = this.props;
-        console.log('current_product', model);
+        // console.log('current_product', model);
         return (
             <div>
             {model && 
@@ -54,7 +54,7 @@ class AddRmaProduct extends Component {
                                         id="outlined-modelNo"
                                         label="Model No"
                                         className={styles.dense}
-                                        value={model.modelNo}
+                                        value={model.modelNo ? model.modelNo : ''}
                                         onChange={(e) => this.props.onFieldChange(e.target.value, 'modelNo')}
                                         margin="normal"
                                         variant="outlined"
@@ -65,7 +65,7 @@ class AddRmaProduct extends Component {
                                         id="outlined-desc"
                                         label="Description"
                                         className={styles.dense}
-                                        value={model.description}
+                                        value={model.description ? model.description : ''}
                                         onChange={(e) => this.props.onFieldChange(e.target.value, 'description')}
                                         margin="normal"
                                         variant="outlined"
@@ -76,7 +76,7 @@ class AddRmaProduct extends Component {
                                         id="outlined-qty"
                                         label="Qty"
                                         className={styles.dense}
-                                        value={model.quantity}
+                                        value={model.quantity ? model.quantity : 0}
                                         onChange={(e) => this.props.onFieldChange(e.target.value, 'quantity')}
                                         margin="normal"
                                         variant="outlined"
@@ -87,7 +87,7 @@ class AddRmaProduct extends Component {
                                         id="outlined-invoice"
                                         label="Invoice#"
                                         className={styles.dense}
-                                        value={model.invoiceNo}
+                                        value={model.invoiceNo ? model.invoiceNo : ''}
                                         onChange={(e) => this.props.onFieldChange(e.target.value, 'invoiceNo')}
                                         margin="normal"
                                         variant="outlined"
@@ -98,7 +98,7 @@ class AddRmaProduct extends Component {
                                         id="outlined-deliveryChallanNo"
                                         label="Delivery Challan#"
                                         className={styles.dense}
-                                        value={model.deliveryChallanNo}
+                                        value={model.deliveryChallanNo ? model.deliveryChallanNo : ''}
                                         onChange={(e) => this.props.onFieldChange(e.target.value, 'deliveryChallanNo')}
                                         margin="normal"
                                         variant="outlined"
@@ -109,7 +109,7 @@ class AddRmaProduct extends Component {
                                         id="outlined-serialNo"
                                         label="Serial#"
                                         className={styles.dense}
-                                        value={model.serialNo}
+                                        value={model.serialNo ? model.serialNo : ''}
                                         onChange={(e) => this.props.onFieldChange(e.target.value, 'serialNo')}
                                         margin="normal"
                                         variant="outlined"
@@ -120,7 +120,7 @@ class AddRmaProduct extends Component {
                                         id="outlined-productUseAddress"
                                         label="Location of product use"
                                         className={styles.dense}
-                                        value={model.productUseAddress}
+                                        value={model.productUseAddress ? model.productUseAddress : ''}
                                         onChange={(e) => this.props.onFieldChange(e.target.value, 'productUseAddress')}
                                         margin="normal"
                                         variant="outlined"
@@ -133,7 +133,7 @@ class AddRmaProduct extends Component {
                                         multiline
                                         rows="4"
                                         className={styles.dense}
-                                        value={model.failureDescription}
+                                        value={model.failureDescription ? model.failureDescription : ''}
                                         onChange={(e) => this.props.onFieldChange(e.target.value, 'failureDescription')}
                                         margin="normal"
                                         variant="outlined"

@@ -6,10 +6,11 @@ Object.defineProperty(exports, "__esModule", {
 var EmailConfig = {
     emailSmtpHost: 'smtp.gmail.com',
     emailSmtpPort: 587,
-    emailAuthUser: 'alok.coolaj@gmail.com',
+    emailAuthUser: 'encasherr@gmail.com',
     emailAuthPassword: 'actionChange',
     inviteFromEmailId: 'encasherr@gmail.com',
-    testLinkPrefix: 'http://tech-gauge.com/candidate/test/'
+    testLinkPrefix: 'http://tech-gauge.com/candidate/test/',
+    rmaLinkPrefix: ''
 };
 var AuthConfig = {
     clientId: '350931387343-l9s3gs4fnmbj4rk4r4nfvh5siega0s5g.apps.googleusercontent.com',

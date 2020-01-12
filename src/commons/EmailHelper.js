@@ -1,5 +1,7 @@
 import nodemailer from 'nodemailer';
 import { EmailConfig } from './ServerConfig';
+var fs = require('fs');
+import path from 'path';
 
 class EmailHelper {
 
@@ -35,16 +37,48 @@ class EmailHelper {
     }
 
     CreateHtml = (emailInfo) => {
-        let html = htmlTemplate;
-        html = html.replace('$$test_name$$', emailInfo.testName + ' Challenge');
-        html = html.replace('$$test_link$$', emailInfo.testLink);
+        let html = this.GetHtmlTemplateByType(emailInfo);
+        if(emailInfo.notificationType === 'test') {
+            html = html.replace('$$test_name$$', emailInfo.testName + ' Challenge');
+            html = html.replace('$$test_link$$', emailInfo.testLink);
+        }
+        if(emailInfo.notificationType === 'rma') {
+            if(emailInfo.rmaRequest.customerDetails) {
+                html = html.replace('$$customer_name$$', emailInfo.rmaRequest.customerDetails.customerName);
+                html = html.replace('$$telephone$$', emailInfo.rmaRequest.customerDetails.telephone);
+                html = html.replace('$$contact_person$$', emailInfo.rmaRequest.customerDetails.contactPerson);
+                html = html.replace('$$rma_link$$', emailInfo.rmaLink);
+            }
+        }
+        return html;
+    }
 
+    GetHtmlTemplateByType = (emailInfo) => {
+        let html = '';
+
+        switch(emailInfo.notificationType)
+        {
+            case 'test':
+            {
+                let file = path.resolve(__dirname + '/testinvitationTemplate.html');
+                console.log('template path', file); 
+                html = fs.readFileSync(file, {encoding: 'utf8'});
+                break;
+            }
+            case 'rma':
+            {
+                let file = path.resolve(__dirname + '/rmatemplate.html');
+                console.log('template path', file); 
+                html = fs.readFileSync(file, {encoding: 'utf8'});
+                break;
+            }
+        }
         return html;
     }
 }
 export default EmailHelper;
 
-const htmlTemplate = `
+/*const htmlTemplate = `
 <style>
 .MuiTypography-subtitle1-87 {
     color: rgba(0, 0, 0, 0.87);
@@ -227,3 +261,4 @@ For any technical queries, please refer to <a href="#">FAQ</a> or email us at su
 </h6>
 </body>
 `;
+*/

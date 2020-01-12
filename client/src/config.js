@@ -17,11 +17,15 @@ const validHeaders = [
     { prop: "choiceE", name: "E" }
 ];
 
+const techAssessment = 'Technical Assessment Admin';
+const hitech = 'Highness Admin';
+
 export default {
     adminApiUrl: domain + '/api/admin/',
     candidateApiUrl: domain + '/api/candidate/',
     hitechApiUrl: domain + '/api/hitech/',
     domainUrl: domainUrl,
+    appTitle: hitech,
     minBulkCount: 1,
     maxBulkCount: 30,
     validHeaders

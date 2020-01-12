@@ -1,19 +1,12 @@
-import React, { Component, Fragment } from 'react';
+import React, { Fragment } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-import { CardHeader, CardContent, IconButton, Typography } from '@material-ui/core';
-import Paper from '@material-ui/core/Paper';
+import { CardHeader, CardContent, Typography } from '@material-ui/core';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import FormControl from '@material-ui/core/FormControl';
-import TextField from '@material-ui/core/TextField'
-import Collapse from '@material-ui/core/Collapse';
-import { Avatar } from '@material-ui/core';
-import ListIcon from '@material-ui/icons/ViewHeadline';
-import AddIcon from '@material-ui/icons/Add';
 import AddRmaProduct from './AddRmaProduct';
 
 const RmaProductList = (props) => {
@@ -78,12 +71,3 @@ const CustomTableCell = withStyles(theme => ({
     },
 }))(TableCell);
 export default RmaProductList;
-
-const styles = {
-    avatar: {
-        backgroundColor: '#555'
-    },
-    formControl: {
-        width: '70%'
-    }
-}

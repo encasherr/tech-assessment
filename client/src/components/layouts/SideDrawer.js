@@ -8,7 +8,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 // import MailIcon from '@material-ui/icons/Mail';
-import { Dashboard, Book, Assessment, ViewQuilt, PermIdentity, SupervisorAccount, Polymer, Airplay  } from '@material-ui/icons';
+import { Dashboard, Book, Assessment, ViewQuilt, PermIdentity, Polymer, Airplay  } from '@material-ui/icons';
 import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
 import { Link } from 'react-router-dom'

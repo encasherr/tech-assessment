@@ -1,4 +1,3 @@
-import axios from 'axios';
 import config from '../config';
 import repository from '../repository';
 
@@ -38,6 +37,10 @@ export const CurrentCategoryFieldChange = (val, field, model) => dispatch => {
                 type: CURRENT_CATEGORY_FIELD_CHANGE,
                 payload: model
             });
+            break;
+        }
+        default:
+        {
             break;
         }
     }

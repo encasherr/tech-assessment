@@ -10,6 +10,8 @@ import { CardHeader, Typography } from '@material-ui/core';
 
 const RmaCustomerDetails = (props) => {
     let { model } = props;
+    // console.log('rmacustomermodel', model);
+    // console.log('model.telephone ? model.telephone : ',model.telephone ? model.telephone : '');
     return (
         <div>
             {model && 
@@ -24,58 +26,58 @@ const RmaCustomerDetails = (props) => {
                         <TextField
                             id="outlined-name"
                             label="Customer Name"
-                            value={model.customerName}
-                            onChange={(e) => props.onFieldChange(e.target.value, 'customerName', model)}
+                            value={model.customerName ? model.customerName : ''}
+                            onChange={(e) => props.onFieldChange(e.target.value, 'customerName')}
                             margin="normal"
                             variant="outlined"
                         />
                     </FormControl>
                     <FormControl variant="outlined" style={styles.fullWidth}>
                         <TextField
-                            id="outlined-name"
+                            id="outlined-address"
                             label="Address"
-                            value={model.address}
-                            onChange={(e) => props.onFieldChange(e.target.value, 'address', model)}
+                            value={model.address ? model.address : ''}
+                            onChange={(e) => props.onFieldChange(e.target.value, 'address')}
                             margin="normal"
                             variant="outlined"
                         />
                     </FormControl>
                     <FormControl variant="outlined" style={styles.width50}>
                         <TextField
-                            id="outlined-name"
+                            id="outlined-tel"
                             label="Tel"
-                            value={model.telephone}
-                            onChange={(e) => props.onFieldChange(e.target.value, 'telephone', model)}
+                            value={model.telephone ? model.telephone : ''}
+                            onChange={(e) => props.onFieldChange(e.target.value, 'telephone')}
                             margin="normal"
                             variant="outlined"
                         />
                     </FormControl>
                     <FormControl variant="outlined" style={styles.width50}>
                         <TextField
-                            id="outlined-name"
+                            id="outlined-fax"
                             label="Fax"
-                            value={model.fax}
-                            onChange={(e) => props.onFieldChange(e.target.value, 'fax', model)}
+                            value={model.fax ? model.fax : ''}
+                            onChange={(e) => props.onFieldChange(e.target.value, 'fax')}
                             margin="normal"
                             variant="outlined"
                         />
                     </FormControl>
                     <FormControl variant="outlined" style={styles.width50}>
                         <TextField
-                            id="outlined-name"
+                            id="outlined-email"
                             label="Email"
-                            value={model.email}
-                            onChange={(e) => props.onFieldChange(e.target.value, 'email', model)}
+                            value={model.email ? model.email : ''}
+                            onChange={(e) => props.onFieldChange(e.target.value, 'email')}
                             margin="normal"
                             variant="outlined"
                         />
                     </FormControl>
                     <FormControl variant="outlined" style={styles.width50}>
                         <TextField
-                            id="outlined-name"
+                            id="outlined-contact"
                             label="Contact Person"
-                            value={model.contactPerson}
-                            onChange={(e) => props.onFieldChange(e.target.value, 'contactPerson', model)}
+                            value={model.contactPerson ? model.contactPerson : ''}
+                            onChange={(e) => props.onFieldChange(e.target.value, 'contactPerson')}
                             margin="normal"
                             variant="outlined"
                         />

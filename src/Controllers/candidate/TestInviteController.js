@@ -50,7 +50,8 @@ class TestInviteController {
                         to: inviteInfo.emailTo,
                         subject: inviteInfo.emailSubject,
                         testName: testName,
-                        testLink: test_link
+                        testLink: test_link,
+                        notificationType: 'test'
                     };
                     let emailHelper = new EmailHelper();
                     emailHelper.SendEmail(emailInfo);

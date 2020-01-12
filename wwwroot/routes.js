@@ -12,6 +12,8 @@ var _admin = require('./Controllers/admin');
 
 var _candidate = require('./Controllers/candidate');
 
+var _hitech = require('./Controllers/hitech');
+
 var _token = require('./utils/token.utils');
 
 var _passport = require('passport');
@@ -45,9 +47,9 @@ api.get('/admin/getAllSkills', _auth2.default, _admin.SkillController.GetAll);
 api.post('/admin/skill', _auth2.default, _admin.SkillController.Add);
 api.delete('/admin/skill', _auth2.default, _admin.SkillController.Delete);
 
-/* candidate endpoints */
-// api.get('/admin/getAllCandidates', auth, CandidateController.GetAll);
-// api.post('/admin/candidate', auth, CandidateController.Add);
+/* hitech endpoints */
+api.get('/hitech/rmaRequests', _hitech.RmaRequestController.GetAll);
+api.post('/hitech/rmaRequest', _hitech.RmaRequestController.Add);
 // api.put('/admin/candidate', auth, CandidateController.Update);
 // api.delete('/admin/candidate', auth, CandidateController.Delete);
 

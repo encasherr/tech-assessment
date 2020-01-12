@@ -8,6 +8,10 @@ export const ADD_RMAREQUESTS_SUCCESS = 'ADD_RMAREQUESTS_SUCCESS';
 export const ADD_RMAREQUESTS_FAIL = 'ADD_RMAREQUESTS_FAIL';
 export const FETCH_RMAREQUESTS_BEGIN = 'FETCH_RMAREQUESTS_BEGIN';
 export const FETCH_RMAREQUESTS_SUCCESS = 'FETCH_RMAREQUESTS_SUCCESS';
+export const FETCH_RMAREQUEST_SUCCESS = 'FETCH_RMAREQUEST_SUCCESS';
+export const FETCH_RMAREQUEST_FAIL = 'FETCH_RMAREQUEST_FAIL';
+export const SELECT_RMA_REQUEST = 'SELECT_RMA_REQUEST';
+export const GOBACK_TO_ALL_REQUESTS = 'GOBACK_TO_ALL_REQUESTS';
 export const FETCH_RMAREQUESTS_FAIL = 'FETCH_RMAREQUESTS_FAIL';
 export const UPDATE_RMAREQUESTS_BEGIN = 'UPDATE_RMAREQUESTS_BEGIN';
 export const UPDATE_RMAREQUESTS_SUCCESS = 'UPDATE_RMAREQUESTS_SUCCESS';
@@ -59,6 +63,7 @@ export const CurrentRmaRequestFieldChange = (val, field, model) => dispatch => {
     }*/
     if(!model.customerDetails) model.customerDetails = {};
     model.customerDetails[field] = val;
+    model.field_version = model.field_version++;
     dispatch({
         type: CURRENT_RMAREQUESTS_FIELD_CHANGE,
         payload: model
@@ -100,6 +105,7 @@ export const AddRmaRequest = (rmaRequestModel) => dispatch => {
     let url = config.hitechApiUrl + 'rmaRequest';
     console.log('action model');
     console.log(rmaRequestModel);
+    rmaRequestModel.emailTo = 'alok.coolaj@gmail.com';
     repository.saveData(url, rmaRequestModel)
         .then((res) => {
             console.log('rma request saved: ' + res);
@@ -154,6 +160,38 @@ export const FetchRmaRequests = () => dispatch => {
                 payload: err
             });
         });
+}
+
+export const FetchRmaRequest = (rmaRequestId) => dispatch => {
+    
+    let url = config.hitechApiUrl + 'rmaRequest/' + rmaRequestId;
+    repository.getData(url)
+        .then((res) => {
+            console.log('rma single request fetched');
+            dispatch({
+                type: FETCH_RMAREQUEST_SUCCESS,
+                payload: res.data
+            });
+        })
+        .catch((err) => {
+            dispatch({
+                type: FETCH_RMAREQUEST_FAIL,
+                payload: err
+            });
+        });
+}
+
+export const SelectRmaRequest = (rmaRequest) => dispatch => {
+    dispatch({
+        type: SELECT_RMA_REQUEST,
+        payload: rmaRequest
+    })
+}
+
+export const GoBackToAllRequests = () => dispatch => {
+    dispatch({
+        type: GOBACK_TO_ALL_REQUESTS
+    })
 }
 
 export const CloseSnackbar = () => dispatch => {

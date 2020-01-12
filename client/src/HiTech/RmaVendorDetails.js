@@ -24,7 +24,7 @@ const RmaVendorDetails = (props) => {
                         id="outlined-purchaseDate"
                         label="Date of Purchase"
                         className={styles.dense}
-                        value={model.purchaseDate}
+                        value={model.purchaseDate ? model.purchaseDate : ''}
                         onChange={(e) => props.onFieldChange(e.target.value, 'purchaseDate')}
                         margin="normal"
                         variant="outlined"
@@ -35,7 +35,7 @@ const RmaVendorDetails = (props) => {
                         id="outlined-vendorName"
                         label="Vendor / Supplier Name"
                         className={styles.dense}
-                        value={model.vendorName}
+                        value={model.vendorName ? model.vendorName : ''}
                         onChange={(e) => props.onFieldChange(e.target.value, 'vendorName')}
                         margin="normal"
                         variant="outlined"
@@ -48,7 +48,7 @@ const RmaVendorDetails = (props) => {
                         multiline
                         rows="4"
                         className={styles.dense}
-                        value={model.address}
+                        value={model.address ? model.address : ''}
                         onChange={(e) => props.onFieldChange(e.target.value, 'address')}
                         margin="normal"
                         variant="outlined"

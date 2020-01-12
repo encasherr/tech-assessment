@@ -1,4 +1,6 @@
 import db from '../../db';
+import EmailHelper from '../../commons/EmailHelper';
+import { EmailConfig } from '../../commons/ServerConfig';
 
 class RmaRequestController {
     GetAll = (req, resp) => {
@@ -11,11 +13,29 @@ class RmaRequestController {
     Add = (req, resp) => {
         console.log('Add rma request called');
         console.log(req.body);
+        let rmaToAdd = req.body;
         let rmaRequests = this.initializeCollection();
-        rmaRequests.insert(req.body);
+        let rmaCreated = rmaRequests.insert(rmaToAdd);
         db.saveDatabase();
+        //send email
+        let emailInfo = {
+            to: rmaToAdd.emailTo,
+            subject: 'RMA Request Submitted',
+            notificationType: 'rma',
+            rmaRequest: rmaCreated,
+            rmaLink: this.generate_rma_link(rmaCreated['$loki'])
+        };
+        let emailHelper = new EmailHelper();
+        emailHelper.SendEmail(emailInfo);
+        
         resp.send(JSON.stringify(req.body));
     }
+
+    generate_rma_link = (rmaRequestId) => {
+        let link = EmailConfig.rmaLinkPrefix + rmaRequestId;
+        return link;
+    }
+
 
     Update = (req, resp) => {
         console.log('update rmaRequests called');

@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Typography, List, ListItem, ListItemText } from '@material-ui/core';
+import React from 'react';
+import { Typography, List } from '@material-ui/core';
 import McqItem from './McqItem';
 
 const SelectedMcqs = (props) => {
