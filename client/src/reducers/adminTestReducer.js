@@ -176,33 +176,6 @@ switch(action.type) {
            filteredCategories: action.payload.filteredCategories
        }
    }
-   case FETCH_TESTS_SUCCESS:
-   {
-       console.log('fetch tests reducer');
-       console.log(action.payload);
-       let arr = [];
-       if(action.payload && action.payload.length > 0) {
-           action.payload.map((item, index) => {
-               arr.push(item);
-           })
-       }
-       return {
-           ...state,
-           error: null,
-           editMode: !state.editMode,
-           current_test: { 
-                skill:'',
-                testName:'',
-                duration: 90,
-                experienceYears: 5,
-                status: 'draft',
-                search_enabled: !state.search_enabled,
-            },
-           success_message: '',
-           search_enabled: !state.search_enabled,
-           tests: arr
-       }
-   }
    case FETCH_TESTS_FAIL:
    {
         console.log('fetch test fail', action.payload);       

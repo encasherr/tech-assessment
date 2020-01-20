@@ -51,7 +51,7 @@ api.delete('/admin/skill', _auth2.default, _admin.SkillController.Delete);
 api.get('/hitech/rmaRequests', _hitech.RmaRequestController.GetAll);
 api.post('/hitech/rmaRequest', _hitech.RmaRequestController.Add);
 // api.put('/admin/candidate', auth, CandidateController.Update);
-// api.delete('/admin/candidate', auth, CandidateController.Delete);
+api.get('/hitech/deleteRmaRequest', _hitech.RmaRequestController.Delete);
 
 /* Admin Test endpoints */
 api.get('/admin/getAllTests', _auth2.default, _admin.AdminTestController.GetAll);

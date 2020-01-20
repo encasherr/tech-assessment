@@ -28,42 +28,14 @@ export const InitializeRmaFields = () => dispatch => {
 } 
 
 export const CurrentRmaRequestFieldChange = (val, field, model) => dispatch => {
-    /*switch(field)
-    {
-        case 'customerName':
-        {
-            model.customerName = val;
-            break;
-        }
-        case 'address':
-        {
-            model.address = val;
-            break;
-        }
-        case 'telephone':
-        {
-            model.telephone = val;
-            break;
-        }
-        case 'fax':
-        {
-            model.fax = val;
-            break;
-        }
-        case 'email':
-        {
-            model.email = val;
-            break;
-        }
-        case 'address':
-        {
-            model.contactPerson = val;
-            break;
-        }
-    }*/
-    if(!model.customerDetails) model.customerDetails = {};
-    model.customerDetails[field] = val;
-    model.field_version = model.field_version++;
+    if(field === 'emailTo'){
+        model.emailTo = val;
+    }
+    else {
+        if(!model.customerDetails) model.customerDetails = {};
+        model.customerDetails[field] = val;
+        model.field_version = model.field_version++;
+    }
     dispatch({
         type: CURRENT_RMAREQUESTS_FIELD_CHANGE,
         payload: model
@@ -105,7 +77,7 @@ export const AddRmaRequest = (rmaRequestModel) => dispatch => {
     let url = config.hitechApiUrl + 'rmaRequest';
     console.log('action model');
     console.log(rmaRequestModel);
-    rmaRequestModel.emailTo = 'alok.coolaj@gmail.com';
+    //return;
     repository.saveData(url, rmaRequestModel)
         .then((res) => {
             console.log('rma request saved: ' + res);

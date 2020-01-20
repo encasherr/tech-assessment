@@ -33,7 +33,14 @@ app.use(function(req, res, next) {
 });
 
 app.use('/api', routes);
-app.get('/home', function (req, res) {
+/* This is for preventing routes and sending forbidden message for unknown urls */
+// app.get('/home', function (req, res) {
+//     let fileName = path.resolve(__dirname + '/index.html');
+//     console.log(fileName);
+//     res.sendFile(fileName);
+// });
+/* This is for allowing refresh when using client side routing and redirecting accordingly */
+app.get('/*', function (req, res) {
     let fileName = path.resolve(__dirname + '/index.html');
     console.log(fileName);
     res.sendFile(fileName);

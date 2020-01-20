@@ -19,6 +19,9 @@ const validHeaders = [
 
 const techAssessment = 'Technical Assessment Admin';
 const hitech = 'Highness Admin';
+const hitechConfig = {
+    notifyEmailId: 'encasherr@gmail.com'
+}
 
 export default {
     adminApiUrl: domain + '/api/admin/',
@@ -28,5 +31,6 @@ export default {
     appTitle: hitech,
     minBulkCount: 1,
     maxBulkCount: 30,
-    validHeaders
+    validHeaders,
+    hitechConfig
 }

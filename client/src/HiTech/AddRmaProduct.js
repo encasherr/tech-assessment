@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import { CardHeader, DialogContent, Dialog, DialogTitle, DialogActions, Divider } from '@material-ui/core';
+import { CardHeader, DialogContent, Dialog, DialogTitle, DialogActions, Divider, Grid } from '@material-ui/core';
 import { MenuItem, OutlinedInput, Select, InputLabel, IconButton } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import { Close, Add } from '@material-ui/icons';
@@ -41,7 +41,8 @@ class AddRmaProduct extends Component {
             <Card>   
                 <Button variant="contained" color="primary" onClick={this.handleClickOpen}><Add /></Button>
                 <Dialog
-                fullWidth={true}
+                fullWidth
+                maxWidth='lg'
                 open={this.state.open}
                 onClose={this.handleClose}
                 >
@@ -49,6 +50,8 @@ class AddRmaProduct extends Component {
                 <Divider />
                 <DialogContent style={{padding: '4%'}}>
                     <form  noValidate autoComplete="off">
+                        <Grid container spacing={16}>
+                            <Grid item sm={12} xs={12} md={5}>
                                 <FormControl variant="outlined" style={styles.formControl}>
                                     <TextField
                                         id="outlined-modelNo"
@@ -60,6 +63,8 @@ class AddRmaProduct extends Component {
                                         variant="outlined"
                                     />
                                 </FormControl>
+                                </Grid>
+                            <Grid item sm={12} xs={12} md={5}>
                                 <FormControl variant="outlined" style={styles.formControl}>
                                     <TextField
                                         id="outlined-desc"
@@ -71,6 +76,8 @@ class AddRmaProduct extends Component {
                                         variant="outlined"
                                     />
                                 </FormControl>
+                                </Grid>
+                                <Grid item sm={12} xs={12} md={5}>
                                 <FormControl variant="outlined" style={styles.formControl}>
                                     <TextField
                                         id="outlined-qty"
@@ -82,6 +89,8 @@ class AddRmaProduct extends Component {
                                         variant="outlined"
                                     />
                                 </FormControl>
+                                </Grid>
+                            <Grid item sm={12} xs={12} md={5}>
                                 <FormControl variant="outlined" style={styles.formControl}>
                                     <TextField
                                         id="outlined-invoice"
@@ -93,6 +102,8 @@ class AddRmaProduct extends Component {
                                         variant="outlined"
                                     />
                                 </FormControl>
+                                </Grid>
+                            <Grid item sm={12} xs={12} md={5}>
                                 <FormControl variant="outlined" style={styles.formControl}>
                                     <TextField
                                         id="outlined-deliveryChallanNo"
@@ -104,6 +115,8 @@ class AddRmaProduct extends Component {
                                         variant="outlined"
                                     />
                                 </FormControl>
+                                </Grid>
+                            <Grid item sm={12} xs={12} md={5}>
                                 <FormControl variant="outlined" style={styles.formControl}>
                                     <TextField
                                         id="outlined-serialNo"
@@ -115,6 +128,8 @@ class AddRmaProduct extends Component {
                                         variant="outlined"
                                     />
                                 </FormControl>
+                                </Grid>
+                            <Grid item sm={12} xs={12} md={5}>
                                 <FormControl variant="outlined" style={styles.formControl}>
                                     <TextField
                                         id="outlined-productUseAddress"
@@ -126,6 +141,8 @@ class AddRmaProduct extends Component {
                                         variant="outlined"
                                     />
                                 </FormControl>
+                                </Grid>
+                            <Grid item sm={12} xs={12} md={5}>
                                 <FormControl variant="outlined" style={styles.formControl}>
                                     <TextField
                                         id="outlined-failureDescription"
@@ -139,6 +156,8 @@ class AddRmaProduct extends Component {
                                         variant="outlined"
                                     />
                                 </FormControl>
+                                </Grid>
+                                </Grid>
                     </form>
                     </DialogContent>
                     <Divider />

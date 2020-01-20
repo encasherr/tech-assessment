@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardHeader, CardContent, Grid, Paper, Button, Divider } from '@material-ui/core';
+import { Card, CardHeader, CardContent, Grid, Paper, Button, Divider, Chip } from '@material-ui/core';
 import { Link } from 'react-router-dom/cjs/react-router-dom';
 import RmaProductList from './RmaProductList';
 import RmaVendorDetails from './RmaVendorDetails';
@@ -87,6 +87,9 @@ class ViewRmaRequest extends React.Component {
                         <RmaProductList
                             productList={model.productList}
                         />
+                        {model.emailTo && <Grid item sm={3}>
+                            <Chip label={`Notified to: ${model.emailTo}`}></Chip>
+                        </Grid>}
                     </Grid>
                 </CardContent>
             </Card>

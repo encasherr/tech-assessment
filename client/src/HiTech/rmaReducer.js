@@ -10,12 +10,14 @@ import { ADD_RMAREQUESTS_BEGIN, ADD_RMAREQUESTS_SUCCESS, ADD_RMAREQUESTS_FAIL, S
     INITIALIZE_RMA_FIELDS,
     SELECT_RMA_REQUEST, GOBACK_TO_ALL_REQUESTS
     } from '../HiTech/RmaRequestActions'
+import config from '../config';
 
 const initial_state = {
     customerDetails: {},
     productList: [],
     current_product: {},
     vendorDetails: {},
+    emailTo: config.hitechConfig.notifyEmailId,
     field_version: 0
 }
 

@@ -55,8 +55,20 @@ class RmaRequestController {
     }
 
     Delete = (req, resp) => {
-        //console.log('get all mcqs called');
-        //resp.send('get all mcqs called');
+        console.log('delete rma request called', req.query.rmaRequestId);
+        let rmaRequests = this.initializeCollection();
+        console.log('rmaRequests length', rmaRequests.data.length);
+        let rmaRequestToDelete = rmaRequests.chain().find({ '$loki': +req.query.rmaRequestId });
+        if(rmaRequestToDelete) {
+            rmaRequestToDelete.remove();
+            db.saveDatabase();
+            console.log('deleted ' + req.query.rmaRequestId);
+            resp.send('deleted ' + req.query.rmaRequestId);
+        }
+        else {
+            console.log('nothing to delete');
+            resp.send('nothing to delete');
+        }
     }
 
     initializeCollection = () => {

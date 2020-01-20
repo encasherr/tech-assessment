@@ -54,6 +54,17 @@ const AddRmaRequestComponent = (props) => {
                         />
                     <RmaTermsAndConditions />
                     <HiTechAddress />
+                    
+                    <FormControl variant="outlined" style={styles.width50}>
+                        <TextField
+                            id="outlined-emailTo"
+                            label="Notify At"
+                            value={model.emailTo ? model.emailTo : ''}
+                            onChange={(e) => props.onFieldChange(e.target.value, 'emailTo', model)}
+                            margin="normal"
+                            variant="outlined"
+                        />
+                    </FormControl>
                 </CardContent>
                 <CardActions style={styles.actionButton}>
                     <Button variant="contained" size="large" color="primary" 

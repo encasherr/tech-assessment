@@ -39,7 +39,7 @@ const Header = (props) => {
             </IconButton>
             <Typography variant="h6" color="inherit" noWrap>
                     <a href={config.domainUrl} style={{color: '#fff'}}>
-                        Technical Assessment Admin
+                        {config.appTitle}
                     </a>
             </Typography>
             {userInfo && 
