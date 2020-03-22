@@ -26,7 +26,7 @@ const MenuItems = [
     { routeName: 'simulator', routeCaption: 'Simulator', icon: Airplay, app: 'TeachAssesment' },
 
     /* HiTech Routes */
-    { routeName: 'rmaRequests', routeCaption: 'RMA', icon: Book, app: 'Hitech' },
+    // { routeName: 'rmaRequests', routeCaption: 'RMA', icon: Book, app: 'Hitech' },
 ];
 
 const getIcon = (menuItem) => {

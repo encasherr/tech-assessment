@@ -71,7 +71,8 @@ api.delete('/admin/user', _auth2.default, _admin.UserController.Delete);
 api.post('/candidate/sendInvite', _auth2.default, _candidate.TestInviteController.SendInvite);
 api.post('/candidate/startTest', _auth2.default, _candidate.TestInviteController.StartTest);
 
-api.get('/admin/auth/google', _passport2.default.authenticate('google-token', { session: false, scope: ['https://www.googleapis.com/auth/plus.login'] }), function (req, res, next) {
+api.get('/admin/auth/google', _passport2.default.authenticate('google-token', { session: false,
+    scope: ['https://www.googleapis.com/auth/plus.login'] }), function (req, res, next) {
     console.log('res next');
     req.auth = req.user;
     if (req.user.status === 'not found') {

@@ -2,10 +2,10 @@ import loki from 'lokijs';
 import path from 'path';
 
 const dbFileName = 'dev.json';
-const dbPath = path.join(__dirname, '..', '..', 'data', dbFileName);
+var dbPath = path.join(__dirname, '..', '..', 'data', dbFileName);
+dbPath = path.join(__dirname,'..', 'data', dbFileName);
 console.log('dbpath: ' + dbPath);
 // const db = new loki(dbPath);
-
 
 var db = new loki(dbPath);
 

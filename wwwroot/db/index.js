@@ -16,9 +16,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var dbFileName = 'dev.json';
 var dbPath = _path2.default.join(__dirname, '..', '..', 'data', dbFileName);
+dbPath = _path2.default.join(__dirname, '..', 'data', dbFileName);
 console.log('dbpath: ' + dbPath);
 // const db = new loki(dbPath);
-
 
 var db = new _lokijs2.default(dbPath);
 

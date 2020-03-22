@@ -17,7 +17,7 @@ const validHeaders = [
     { prop: "choiceE", name: "E" }
 ];
 
-const techAssessment = 'Technical Assessment Admin';
+const techAssessment = 'Tech Assessment Admin';
 const hitech = 'Highness Admin';
 const hitechConfig = {
     notifyEmailId: 'encasherr@gmail.com'
@@ -28,7 +28,7 @@ export default {
     candidateApiUrl: domain + '/api/candidate/',
     hitechApiUrl: domain + '/api/hitech/',
     domainUrl: domainUrl,
-    appTitle: hitech,
+    appTitle: techAssessment,
     minBulkCount: 1,
     maxBulkCount: 30,
     validHeaders,
