@@ -22,7 +22,6 @@ const AddMcq = (props) => {
         let { model, editMode } = props;
 
         const onSubmitExperience = (min, max) => {
-            console.log('add mcq handler for experience called');
             props.onFieldChange(min, 'minimumExperience', props.model)
             props.onFieldChange(max, 'maximumExperience', props.model)
         }
@@ -30,7 +29,7 @@ const AddMcq = (props) => {
         return (
             <Card>
         {!model && <LoadingComponent />} 
-        {model &&    
+        {model && model.mcq_meta &&   
                         <form  noValidate autoComplete="off">
                             <CardHeader avatar={
                                 <Avatar aria-label="Recipe" style={styles.avatar}>
@@ -53,7 +52,7 @@ const AddMcq = (props) => {
                                     </InputLabel>
                                     <Select
                                         onChange={(e) => props.onFieldChange(e.target.value, 'category', props.model)}
-                                        value={model.category}
+                                        value={model.mcq_meta.category}
                                         input={
                                         <OutlinedInput
                                             labelWidth={65}
@@ -65,7 +64,8 @@ const AddMcq = (props) => {
                                         <em>None</em>
                                         </MenuItem>
                                         {props.categories && props.categories.length > 0 &&
-                                            props.categories.map((item, index) => {
+                                            props.categories.map((category, index) => {
+                                                let item = category.category_meta;
                                             return (
                                                 <MenuItem key={index} value={item.title}>{item.title}</MenuItem>
                                             )
@@ -77,7 +77,7 @@ const AddMcq = (props) => {
                                         id="outlined-name"
                                         label="Title"
                                         className={styles.dense}
-                                        value={model.question}
+                                        value={model.mcq_meta.question}
                                         onChange={(e) => props.onFieldChange(e.target.value, 'question', props.model)}
                                         margin="normal"
                                         variant="outlined"
@@ -90,7 +90,7 @@ const AddMcq = (props) => {
                                     </InputLabel>
                                     <Select
                                         onChange={(e) => props.onFieldChange(e.target.value, 'skill', props.model)}
-                                        value={model.skill}
+                                        value={model.mcq_meta.skill}
                                         input={
                                         <OutlinedInput
                                             labelWidth={30}
@@ -101,7 +101,8 @@ const AddMcq = (props) => {
                                         <MenuItem value="">
                                         <em>None</em>
                                         </MenuItem>
-                                        {props.skills && props.skills.map((item, index) => {
+                                        {props.skills && props.skills.map((skillItem, index) => {
+                                            let item = skillItem.skill_meta;
                                             return (
                                                 <MenuItem key={index} value={item.skill}>{item.skill}</MenuItem>
                                             )
@@ -115,10 +116,22 @@ const AddMcq = (props) => {
                                 <FormControl variant="outlined" style={styles.formControl}>
                                     <TextField
                                         id="outlined-name"
+                                        label="Score"
+                                        type="number"
+                                        className={styles.dense}
+                                        value={model.mcq_meta.score}
+                                        onChange={(e) => props.onFieldChange(e.target.value, 'score', props.model)}
+                                        margin="normal"
+                                        variant="outlined"
+                                    />
+                                </FormControl>
+                                <FormControl variant="outlined" style={styles.formControl}>
+                                    <TextField
+                                        id="outlined-name"
                                         label="Question Description"
                                         multiline
                                         rows="4"
-                                        value={model.description}
+                                        value={model.mcq_meta.description}
                                         className={styles.dense}
                                         onChange={(e) => props.onFieldChange(e.target.value, 'description', props.model)}
                                         margin="normal"

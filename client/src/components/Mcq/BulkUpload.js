@@ -27,14 +27,12 @@ class BulkUpload extends React.Component {
             headers.push(item);
         });
         if (!this.validateHeaders(headers)) {
-            console.log("invalid headers");
             this.setState({
                 message: "Invalid Headers. Please check the file format and try again."
             });
             return;
         }
         if (!this.validCount(matrixArray)) {
-            console.log("Invalid number of records");
             this.setState({
                 message: `Invalid number of records. Min: ${config.minBulkCount}, Max: ${config.maxBulkCount}`
             });
@@ -46,7 +44,9 @@ class BulkUpload extends React.Component {
             }
             else {
                 let mcq = {};
-                mcq.choices = [];
+                mcq.mcq_meta = {
+                    choices: []
+                };
                 let correctAnswer = "";
                 itemArray.map((colValue, colIndex) => {
                     let filteredHeaders = config.validHeaders.filter((item) => {
@@ -57,23 +57,18 @@ class BulkUpload extends React.Component {
                         let prop = filteredHeaders[0].prop;
                         if(prop.startsWith("choice")) {
                             if(colValue) {
-                                mcq.choices.push({
+                                mcq.mcq_meta.choices.push({
                                     content: colValue,
                                     isCorrect: correctAnswer 
                                 });
                             }
                         }
-                        // else if(prop === "correctAnswer") {
-                        //     mcq['answer'] = colValue;
-                        // }
                         else {
-                            mcq[prop] = colValue;
+                            mcq.mcq_meta[prop] = colValue;
                         }
-                        //mcq[filteredHeaders[0].prop] = colValue;
                     }
-                    // mcq[headers[colIndex]] = colValue;
                 });
-                if(mcq.question && mcq.question !== '') {
+                if(mcq.mcq_meta.question && mcq.mcq_meta.question !== '') {
                     finalJson.mcqs.push(mcq);
                 }
             }
@@ -85,7 +80,7 @@ class BulkUpload extends React.Component {
 
     onUpload = () => {
         let { finalJson } = this.state;
-        let url = config.adminApiUrl + 'bulkMcq';
+        let url = config.instance.getAdminApiUrl() + 'bulkMcq';
         repository.saveData(url, finalJson)
             .then((res) => {
                 this.setState({

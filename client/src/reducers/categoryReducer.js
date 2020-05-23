@@ -10,8 +10,7 @@ import { ADD_CATEGORY_SUCCESS, ADD_CATEGORY_FAIL, SELECT_CATEGORY,
          CATEGORY_SEARCH_SUCCESS} from "../actions/CategoryActions";
 
 const initial_current_Category = {
-    title: '',
-    description: ''
+    id: 0, category_meta: {title:'',description:''}
 }
 
 export default (state = {}, action) => {
@@ -53,8 +52,6 @@ export default (state = {}, action) => {
         }
         case CURRENT_CATEGORY_FIELD_CHANGE:
         {
-            console.log('field change reducer');
-            console.log(action.payload);
             
             return {
                 ...state,
@@ -71,14 +68,11 @@ export default (state = {}, action) => {
         }
         case FETCH_CATEGORIES_SUCCESS:
         {
-            console.log('fetch categories reducer');
-            console.log(action.payload);
-            
             return {
                 ...state,
                 error: null,
                 editMode: false,
-                current_category: {title:'',description:''},
+                current_category: {id: 0, category_meta: {title:'',description:''}},
                 success_message: '',
                 search_enabled: false,
                 categoryList: action.payload
@@ -93,22 +87,11 @@ export default (state = {}, action) => {
                 filteredCategories: state.categoryList
             }
         }
-        // case CATEGORY_SEARCH_TERM_CHANGE:
-        // {
-        //     console.log('search term change reducer');
-        //     console.log(action.payload);
-            
-        //     return {
-        //         ...state,
-        //         search_term: action.payload
-        //     }
-        // }
         case CATEGORY_SEARCH_SUCCESS:
         {   
             return {
                 ...state,
                 search_term: action.payload.searchTerm,
-                // search_enabled: false,
                 filteredCategories: action.payload.filteredCategories
             }
         }

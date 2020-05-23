@@ -48,13 +48,14 @@ const SkillList = (props) => {
                     }
                     <List dense={true}>
                         {props.skills && props.skills.length > 0
-                        && props.skills.map((item, index) => {
+                        && props.skills.map((skillItem, index) => {
+                            let item = skillItem.skill_meta;
                             return(
-                            <Chip label={item.skill} key={index}
+                            <Chip label={item.skill} key={skillItem.id}
                                 style={styles.chip}
                                 avatar={
                                     <Avatar>
-                                        {item.skill[0]}
+                                        {item.skill ? item.skill[0] : 'S'}
                                     </Avatar>   
                                 }/>
                             )

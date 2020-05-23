@@ -7,7 +7,6 @@ import {    AddMcq, FetchMcqs, UpdateMcq, FetchCategories, FetchSkills,
             BeginSearch, SearchMcq } from '../actions/McqActions';
 import Grid from '@material-ui/core/Grid';
 import SnackbarComponent from '../components/lib/SnackbarComponent';
-// import McqList from '../components/Mcq/McqList';
 
 class McqContainer extends React.Component {
 
@@ -21,15 +20,6 @@ class McqContainer extends React.Component {
         }
     }
 
-    componentWillReceiveProps = (newprops, oldprops) => {
-        // console.log('mcq container: receiving props');
-        if(newprops.success_message !== '') {
-            setTimeout(() => {
-                this.props.history.push('/mcqs');
-            }, 1000);
-        }
-    }
-
     reload = () => {
         this.props.FetchCategories();
         this.props.FetchSkills();
@@ -40,8 +30,17 @@ class McqContainer extends React.Component {
         let editMode = false;
         if(state && state.mcq) {
             editMode = true;
+            this.props.UpdateMcq(model)
+                .then((res) => {
+                    this.props.history.push('/mcqs');
+                });
         }
-        this.props.AddMcq(model, editMode);
+        else {
+            this.props.AddMcq(model)
+                    .then((res) => {
+                        this.props.history.push('/mcqs');
+                    });
+        }
     }
 
     render = () => {
@@ -50,7 +49,6 @@ class McqContainer extends React.Component {
         if(state && state.mcq) {
             mcq = state.mcq;
         }
-        console.log('mcq container render snack open: ' + this.props.snack_open);
         return(
             <Grid container spacing={16}>
                 <Grid item xs={12} sm={12}>
@@ -67,10 +65,6 @@ class McqContainer extends React.Component {
                         onAnswerFieldChange={ (val, field, model) => this.props.CurrentAnswerFieldChange(val, field, model) } 
                         history={this.props.history}
                         />
-                    <SnackbarComponent 
-                        openSnack={this.props.snack_open} handleClose={() => this.props.CloseSnackbar()} 
-                        snackMessage={"Data Saved Successfully!"} 
-                    /> 
                 </Grid>
             </Grid>
         );

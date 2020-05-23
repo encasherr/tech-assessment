@@ -1,9 +1,13 @@
 import loki from 'lokijs';
 import path from 'path';
+import { DbConfig } from '../commons/ServerConfig';
 
 const dbFileName = 'dev.json';
 var dbPath = path.join(__dirname, '..', '..', 'data', dbFileName);
 dbPath = path.join(__dirname,'..', 'data', dbFileName);
+dbPath = DbConfig.filePath;
+// dbPath = 'https://techassessment-bucket.s3.ap-south-1.amazonaws.com/dev_11.json';
+// dbPath = 'https://drive.google.com/file/d/1f0QqEi1aLlJ0BQBcGuUphKecQeYn-2p-/view?usp=sharing';
 console.log('dbpath: ' + dbPath);
 // const db = new loki(dbPath);
 
@@ -30,7 +34,6 @@ const dataCleanup = () => {
   })
   console.log('deleted all entities');
 }
-
 
 // place any bootstrap logic which needs to be run after loadDatabase has completed
 function runProgramLogic() {

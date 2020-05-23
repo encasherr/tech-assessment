@@ -18,7 +18,7 @@ class TestConsoleTabs extends Component {
 
     render = () => {
         let { value } = this.state;
-        let { tabs, selectedMcqs, currentTest } = this.props;
+        let { tabs, selectedMcqs, currentTest, candidates } = this.props;
         return(
         <div>
             <AppBar position="static">
@@ -33,16 +33,20 @@ class TestConsoleTabs extends Component {
                 <TestConsoleQuestions   
                             selectedMcqs={selectedMcqs} 
                             onSelectMcq={ (mcqItem) => this.props.onAddMcqToTest(mcqItem) } 
+                            onRemoveMcqFromTest={ (mcqItem) => this.props.onRemoveMcqFromTest(mcqItem) } 
                             currentTest={currentTest}
                             /> 
             </TabContainer>}
             {value === 1 && 
             <TabContainer>
                 <TestConsoleCandidates 
-                    currentTest={currentTest}
+                    candidates={candidates}
                 /> 
             </TabContainer>}
-            {value === 2 && <TabContainer><TestConsoleSettings /> </TabContainer>}
+            {value === 2 && 
+            <TabContainer>
+                <TestConsoleSettings /> 
+            </TabContainer>}
         </div>
         );
     }

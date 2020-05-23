@@ -17,14 +17,23 @@ export default (state = {}, action) => {
 switch(action.type) {
    case ADD_TEST_SUCCESS:
    {
-       console.log('add test success reducer');
        return {
-           ...state,
-           error: null,
-           current_test: action.payload,
-           success_message: 'Test added successfully',
-           snack_open: true
-       }
+            ...state,
+            error: null,
+            current_test: { 
+                id: 0,
+                test_meta: {
+                skill:'',
+                testName:'',
+                duration: 90,
+                experienceYears: 5,
+                status: 'draft',
+                search_enabled: !state.search_enabled,
+                }
+            },
+            success_message: 'Test added successfully',
+            snack_open: true
+        }
    }
    case UPDATE_TEST_FAIL:
    case ADD_TEST_FAIL:
@@ -62,8 +71,6 @@ switch(action.type) {
    }
    case CURRENT_TEST_FIELD_CHANGE:
    {
-       console.log('field change reducer');
-       console.log(action.payload);
        
        return {
            ...state,
@@ -88,8 +95,6 @@ switch(action.type) {
    }
    case FETCH_TESTS_SUCCESS:
    {
-       console.log('fetch tests reducer');
-       console.log(action.payload);
        let arr = [];
        if(action.payload && action.payload.length > 0) {
            action.payload.map((item, index) => {
@@ -101,12 +106,15 @@ switch(action.type) {
            error: null,
            editMode: !state.editMode,
            current_test: { 
+               id: 0,
+               test_meta: {
                 skill:'',
                 testName:'',
                 duration: 90,
                 experienceYears: 5,
                 status: 'draft',
                 search_enabled: !state.search_enabled,
+               }
             },
            success_message: '',
            search_enabled: !state.search_enabled,
@@ -115,8 +123,6 @@ switch(action.type) {
    }
    case FETCH_SKILLS_SUCCESS:
    {
-        console.log('fetch skills reducer');
-        console.log(action.payload);
         
         return {
             ...state,
@@ -125,18 +131,19 @@ switch(action.type) {
    }
    case FETCH_CATEGORIES_SUCCESS:
    {
-       console.log('fetch categories reducer');
-       console.log(action.payload);
        
        return {
            ...state,
            error: null,
-           current_test: { 
+           current_test: {
+               id: 0,
+               test_meta: { 
                 question:'',
                 description:'',
                 category: '',
                 skill: '',
                 choices: []
+               }
            },
            currentAnswer: {
                 content: '',
@@ -178,10 +185,8 @@ switch(action.type) {
    }
    case FETCH_TESTS_FAIL:
    {
-        console.log('fetch test fail', action.payload);       
         let payload = action.payload;
         if(payload && payload.errorStatus === '401') {
-            console.log('return fetch test fail', action.payload);       
             return {
                 ...state,
                 tests: [],

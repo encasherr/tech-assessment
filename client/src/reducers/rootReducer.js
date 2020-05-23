@@ -8,10 +8,11 @@ import testConsoleReducer from './testConsoleReducer';
 import inviteConsoleReducer from './inviteConsoleReducer';
 import userReducer from './userReducer';
 import questionSimulatorConsoleReducer from './questionSimulatorConsoleReducer';
+import orgReducer from './orgReducer';
 
 import rmaReducer from '../HiTech/rmaReducer';
 
-export default combineReducers({
+const appReducer = combineReducers({
     categoryReducer,
     skillReducer,
     mcqReducer,
@@ -21,5 +22,16 @@ export default combineReducers({
     inviteConsoleReducer,
     userReducer,
     questionSimulatorConsoleReducer,
+    orgReducer,
     rmaReducer
 });
+
+const rootReducer = (state, action) => {
+    if(action.type === 'LOGOUT_CURRENT_USER') {
+        state = undefined;
+    }
+
+    return appReducer(state, action);
+}
+
+export default rootReducer;

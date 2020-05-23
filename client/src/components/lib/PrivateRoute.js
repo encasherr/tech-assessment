@@ -1,17 +1,18 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
+import AuthHelper from '../../AuthHelper';
 
 const PrivateRoute = ({ component: Component, authed, ...rest}) => {
     return (
         <Route 
             {...rest}
-            render={(props) => isLoggedIn() === true
+            render={(props) => isAuthorized() === true
                 ? <Component {...props} />
                 : <Redirect to={{pathname: '/login'}} />}
         />
     );
 }
-const isLoggedIn = () => {
+const isAuthorized = () => {
     let token = localStorage.getItem('auth-token');
     if(token) {
         return true;

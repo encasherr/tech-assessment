@@ -66,7 +66,7 @@ class AddTest extends Component {
                                 </InputLabel>
                                 <Select
                                     onChange={(e) => this.props.onFieldChange(e.target.value, 'skill', this.props.model)}
-                                    value={model.skill}
+                                    value={model.test_meta.skill}
                                     input={
                                     <OutlinedInput
                                         labelWidth={65}
@@ -78,7 +78,8 @@ class AddTest extends Component {
                                     <em>None</em>
                                     </MenuItem>
                                     {this.props.skills && this.props.skills.length > 0 &&
-                                        this.props.skills.map((item, index) => {
+                                        this.props.skills.map((skillItem, index) => {
+                                            let item = skillItem.skill_meta;
                                         return (
                                             <MenuItem key={index} value={item.skill}>{item.skill}</MenuItem>
                                         )
@@ -90,7 +91,7 @@ class AddTest extends Component {
                                     id="outlined-testname"
                                     label="Test Name"
                                     className={styles.dense}
-                                    value={model.testName}
+                                    value={model.test_meta.testName}
                                     onChange={(e) => this.props.onFieldChange(e.target.value, 'testName', this.props.model)}
                                     margin="normal"
                                     variant="outlined"
@@ -101,7 +102,7 @@ class AddTest extends Component {
                                     id="outlined-email"
                                     label="Test Duration (mins)"
                                     className={styles.dense}
-                                    value={model.duration}
+                                    value={model.test_meta.duration}
                                     onChange={(e) => this.props.onFieldChange(e.target.value, 'duration', this.props.model)}
                                     margin="normal"
                                     variant="outlined"

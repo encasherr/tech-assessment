@@ -28,10 +28,7 @@ switch(action.type) {
        }
    }
    case CURRENT_SKILL_FIELD_CHANGE:
-   {
-       console.log('field change reducer');
-       console.log(action.payload);
-       
+   {       
        return {
            ...state,
            field_updated: true,
@@ -47,13 +44,10 @@ switch(action.type) {
    }
    case FETCH_SKILLS_SUCCESS:
    {
-       console.log('fetch skills reducer');
-       console.log(action.payload);
-       
        return {
            ...state,
            error: null,
-           current_skill: {skill:''},
+           current_skill: {id: 0, skill_meta: {skill:''}},
            editMode: false,
            success_message: '',
            search_enabled: false,
@@ -79,7 +73,6 @@ switch(action.type) {
    }
    case FETCH_SKILLS_FAIL:
    {
-        console.log('fail skill fetch: ' + action.payload);
         return {
            ...state,
            current_skill: {skill:''},

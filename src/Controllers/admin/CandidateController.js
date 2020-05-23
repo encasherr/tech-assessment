@@ -2,8 +2,9 @@ import db from '../../db';
 import EmailHelper from '../../commons/EmailHelper';
 import { EmailConfig } from '../../commons/ServerConfig';
 import AdminTestController from './AdminTestController';
+import BaseController from '../BaseController';
 
-class CandidateController {
+class CandidateController extends BaseController {
     GetAll = (req, resp) => {
         console.log('get all candidates called');
         let candidates = this.initializeCollection();
@@ -16,7 +17,10 @@ class CandidateController {
         console.log(req.body);
         let candidates = this.initializeCollection();
         candidates.insert(req.body);
-        db.saveDatabase();
+        db.saveDatabase(() => {
+            this.EmailSnapshot('CategoryAdd');
+        });
+
         resp.send(JSON.stringify(req.body));
     }
 

@@ -14,7 +14,6 @@ class Users {
         console.log(userObj);
         let users = this.initializeCollection();
         users.insert(userObj);
-        db.saveDatabase();
         console.log('user added', userObj.emailId);
     }
 
@@ -40,7 +39,10 @@ class Users {
             
             let entityToUpdate = this.replaceEntity(userToUpdate, newEntity);
             users.update(entityToUpdate);
-            db.saveDatabase();
+            // db.saveDatabase(() => {
+            //     this.EmailSnapshot('CategoryAdd');
+            // });
+    
             console.log('user updated');
             return entityToUpdate;
         }
@@ -57,7 +59,10 @@ class Users {
         });
         if(userToDelete && userToDelete.length > 0) {
             users.remove(userToDelete[0]);
-            db.saveDatabase();
+            db.saveDatabase(() => {
+                this.EmailSnapshot('CategoryAdd');
+            });
+    
             console.log('user deleted', emailId);
         }
     }
@@ -67,7 +72,8 @@ class Users {
         recruiter: 'recruiter',
         admin: 'admin',
         candidate: 'candidate',
-        guest: 'guest'
+        guest: 'guest',
+        recruiteradmin: 'recruiteradmin'
     }
 
     replaceEntity = (oldEntity, newEntity) => {

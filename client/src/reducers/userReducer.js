@@ -13,9 +13,6 @@ import {
     SET_USER_INFO_LOCAL,
     LOGOUT_CURRENT_USER
 } from "../actions/UserActions";
-// import { FETCH_SKILLS_SUCCESS } from "../actions/SkillActions";
-// import { UNAUTHORIZED_ACCESS } from "../actions/TestConsoleActions";
-// import { stat } from "fs";
 
 export default (state = {}, action) => {
 switch(action.type) {
@@ -24,9 +21,12 @@ switch(action.type) {
        return {
             ...state,
             error: null,
-            current_USER: { 
-               emailId:'',
-               role: 'guest'
+            current_user: { 
+                id: 0,
+                user_meta: { 
+                    emailId: '',
+                    role: 'guest'
+                }
             },
             snack_open: true,
             success_message: 'User added successfully'
@@ -51,13 +51,15 @@ switch(action.type) {
    }
    case UPDATE_USER_SUCCESS:
    {
-       console.log('user updated successfully');
        return {
            ...state,
            editMode: false,
            current_user: { 
-                emailId:'',
-                role: 'guest'
+                id: 0,
+                user_meta: { 
+                    emailId: '',
+                    role: 'guest'
+                }
            },
            snack_open: true,
            success_message: 'User Updated Successfully'
@@ -65,8 +67,6 @@ switch(action.type) {
    }
    case CURRENT_USER_FIELD_CHANGE:
    {
-       console.log('field change reducer');
-       console.log(action.payload);
        
        return {
            ...state,
@@ -83,16 +83,17 @@ switch(action.type) {
    }
    case FETCH_USER_SUCCESS:
    {
-       console.log('fetch candidate reducer');
-       console.log(action.payload);
        
        return {
            ...state,
            error: null,
            editMode: false,
-           current_user: { 
+           current_user: {
+               id: 0,
+               user_meta: { 
                 emailId: '',
                 role: 'guest'
+               }
            },
            success_message: '',
            search_enabled: false,
@@ -141,7 +142,8 @@ switch(action.type) {
    {
        return {
            ...state,
-           currentUserLocal: null
+           currentUserLocal: null,
+           isTokenExpired: true
        }
    }
    case OPEN_SNACKBAR:

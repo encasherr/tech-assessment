@@ -6,20 +6,31 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Typography from '@material-ui/core/Typography';
 import classNames from 'classnames';
 import { Button, Menu, MenuItem } from '@material-ui/core';
-import { PowerSettingsNew } from '@material-ui/icons';
+import AccountCircle from '@material-ui/icons/AccountCircle';
 import { makeStyles } from '@material-ui/core/styles';
 import AuthHelper from '../../AuthHelper';
 import config from '../../config';
+import TickComponent from '../lib/TickComponent';
 
 const Header = (props) => {
-    // const classes = useStyles();
-    const { classes, openState } = props;
+    const { classes, openState, isTokenExpired } = props;
     const logout = () => {
         props.onLogout();
     }
     let userInfo = AuthHelper.GetUserInfo();
-    //console.log('header props', userInfo.name);
+    const [auth, setAuth] = React.useState(true);
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const open = Boolean(anchorEl);
+    const handleMenu = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    
+      const handleClose = () => {
+        setAnchorEl(null);
+      };
+      
     return (
+        <div>
         <AppBar
             position="fixed"
             className={classNames(classes.appBar, {
@@ -27,53 +38,83 @@ const Header = (props) => {
             })}
         >
             <Toolbar disableGutters={!openState}>
-            <IconButton
-                color="inherit"
-                aria-label="Open drawer"
-                onClick={() => props.onDrawerOpen()}
-                className={classNames(classes.menuButton, {
-                [classes.hide]: openState,
-                })}
-            >
-                <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" color="inherit" noWrap>
-                    <a href={config.domainUrl} style={{color: '#fff'}}>
-                        {config.appTitle}
+                {
+                    props.isDrawerRequired &&
+                    <IconButton
+                        color="inherit"
+                        edge="start"
+                        aria-label="Open drawer"
+                        onClick={() => props.onDrawerOpen()}
+                        className={classNames(classes.menuButton, {
+                        [classes.hide]: openState,
+                        })}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                }
+            <Typography  style={styles.paddingLeft} variant="h6" color="inherit" noWrap>
+                    <a href={config.instance.getValue('site_url')} style={{color: '#fff'}}>
+                        {config.instance.getValue('site_title')}
                     </a>
             </Typography>
-            {userInfo && 
+            {userInfo &&
             <Typography variant="subtitle1" color="inherit" noWrap style={styles.welcomeMessage}>
-                {userInfo.name} ({userInfo.role})
+                {userInfo.name}
             </Typography>
             }
-            {AuthHelper.isLoggedIn() && 
-                // <Button style={styles.menuButton}
-                //     onClick={logout}
-                // color="inherit">Logout</Button>
+            {
+                AuthHelper.isLoggedIn() && props.isLogoutButtonRequired && 
+                <div style={styles.menuButton}>
                 <IconButton 
-                    onClick={logout}
-                    style={styles.menuButton}
+                    onClick={handleMenu}
                     edge="end"
                     aria-label="Account of current user"
-                    // aria-controls={menuId}
                     aria-haspopup="true"
-                    // onClick={handleProfileMenuOpen}
                     color="inherit"
                     >
-                    <PowerSettingsNew />
+                    <AccountCircle />
+                </IconButton>
+                <Menu
+                    id="menu-appbar"
+                    anchorEl={anchorEl}
+                    anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                    }}
+                    open={open}
+                    onClose={handleClose}
+                    >
+                    <MenuItem >Role: {userInfo && userInfo.role}</MenuItem>
+                    <MenuItem onClick={logout} >Logout</MenuItem>
+                </Menu>
+                </div>
+            }
+            {
+                props.isTickerRequired &&
+                <IconButton style={styles.paddingLeft}>
+                    <TickComponent />
                 </IconButton>
             }
+            
             </Toolbar>
-        </AppBar>
+            </AppBar>
+        </div>
     )
 }
 export default Header;
 const styles = {
     menuButton: {
-        marginLeft: '20%'
+        right: '4px'
     },
     welcomeMessage: {
         marginLeft: '40%'
+    },
+    paddingLeft: {
+        paddingLeft: '1%'
     }
 }

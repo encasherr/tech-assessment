@@ -11,6 +11,7 @@ import Avatar from '@material-ui/core/Avatar';
 import LoadingComponent from '../../components/lib/LoadingComponent';
 import { Close  } from '@material-ui/icons';
 import AuthHelper from '../../AuthHelper';
+import config from '../../config';
 
 class AddUser extends Component {
 
@@ -35,9 +36,7 @@ class AddUser extends Component {
     }
     
     render = () => {
-        let { model } = this.props;
-        let UserRoles = AuthHelper.UserRoles();
-        console.log('current_user', model);
+        let { model, orgs, UserRoles } = this.props;
         return (
             <div>
             {!model && <LoadingComponent /> } 
@@ -54,17 +53,45 @@ class AddUser extends Component {
                 <DialogContent style={{padding: '4%'}}>
                     <form  noValidate autoComplete="off">
                                 <FormControl variant="standard" style={styles.formControl}>
+                                    <InputLabel htmlFor="outlined-role-simple">
+                                        Role
+                                    </InputLabel>
                                     <Select
                                         onChange={(e) => this.props.onFieldChange(e.target.value, 'role', model)}
-                                        value={model.role}
-                                        >
-                                        <MenuItem value="">
-                                        <em>None</em>
-                                        </MenuItem>
+                                        value={model.user_meta.role}
+                                        input={
+                                            <OutlinedInput
+                                                labelWidth={85}
+                                                name="role"
+                                                id="outlined-role-simple"
+                                            />
+                                        }>
                                         {UserRoles && UserRoles.length > 0 &&
                                             UserRoles.map((item, index) => {
                                             return (
                                                 <MenuItem key={index} value={item}>{item}</MenuItem>
+                                            )
+                                        })}
+                                    </Select>
+                                </FormControl>
+                                <FormControl variant="standard" style={styles.formControl}>
+                                    <InputLabel htmlFor="outlined-org-simple">
+                                        Organization
+                                    </InputLabel>
+                                    <Select
+                                        onChange={(e) => this.props.onFieldChange(e.target.value, 'orgId', model)}
+                                        value={model.user_meta.orgId}
+                                        input={
+                                            <OutlinedInput
+                                                labelWidth={85}
+                                                name="org"
+                                                id="outlined-org-simple"
+                                            />
+                                        }>
+                                        {orgs && orgs.length > 0 &&
+                                            orgs.map((item, index) => {
+                                            return (
+                                                <MenuItem key={index} value={item.id}>{item.org_meta.name}</MenuItem>
                                             )
                                         })}
                                     </Select>
@@ -74,8 +101,19 @@ class AddUser extends Component {
                                     id="outlined-email"
                                     label="Email Id"
                                     className={styles.dense}
-                                    value={model.emailId}
+                                    value={model.user_meta.emailId}
                                     onChange={(e) => this.props.onFieldChange(e.target.value, 'emailId', model)}
+                                    margin="normal"
+                                    variant="outlined"
+                                />
+                            </FormControl>
+                            <FormControl variant="outlined" style={styles.formControl}>
+                                <TextField
+                                    id="outlined-name"
+                                    label="Full Name"
+                                    className={styles.dense}
+                                    value={model.user_meta.name}
+                                    onChange={(e) => this.props.onFieldChange(e.target.value, 'name', model)}
                                     margin="normal"
                                     variant="outlined"
                                 />

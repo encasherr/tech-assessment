@@ -24,7 +24,7 @@ class McqSelector extends Component {
 
     componentDidMount = () => {
             
-        let url = config.adminApiUrl + 'getAllMcqs';
+        let url = config.instance.getAdminApiUrl() + 'getAllMcqs';
         repository.getData(url)
             .then((res) => {
                 console.log('MCQ fetched');
@@ -58,7 +58,6 @@ class McqSelector extends Component {
         let { mcqList } = this.state;
         if(selectedMcqs && selectedMcqs.length > 0) {
             selectedMcqs.map((item, index) => {
-                // console.log(`selectedMcq: ${item.$loki}`);
             })
         }
         return (
@@ -85,19 +84,15 @@ class McqSelector extends Component {
                     <List>
                         {mcqList && mcqList.length > 0 &&
                         mcqList.map((item, index) => {
-                            // console.log(`item: ${item.$loki}`);
                             if(selectedMcqs && selectedMcqs.findIndex(mcq => {
-                                console.log(`${mcq.$loki} == ${item.$loki}, ${mcq.$loki == item.$loki}`);
-                                return (mcq.$loki == item.$loki) || (mcq.$loki === item.$loki)
+                                return (mcq.id == item.id) || (mcq.id === item.id)
                             }) > -1) {
-                                // console.log(`selected mcq: ${item.question}, total: ${mcqList.length}`);
                                 item.selected = true;
                             } else {
-                                // console.log(`selected mcq: ${item.$loki}, total: ${mcqList.length}`);
                                 item.selected = false;
                             }
                             return (
-                            <McqItem    mcq={item} key={index}
+                            <McqItem    mcqItem={item} key={index}
                                         onAddMcqToTest={() => this.props.onSelectMcq(item) } 
                                         isSelectable={true}
                                         isEditable={false} />
@@ -105,13 +100,6 @@ class McqSelector extends Component {
                         })}
                     </List>
                     </DialogContent>
-                        {/* <Divider />
-                    <DialogActions>
-                        <Button variant="contained" size="large" color="primary"
-                                        onClick={ () => this.handleSubmit(this.props.model)}>
-                            Create Test
-                        </Button>
-                    </DialogActions> */}
                 </Dialog>
             </Card>
         

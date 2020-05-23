@@ -14,15 +14,7 @@ class LoginComponent extends Component {
         };
     }
     googleResponse = (response) => {
-        console.log('response', response);
-        // const tokenBlob = new Blob([JSON.stringify({access_token: response.accessToken}, null, 2)], {type : 'application/json'});
-        // const options = {
-        //     method: 'POST',
-        //     body: tokenBlob,
-        //     mode: 'cors',
-        //     cache: 'default'
-        // };
-        let url = config.adminApiUrl + 'auth/google';
+        let url = config.instance.getAdminApiUrl() + 'auth/google';
         axios.get(url, {
           headers: {
             access_token: response.accessToken
@@ -41,12 +33,11 @@ class LoginComponent extends Component {
                 });    
             }
         }).catch((err) => {
-            this.props.history.push({
-                pathname: '/userForbidden'
-            });
-            // this.setState({
-            //     errorMessage: 'Something went wrong. Please try again later.'
-            // })
+            if(this.props.history){ 
+                this.props.history.push({
+                    pathname: '/userForbidden'
+                });
+            }
         });
     }
     

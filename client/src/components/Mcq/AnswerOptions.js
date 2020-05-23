@@ -2,7 +2,8 @@ import React from 'react';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import { Typography } from '@material-ui/core';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import { Typography, Avatar } from '@material-ui/core';
 
 const AnswerOptions = (props) => {
         return (
@@ -16,6 +17,11 @@ const AnswerOptions = (props) => {
                                 divider={true}
                                 button={false} onClick={ () => props.onChoiceSelect && props.onChoiceSelect(item) }
                             >
+                            <ListItemIcon>
+                                <Avatar>
+                                    {item.key}
+                                </Avatar>
+                            </ListItemIcon>
                             <ListItemText
                                 primary={item.content}
                                 secondary={item.isCorrect ? 'Correct' : 'Wrong'}

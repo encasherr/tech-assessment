@@ -1,12 +1,11 @@
 import nodemailer from 'nodemailer';
-import { EmailConfig } from './ServerConfig';
+import { EmailConfig, DbConfig } from './ServerConfig';
 var fs = require('fs');
 import path from 'path';
 
 class EmailHelper {
 
-    SendEmail = (emailInfo) => {
-        console.log('email helper send called');
+    CreateTransporter = () => {
         let transporter = nodemailer.createTransport({
             host: EmailConfig.emailSmtpHost,
             port: EmailConfig.emailSmtpPort,
@@ -17,7 +16,46 @@ class EmailHelper {
                 pass: EmailConfig.emailAuthPassword
             }
         });
+        return transporter;
+    }
 
+    SendEmailWithAttachment = (emailInfo) => {
+        let transporter = this.CreateTransporter();
+        let mailOptions = {
+            from: EmailConfig.inviteFromEmailId,
+            to: emailInfo.to,
+            subject: emailInfo.subject,
+            text: emailInfo.text,
+            attachments: [
+                {
+                    path: emailInfo.attachmentPath
+                }
+            ]
+        }
+        transporter.sendMail(mailOptions, (error, info) => {
+            if(error) {
+                console.log('error occured in sending email');
+                console.log(error);
+                return;
+            }
+            console.log('email sent: ' + info.messageId + ', resp: ' + info.response);
+        })
+    }
+
+    SendEmail = (emailInfo) => {
+        console.log('email helper send called');
+        // let transporter = nodemailer.createTransport({
+        //     host: EmailConfig.emailSmtpHost,
+        //     port: EmailConfig.emailSmtpPort,
+        //     secure: false,
+        //     requireTLS: true,
+        //     auth: {
+        //         user: EmailConfig.emailAuthUser,
+        //         pass: EmailConfig.emailAuthPassword
+        //     }
+        // });
+
+        let transporter = this.CreateTransporter();
         let mailOptions = {
             from: EmailConfig.inviteFromEmailId,
             to: emailInfo.to,
@@ -41,6 +79,7 @@ class EmailHelper {
         if(emailInfo.notificationType === 'test') {
             html = html.replace('$$test_name$$', emailInfo.testName + ' Challenge');
             html = html.replace('$$test_link$$', emailInfo.testLink);
+            html = html.replace('$$faq_link$$', emailInfo.faqLink);
         }
         if(emailInfo.notificationType === 'rma') {
             if(emailInfo.rmaRequest.customerDetails) {

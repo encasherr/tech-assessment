@@ -4,19 +4,19 @@ import { AuthConfig } from '../commons/ServerConfig';
 const resources = [
     { 
         resource: '/admin/getAllMcqs',
-        allowedRoles: [ 'admin', 'recruiter' ] 
+        allowedRoles: [ 'admin', 'orgadmin', 'staff' ] 
     },
     { 
         resource: '/admin/mcq',
-        allowedRoles: [ 'admin', 'recruiter' ] 
+        allowedRoles: [ 'admin', 'orgadmin', 'staff' ] 
     },
     { 
         resource: '/admin/bulkMcq',
-        allowedRoles: [ 'admin', 'recruiter' ] 
+        allowedRoles: [ 'admin', 'orgadmin', 'staff' ] 
     },
     { 
         resource: '/admin/getAllCategories',
-        allowedRoles: [ 'admin', 'recruiter' ] 
+        allowedRoles: [ 'admin', 'orgadmin', 'staff' ] 
     },
     { 
         resource: '/admin/category',
@@ -24,7 +24,7 @@ const resources = [
     },
     { 
         resource: '/admin/getAllSkills',
-        allowedRoles: [ 'admin', 'recruiter' ] 
+        allowedRoles: [ 'admin', 'orgadmin', 'staff' ] 
     },
     { 
         resource: '/admin/skill',
@@ -36,27 +36,59 @@ const resources = [
     },
     { 
         resource: '/admin/getAllTests',
-        allowedRoles: [ 'admin', 'recruiter' ] 
+        allowedRoles: [ 'admin', 'orgadmin', 'staff' ] 
     },
     { 
         resource: '/admin/getTest',
-        allowedRoles: [ 'admin', 'recruiter' ] 
+        allowedRoles: [ 'admin', 'orgadmin', 'staff' ] 
     },
     { 
         resource: '/admin/test',
-        allowedRoles: [ 'admin', 'recruiter' ] 
+        allowedRoles: [ 'admin', 'recruiter', 'staff' ] 
     },
     { 
         resource: '/admin/getAllUsers',
-        allowedRoles: [ 'admin' ] 
+        allowedRoles: [ 'admin', 'orgadmin', 'staff' ] 
     },
     { 
         resource: '/admin/user',
+        allowedRoles: [ 'admin', 'orgadmin' ] 
+    },
+    { 
+        resource: '/admin/getAllOrgs',
+        allowedRoles: [ 'admin', 'orgadmin' ] 
+    },
+    { 
+        resource: '/admin/org',
         allowedRoles: [ 'admin' ] 
+    },
+    { 
+        resource: '/admin/getCandidatesByTestId',
+        allowedRoles: [ 'admin', 'orgadmin', 'staff' ] 
+    },
+    { 
+        resource: '/admin/getMcqsByTestId',
+        allowedRoles: [ 'admin', 'orgadmin', 'staff' ] 
     },
     { 
         resource: '/candidate/startTest',
         allowedRoles: [ 'admin', 'candidate' ] 
+    },
+    {
+        resource: '/candidate/submitAnswers',
+        allowedRoles: [ 'admin', 'candidate' ]
+    },
+    {
+        resource: '/candidate/getAllInvites',
+        allowedRoles: [ 'admin', 'orgadmin', 'staff' ]
+    },
+    {
+        resource: '/candidate/evaluateAnswers',
+        allowedRoles: [ 'admin', 'orgadmin' ]
+    },
+    {
+        resource: '/loadConfig',
+        allowedRoles: [ 'admin', 'orgadmin', null, undefined, '' ]
     }
 ];
 
@@ -102,6 +134,7 @@ module.exports = function(req, res, next) {
         }    
     } catch (ex) {
             console.log('exception in authorization', req.user);
-            res.status(401).send("Invalid token.");
+            res.status(401).json({message: "Invalid token."});
+            // res.status(500).send("Invalid token.");
     }
 };

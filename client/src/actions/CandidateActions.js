@@ -89,10 +89,7 @@ export const AddCandidate = (candidateModel, editMode) => dispatch => {
     dispatch({
         type: ADD_CANDIDATE_BEGIN
     });
-    let url = config.adminApiUrl + 'candidate';
-    console.log('action model');
-    console.log(candidateModel);
-    // if(!editMode) {
+    let url = config.instance.getAdminApiUrl() + 'candidate';
         repository.saveData(url, candidateModel)
             .then((res) => {
                 console.log('CANDIDATE saved: ' + res);
@@ -115,56 +112,11 @@ export const BeginSearch = () => dispatch => {
     });
 }
 
- export const SearchCandidate = (searchTerm, candidateList) => dispatch => {
-//     console.log(`search term: ${searchTerm}, list length: ${CANDIDATEList ? CANDIDATEList.length : 0}`);
-//     if(CANDIDATEList && CANDIDATEList.length > 0) {
-//         let filteredCANDIDATES = CANDIDATEList.filter((item) => {
-//             return (
-//                     item.title &&
-//                     item.title.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1
-//                     ) ||
-//                     (
-//                         item.description &&
-//                         item.description.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1);
-//         });
-//         if(filteredCANDIDATES && filteredCANDIDATES.length > 0) {
-//             dispatch({
-//                 type: CANDIDATE_SEARCH_SUCCESS,
-//                 payload: {
-//                     filteredCANDIDATES,
-//                     searchTerm
-//                 }
-//             });
-//         }
-//         else {
-//             dispatch({
-//                 type: CANDIDATE_SEARCH_SUCCESS,
-//                 payload: {
-//                     filteredCANDIDATES: [],
-//                     searchTerm
-//                 }
-//             });
-//         }
-//     }
-//     else {
-//         dispatch({
-//             type: CANDIDATE_SEARCH_SUCCESS,
-//             payload: {
-//                 filteredCANDIDATES: [],
-//                 searchTerm
-//             }
-//         });
-//     }
- }
 
  export const FetchCandidates = () => dispatch => {
-    // dispatch({
-    //     type: FETCH_CANDIDATES_BEGIN
-    // });
-    let url = config.adminApiUrl + 'getAllCandidates';
+    let url = config.instance.getAdminApiUrl() + 'getAllCandidates';
     repository.getData(url)
         .then((res) => {
-            console.log('CANDIDATES fetched');
             dispatch({
                 type: FETCH_CANDIDATE_SUCCESS,
                 payload: res.data
@@ -182,10 +134,9 @@ export const FetchSkills = () => dispatch => {
     dispatch({
         type: FETCH_SKILLS_BEGIN
     });
-    let url = config.adminApiUrl + 'getAllSkills';
+    let url = config.instance.getAdminApiUrl() + 'getAllSkills';
     repository.getData(url)
         .then((res) => {
-            console.log('skills fetched');
             dispatch({
                 type: FETCH_SKILLS_SUCCESS,
                 payload: res.data
@@ -210,7 +161,7 @@ export const UpdateCandidate = (candidateModel) => dispatch => {
     dispatch({
         type: UPDATE_CANDIDATE_BEGIN
     });
-    let url = config.adminApiUrl + 'candidate';
+    let url = config.instance.getAdminApiUrl() + 'candidate';
     repository.updateData(url, candidateModel)
         .then((res) => {
             dispatch({

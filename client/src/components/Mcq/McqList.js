@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {    FetchMcqs, DeleteMcq,
+import {    FetchMcqs, DeleteMcq, BulkDeleteMcq,
             CloseSnackbar,
             OpenSnackbar, 
             BeginSearch, EndSearch, SearchMcq } from '../../actions/McqActions';
@@ -13,8 +13,12 @@ import McqItem from '../../Containers/TestConsole/McqItem';
 import SnackbarComponent from '../lib/SnackbarComponent';
 import Fab from '@material-ui/core/Fab';
 import { Add, Search } from '@material-ui/icons';
+import LoadingComponent from '../lib/LoadingComponent';
+import User401 from '../../Containers/User/User401';
 
-class McqList extends Component {
+import BaseComponent from '../lib/BaseComponent';
+
+class McqList extends BaseComponent {
 
     constructor (props) {
        super(props);
@@ -42,16 +46,12 @@ class McqList extends Component {
 
     onDeleteMcq = (mcq) => {
         this.props.DeleteMcq(mcq);
-        // this.props.FetchMcqs();
     }
 
     bulkDeleteMcq = () => {
         let { selectedMcqs } = this.state;
         if(selectedMcqs && selectedMcqs.length > 0) {
-            console.log('deleting mcqs', selectedMcqs);
-            selectedMcqs.map((item, index) => {
-                this.onDeleteMcq(item);
-            });
+            this.props.BulkDeleteMcq(selectedMcqs);
         }        
     }
 
@@ -68,9 +68,14 @@ class McqList extends Component {
     }
 
     render = () => {
-        let { mcqs, search_term, filteredCategories, search_enabled } = this.props;
+        let { mcqs, search_term, filteredCategories, search_enabled, error } = this.props;
         let { selectedMcqs } = this.state;
         let mcqToDisplay = filteredCategories ? filteredCategories : mcqs;
+        if(!mcqToDisplay){
+            return (
+                <LoadingComponent />
+            )
+        }
         return (
             <Card>
                 <CardHeader
@@ -126,19 +131,15 @@ class McqList extends Component {
                         { mcqToDisplay && mcqToDisplay.length > 0 &&
                           mcqToDisplay.map((item, index) => {
                             return (
-                                <McqItem    mcq={item} key={index}
-                                            onEditClick={(mcq) => this.onEditClick(mcq)}
+                                <McqItem    mcqItem={item} key={index}
+                                            onEditClick={(mcq) => this.onEditClick(item)}
                                             onDeleteMcq={() => this.onDeleteMcq(item)}
-                                            markForDeletion={(mcq) => this.markForDeletion(mcq)}
+                                            markForDeletion={() => this.markForDeletion(item)}
                                             isSelectable={false} 
                                             isEditable={true} />
                             )
                         } )}
                     </List>
-                    <SnackbarComponent 
-                        openSnack={this.props.snack_open} handleClose={() => this.props.CloseSnackbar()} 
-                        snackMessage={this.props.success_message}
-                        />
                 </CardContent>
             </Card>
         );
@@ -147,11 +148,11 @@ class McqList extends Component {
 
 const mapStateToProps = state => ({
     ...state.mcqReducer,
-    // ...state.testConsoleReducer
 });
 const mapDispatchToProps = dispatch => ({
     FetchMcqs: () => dispatch(FetchMcqs()),
     DeleteMcq: (mcq) => dispatch(DeleteMcq(mcq)),
+    BulkDeleteMcq: (mcqs) => dispatch(BulkDeleteMcq(mcqs)),
     CloseSnackbar: () => dispatch(CloseSnackbar()),
     OpenSnackbar: () => dispatch(OpenSnackbar()),
     BeginSearch: () => dispatch(BeginSearch()),

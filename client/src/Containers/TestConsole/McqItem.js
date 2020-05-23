@@ -41,16 +41,21 @@ class McqItem extends Component {
     }
 
     render = () => {
-        let { mcq, isSelectable, isEditable, isChecked } = this.props; 
+        let { mcqItem, isSelectable, isEditable, 
+                isDeletable, isChecked } = this.props;
+        let mcq = mcqItem ? mcqItem.mcq_meta : null; 
         return (
             <div>
-                
+            
+            {mcq && 
                 <ListItem 
                     divider={true} 
                     onClick={this.handleClickOpen}
                     button={true}
                     >
-                    <ListItemText primary={mcq.question} secondary={`${mcq.category} - ${mcq.skill}`}>
+                    <ListItemText 
+                                primary={ mcq.question }
+                                secondary={ `${mcq.category} - ${mcq.skill} ` } >
                     </ListItemText>
                     {isSelectable && 
                     <ListItemSecondaryAction>
@@ -58,9 +63,12 @@ class McqItem extends Component {
                             {!mcq.selected && 
                             <AddBox fontSize="large" color="secondary" />
                             }
-                            {mcq.selected && 
+                        </IconButton>
+                    </ListItemSecondaryAction>}
+                    {isDeletable &&
+                    <ListItemSecondaryAction>
+                        <IconButton onClick={() => this.props.onRemoveMcqFromTest()}>
                             <Remove fontSize="large" color="secondary" />
-                            }
                         </IconButton>
                     </ListItemSecondaryAction>}
                     {isEditable && 
@@ -71,6 +79,8 @@ class McqItem extends Component {
                         </IconButton>
                     </ListItemSecondaryAction>}
                 </ListItem>
+            }
+            {mcq &&
                 <Dialog
                     TransitionComponent={Transition}
                     fullScreen
@@ -79,8 +89,11 @@ class McqItem extends Component {
                     onClose={this.handleClose}
                 >
                     <DialogTitle onClose={this.handleClose}>
-                        <Typography variant="display1">
+                        <Typography variant="display2">
                             {mcq.question}
+                        </Typography>
+                        <Typography variant="display1">
+                            {`${mcq.category} - ${mcq.skill}`}
                         </Typography>
                         <IconButton onClick={this.handleClose} style={{right: '4%', top: '1%', position:'absolute'}}>
                             <Close />
@@ -99,7 +112,9 @@ class McqItem extends Component {
                     </DialogActions>
                     }
                 </Dialog>
+            }
             </div>
+                
         );  
     }
 }

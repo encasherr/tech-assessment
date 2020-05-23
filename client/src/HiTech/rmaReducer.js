@@ -17,7 +17,7 @@ const initial_state = {
     productList: [],
     current_product: {},
     vendorDetails: {},
-    emailTo: config.hitechConfig.notifyEmailId,
+    emailTo: '', //config.hitechConfig.notifyEmailId,
     field_version: 0
 }
 

@@ -9,11 +9,9 @@ class TestConsoleQuestions extends Component {
 
     render = () => {
         let { selectedMcqs, currentTest } = this.props;
-        console.log('test console questions render');
-        console.log(selectedMcqs);
         return (
             <Card>
-                {currentTest && currentTest.status==='draft' &&
+                {currentTest && currentTest.test_meta.status==='draft' &&
                 <CardHeader action={
                     <McqSelector 
                         onSelectMcq={(mcqItem) => this.props.onSelectMcq(mcqItem)} 
@@ -23,7 +21,9 @@ class TestConsoleQuestions extends Component {
                 />
                 }
                 <CardContent>
-                    <SelectedMcqs selectedMcqs={selectedMcqs} />
+                    <SelectedMcqs
+                        onRemoveMcqFromTest={(mcqItem) => this.props.onRemoveMcqFromTest(mcqItem) } 
+                        selectedMcqs={selectedMcqs} />
                 </CardContent>
             </Card>
         );

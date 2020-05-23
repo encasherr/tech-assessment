@@ -3,11 +3,11 @@ import AuthHelper from '../AuthHelper';
 import { connect } from 'react-redux';
 import { SetUserInfo } from '../actions/UserActions';
 import { Card, CardHeader, CardContent, Typography, CardActions, Button, Grid } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 
 class Dashboard extends Component {
     componentDidMount = () => {
         AuthHelper.SetHistory(this.props.history);
-        // this.props.SetUserInfo(AuthHelper.GetUserInfo());
     }
     
     
@@ -25,8 +25,9 @@ class Dashboard extends Component {
                                 </Typography>
                             </CardContent>
                             <CardActions style={styles.cardAction}>
-                                <Button variant="contained" size="small" color="primary">View All</Button>
-                                <a href="#">Click Here</a>
+                                <Link to="/testConsole" >
+                                    <Button size="small" variant="contained" color="primary">Add New</Button>
+                                </Link>
                             </CardActions>
                             
                         </Card>
@@ -42,7 +43,9 @@ class Dashboard extends Component {
                                 </Typography>
                             </CardContent>
                             <CardActions style={styles.cardAction}>
-                                <Button variant="contained" size="small" color="primary">Start Adding</Button>
+                                <Link to="/addMcq" >
+                                    <Button size="small" variant="contained" color="primary">Add New</Button>
+                                </Link>
                             </CardActions>
                             
                         </Card>
@@ -58,7 +61,9 @@ class Dashboard extends Component {
                                 </Typography>
                             </CardContent>
                             <CardActions style={styles.cardAction}>
-                                <Button variant="contained" size="small" color="primary">Go to Tests</Button>
+                                <Link to="/tests" >
+                                    <Button size="small" variant="contained" color="primary">View</Button>
+                                </Link>
                             </CardActions>
                             
                         </Card>
@@ -70,11 +75,13 @@ class Dashboard extends Component {
                             </CardHeader>
                             <CardContent>
                                 <Typography variant="subtitle1">
-                                    You have defined 25 skill sets for your hiring. Keep it updated.
+                                    25 skills in your library
                                 </Typography>
                             </CardContent>
                             <CardActions style={styles.cardAction}>
-                                <Button variant="contained" size="small" color="primary">View All</Button>
+                                <Link to="/skills" >
+                                    <Button size="small" variant="contained" color="primary">View</Button>
+                                </Link>
                             </CardActions>
                             
                         </Card>
@@ -101,7 +108,6 @@ const styles = {
     },
     cardHeader: {
         borderBottom: '1px solid #3f51b5',
-        // backgroundColor: '#3f51b5',
         color: '#fff'
     }
 }

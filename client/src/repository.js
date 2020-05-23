@@ -5,9 +5,10 @@ let History = null;
 axios.interceptors.response.use(response => {
         return response;
     }, error => {
+        if(!error.response) throw error;
     if (error.response.status === 401) {
         console.log('intercept 401', error.response);
-        RedirectFromAction('unauthorizedUser');
+        // RedirectFromAction('unauthorizedUser');
     }
     else if (error.response.status === 403) {
         console.log('intercept 403', error.response);
@@ -17,7 +18,7 @@ axios.interceptors.response.use(response => {
         console.log('intercept 404', error.response);
         RedirectFromAction('notFound');
     }
-    return error;
+    throw error.response;
  });
 
 const getData = (url) => {

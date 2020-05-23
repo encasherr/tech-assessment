@@ -20,3 +20,50 @@ Encasherr github:
 encasherr@gmail.com
 encasherr
 Action@7654321
+
+
+
+TODO:
+1. Done: Display question numbers in simulator - both current and total e.g. 5 / 20.
+2. Done: In test console, in reports tab, show list of candidates that have taken the test and their scores as well as results.
+3. Done: testLanding page should have instructions of taking the test and Start Test button.
+4. Done: Create a FAQ page for candidates to refer to for taking online test.
+5. Load all data in the dashboard.
+6. Collect candidate name while sending invitation.
+7. Synchronize the email template between UI and server side.
+8. Remove double quotes that are displayed for field values in UI for all data.
+9. Add standard data grid in all screens, with filter feature.
+10. Delete the related questions from test when question is deleted.
+11. Change back link text on test console screen to match invitaions/tests.
+12. Done: Define organization master.. having org code.
+13. Done: Map each new user in ta_users table to org code.
+14. Done: Filter MCQs to be displayed by current user's org code.
+15. Done: Permissions for admin:
+    add organization
+    add user for any organization
+    send invitation
+    add category
+    add skill
+    add mcq
+    add test
+    view all tests
+    view all mcqs
+    view all users
+    view all organizations
+16. Done: Permissions for orgadmin:
+    send invitation
+    add user for own organization
+    add category
+    add skill
+    add mcq
+    add test
+    view org and admin tests
+    view org and admin mcqs
+    view org users
+17. Done: Permissions for staff:
+    add mcq
+    add test
+    view org and admin tests
+    view org and admin mcqs
+    view org users
+18. Users list grid, handle cancel editing

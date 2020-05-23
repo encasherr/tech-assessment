@@ -20,7 +20,7 @@ export const CurrentSkillFieldChange = (val, field, model) => dispatch => {
     {
         case 'skill':
         {
-            model.skill = val;
+            model.skill_meta.skill = val;
             dispatch({
                 type: CURRENT_SKILL_FIELD_CHANGE,
                 payload: model
@@ -37,12 +37,9 @@ export const AddSkill = (skillModel) => dispatch => {
     dispatch({
         type: ADD_SKILL_BEGIN
     });
-    let url = config.adminApiUrl + 'skill';
-    console.log('action model');
-    console.log(skillModel);
+    let url = config.instance.getAdminApiUrl() + 'skill';
     repository.saveData(url, skillModel)
         .then((res) => {
-            console.log('skill saved: ' + res);
             dispatch({
                 type: ADD_SKILL_SUCCESS,
                 payload: res.data
@@ -64,7 +61,6 @@ export const BeginSearch = () => dispatch => {
 }
 
 export const SearchSkill = (searchTerm, skillList) => dispatch => {
-    console.log(`search term: ${searchTerm}, list length: ${skillList ? skillList.length : 0}`);
     if(skillList && skillList.length > 0) {
         let filteredSkills = skillList.filter((item) => {
             return (
@@ -106,10 +102,9 @@ export const FetchSkills = () => dispatch => {
     dispatch({
         type: FETCH_SKILLS_BEGIN
     });
-    let url = config.adminApiUrl + 'getAllSkills';
+    let url = config.instance.getAdminApiUrl() + 'getAllSkills';
     repository.getData(url)
         .then((res) => {
-            console.log('skills fetched');
             dispatch({
                 type: FETCH_SKILLS_SUCCESS,
                 payload: res.data

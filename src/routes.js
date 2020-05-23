@@ -9,16 +9,22 @@ import { RmaRequestController } from './Controllers/hitech';
 import { generateToken, sendToken } from './utils/token.utils';
 import passport from 'passport';
 import auth from './utils/auth';
+import OrgController from './Controllers/admin/OrgController';
 
 
 let api = express.Router();
 
+
+api.get('/loadConfig', UserController.LoadConfig);
+
 /* Admin Routes */
 /* mcq endpoints */
+// api.get('/admin/getAllMcqs', McqController.GetAll);
 api.get('/admin/getAllMcqs', auth, McqController.GetAll);
 api.post('/admin/mcq', auth, McqController.Add);
 api.put('/admin/mcq', auth, McqController.Update);
 api.delete('/admin/mcq', auth, McqController.Delete);
+api.delete('/admin/bulkmcq', McqController.BulkDelete);
 api.post('/admin/bulkMcq', auth, McqController.BulkMcq);
 
 /* category endpoints */
@@ -32,14 +38,21 @@ api.get('/admin/getAllSkills', auth, SkillController.GetAll);
 api.post('/admin/skill', auth, SkillController.Add);
 api.delete('/admin/skill', auth, SkillController.Delete);
 
+/* org endpoints */
+api.get('/admin/getAllOrgs', auth, OrgController.GetAll);
+api.post('/admin/org', auth, OrgController.Add);
+api.put('/admin/org', auth, OrgController.Update);
+api.delete('/admin/org', auth, OrgController.Delete);
+
 /* hitech endpoints */
 api.get('/hitech/rmaRequests', RmaRequestController.GetAll);
 api.post('/hitech/rmaRequest', RmaRequestController.Add);
-// api.put('/admin/candidate', auth, CandidateController.Update);
 api.get('/hitech/deleteRmaRequest', RmaRequestController.Delete);
 
 /* Admin Test endpoints */
-api.get('/admin/getAllTests', auth,  AdminTestController.GetAll);
+api.get('/admin/getAllTests', auth, AdminTestController.GetAll);
+api.get('/admin/getMcqsByTestId', auth, AdminTestController.GetMcqsByTestId);
+api.get('/admin/getCandidatesByTestId', auth, AdminTestController.GetCandidatesByTestId);
 api.get('/admin/getTest', auth, AdminTestController.GetTest);
 api.post('/admin/test', auth, AdminTestController.Add);
 api.put('/admin/test', auth, AdminTestController.Update);
@@ -53,9 +66,12 @@ api.delete('/admin/user', auth, UserController.Delete);
 
 /* Candidate Routes */
 /* Test Invite endpoints */
+api.get('/candidate/getAllInvites', auth, TestInviteController.GetAll);
+api.get('/candidate/invitation', TestInviteController.GetInvitation);
 api.post('/candidate/sendInvite', auth, TestInviteController.SendInvite);
 api.post('/candidate/startTest', auth, TestInviteController.StartTest);
-
+api.post('/candidate/submitAnswers', auth, TestInviteController.SubmitAnswers);
+api.post('/candidate/evaluateAnswers', TestInviteController.EvaluateAnswers);
 
 api.get('/admin/auth/google',
     passport.authenticate('google-token', { session: false, scope: ['https://www.googleapis.com/auth/plus.login'] }),
@@ -67,6 +83,28 @@ api.get('/admin/auth/google',
         }
         next();
     }, generateToken, sendToken);
+
+    
+api.post('/admin/auth/local',passport.authenticate('local',{session: false}),
+   (req, res, next) => {
+    console.log('received local call');
+    req.auth = req.user;
+        if(req.user.status === 'not found') {
+            return res.status(401).send('User Not Found');
+        }
+        next();
+}, generateToken, sendToken);
+
+
+api.post('/candidate/auth/local',TestInviteController.AuthenticateCandidate,
+   (req, res, next) => {
+       console.log('returned from authenticate candidate', req.user);
+        req.auth = req.user;
+        if(req.user.status === 'not found') {
+            return res.status(401).send('Candidate Not Registered');
+        }
+        next();
+}, generateToken, sendToken);
 
 // GET /auth/google/callback
 //   Use passport.authenticate() as route middleware to authenticate the

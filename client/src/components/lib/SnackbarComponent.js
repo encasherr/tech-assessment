@@ -7,7 +7,6 @@ import Button from '@material-ui/core/Button';
 import { Typography } from '@material-ui/core';
 
 const SnackbarComponent = (props) => {
-    console.log('snack render: ' + props.openSnack);
     let { openSnack } = props;
     return (
         <Snackbar
@@ -47,13 +46,10 @@ const SnackbarComponent = (props) => {
                 key="close"
                 aria-label="Close"
                 color="inherit"
-                // className={classes.close}
-                // onClick={onClose}
                 >
                 <CloseIcon />
                 </IconButton>,
             ]}
-            // {...other}
             />
         </Snackbar>
     );

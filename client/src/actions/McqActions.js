@@ -1,6 +1,7 @@
 import axios from 'axios';
 import config from '../config';
 import repository from '../repository';
+import { LogoutCurrentUser } from './UserActions';
 import { FETCH_CATEGORIES_SUCCESS, FETCH_CATEGORIES_FAIL } from './CategoryActions';
 
 export const ADD_MCQ_BEGIN = 'ADD_MCQ_BEGIN';
@@ -29,13 +30,11 @@ export const CLOSE_SNACKBAR = 'CLOSE_SNACKBAR';
 export const OPEN_SNACKBAR = 'OPEN_SNACKBAR';
 
 export const CurrentMcqFieldChange = (val, field, model) => dispatch => {
-    console.log('mcq field change: ' + field);
-    console.log(val);
     switch(field)
     {
         case 'question':
         {
-            model.question = val;
+            model.mcq_meta.question = val;
             dispatch({
                 type: CURRENT_MCQ_FIELD_CHANGE,
                 payload: model
@@ -44,7 +43,7 @@ export const CurrentMcqFieldChange = (val, field, model) => dispatch => {
         }
         case 'description':
         {
-            model.description = val;
+            model.mcq_meta.description = val;
             dispatch({
                 type: CURRENT_MCQ_FIELD_CHANGE,
                 payload: model
@@ -53,7 +52,7 @@ export const CurrentMcqFieldChange = (val, field, model) => dispatch => {
         }
         case 'category':
         {
-            model.category = val;
+            model.mcq_meta.category = val;
             dispatch({
                 type: CURRENT_MCQ_FIELD_CHANGE,
                 payload: model
@@ -62,7 +61,7 @@ export const CurrentMcqFieldChange = (val, field, model) => dispatch => {
         }
         case 'skill':
         {
-            model.skill = val;
+            model.mcq_meta.skill = val;
             dispatch({
                 type: CURRENT_MCQ_FIELD_CHANGE,
                 payload: model
@@ -71,7 +70,7 @@ export const CurrentMcqFieldChange = (val, field, model) => dispatch => {
         }
         case 'minimumExperience':
         {
-            model.minimumExperience = val;
+            model.mcq_meta.minimumExperience = val;
             dispatch({
                 type: CURRENT_MCQ_FIELD_CHANGE,
                 payload: model
@@ -80,7 +79,16 @@ export const CurrentMcqFieldChange = (val, field, model) => dispatch => {
         }
         case 'maximumExperience':
         {
-            model.maximumExperience = val;
+            model.mcq_meta.maximumExperience = val;
+            dispatch({
+                type: CURRENT_MCQ_FIELD_CHANGE,
+                payload: model
+            });
+            break;
+        }
+        case 'score':
+        {
+            model.mcq_meta.score = val;
             dispatch({
                 type: CURRENT_MCQ_FIELD_CHANGE,
                 payload: model
@@ -97,8 +105,6 @@ export const CurrentMcqFieldChange = (val, field, model) => dispatch => {
 }
 
 export const CurrentAnswerFieldChange = (val, field, model) => dispatch => {
-    console.log('mcq answer field change: ' + field);
-    console.log(val);
     switch(field)
     {
         case 'content':
@@ -130,10 +136,17 @@ export const CurrentAnswerFieldChange = (val, field, model) => dispatch => {
 
 export const AddAnswerChoice = (answerModel, mcqModel) => dispatch => {
     if(mcqModel) {
-        if(!mcqModel.choices) {
-            mcqModel.choices = [];
+        if(!mcqModel.mcq_meta.choices && mcqModel.mcq_meta.choices.length === 0) {
+            mcqModel.mcq_meta.choices = [];
+            answerModel.key = config.instance.OrderedAlphabets[0];
         }
-        mcqModel.choices.push(answerModel);
+        if(!answerModel.key) {
+            let answerKeyIndex = mcqModel.mcq_meta.choices.length === 0 ? 0 : mcqModel.mcq_meta.choices.length; 
+            answerModel.key = config.instance.OrderedAlphabets[answerKeyIndex];
+        }
+
+
+        mcqModel.mcq_meta.choices.push(answerModel);
     }
     dispatch({
         type: CHOICE_ADDED_TO_MCQ,
@@ -141,61 +154,85 @@ export const AddAnswerChoice = (answerModel, mcqModel) => dispatch => {
     })
 }
 
-export const AddMcq = (mcqModel, editMode) => dispatch => {
-    dispatch({
-        type: ADD_MCQ_BEGIN
-    });
-    let url = config.adminApiUrl + 'mcq';
-    console.log('action model');
-    console.log(mcqModel);
-    if(!editMode) {
+export const AddMcq = (mcqModel) => dispatch => {
+    return new Promise((resolve, reject) => {
+        dispatch({
+            type: ADD_MCQ_BEGIN
+        });
+        let url = config.instance.getAdminApiUrl() + 'mcq';
         repository.saveData(url, mcqModel)
             .then((res) => {
-                console.log('mcq saved: ' + res);
                 dispatch({
                     type: ADD_MCQ_SUCCESS,
                     payload: res.data
                 });
+            })
+            .then((res) => {
+                resolve(true);
             })
             .catch((err) => {
                 dispatch({
                     type: ADD_MCQ_FAIL,
                     payload: err
                 });
+                reject(err);
             });
-    }
-    else {
-        dispatch(UpdateMcq(mcqModel));
-    }
+
+    });
 }
 
 export const UpdateMcq = (mcqModel) => dispatch => {
-    dispatch({
-        type: UPDATE_MCQ_BEGIN
-    });
-    let url = config.adminApiUrl + 'mcq';
-    repository.updateData(url, mcqModel)
-        .then((res) => {
-            dispatch({
-                type: UPDATE_MCQ_SUCCESS
+    return new Promise((resolve, reject) => {
+
+        dispatch({
+            type: UPDATE_MCQ_BEGIN
+        });
+        let url = config.instance.getAdminApiUrl() + 'mcq';
+        repository.updateData(url, mcqModel)
+            .then((res) => {
+                dispatch({
+                    type: UPDATE_MCQ_SUCCESS
+                });
+            })
+            .then((res) => {
+                resolve(true);
+            })
+            .catch((err) => {
+                dispatch({
+                    type: UPDATE_MCQ_FAIL,
+                    payload: err
+                });
+                reject(err);
             });
+    })
+}
+
+export const DeleteMcq = (mcqModel) => dispatch => {
+    let url = config.instance.getAdminApiUrl() + 'mcq';
+    repository.deleteData(url, mcqModel)
+        .then((res) => {
+            dispatch(FetchMcqs(true));
         })
         .catch((err) => {
             dispatch({
-                type: UPDATE_MCQ_FAIL,
+                type: DELETE_MCQ_FAIL,
                 payload: err
             });
         });
 }
 
-export const DeleteMcq = (mcqModel) => dispatch => {
-    let url = config.adminApiUrl + 'mcq';
-    repository.deleteData(url, mcqModel)
+export const BulkDeleteMcq = (mcqs) => dispatch => {
+    let url = config.instance.getAdminApiUrl() + 'bulkmcq';
+    let mcqIdsToDelete = [];
+    mcqs.map((item, index) => {
+        mcqIdsToDelete.push(item.id);
+    })
+    let data = {
+        mcqIdsToDelete: mcqIdsToDelete
+    }
+    repository.deleteData(url, data)
         .then((res) => {
             dispatch(FetchMcqs(true));
-            // dispatch({
-            //     type: DELETE_MCQ_SUCCESS
-            // });
         })
         .catch((err) => {
             dispatch({
@@ -218,9 +255,9 @@ export const EndSearch = () => dispatch => {
 }
 
  export const SearchMcq = (searchTerm, mcqList) => dispatch => {
-    console.log(`search term: ${searchTerm}, list length: ${mcqList ? mcqList.length : 0}`);
     if(mcqList && mcqList.length > 0) {
-        let filteredCategories = mcqList.filter((item) => {
+        let filteredCategories = mcqList.filter((mcqItem) => {
+            let item = mcqItem.mcq_meta;
             return (
                     item.question &&
                     item.question.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1
@@ -260,13 +297,9 @@ export const EndSearch = () => dispatch => {
  }
 
  export const FetchCategories = () => dispatch => {
-    // dispatch({
-    //     type: FETCH_CATEGORIES_BEGIN
-    // });
-    let url = config.adminApiUrl + 'getAllCategories';
+    let url = config.instance.getAdminApiUrl() + 'getAllCategories';
     repository.getData(url)
         .then((res) => {
-            console.log('categories fetched');
             dispatch({
                 type: FETCH_CATEGORIES_SUCCESS,
                 payload: res.data
@@ -281,10 +314,9 @@ export const EndSearch = () => dispatch => {
 }
 
 export const FetchSkills = () => dispatch => {
-    let url = config.adminApiUrl + 'getAllSkills';
+    let url = config.instance.getAdminApiUrl() + 'getAllSkills';
     repository.getData(url)
         .then((res) => {
-            console.log('skills fetched');
             dispatch({
                 type: FETCH_SKILLS_SUCCESS,
                 payload: res.data
@@ -310,10 +342,9 @@ export const FetchMcqs = (isDeleted) => dispatch => {
     dispatch({
         type: FETCH_MCQ_BEGIN
     });
-    let url = config.adminApiUrl + 'getAllMcqs';
+    let url = config.instance.getAdminApiUrl() + 'getAllMcqs';
     repository.getData(url)
         .then((res) => {
-            console.log('MCQ fetched');
             let payload = {
                 data: res.data,
                 message: 'MCQs fetched successfully'
@@ -327,25 +358,16 @@ export const FetchMcqs = (isDeleted) => dispatch => {
             });
         })
         .catch((err) => {
-            dispatch({
-                type: FETCH_MCQ_FAIL,
-                payload: err
-            });
+            if(err.data && err.data.message === 'Invalid token.') {
+                dispatch(LogoutCurrentUser());
+            }
+            else {
+                dispatch({
+                    type: FETCH_MCQ_FAIL,
+                    payload: err.statusText
+                });
+            }
         });
-    // repository.getData(url)
-    //     .then((res) => {
-    //         console.log('MCQ fetched');
-    //         dispatch({
-    //             type: FETCH_MCQ_SUCCESS,
-    //             payload: res.data
-    //         });
-    //     })
-    //     .catch((err) => {
-    //         dispatch({
-    //             type: FETCH_MCQ_FAIL,
-    //             payload: err
-    //         });
-    //     });
 }
 
 export const CloseSnackbar = () => dispatch => {

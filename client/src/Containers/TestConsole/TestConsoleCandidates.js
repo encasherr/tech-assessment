@@ -9,49 +9,18 @@ import TableRow from '@material-ui/core/TableRow';
 import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 
-// const useStyles = makeStyles(theme => ({
-//     root: {
-//       width: '100%',
-//       marginTop: theme.spacing(3),
-//       overflowX: 'auto',
-//     },
-//     table: {
-//       minWidth: 700,
-//     },
-// }));
+import InviteList from '../InviteConsole/InviteList';
 
 class TestConsoleCandidates extends Component {
 
     render = () => {
-        // const classes = useStyles();
-        let { currentTest } = this.props;
+        let { candidates } = this.props;
+        return (
+            <InviteList
+                invitations={candidates}
+                />
+        )
 
-        if(currentTest && currentTest.invitations && currentTest.invitations.length > 0){
-            return (
-                <div>
-                {/* <Card>
-                    <CardContent> */}
-                    <Table>
-                        <TableHead>
-                        <TableRow>
-                            <CustomTableCell>Email</CustomTableCell>
-                            <CustomTableCell align="left">Status</CustomTableCell>
-                        </TableRow>
-                        </TableHead>
-                        <TableBody>
-                        {currentTest.invitations.map((inviteInfo, index) => (
-                            <TableRow key={index}>
-                            <CustomTableCell align="left"><Typography variant="subtitle2" >{inviteInfo.emailTo}</Typography></CustomTableCell>
-                            <CustomTableCell align="left"><Typography variant="subtitle2" >{inviteInfo.testStatus}</Typography></CustomTableCell>
-                            </TableRow>
-                        ))}
-                        </TableBody>
-                    </Table>
-                    {/* </CardContent>
-                </Card> */}
-                </div>
-            );
-        }
 
         return (
             <div>
@@ -59,33 +28,11 @@ class TestConsoleCandidates extends Component {
             </div> 
         )
 
-        // return (
-        //     <Paper className={classes.root}>
-        //         <Table className={classes.table}>
-        //             <TableHead>
-        //             <TableRow>
-        //                 <StyledTableCell>Email</StyledTableCell>
-        //                 <StyledTableCell align="right">Status</StyledTableCell>
-        //             </TableRow>
-        //             </TableHead>
-        //             <TableBody>
-        //             {currentTest.invitations.map(row => (
-        //                 <StyledTableRow key={row.emailTo}>
-        //                 <StyledTableCell component="th" scope="row">
-        //                     {row.status}
-        //                 </StyledTableCell>
-        //                 </StyledTableRow>
-        //             ))}
-        //             </TableBody>
-        //         </Table>
-        //     </Paper>
-        // )
     }
 }
 const CustomTableCell = withStyles(theme => ({
     head: {
       backgroundColor: '#3f51b5',
-      //   backgroundColor: theme.palette.common.black,
       color: theme.palette.common.white,
     },
     body: {

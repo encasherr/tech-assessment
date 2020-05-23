@@ -63,7 +63,7 @@ const AddAnswerOption = (props) => {
                         /> 
                     }
                     </div>
-                    <AnswerOptions choices={model.choices} />
+                    <AnswerOptions choices={model.mcq_meta.choices} />
                 </ExpansionPanelDetails>
                 <Divider />
                 <ExpansionPanelActions>

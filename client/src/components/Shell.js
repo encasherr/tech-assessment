@@ -8,15 +8,12 @@ import { SetUserInfo, LogoutCurrentUser } from '../actions/UserActions';
 
 import Header from './layouts/Header';
 import SideDrawer from './layouts/SideDrawer';
-
-// import McqComponent from './Mcq/McqList';
-// import AddMcqComponent from './Mcq/AddMcq';
-// import CategoriesComponent from './Categories/CategoryList';
-// import AddCategoryComponent from './Categories/AddCategory';
-// import DashboardComponent from './Dashboard';
-// import UsersComponent from './Users';
+import SimulatorShell from '../Containers/Simulator/SimulatorShell';
+import LocalLoginComponent from '../components/lib/LocalLoginComponent';
+import LoadingComponent from '../components/lib/LoadingComponent';
 import Routes from './Routes';
 import AuthHelper from '../AuthHelper';
+import config from '../config';
 
 const drawerWidth = 240;
 
@@ -85,6 +82,7 @@ const styles = theme => ({
 class Shell extends React.Component {
   state = {
     open: false,
+    config: {}
   };
 
   handleDrawerOpen = () => {
@@ -96,41 +94,75 @@ class Shell extends React.Component {
   };
   
   componentDidMount = () => {
-    console.log('shell userinfo', AuthHelper.GetUserInfo());
-    // this.props.SetUserInfo(AuthHelper.GetUserInfo());
+    config.instance.initialize()
+        .then((res) => {
+            this.setState({
+              config: res
+            });
+        })
+
   }
   Logout = () => {
     this.props.LogoutCurrentUser();
-    AuthHelper.GetHistory().push({
-      pathname: '/login'
-    });
   }
 
   render() {
-    const { classes, theme } = this.props;
-    console.log('shell props', this.props);
-    return (
-      <div className={classes.root}>
-        <CssBaseline />
-        <Header classes={classes} 
-                openState={this.state.open} 
-                onDrawerOpen={this.handleDrawerOpen}
-                onLogout={() => this.Logout()}
-                />
-        <Router>
-          <SideDrawer classes={classes} 
-                  openState={this.state.open} 
-                  onDrawerClose={this.handleDrawerClose}
-                  theme={theme}
-                  />
-          <main className={classes.content}>
-            <div className={classes.toolbar} />
-                <Routes />
-          </main>
-        </Router>
-      </div>
-    );
-  }
+        const { classes, theme, isTokenExpired } = this.props;
+        let user = AuthHelper.GetUserInfo();
+
+        let { config } = this.state;
+        if(!config.site_title) {
+          return (
+            <LoadingComponent />
+          )
+        }
+
+        if(user && user.role === 'candidate') {
+            return (
+              <div className={classes.root}>
+                  <CssBaseline />
+                  <Header classes={classes} 
+                        openState={this.state.open} 
+                        isTickerRequired={true}
+                        isDrawerRequired={false}
+                        isLogoutButtonRequired={false}
+                        isTokenExpired={isTokenExpired}
+                        />
+                    <Router>
+                      <main className={classes.content}>
+                        <div className={classes.toolbar} />
+                            <Routes />
+                      </main>
+                    </Router>
+              </div>
+            );
+        }
+        return (
+          <div className={classes.root}>
+            <CssBaseline />
+            <Header classes={classes} 
+                    openState={this.state.open} 
+                    onDrawerOpen={this.handleDrawerOpen}
+                    onLogout={() => this.Logout()}
+                    isTickerRequired={false}
+                    isDrawerRequired={true}
+                    isLogoutButtonRequired={true}
+                    isTokenExpired={isTokenExpired}
+                    />
+            <Router>
+              <SideDrawer classes={classes} 
+                      openState={this.state.open} 
+                      onDrawerClose={this.handleDrawerClose}
+                      theme={theme}
+                      />
+              <main className={classes.content}>
+                <div className={classes.toolbar} />
+                    <Routes />
+              </main>
+            </Router>
+          </div>
+          );
+    }
 }
 
 Shell.propTypes = {
@@ -144,13 +176,5 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   SetUserInfo: (userInfo) => dispatch(SetUserInfo(userInfo)),
   LogoutCurrentUser: () => dispatch(LogoutCurrentUser())
-  // AddTest: (model, editMode) => dispatch(AddTest(model, editMode)),
-  // UpdateTest: (model) => dispatch(UpdateTest(model)),
-  // FetchSkills: () => dispatch(FetchSkills()),
-  // FetchTests: () => dispatch(FetchTests()),
-  // CloseSnackbar: () => dispatch(CloseSnackbar()),
-  // OpenSnackbar: () => dispatch(OpenSnackbar()),
-  // CurrentTestFieldChange: (val, field, model) => dispatch(CurrentTestFieldChange(val, field, model))
 });
 export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(Shell));
-// export default withStyles(styles, { withTheme: true })(Shell);

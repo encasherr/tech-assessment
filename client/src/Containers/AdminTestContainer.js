@@ -15,54 +15,18 @@ class AdminTestContainer extends React.Component {
         this.reload();
     }
 
-    componentWillReceiveProps = (newprops, oldprops) => {
-        console.log('adm in test container: component will receive');
-        // if(newprops.success_message !== '' && newprops.success_message !== undefined &&
-        //     newprops.success_message !== oldprops.success_message) {
-        if(newprops.snack_open) {
-            console.log('snack_open: component will update');
-            // this.props.OpenSnackbar();
-            // console.log('added successfully, testId: ');
-            // console.log(newprops.current_test.$loki);
-            // this.props.history.push({
-            //     pathName:  '/testConsole',
-            //     state: {
-            //         testId: newprops.current_test.$loki
-            //     }
-            // });
-        }
-    }
 
-    componentWillUpdate = () => {
-        console.log('adm in test container: component will update', this.props);
-        if(this.props.error) {
-                console.log('error status 401 - 11');
-                if(this.props.error.errorStatus === '401') {
-                console.log('error status 401 - 22');
-                this.props.history.push({
-                    pathname: '/dashboard'
-                });
-            }
-        }
-        if(this.props.snack_open) {
-            console.log('snack_open: component will update');
-            // this.props.history.push('/testConsole');
-            this.props.history.push({
-                pathname:  '/testConsole',
-                state: {
-                    testId: this.props.current_test.$loki
-                }
-            });
-        }
-    }
 
     reload = () => {
-        // this.props.FetchSkills();
+        this.props.FetchSkills();
         this.props.FetchTests();
     }
 
     onAddTest = (model) => {
-        this.props.AddTest(model, this.props.editMode)
+        this.props.AddTest(model, this.props.editMode, this.props.history)
+                .then((res) => {
+                    this.reload();  
+                });
     }
 
     render = () => {

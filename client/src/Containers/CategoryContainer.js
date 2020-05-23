@@ -4,7 +4,7 @@ import AddCategoryComponent from '../components/Categories/AddCategory';
 import CategoryList from '../components/Categories/CategoryList';
 import {    AddCategory, FetchCategories, UpdateCategory, 
             CloseSnackbar, CurrentCategoryFieldChange,
-            OpenSnackbar, SelectCategory,
+            OpenSnackbar, SelectCategory, DeleteCategory,
             BeginSearch, SearchCategory } from '../actions/CategoryActions';
 import Grid from '@material-ui/core/Grid';
 import SnackbarComponent from '../components/lib/SnackbarComponent';
@@ -12,20 +12,16 @@ import SnackbarComponent from '../components/lib/SnackbarComponent';
 class CategoryContainer extends React.Component {
 
     componentDidMount = () => {
-        console.log('did mount');
         this.reload();
     }
 
     componentWillUpdate = () => {
-     console.log('container updated');
         if(this.props.success_message !== '') {
             this.props.FetchCategories();
         }
     }
 
     componentWillReceiveProps = (newprops, oldprops) => {
-        console.log('receiving props');
-        console.log(newprops);
         if(newprops.success_message !== '') {
             this.props.FetchCategories();
             this.props.OpenSnackbar();
@@ -36,14 +32,7 @@ class CategoryContainer extends React.Component {
         this.props.FetchCategories();
     }
 
-    // shouldComponentUpdate = () => {
-    //     console.log('should');
-    //     return true;
-    // }
-
     render = () => {
-        console.log('container render');
-        console.log(this.props);
         let categories = [];
         if(this.props.search_enabled) {
             categories = this.props.filteredCategories;
@@ -65,6 +54,7 @@ class CategoryContainer extends React.Component {
                     <CategoryList categories={categories} 
                         onCategorySelect={ (item) => this.props.SelectCategory(item) } 
                         onSearchEnable={ () => this.props.BeginSearch() } 
+                        onDeleteCategory={ (item) => this.props.DeleteCategory(item)}
                         searchEnabled={this.props.search_enabled}
                         searchTerm={this.props.search_term}
                         onSearchCategory={ (searchTerm) => this.props.SearchCategory(searchTerm, this.props.categoryList) }/>
@@ -72,8 +62,6 @@ class CategoryContainer extends React.Component {
                 <SnackbarComponent 
                     openSnack={this.props.snack_open} handleClose={() => this.props.CloseSnackbar()} 
                     snackMessage={"Data Saved Successfully!"} 
-                                    // "Category Updated Successfully" :    
-                                    // "Category Added Successfully!"}
                     /> 
             </Grid>
         );
@@ -86,6 +74,7 @@ const mapDispatchToProps = dispatch => ({
     AddCategory: (model, editMode) => dispatch(AddCategory(model, editMode)),
     UpdateCategory: (model) => dispatch(UpdateCategory(model)),
     SelectCategory: (model) => dispatch(SelectCategory(model)),
+    DeleteCategory: (model) => dispatch(DeleteCategory(model)),
     FetchCategories: () => dispatch(FetchCategories()),
     CloseSnackbar: () => dispatch(CloseSnackbar()),
     OpenSnackbar: () => dispatch(OpenSnackbar()),

@@ -35,13 +35,20 @@ export const SetHistory = (propsHistory) => dispatch => {
 }
 
 export const CurrentUserFieldChange = (val, field, model) => dispatch => {
-    console.log('USER field change: ' + field);
-    console.log(val);
     switch(field)
     {
         case 'emailId':
         {
-            model.emailId = val;
+            model.user_meta.emailId = val;
+            dispatch({
+                type: CURRENT_USER_FIELD_CHANGE,
+                payload: model
+            });
+            break;
+        }
+        case 'name':
+        {
+            model.user_meta.name = val;
             dispatch({
                 type: CURRENT_USER_FIELD_CHANGE,
                 payload: model
@@ -50,7 +57,16 @@ export const CurrentUserFieldChange = (val, field, model) => dispatch => {
         }
         case 'role':
         {
-            model.role = val;
+            model.user_meta.role = val;
+            dispatch({
+                type: CURRENT_USER_FIELD_CHANGE,
+                payload: model
+            });
+            break;
+        }
+        case 'orgId':
+        {
+            model.user_meta.orgId = val;
             dispatch({
                 type: CURRENT_USER_FIELD_CHANGE,
                 payload: model
@@ -67,102 +83,112 @@ export const CurrentUserFieldChange = (val, field, model) => dispatch => {
 }
 
 export const DeleteUser = (userModel) => dispatch => {
-    let model ={
-        user: userModel
-    };
-    let url = config.adminApiUrl + 'user';
-    console.log('action model', userModel);
-    repository.deleteData(url, model)
-            .then((res) => {
-                console.log('user deleted: ' + res);
-                dispatch({
-                    type: DELETE_USER_SUCCESS,
-                    payload: res.data
+    return new Promise((resolve, reject) => {
+
+        let url = config.instance.getAdminApiUrl() + 'user';
+        repository.deleteData(url, userModel)
+                .then((res) => {
+                    dispatch({
+                        type: DELETE_USER_SUCCESS,
+                        payload: res.data
+                    });
+                })
+                .then((res) => {
+                    resolve(true);
+                })
+                .catch((err) => {
+                    dispatch({
+                        type: DELETE_USER_FAIL,
+                        payload: err
+                    });
+                    reject(err);
                 });
-            })
-            .catch((err) => {
-                dispatch({
-                    type: DELETE_USER_FAIL,
-                    payload: err
-                });
-            });
+    })
 }
 
 export const AddUser = (userModel) => dispatch => {
-    let model ={
-        user: userModel
-    };
-    let url = config.adminApiUrl + 'user';
-    console.log('action model', userModel);
-    repository.saveData(url, model)
-            .then((res) => {
-                console.log('user added: ' + res);
-                dispatch({
-                    type: ADD_USER_SUCCESS,
-                    payload: res.data
+    return new Promise((resolve, reject) => {
+
+        let model ={
+            user_meta: userModel
+        };
+        let url = config.instance.getAdminApiUrl() + 'user';
+        repository.saveData(url, userModel)
+                .then((res) => {
+                    dispatch({
+                        type: ADD_USER_SUCCESS,
+                        payload: res.data
+                    });
+                })
+                .then((res) => {
+                    resolve(true);
+                })
+                .catch((err) => {
+                    dispatch({
+                        type: ADD_USER_FAIL,
+                        payload: err
+                    });
+                    reject(err);
                 });
-            })
-            .catch((err) => {
-                dispatch({
-                    type: ADD_USER_FAIL,
-                    payload: err
-                });
-            });
+    })
 }
 
 export const FetchUsers = () => dispatch => {
-    let url = config.adminApiUrl + 'getAllUsers';
+    let url = config.instance.getAdminApiUrl() + 'getAllUsers';
     repository.getData(url, history)
         .then((res) => {
-            console.log('promise resolved');
             dispatch({
                 type: FETCH_USER_SUCCESS,
                 payload: res.data
             });
         })
         .catch((err) => {
-            console.log('promise rejected');
             dispatch({
                 type: FETCH_USER_FAIL,
-                payload: { errorStatus: '401' }
+                payload: err.statusText
             });
         });
 }
 
 export const UpdateUser = (userModel) => dispatch => {
-    let url = config.adminApiUrl + 'user';
-    let model ={
-        user: userModel
-    };
-    repository.updateData(url, model, history)
-        .then((res) => {
-            console.log('promise resolved');
-            dispatch({
-                type: UPDATE_USER_SUCCESS
+    return new Promise((resolve, reject) => {
+
+        let url = config.instance.getAdminApiUrl() + 'user';
+        repository.updateData(url, userModel, history)
+            .then((res) => {
+                dispatch({
+                    type: UPDATE_USER_SUCCESS
+                });
+            })
+            .then((res) => {
+                resolve(true);
+            })
+            .catch((err) => {
+                dispatch({
+                    type: UPDATE_USER_SUCCESS,
+                    payload: { errorStatus: '401' }
+                });
+                reject(err);
             });
-        })
-        .catch((err) => {
-            console.log('promise rejected');
-            dispatch({
-                type: UPDATE_USER_SUCCESS,
-                payload: { errorStatus: '401' }
-            });
-        });
+    })
 }
 
 export const SetUserInfo = (res) => dispatch => {
-    AuthHelper.Login(res);
-    let userInfo = AuthHelper.GetUserInfo();
-    dispatch({
-        type: SET_USER_INFO_LOCAL,
-        payload: userInfo
+    return new Promise((resolve, reject) => {
+        AuthHelper.Login(res);
+        let userInfo = AuthHelper.GetUserInfo();
+        dispatch({
+            type: SET_USER_INFO_LOCAL,
+            payload: userInfo
+        });
+        resolve(true);
     })
 }
 export const LogoutCurrentUser = () => dispatch => {
     AuthHelper.LogOut();
     dispatch({
         type: LOGOUT_CURRENT_USER
-    })
+    });
 }
 
 export const CloseSnackbar = () => dispatch => {

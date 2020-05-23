@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-// import AddTestComponent from '../components/AdminTest/AddTest';
 import {    FetchTest, AddMcqToTest, PublishTest, CloseSnackbar, SetHistory,
-            OpenSnackbar } from '../../actions/TestConsoleActions';            
+    RemoveMcqFromTest, LoadTestMcqs, LoadTestCandidates, OpenSnackbar } from '../../actions/TestConsoleActions';            
+import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import SnackbarComponent from '../../components/lib/SnackbarComponent';
 import TestConsoleTabs from './TestConsoleTabs';
@@ -13,28 +13,22 @@ import { KeyboardBackspace } from '@material-ui/icons';
 
 class TestConsoleContainer extends React.Component {
     
-    componentWillMount = () => {
-    }
-
     componentDidMount = () => {
-        console.log('this.props.history', this.props.history);
         this.props.SetHistory(this.props.history);
         this.reload();
     }
 
     componentWillReceiveProps = (newprops, oldprops) => {
         if(newprops.success_message !== '' && newprops.success_message !== undefined) {
-            // this.props.OpenSnackbar();
         }
     }
 
     reload = () => {
-        // this.props.FetchSkills();
         let { state } = this.props.location;
-        console.log('reload: location state');
-        console.log(state);
         if(state){
             this.props.FetchTest(state.testId, this.props.history);
+            this.props.LoadTestMcqs(state.testId);
+            this.props.LoadTestCandidates(state.testId);
         }
     }
 
@@ -43,8 +37,15 @@ class TestConsoleContainer extends React.Component {
     }
 
     onAddMcqToTest = (mcqItem) => {
-        console.log('container: mcq added to test');
-        this.props.AddMcqToTest(mcqItem, this.props.current_test);
+        let { current_test } = this.props;
+        this.props.AddMcqToTest(mcqItem, this.props.current_test)
+                .then((res) => {
+                    this.props.LoadTestMcqs(current_test.id);  
+                });
+    }
+    
+    onRemoveMcqFromTest = (mcqItem) => {
+        this.props.RemoveMcqFromTest(mcqItem, this.props.current_test);
     }
 
     onPublish = () => {
@@ -53,9 +54,7 @@ class TestConsoleContainer extends React.Component {
     }
 
     render = () => {
-        let { current_test } = this.props;
-        console.log('container: render');
-        console.log(current_test);
+        let { current_test, selectedMcqs, candidates } = this.props;
         if(current_test && current_test.selectedMcqs) {
             console.log(current_test.selectedMcqs);
         }
@@ -67,23 +66,26 @@ class TestConsoleContainer extends React.Component {
                 <Card>
                     <CardHeader action={
                         <div>
-                        {current_test.status=='draft' && current_test.selectedMcqs && current_test.selectedMcqs.length > 0 &&
-                        <Button variant="contained" color="primary"
+                        {current_test.test_meta.status === 'draft' && 
+                        current_test.test_meta.selectedMcqs && 
+                        current_test.test_meta.selectedMcqs.length > 0 &&
+                        <Button style={styles.headerButton} variant="contained" color="primary" size="small"
                                 onClick={this.onPublish}
                         >Publish</Button>}
-                        <Button color="primary" size="large" variant="outlined"
-                                onClick={() => this.props.history.goBack() }>
-                            <KeyboardBackspace />
-                        </Button>
+                        <Link style={styles.headerButton} href="#" onClick={() => this.props.history.goBack()}>
+                            Back To Tests
+                        </Link>
                         </div>
                     }
-                    title={current_test.testName}
-                     subheader={current_test.status!=='draft' ? 'Published' : 'draft'}
+                    title={current_test.test_meta.testName}
+                     subheader={current_test.test_meta.status!=='draft' ? 'Published' : 'draft'}
                     />
                     <TestConsoleTabs 
                         tabs={tabs} 
-                        onAddMcqToTest={(mcqId) => this.onAddMcqToTest(mcqId) }
-                        selectedMcqs={current_test.selectedMcqs} 
+                        onAddMcqToTest={(mcqItem) => this.onAddMcqToTest(mcqItem) }
+                        onRemoveMcqFromTest={ (mcqItem) => this.onRemoveMcqFromTest(mcqItem) } 
+                        selectedMcqs={selectedMcqs} 
+                        candidates={candidates}
                         currentTest={current_test}
                         />
                 </Card>
@@ -101,15 +103,15 @@ const mapStateToProps = state => ({
     ...state.testConsoleReducer
 });
 const mapDispatchToProps = dispatch => ({
-    // AddTest: (model, editMode) => dispatch(AddTest(model, editMode)),
-    // UpdateTest: (model) => dispatch(UpdateTest(model)),
     SetHistory: (history) => dispatch(SetHistory(history)),
     AddMcqToTest: (mcqItem, testModel) => dispatch(AddMcqToTest(mcqItem, testModel)),
+    RemoveMcqFromTest: (mcqItem, testModel) => dispatch(RemoveMcqFromTest(mcqItem, testModel)),
     PublishTest: (testModel) => dispatch(PublishTest(testModel)),
     FetchTest: (testId, history) => dispatch(FetchTest(testId, history)),
+    LoadTestMcqs: (testId) => dispatch(LoadTestMcqs(testId)),
+    LoadTestCandidates: (testId) => dispatch(LoadTestCandidates(testId)),
     CloseSnackbar: () => dispatch(CloseSnackbar()),
     OpenSnackbar: () => dispatch(OpenSnackbar()),
-    // CurrentTestFieldChange: (val, field, model) => dispatch(CurrentTestFieldChange(val, field, model))
 });
 const tabs = [
     {key: 0, content: '<Button variant="container" color="primary">Page {index}</Button>'},
@@ -118,8 +120,10 @@ const tabs = [
 ]
 const getButton = (index) => {
     return 'abc'+index;
-    // (
-        // <Button variant="container" color="primary">Page {index}</Button>
-    // );
 }
 export default connect(mapStateToProps, mapDispatchToProps)(TestConsoleContainer);
+const styles = {
+    headerButton: {
+        marginLeft: '10px'
+    }
+}

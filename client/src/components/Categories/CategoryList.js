@@ -4,6 +4,7 @@ import Card from '@material-ui/core/Card';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import { CardHeader, CardContent, IconButton } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import ListIcon from '@material-ui/icons/ViewHeadline';
@@ -12,6 +13,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import FormControl from '@material-ui/core/FormControl';
 import TextField from '@material-ui/core/TextField'
 import Collapse from '@material-ui/core/Collapse';
+import Remove from '@material-ui/icons/Remove';
 
 const CategoryList = (props) => {
         console.log(props);
@@ -24,7 +26,6 @@ const CategoryList = (props) => {
                         </Avatar>
                     }    
                     action={
-                        // !props.searchEnabled && 
                         <IconButton onClick={() => props.onSearchEnable()}>
                             {!props.searchEnabled && <SearchIcon />}
                             {props.searchEnabled && <CloseIcon />}
@@ -50,16 +51,22 @@ const CategoryList = (props) => {
                     }
                     <List dense={true}>
                         {props.categories && props.categories.length > 0
-                        && props.categories.map((item, index) => {
+                        && props.categories.map((category, index) => {
+                            let item = category.category_meta;
                             return(
-                            <ListItem key={index}
+                            <ListItem key={category.id}
                                 divider={true}
-                                button={true} onClick={ () => props.onCategorySelect(item) }
+                                button={true} onClick={ () => props.onCategorySelect(category) }
                             >
                             <ListItemText
                                 primary={item.title}
                                 secondary={item.description}
                                 />
+                            <ListItemSecondaryAction>
+                                <IconButton onClick={() => props.onDeleteCategory(category)}>
+                                    <Remove fontSize="large" color="secondary" />
+                                </IconButton>
+                            </ListItemSecondaryAction>
                             </ListItem>)
                         })}
                         

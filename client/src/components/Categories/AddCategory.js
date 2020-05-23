@@ -40,7 +40,7 @@ const AddCategoryComponent = (props) => {
                         <TextField
                             id="outlined-name"
                             label="Title"
-                            value={model.title}
+                            value={model.category_meta ? model.category_meta.title : ''}
                             onChange={(e) => props.onFieldChange(e.target.value, 'title', props.model)}
                             margin="normal"
                             variant="outlined"
@@ -53,7 +53,7 @@ const AddCategoryComponent = (props) => {
                             label="Description"
                             multiline
                             rows="4"
-                            value={model.description}
+                            value={model.category_meta ? model.category_meta.description : ''}
                             onChange={(e) => props.onFieldChange(e.target.value, 'description', props.model)}
                             margin="normal"
                             variant="outlined"

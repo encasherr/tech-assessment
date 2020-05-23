@@ -1,6 +1,7 @@
 import React from 'react';
 import { Typography } from '@material-ui/core';
 import LoginComponent from '../../components/lib/LoginComponent';
+import LocalLoginComponent from '../../components/lib/LocalLoginComponent';
 
 const UserForbidden = (props) => {
 
@@ -13,7 +14,8 @@ const UserForbidden = (props) => {
                 Please check with Admin if your emailId is added to user list. 
             </Typography>
             <div>
-                <LoginComponent />
+                {/* <LoginComponent /> */}
+                <LocalLoginComponent />
             </div>
         </div>
     )

@@ -16,23 +16,32 @@ const SendTestInvite = (props) => {
     let { currentTest, inviteInfo } = props;
     
     return (
-        // <Card>
-        //     <CardContent>
         <div>
                 <FormControl variant="outlined" style={styles.formControl}>
                     <TextField
                         id="outlined-name"
+                        label="Candidate Name"
+                        value={inviteInfo.name}
+                        onChange={(e) => props.onFieldChange(e.target.value, 'name')}
+                        margin="normal"
+                        variant="outlined"
+                        helperText="Full name of the candidate"
+                    />
+                </FormControl>
+                <FormControl variant="outlined" style={styles.formControl}>
+                    <TextField
+                        id="outlined-email"
                         label="To"
                         value={inviteInfo.emailTo}
                         onChange={(e) => props.onFieldChange(e.target.value, 'emailTo')}
                         margin="normal"
                         variant="outlined"
-                        helperText="e.g. john@hotmail.com (to invite multiple candidates, enter multiple email ids separated by ';')"
+                        helperText="e.g. john@hotmail.com"
                     />
                 </FormControl>
                 <FormControl variant="outlined" style={styles.formControl}>
                     <TextField
-                        id="outlined-name"
+                        id="outlined-subject"
                         label="Subject"
                         value={inviteInfo.emailSubject}
                         onChange={(e) => props.onFieldChange(e.target.value, 'emailSubject')}
@@ -41,12 +50,15 @@ const SendTestInvite = (props) => {
                     />
                 </FormControl>
                     <Typography align="center" variant="subtitle1">
-                    You have been invited to attend the {currentTest.testName} challenge. We wish you all the best!
+                    You have been invited to attend the 
+                    <Typography color="secondary"> {currentTest.test_meta.testName}
+                    </Typography> 
+                    challenge. We wish you all the best!
                     </Typography>
 
                     <div style={styles.margintop}>
                     <Typography variant="button" align="center">
-                    Duration: {currentTest.duration} mins
+                    Duration: {currentTest.test_meta.duration} mins
                     <br></br><br></br>
                     <a href="#" style={styles.margintop}>
                     <Button variant="contained" align="center" size="large" color="secondary">
@@ -81,9 +93,5 @@ const styles ={
     },
     editorControl: {
         height: '100%'
-        // width: '70%',
-        // padding: '1%',
-        // borderRadius: '5px',
-        // border: '1px solid #ccc'
     }
 }

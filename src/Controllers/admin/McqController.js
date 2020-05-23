@@ -1,13 +1,10 @@
 import db from '../../db';
 import auth from '../../utils/auth';
 import users from '../../users';
-import McqModel from '../../McqModel';
+import McqModel from '../../Models/McqModel';
+import BaseController from '../BaseController';
 
-class McqController {
-    //Model = {};
-    constructor() {
-        //this.Model = new McqModel();
-    }
+class McqController extends BaseController {
 
     GetAll = (req, resp) => {
         console.log('get all mcqs called', req.user);
@@ -22,9 +19,8 @@ class McqController {
         let model = new McqModel();
         model.GetAll(req.user)
             .then((res) => {
-                if(res) {
-                    resp.status(200).send(res);
-                }
+                console.log('mcq retrieved');
+                resp.status(200).send(res);
             })
             .catch((error) => {
                 let msg = "Error in fetch MCQ: " + error;
@@ -50,12 +46,12 @@ class McqController {
         console.log('Add Mcq called');
         console.log(req.body);
         // let mcqs = this.initializeCollection();
-        let mcqToAdd = req.body;
-        if(req.user) {
-            mcqToAdd.addedBy = req.user.emailId;
-        }
-        let model = new McqModel(); 
-        model.Add(mcqToAdd)
+        let { mcq_meta } = req.body;
+        let model = new McqModel();
+        mcq_meta.createdBy = req.user.id;
+        mcq_meta.createdOn = (new Date()).toLocaleDateString();
+
+        model.Add(mcq_meta)
             .then((res) => {
                 if(res) {
                     console.log('MCQ Added');
@@ -67,9 +63,6 @@ class McqController {
                 console.log(msg);
                 resp.status(500).send(msg);
             });
-        // mcqs.insert(mcqToAdd);
-        // db.saveDatabase();
-        // resp.send(JSON.stringify(req.body));
     }
 
     BulkMcq = (req, resp) => {
@@ -110,27 +103,13 @@ class McqController {
                 console.log(msg);
                 resp.status(500).send(msg);
             });
-        // let mcqs = this.initializeCollection();
-        // let mcqToUpdate = mcqs.find({ '$loki': req.body.$loki });
-        // if(mcqToUpdate && mcqToUpdate.length > 0) {
-        //     mcqToUpdate[0].title = req.body.title;
-        //     mcqToUpdate[0].description = req.body.description;
-        //     if(req.user) {
-        //         mcqToUpdate[0].updatedBy = req.user.emailId;
-        //     }
-        //     mcqs.update(mcqToUpdate[0]);
-        // }
-        // else {
-        //     console.log('nothing to update');
-        // }
-        // console.log(mcqToUpdate);
-        // resp.send(JSON.stringify(req.body));
+
     }
 
     Delete = (req, resp) => {
         console.log('delete mcq called');
-        
-        let model = new McqModel(); 
+        console.log(req.body);
+        let model = new McqModel();
         model.Delete(req.body)
             .then((res) => {
                 if(res) {
@@ -145,13 +124,26 @@ class McqController {
             });
     }
 
-    // initializeCollection = () => {
-    //     let mcqs = db.getCollection('mcqs');
-    //     if(!mcqs) {
-    //         mcqs = db.addCollection('mcqs');
-    //     }
-    //     return mcqs;
-    // }
+    
+    BulkDelete = (req, resp) => {
+        console.log('bulk delete mcq called');
+        console.log(req.body);
+        let model = new McqModel();
+        let { mcqIdsToDelete } = req.body; 
+        model.DeleteByIds(mcqIdsToDelete)
+            .then((res) => {
+                if(res) {
+                    console.log('Bulk MCQ Deleted');
+                    resp.status(200).send('success');
+                }  
+            })
+            .catch((error) => {
+                let msg = "Error in delete MCQ: " + error;
+                console.log(msg);
+                resp.status(500).send(msg);
+            });
+    }
+
 }
 
 export default new McqController();

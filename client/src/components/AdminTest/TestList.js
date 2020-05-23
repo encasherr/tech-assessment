@@ -9,6 +9,7 @@ import { PersonAdd } from '@material-ui/icons';
 import LoadingComponent from '../lib/LoadingComponent';
 import { Typography } from '@material-ui/core';
 import { Link } from 'react-router-dom';
+import { CanSendInvite } from '../../common/HelperFunctions';
 
 const TestList = (props) => {
     let { tests } = props;
@@ -22,9 +23,8 @@ const TestList = (props) => {
             <TableRow>
                 <CustomTableCell>Test</CustomTableCell>
                 <CustomTableCell align="left">Status</CustomTableCell>
-                <CustomTableCell align="right">Not Attempted</CustomTableCell>
-                <CustomTableCell align="right">Completed</CustomTableCell>
-                <CustomTableCell align="right">To Evaluate</CustomTableCell>
+                <CustomTableCell align="left">Created On</CustomTableCell>
+                <CustomTableCell align="left">Author</CustomTableCell>
                 <CustomTableCell align="right"></CustomTableCell>
             </TableRow>
             </TableHead>
@@ -32,18 +32,19 @@ const TestList = (props) => {
             {tests.map((test, index) => (
                 <TableRow key={index}>
                 <CustomTableCell component="th" scope="row">
-                    <Link to={ {pathname: "/testConsole", state: { testId: test.$loki } }}>
-                        {test.testName}
+                    <Link to={ {pathname: "/testConsole", state: { testId: test.id } }}>
+                        {test.test_meta.testName}
                     </Link>
                 </CustomTableCell>
-                <CustomTableCell align="left"><Typography variant="subtitle2" >{test.status.toUpperCase()}</Typography></CustomTableCell>
-                <CustomTableCell align="right">{test.pendingAttempt}</CustomTableCell>
-                <CustomTableCell align="right">{test.completed}</CustomTableCell>
-                <CustomTableCell align="right">{test.toEvaluate}</CustomTableCell>
+                <CustomTableCell align="left"><Typography variant="subtitle2" >{test.test_meta.status.toUpperCase()}</Typography></CustomTableCell>
+                <CustomTableCell align="left">{test.test_meta.createdOn}</CustomTableCell>
+                <CustomTableCell align="left">{test.user_meta.name}</CustomTableCell>
                 <CustomTableCell align="right" scope="row" component="th">
-                    <Link to={ {pathname: "/inviteConsole", state: { testId: test.$loki } }}>
+                    {CanSendInvite(test.test_meta.status) &&
+                    <Link to={ {pathname: "/inviteConsole", state: { testId: test.id } }}>
                         <PersonAdd />
                     </Link>
+                    }
                 </CustomTableCell>
                 </TableRow>
             ))}

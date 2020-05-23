@@ -7,29 +7,34 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-// import MailIcon from '@material-ui/icons/Mail';
-import { Dashboard, Book, Assessment, ViewQuilt, PermIdentity, Polymer, Airplay  } from '@material-ui/icons';
+import { Dashboard, Book, Assessment, ViewQuilt, PermIdentity, Polymer, Airplay,
+    SupervisorAccount, Work  } from '@material-ui/icons';
 import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
 import { Link } from 'react-router-dom'
 import AuthHelper from '../../AuthHelper';
+import { Avatar } from '@material-ui/core';
 
 const MenuItems = [
-    // { routeName: 'login', routeCaption: 'Login', icon: Polymer },
     { routeName: 'dashboard', routeCaption: 'Dashboard', icon: Dashboard, app: 'TeachAssesment' },
-    { routeName: 'tests', routeCaption: 'Tests', icon: Assessment, app: 'TeachAssesment' },
     { routeName: 'mcqs', routeCaption: 'Library', icon: Book, app: 'TeachAssesment' },
+    { routeName: 'tests', routeCaption: 'Tests', icon: Assessment, app: 'TeachAssesment' },
+    { routeName: 'invitations', routeCaption: 'Invitations', icon: SupervisorAccount, app: 'TeachAssesment' },
     { routeName: 'categories', routeCaption: 'Categories', icon: ViewQuilt, app: 'TeachAssesment' },
     { routeName: 'skills', routeCaption: 'Skills', icon: Polymer, app: 'TeachAssesment' },
-    // { routeName: 'candidates', routeCaption: 'Invite Candidates', icon: SupervisorAccount },
+    { routeName: 'orgs', routeCaption: 'Organizations', icon: Work, app: 'TeachAssesment' },
     { routeName: 'users', routeCaption: 'Users', icon: PermIdentity, app: 'TeachAssesment' },
-    { routeName: 'simulator', routeCaption: 'Simulator', icon: Airplay, app: 'TeachAssesment' },
 
     /* HiTech Routes */
     // { routeName: 'rmaRequests', routeCaption: 'RMA', icon: Book, app: 'Hitech' },
 ];
 
 const getIcon = (menuItem) => {
+    /*if(menuItem.routeName === 'skills') {
+        return (
+            <Avatar>S</Avatar>
+        )
+    }*/
     let icon = menuItem.icon;
     return (
         React.createElement(icon)
@@ -38,7 +43,6 @@ const getIcon = (menuItem) => {
 
 const SideDrawer = (props) => {
     const { classes, openState, theme } = props;
-    // console.log('Menuitems', MenuItems);
     return (
             <Drawer
             variant="permanent"
@@ -90,17 +94,6 @@ const SideDrawer = (props) => {
             </div>
             ))}
             </List>
-            {/* <Divider />
-            <List>
-            {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                <Link to="/">
-                    <ListItem button key={text}>
-                    <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                    <ListItemText primary={text} />
-                    </ListItem>
-                </Link>
-            ))}
-            </List> */}
             </Drawer>
                 );
 }

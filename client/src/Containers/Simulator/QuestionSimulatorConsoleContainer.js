@@ -4,11 +4,7 @@ import { Typography, Card, CardHeader, CardContent, FormControl,
          Button } from '@material-ui/core';
 import AuthHelper from '../../AuthHelper';
 import LoadingComponent from '../../components/lib/LoadingComponent';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/Inbox';
+import Question from '../../components/Simulator/Question';
 
 class QuestionSimulatorConsoleContainer extends React.Component {
     constructor(props) {
@@ -21,80 +17,58 @@ class QuestionSimulatorConsoleContainer extends React.Component {
         };
     }
 
-    handleAnswerSelect = (event, itemIndex) => {
-        let { selectedAnswers } = this.state;
-        if(selectedAnswers && selectedAnswers.indexOf(itemIndex) !== -1) {
-            let tempAnswers = [];
-            selectedAnswers.map((item, idx) => {
-                tempAnswers.push(item);
-            });
-            tempAnswers.push(itemIndex);
-            this.setState({
-                selectedAnswers: tempAnswers
-            })
-        }
-    }
-
     render = () => {
-        let { model } = this.props;
-        console.log('question simulator', model);
+        let { model, currentQuestion } = this.props;
         let { selectedAnswers } = this.state;
         let qEntity = {};
-        if(model && model.selectedMcqs && model.selectedMcqs.length > 0) {
-            qEntity = model.selectedMcqs[0];
+        let questionNumberText = '';
+        let currentQuestionIndex = 0;
+        let totalQuestions = 0;
+        if(model && currentQuestion) {
+            qEntity = currentQuestion;
+            if(model.response_meta && model.response_meta.mcqs) {
+                currentQuestionIndex = (qEntity.questionOrderIndex+1);
+                totalQuestions = model.response_meta.mcqs.length;
+                questionNumberText = 'Q.' + currentQuestionIndex + ' of ' + totalQuestions;
+            }
         }
-        else {
+        if(!qEntity) {
             return (
                 <LoadingComponent />
             )
         }
-        // let itemIndex = 0;
+        else {
         return (
-            <Card>
-                <CardHeader 
-                            title={qEntity.question}
-                            subheader={qEntity.category}>
-                </CardHeader>
-                <CardContent>
-                    <Typography variant="subtitle1">
-                        {qEntity.description}
-                    </Typography>
-                    <FormControl component="fieldset">
-                        <FormLabel component="legend">Options</FormLabel>
-                        {qEntity.choices && qEntity.choices.length > 0 &&
-                        <List component="nav" aria-label="main mailbox folders">
-                            {qEntity.choices.map((choiceItem, choiceIndex) => {
-                                return (
-                                    <ListItem
-                                    button
-                                    selected={selectedAnswers.indexOf(choiceIndex) > -1}
-                                    onClick={event => this.handleAnswerSelect(event, choiceIndex)}>
-                                    <ListItemIcon>
-                                        <InboxIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary={choiceItem.content} />
-                                    </ListItem>
-                                )
-                            })}
-                        </List>
+                <Card>
+                    <CardHeader 
+                            action={
+                                <Button color="secondary" size="large" variant="contained"
+                                        onClick={() => this.props.submitAnswers() }>
+                                    Submit
+                                </Button>
+                            }
+                            title={qEntity.mcq.mcq_meta.question}
+                            subheader={questionNumberText}>
+                    </CardHeader>
+                    <CardContent>
+                        <Question
+                            model = {qEntity}
+                            onResponseChange = {(choiceKey) => this.props.onResponseChange(choiceKey)} 
+                        />
+                    </CardContent>
+                    <CardActions>
+                        {currentQuestionIndex !== 1 &&
+                        <Button variant="contained" size="small" 
+                                onClick={() => this.props.goToPrevious()} >Previous</Button>
                         }
-                    </FormControl>
-                </CardContent>
-                <CardActions>
-                    <Button variant="contained" size="small">Previous</Button>
-                    <Button variant="contained" size="small" color="primary">Next</Button>
-                </CardActions>
-            </Card>
-        );
+                        {currentQuestionIndex !== totalQuestions &&
+                        <Button variant="contained" size="small" color="primary"
+                                onClick={() => this.props.goToNext()}>Next</Button>
+                        }
+                    </CardActions>                    
+                </Card>
+            );
+        }
     }
 }
-
-// const mapStateToProps = state => ({
-//     ...state.simulatorConsoleReducer
-// });
-// const mapDispatchToProps = dispatch => ({
-//     // LoadExamSimulator: () => dispatch(LoadExamSimulator())
-// });
-
-// export default connect(mapStateToProps, mapDispatchToProps)(QuestionSimulatorConsoleContainer);
 export default QuestionSimulatorConsoleContainer;

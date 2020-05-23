@@ -1,6 +1,7 @@
 import axios from 'axios';
 import config from '../config';
 import repository from '../repository';
+import { LogoutCurrentUser } from './UserActions';
 import { FETCH_CATEGORIES_SUCCESS, FETCH_CATEGORIES_FAIL } from './CategoryActions';
 
 export const ADD_TEST_BEGIN = 'ADD_TEST_BEGIN';
@@ -32,7 +33,7 @@ export const CurrentTestFieldChange = (val, field, model) => dispatch => {
     {
         case 'testName':
         {
-            model.testName = val;
+            model.test_meta.testName = val;
             dispatch({
                 type: CURRENT_TEST_FIELD_CHANGE,
                 payload: model
@@ -41,7 +42,7 @@ export const CurrentTestFieldChange = (val, field, model) => dispatch => {
         }
         case 'skill':
         {
-            model.skill = val;
+            model.test_meta.skill = val;
             dispatch({
                 type: CURRENT_TEST_FIELD_CHANGE,
                 payload: model
@@ -50,7 +51,7 @@ export const CurrentTestFieldChange = (val, field, model) => dispatch => {
         }
         case 'duration':
         {
-            model.duration = val;
+            model.test_meta.duration = val;
             dispatch({
                 type: CURRENT_TEST_FIELD_CHANGE,
                 payload: model
@@ -59,7 +60,7 @@ export const CurrentTestFieldChange = (val, field, model) => dispatch => {
         }
         case 'experienceYears':
         {
-            model.experienceYears = val;
+            model.test_meta.experienceYears = val;
             dispatch({
                 type: CURRENT_TEST_FIELD_CHANGE,
                 payload: model
@@ -75,84 +76,38 @@ export const CurrentTestFieldChange = (val, field, model) => dispatch => {
     });
 }
 
-export const CurrentAnswerFieldChange = (val, field, model) => dispatch => {
-    console.log('test answer field change: ' + field);
-    console.log(val);
-    switch(field)
-    {
-        case 'content':
-        {
-            model.content = val;
-            dispatch({
-                type: CURRENT_ANSWER_FIELD_CHANGE,
-                payload: model
-            });
-            break;
-        }
-        case 'isCorrect':
-        {
-            model.isCorrect = val;
-            dispatch({
-                type: CURRENT_ANSWER_FIELD_CHANGE,
-                payload: model
-            });
-            break;
-        }
-        default:
-        {
-        }
-    }
-    dispatch({
-        type: CURRENT_ANSWER_FIELD_CHANGE_END
-    });
-}
-
-export const AddAnswerChoice = (answerModel, testModel) => dispatch => {
-    if(testModel) {
-        if(!testModel.choices) {
-            testModel.choices = [];
-        }
-        testModel.choices.push(answerModel);
-    }
-    dispatch({
-        type: CHOICE_ADDED_TO_TEST,
-        payload: testModel
-    })
-}
-
 export const AddTest = (testModel, editMode) => dispatch => {
-    dispatch({
-        type: ADD_TEST_BEGIN
-    });
-    let url = config.adminApiUrl + 'test';
-    console.log('action model');
-    console.log(testModel);
-    testModel.status = 'draft';
-    repository.saveData(url, testModel)
-        .then((res) => {
-            console.log('test saved: ' + res);
-            dispatch({
-                type: ADD_TEST_SUCCESS,
-                payload: res.data
-            });
-        })
-        .catch((err) => {
-            dispatch({
-                type: ADD_TEST_FAIL,
-                payload: err
-            });
+    return new Promise((resolve, reject) => {
+        dispatch({
+            type: ADD_TEST_BEGIN
         });
-    
+        let url = config.instance.getAdminApiUrl() + 'test';
+        testModel.test_meta.status = 'draft';
+        repository.saveData(url, testModel)
+            .then((res) => {
+                dispatch({
+                    type: ADD_TEST_SUCCESS,
+                    payload: res.data
+                });
+            })
+            .then((res) => {
+                resolve(true);
+            })
+            .catch((err) => {
+                dispatch({
+                    type: ADD_TEST_FAIL,
+                    payload: err
+                });
+                reject(err);
+            });
+
+    });
 }
 
  export const FetchCategories = () => dispatch => {
-    // dispatch({
-    //     type: FETCH_CATEGORIES_BEGIN
-    // });
-    let url = config.adminApiUrl + 'getAllCategories';
+    let url = config.instance.getAdminApiUrl() + 'getAllCategories';
     repository.getData(url)
         .then((res) => {
-            console.log('categories fetched');
             dispatch({
                 type: FETCH_CATEGORIES_SUCCESS,
                 payload: res.data
@@ -167,10 +122,9 @@ export const AddTest = (testModel, editMode) => dispatch => {
 }
 
 export const FetchSkills = () => dispatch => {
-    let url = config.adminApiUrl + 'getAllSkills';
+    let url = config.instance.getAdminApiUrl() + 'getAllSkills';
     repository.getData(url)
         .then((res) => {
-            console.log('skills fetched');
             dispatch({
                 type: FETCH_SKILLS_SUCCESS,
                 payload: res.data
@@ -184,18 +138,11 @@ export const FetchSkills = () => dispatch => {
         });
 }
 
-// export const SelectMcq = (testModel) => dispatch => {
-//     dispatch({
-//         type: SELECT_TEST,
-//         payload: testModel
-//     })
-// }
-
 export const UpdateTest = (testModel) => dispatch => {
     dispatch({
         type: UPDATE_TEST_BEGIN
     });
-    let url = config.adminApiUrl + 'test';
+    let url = config.instance.getAdminApiUrl() + 'test';
     repository.updateData(url, testModel)
         .then((res) => {
             dispatch({
@@ -214,43 +161,25 @@ export const FetchTests = () => dispatch => {
     dispatch({
         type: FETCH_TEST_BEGIN
     });
-    let url = config.adminApiUrl + 'getAllTests';
+    let url = config.instance.getAdminApiUrl() + 'getAllTests';
     repository.getData(url)
         .then((res) => {
-            console.log('promise resolved');
             dispatch({
                 type: FETCH_TESTS_SUCCESS,
                 payload: res.data
             });
         })
         .catch((err) => {
-            console.log('promise rejected');
-            dispatch({
-                type: FETCH_TESTS_FAIL,
-                payload: { errorStatus: '401' }
-            });
+            if(err.data && err.data.message === 'Invalid token.') {
+                dispatch(LogoutCurrentUser());
+            }
+            else {
+                dispatch({
+                    type: FETCH_TESTS_FAIL,
+                    payload: err.statusText
+                });
+            }
         });
-    // let accessToken = localStorage.getItem("auth-token");
-    // let options = {
-    //     headers: {
-    //       "x-access-token": accessToken
-    //     }
-    // };
-    // let url = config.adminApiUrl + 'getAllTests';
-    // repository.getData(url, options)
-    //     .then((res) => {
-    //         console.log('TEST fetched');
-    //         dispatch({
-    //             type: FETCH_TESTS_SUCCESS,
-    //             payload: res.data
-    //         });
-    //     })
-    //     .catch((err) => {
-    //         dispatch({
-    //             type: FETCH_TESTS_FAIL,
-    //             payload: err
-    //         });
-    //     });
 }
 
 export const CloseSnackbar = () => dispatch => {
