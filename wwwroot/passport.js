@@ -10,50 +10,126 @@ var _users = require('./users');
 
 var _users2 = _interopRequireDefault(_users);
 
+var _UserModel = require('./Models/UserModel');
+
+var _UserModel2 = _interopRequireDefault(_UserModel);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var GoogleTokenStrategy = require('passport-google-token').Strategy;
 
+var LocalStrategy = require('passport-local').Strategy;
 
-_passport2.default.use('google-token', new GoogleTokenStrategy({
-    clientID: _ServerConfig.AuthConfig.clientId,
-    clientSecret: _ServerConfig.AuthConfig.clientSecret,
-    callbackUrl: 'http://localhost:3001/api/admin/auth/callback'
-}, function (accessToken, refreshToken, profile, done) {
-    try {
-        console.log('profile authenticated', profile);
-        var emailId = profile.emails[0].value;
-        var existingUser = _users2.default.GetUser(emailId);
-        if (existingUser !== null) {
+console.log('passport intitialized');
+/*
+passport.serializeUser(function(user, done) { //In serialize user you decide what to store in the session. Here I'm storing the user id only.
+  done(null, user.emailId);
+});
+
+passport.deserializeUser(function(emailId, done) { //Here you retrieve all the info of the user from the session storage using the user id stored in the session earlier using serialize user.
+    let existingUser = users.GetUser(emailId);
+    if(existingUser !== null) {
+        console.log('user found');
+        let userEntity = {
+            ...existingUser,
+            emailId: emailId,
+            name: existingUser.displayName ? existingUser.displayName : emailId,
+            role: existingUser.role
+        };
+        done(null, userEntity);
+    }
+    
+});
+*/
+var localOptions = {
+    usernameField: 'emailId',
+    passwordField: 'password'
+};
+_passport2.default.use(new LocalStrategy(localOptions, function (emailId, password, done) {
+    console.log('local strategy being used');
+    var userModel = new _UserModel2.default();
+    // let existingUser = users.GetUser(emailId);
+    userModel.GetUserByEmail(emailId).then(function (users) {
+        var existingUser = users[0];
+        if (existingUser) {
+            var userMeta = JSON.parse(existingUser.user_meta);
             var userEntity = {
+                id: existingUser.id,
+                emailId: emailId,
+                name: userMeta.name ? userMeta.name : emailId,
+                role: userMeta.role,
+                orgId: userMeta.orgId
+            };
+            console.log('user found', userEntity);
+            done(null, userEntity);
+        } else {
+            console.log('unknown user login being attempted');
+
+            var newUser = {
+                emailId: emailId,
+                status: 'not found',
+                name: emailId,
+                role: 'guest'
+            };
+
+            done(null, newUser);
+        }
+    });
+
+    /*if(emailId === Constants.AdminEmailId) {
+        console.log('admin user being added');
+        let userEntity = {
+            emailId: emailId,
+            name: Constants.AdminEmailId,
+            role: Constants.AdminRole
+        };
+        users.Add(userEntity);
+        return done(null, userEntity);
+    }*/
+}));
+/*
+passport.use('google-token',new GoogleTokenStrategy({
+        clientID: AuthConfig.clientId,
+        clientSecret: AuthConfig.clientSecret,
+        callbackUrl: 'http://localhost:3001/api/admin/auth/callback'
+    }, (accessToken, refreshToken, profile, done) => {
+    try{
+        console.log('profile authenticated', profile);
+        let emailId = profile.emails[0].value;
+        let existingUser = users.GetUser(emailId);
+        if(existingUser !== null) {
+            let userEntity = {
                 emailId: emailId,
                 name: profile.displayName,
                 role: existingUser.role
             };
-            _users2.default.UpdateUser(emailId, userEntity);
+            users.UpdateUser(emailId, userEntity);
             return done(null, existingUser);
         }
-        if (emailId === _ServerConfig.Constants.AdminEmailId) {
-            var _userEntity = {
+        if(emailId === Constants.AdminEmailId) {
+            let userEntity = {
                 emailId: emailId,
                 name: profile.displayName,
-                role: _ServerConfig.Constants.AdminRole
+                role: Constants.AdminRole
             };
-            _users2.default.Add(_userEntity);
-            return done(null, _userEntity);
+            users.Add(userEntity);
+            return done(null, userEntity);
         }
-        var newUser = {
+        const newUser = {
             emailId: emailId,
             googleId: profile.id,
             status: 'not found',
             name: profile.displayName,
             role: 'guest'
-            // users.Add(newUser);
-        };done(null, newUser);
-    } catch (err) {
+        }
+        // users.Add(newUser);
+        done(null, newUser);
+    }
+    catch(err) {
         console.log('error occured in profile authentication callback');
         console.log(err);
         done(err, false, err.message);
     }
 }));
+*/
 //# sourceMappingURL=passport.js.map

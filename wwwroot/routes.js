@@ -24,16 +24,24 @@ var _auth = require('./utils/auth');
 
 var _auth2 = _interopRequireDefault(_auth);
 
+var _OrgController = require('./Controllers/admin/OrgController');
+
+var _OrgController2 = _interopRequireDefault(_OrgController);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var api = _express2.default.Router();
 
+api.get('/loadConfig', _admin.UserController.LoadConfig);
+
 /* Admin Routes */
 /* mcq endpoints */
-api.get('/admin/getAllMcqs', _auth2.default, _admin.McqController.GetAll);
+api.get('/admin/getAllMcqs', _admin.McqController.GetAll);
+// api.get('/admin/getAllMcqs', auth, McqController.GetAll);
 api.post('/admin/mcq', _auth2.default, _admin.McqController.Add);
 api.put('/admin/mcq', _auth2.default, _admin.McqController.Update);
 api.delete('/admin/mcq', _auth2.default, _admin.McqController.Delete);
+api.delete('/admin/bulkmcq', _admin.McqController.BulkDelete);
 api.post('/admin/bulkMcq', _auth2.default, _admin.McqController.BulkMcq);
 
 /* category endpoints */
@@ -47,14 +55,21 @@ api.get('/admin/getAllSkills', _auth2.default, _admin.SkillController.GetAll);
 api.post('/admin/skill', _auth2.default, _admin.SkillController.Add);
 api.delete('/admin/skill', _auth2.default, _admin.SkillController.Delete);
 
+/* org endpoints */
+api.get('/admin/getAllOrgs', _auth2.default, _OrgController2.default.GetAll);
+api.post('/admin/org', _auth2.default, _OrgController2.default.Add);
+api.put('/admin/org', _auth2.default, _OrgController2.default.Update);
+api.delete('/admin/org', _auth2.default, _OrgController2.default.Delete);
+
 /* hitech endpoints */
 api.get('/hitech/rmaRequests', _hitech.RmaRequestController.GetAll);
 api.post('/hitech/rmaRequest', _hitech.RmaRequestController.Add);
-// api.put('/admin/candidate', auth, CandidateController.Update);
 api.get('/hitech/deleteRmaRequest', _hitech.RmaRequestController.Delete);
 
 /* Admin Test endpoints */
 api.get('/admin/getAllTests', _auth2.default, _admin.AdminTestController.GetAll);
+api.get('/admin/getMcqsByTestId', _auth2.default, _admin.AdminTestController.GetMcqsByTestId);
+api.get('/admin/getCandidatesByTestId', _auth2.default, _admin.AdminTestController.GetCandidatesByTestId);
 api.get('/admin/getTest', _auth2.default, _admin.AdminTestController.GetTest);
 api.post('/admin/test', _auth2.default, _admin.AdminTestController.Add);
 api.put('/admin/test', _auth2.default, _admin.AdminTestController.Update);
@@ -68,15 +83,36 @@ api.delete('/admin/user', _auth2.default, _admin.UserController.Delete);
 
 /* Candidate Routes */
 /* Test Invite endpoints */
+api.get('/candidate/getAllInvites', _auth2.default, _candidate.TestInviteController.GetAll);
+api.get('/candidate/invitation', _candidate.TestInviteController.GetInvitation);
 api.post('/candidate/sendInvite', _auth2.default, _candidate.TestInviteController.SendInvite);
 api.post('/candidate/startTest', _auth2.default, _candidate.TestInviteController.StartTest);
+api.post('/candidate/submitAnswers', _auth2.default, _candidate.TestInviteController.SubmitAnswers);
+api.post('/candidate/evaluateAnswers', _candidate.TestInviteController.EvaluateAnswers);
 
-api.get('/admin/auth/google', _passport2.default.authenticate('google-token', { session: false,
-    scope: ['https://www.googleapis.com/auth/plus.login'] }), function (req, res, next) {
+api.get('/admin/auth/google', _passport2.default.authenticate('google-token', { session: false, scope: ['https://www.googleapis.com/auth/plus.login'] }), function (req, res, next) {
     console.log('res next');
     req.auth = req.user;
     if (req.user.status === 'not found') {
         return res.status(403).send('User Not Found');
+    }
+    next();
+}, _token.generateToken, _token.sendToken);
+
+api.post('/admin/auth/local', _passport2.default.authenticate('local', { session: false }), function (req, res, next) {
+    console.log('received local call');
+    req.auth = req.user;
+    if (req.user.status === 'not found') {
+        return res.status(401).send('User Not Found');
+    }
+    next();
+}, _token.generateToken, _token.sendToken);
+
+api.post('/candidate/auth/local', _candidate.TestInviteController.AuthenticateCandidate, function (req, res, next) {
+    console.log('returned from authenticate candidate', req.user);
+    req.auth = req.user;
+    if (req.user.status === 'not found') {
+        return res.status(401).send('Candidate Not Registered');
     }
     next();
 }, _token.generateToken, _token.sendToken);

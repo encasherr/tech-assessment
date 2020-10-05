@@ -25,8 +25,7 @@ var EmailHelper = function EmailHelper() {
 
     _classCallCheck(this, EmailHelper);
 
-    this.SendEmail = function (emailInfo) {
-        console.log('email helper send called');
+    this.CreateTransporter = function () {
         var transporter = _nodemailer2.default.createTransport({
             host: _ServerConfig.EmailConfig.emailSmtpHost,
             port: _ServerConfig.EmailConfig.emailSmtpPort,
@@ -37,7 +36,44 @@ var EmailHelper = function EmailHelper() {
                 pass: _ServerConfig.EmailConfig.emailAuthPassword
             }
         });
+        return transporter;
+    };
 
+    this.SendEmailWithAttachment = function (emailInfo) {
+        var transporter = _this.CreateTransporter();
+        var mailOptions = {
+            from: _ServerConfig.EmailConfig.inviteFromEmailId,
+            to: emailInfo.to,
+            subject: emailInfo.subject,
+            text: emailInfo.text,
+            attachments: [{
+                path: emailInfo.attachmentPath
+            }]
+        };
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                console.log('error occured in sending email');
+                console.log(error);
+                return;
+            }
+            console.log('email sent: ' + info.messageId + ', resp: ' + info.response);
+        });
+    };
+
+    this.SendEmail = function (emailInfo) {
+        console.log('email helper send called');
+        // let transporter = nodemailer.createTransport({
+        //     host: EmailConfig.emailSmtpHost,
+        //     port: EmailConfig.emailSmtpPort,
+        //     secure: false,
+        //     requireTLS: true,
+        //     auth: {
+        //         user: EmailConfig.emailAuthUser,
+        //         pass: EmailConfig.emailAuthPassword
+        //     }
+        // });
+
+        var transporter = _this.CreateTransporter();
         var mailOptions = {
             from: _ServerConfig.EmailConfig.inviteFromEmailId,
             to: emailInfo.to,
@@ -61,6 +97,7 @@ var EmailHelper = function EmailHelper() {
         if (emailInfo.notificationType === 'test') {
             html = html.replace('$$test_name$$', emailInfo.testName + ' Challenge');
             html = html.replace('$$test_link$$', emailInfo.testLink);
+            html = html.replace('$$faq_link$$', emailInfo.faqLink);
         }
         if (emailInfo.notificationType === 'rma') {
             if (emailInfo.rmaRequest.customerDetails) {

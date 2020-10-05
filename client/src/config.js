@@ -67,5 +67,5 @@ export default class config {
     
     OrderedAlphabets = ['A','B','C','D','E','F','G','H','I','J'];
 
-    validHeaders;
+    validHeaders = validHeaders;
 }

@@ -16,9 +16,9 @@ import { Add, Search } from '@material-ui/icons';
 import LoadingComponent from '../lib/LoadingComponent';
 import User401 from '../../Containers/User/User401';
 
-import BaseComponent from '../lib/BaseComponent';
+//import BaseComponent from '../lib/BaseComponent';
 
-class McqList extends BaseComponent {
+class McqList extends Component {
 
     constructor (props) {
        super(props);

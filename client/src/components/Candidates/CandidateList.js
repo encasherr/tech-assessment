@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import {    FetchCandidates, 
             CloseSnackbar,
             OpenSnackbar, 
-            BeginSearch, SearchCandidate } from '../../actions/CandidateActions';
+            BeginSearch//, SearchCandidate 
+        } from '../../actions/CandidateActions';
 import { Link } from 'react-router-dom';
 import { FormControl, Grid, Card, CardHeader, Button, CardContent, List, ListItem } from '@material-ui/core';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
@@ -88,8 +89,8 @@ const mapDispatchToProps = dispatch => ({
     FetchCandidates: () => dispatch(FetchCandidates()),
     CloseSnackbar: () => dispatch(CloseSnackbar()),
     OpenSnackbar: () => dispatch(OpenSnackbar()),
-    BeginSearch: () => dispatch(BeginSearch()),
-    SearchCandidate: (searchTerm, candidateList) => dispatch(SearchCandidate(searchTerm, candidateList)),
+    BeginSearch: () => dispatch(BeginSearch())
+    //SearchCandidate: (searchTerm, candidateList) => dispatch(SearchCandidate(searchTerm, candidateList)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(CandidateList);
 const styles = {

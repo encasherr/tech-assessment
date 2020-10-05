@@ -12,11 +12,16 @@ var _path = require('path');
 
 var _path2 = _interopRequireDefault(_path);
 
+var _ServerConfig = require('../commons/ServerConfig');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var dbFileName = 'dev.json';
 var dbPath = _path2.default.join(__dirname, '..', '..', 'data', dbFileName);
 dbPath = _path2.default.join(__dirname, '..', 'data', dbFileName);
+dbPath = _ServerConfig.DbConfig.filePath;
+// dbPath = 'https://techassessment-bucket.s3.ap-south-1.amazonaws.com/dev_11.json';
+// dbPath = 'https://drive.google.com/file/d/1f0QqEi1aLlJ0BQBcGuUphKecQeYn-2p-/view?usp=sharing';
 console.log('dbpath: ' + dbPath);
 // const db = new loki(dbPath);
 

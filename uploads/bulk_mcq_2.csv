@@ -1,0 +1,64 @@
+Category,Skill,Title,Description,Min,Max,Score,Answer,A,B,C,D
+Programming,PLSQL,ROWTYPE and TYPE RECORD,Differentiate between % ROWTYPE and TYPE RECORD.,1,10,10,A,"% ROWTYPE is used when a query returns an entire row of a table or view.
+TYPE RECORD, on the other hand, is used when a query returns column of different tables or views.","% ROWTYPE is used when a query does not return an entire row of a table or view.
+TYPE RECORD, on the other hand, is used when a query does not return column of different tables or views.",,
+Programming,PLSQL,Cursor,Explain uses of cursor.,1,10,10,A,Cursor is a named private area in SQL from which information can be accessed. They are required to process each row individually for queries which return multiple rows.,Cursor is a named public area in SQL from which information can be accessed. They are required to process each row individually for queries which return multiple rows.,,
+Programming,PLSQL,Functions and Procedures,Show how functions and procedures are called in a PL SQL block.,1,10,10,A,"Function is called as a part of an expression.
+total:=calculate_sal('b644')
+Procedure is called as a statement in PL/SQL.
+calculate_bonus('b644');","Procedure is called as a part of an expression.
+total:=calculate_sal('b644')
+Function is called as a statement in PL/SQL.
+calculate_bonus('b644');",,
+Programming,PLSQL,Comparisons,What are the rules to be applied to NULLs whilst doing comparisons?,1,10,10,B,"1) NULL is always TRUE or FALSE
+2) NULL can be equal or unequal to other values
+3) If a value in an expression is NULL, then the expression itself does not evaluates to NULL except for concatenation operator (||)","1) NULL is never TRUE or FALSE
+2) NULL cannot be equal or unequal to other values
+3) If a value in an expression is NULL, then the expression itself evaluates to NULL except for concatenation operator (||)",,
+Programming,PLSQL,Differentiate Errors,Differentiate between Syntax and runtime errors.,1,10,10,A,"A syntax error can be easily detected by a PL/SQL compiler. For eg, incorrect spelling.
+A runtime error is handled with the help of exception-handling section in an PL/SQL block. For eg, SELECT INTO statement, which does not return any rows.","A syntax error cannot be easily detected by a PL/SQL compiler. For eg, incorrect spelling.
+A runtime error is not handled with the help of exception-handling section in an PL/SQL block. For eg, SELECT INTO statement, which does not return any rows.",,
+Programming,PLSQL,"Commit, Rollback, Savepoint","Explain Commit, Rollback and Savepoint.",1,10,10,A,"For a COMMIT statement, the following is true:
+•	Other users can see the data changes made by the transaction.
+•	The locks acquired by the transaction are released.
+•	The work done by the transaction becomes permanent.
+A ROLLBACK statement gets issued when the transaction ends, and the following is true.
+•	The work done in a transition is undone as if it was never issued.
+•	All locks acquired by transaction are released.
+It undoes all the work done by the user in a transaction. With SAVEPOINT, only part of transaction can be undone.","For a COMMIT statement, the following is not true:
+•	Other users can see the data changes made by the transaction.
+•	The locks acquired by the transaction are released.
+•	The work done by the transaction becomes permanent.
+A ROLLBACK statement gets issued when the transaction ends, and the following is  not true.
+•	The work done in a transition is undone as if it was never issued.
+•	All locks acquired by transaction are released.
+It undoes all the work done by the user in a transaction. With SAVEPOINT, entire part of transaction can be undone.",,
+Programming,PLSQL,Implicit & Explicit Cursors,Define Implicit and Explicit Cursors.,1,10,10,B,"A cursor is not implicit by default. The user cannot control or process the information in this cursor.
+If a query returns multiple rows of data, the program does not defines an explicit cursor. This does not allows the application to process each row sequentially as the cursor returns it.","A cursor is implicit by default. The user cannot control or process the information in this cursor.
+If a query returns multiple rows of data, the program defines an explicit cursor. This allows the application to process each row sequentially as the cursor returns it.",,
+Programming,PLSQL,Operators,What operators deal with NULL?,1,10,10,A,"NVL converts NULL to another specified value.
+var:=NVL(var2,'Hi');
+IS NULL and IS NOT NULL can be used to check specifically to see whether the value of a variable is NULL or not.","NVL does not convert NULL to another specified value.
+var:=NVL(var2,'Hi');
+IS NULL and IS NOT NULL cannot be used to check specifically to see whether the value of a variable is NULL or not.",,
+Programming,PLSQL,Cursor Attributes,Show the cursor attributes of PL/SQL.,1,10,10,B,"%IDOPEN : Checks if the cursor is open or not
+%ROCOUNT : The number of rows that are updated, deleted or fetched.
+%FIUND : Checks if the cursor has fetched any row. It is true if rows are fetched
+%NOT FOUN : Checks if the cursor has fetched any row. It is True if rows are not fetched.","%ISOPEN : Checks if the cursor is open or not
+%ROWCOUNT : The number of rows that are updated, deleted or fetched.
+%FOUND : Checks if the cursor has fetched any row. It is true if rows are fetched
+%NOT FOUND : Checks if the cursor has fetched any row. It is True if rows are not fetched.",,
+Programming,PLSQL,Intersect,What is an Intersect?,1,10,10,A,Intersect is the product of two tables and it lists only matching rows.,Intersect is not a product of two tables and it lists all rows.,,
+Programming,PLSQL,Sequences,What are sequences?,1,10,10,A,Sequences are used to generate sequence numbers without an overhead of locking. Its drawback is that the sequence number is lost if the transaction is rolled back.,Sequences are not used to generate sequence numbers without an overhead of locking. Its advantage is that the sequence number is lost if the transaction is rolled back.,,
+Programming,PLSQL,ROWID,How does ROWID help in running a query faster?,1,10,10,B,"ROWID is not the logical address of a row, it is  a physical column. It composes of data  number, file  and row number in the data block. Thus, I/O time gets maximized retrieving the row, and results in a faster query.","ROWID is the logical address of a row, it is not a physical column. It composes of data block number, file number and row number in the data block. Thus, I/O time gets minimized retrieving the row, and results in a faster query.",,
+Programming,PLSQL,Fetch Cursor,What does fetching a cursor do?,1,10,10,B,Fetching a cursor writes Result Set row by row.,Fetching a cursor reads Result Set row by row.,,
+Programming,PLSQL,Close Cursor,What does closing a cursor do?,1,10,10,B,Closing a cursor jams the private SQL area as well as allocates memory,Closing a cursor clears the private SQL area as well as de-allocates memory,,
+Programming,PLSQL,Mutating & Constraining Tables,What is the mutating table and constraining table?,1,10,10,A,"A table that is currently being modified by a DML statement like defining triggers in a table is known as a Mutating table.
+A table that might need to be read from for a referential integrity constraint is known as constraining table","A table that is not currently being modified by a DML statement like defining triggers in a table is known as a Mutating table.
+A table that might not need to be read from for a referential integrity constraint is known as constraining table",,
+Programming,PLSQL,Truncate & Delete,What is difference between TRUNCATE & DELETE?,1,10,10,A,"Truncate is a DDL command
+Delete is a DML command","Truncate is a DML command
+Delete is a DDL command",,
+Programming,PLSQL,Procedure  & Function,What is Difference between procedure and function?,1,10,10,A,"Procedure allow the DML statements without any restrictions
+Function does not allow the DML statements ","Procedure does not allow the DML statements without any restrictions
+Function  allow the DML statements ",,

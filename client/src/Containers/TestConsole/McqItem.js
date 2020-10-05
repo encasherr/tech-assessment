@@ -44,6 +44,8 @@ class McqItem extends Component {
         let { mcqItem, isSelectable, isEditable, 
                 isDeletable, isChecked } = this.props;
         let mcq = mcqItem ? mcqItem.mcq_meta : null; 
+        // console.log(`mcq: ${JSON.parse(mcqItem.mcq_meta)}`);
+
         return (
             <div>
             
@@ -89,10 +91,10 @@ class McqItem extends Component {
                     onClose={this.handleClose}
                 >
                     <DialogTitle onClose={this.handleClose}>
-                        <Typography variant="display2">
+                        <Typography variant="caption">
                             {mcq.question}
                         </Typography>
-                        <Typography variant="display1">
+                        <Typography variant="caption">
                             {`${mcq.category} - ${mcq.skill}`}
                         </Typography>
                         <IconButton onClick={this.handleClose} style={{right: '4%', top: '1%', position:'absolute'}}>

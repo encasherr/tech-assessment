@@ -60,6 +60,10 @@ app.use(function (req, res, next) {
 });
 
 app.use('/api', _routes2.default);
+app.use('/testLanding', function (req, resp) {
+    var fileName = _path2.default.resolve(__dirname + '/index.html');
+    resp.sendFile(fileName);
+});
 /* This is for preventing routes and sending forbidden message for unknown urls */
 // app.get('/home', function (req, res) {
 //     let fileName = path.resolve(__dirname + '/index.html');
@@ -67,12 +71,13 @@ app.use('/api', _routes2.default);
 //     res.sendFile(fileName);
 // });
 /* This is for allowing refresh when using client side routing and redirecting accordingly */
+/*
 app.get('/*', function (req, res) {
-    var fileName = _path2.default.resolve(__dirname + '/index.html');
+    let fileName = path.resolve(__dirname + '/index.html');
     console.log(fileName);
     res.sendFile(fileName);
 });
-
+*/
 app.listen(port_number, function () {
     console.log('Tech Assess API runnning on ' + port_number);
 });

@@ -18,10 +18,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var createToken = function createToken(auth) {
     console.log('creating token');
     return _jsonwebtoken2.default.sign({
-        googleId: auth.googleId,
+        googleId: auth.googleId ? auth.googleId : auth.emailId,
+        id: auth.id,
         emailId: auth.emailId,
         role: auth.role,
-        name: auth.name
+        name: auth.name,
+        orgId: auth.orgId
     }, _ServerConfig.AuthConfig.myPrivateKey,
     // }, 'my-secret',
     {

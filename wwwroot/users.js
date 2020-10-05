@@ -29,7 +29,6 @@ var Users = function Users() {
         console.log(userObj);
         var users = _this.initializeCollection();
         users.insert(userObj);
-        _db2.default.saveDatabase();
         console.log('user added', userObj.emailId);
     };
 
@@ -55,7 +54,10 @@ var Users = function Users() {
 
             var entityToUpdate = _this.replaceEntity(userToUpdate, newEntity);
             users.update(entityToUpdate);
-            _db2.default.saveDatabase();
+            // db.saveDatabase(() => {
+            //     this.EmailSnapshot('CategoryAdd');
+            // });
+
             console.log('user updated');
             return entityToUpdate;
         } else {
@@ -71,7 +73,10 @@ var Users = function Users() {
         });
         if (userToDelete && userToDelete.length > 0) {
             users.remove(userToDelete[0]);
-            _db2.default.saveDatabase();
+            _db2.default.saveDatabase(function () {
+                _this.EmailSnapshot('CategoryAdd');
+            });
+
             console.log('user deleted', emailId);
         }
     };
@@ -80,7 +85,8 @@ var Users = function Users() {
         recruiter: 'recruiter',
         admin: 'admin',
         candidate: 'candidate',
-        guest: 'guest'
+        guest: 'guest',
+        recruiteradmin: 'recruiteradmin'
     };
 
     this.replaceEntity = function (oldEntity, newEntity) {

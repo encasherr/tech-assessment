@@ -34,7 +34,7 @@ class BulkUpload extends React.Component {
         }
         if (!this.validCount(matrixArray)) {
             this.setState({
-                message: `Invalid number of records. Min: ${config.minBulkCount}, Max: ${config.maxBulkCount}`
+                message: `Invalid number of records. Min: ${config.instance.minBulkCount}, Max: ${config.instance.maxBulkCount}`
             });
             return;
         }
@@ -49,7 +49,7 @@ class BulkUpload extends React.Component {
                 };
                 let correctAnswer = "";
                 itemArray.map((colValue, colIndex) => {
-                    let filteredHeaders = config.validHeaders.filter((item) => {
+                    let filteredHeaders = config.instance.validHeaders.filter((item) => {
                         return item.name === headers[colIndex];
                     });
 
@@ -99,7 +99,7 @@ class BulkUpload extends React.Component {
         
         let isValid = true;
         headers.map((item, idx) => {
-            let filteredHeaders = config.validHeaders.filter((vh) => {
+            let filteredHeaders = config.instance.validHeaders.filter((vh) => {
                 return vh.name === item;
             });
             if(filteredHeaders && filteredHeaders.length > 0) {
@@ -112,7 +112,7 @@ class BulkUpload extends React.Component {
     
     validCount = (matrix) => {
         let matrixLength = matrix.length;
-        if(matrixLength < config.minBulkCount || matrixLength > config.maxBulkCount) {
+        if(matrixLength < config.instance.minBulkCount || matrixLength > config.instance.maxBulkCount) {
             return false;
         }
         return true;
