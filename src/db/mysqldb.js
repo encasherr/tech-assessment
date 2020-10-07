@@ -139,9 +139,14 @@ const SerializeToJson = (data, entityName) => {
     console.log('data count', data.length);
     if(data && data.length > 0) {
         data.map((item, index) => {
+            let item_value = item[field_name];
+            item_value = item_value.replace(/\n/g, "\\n");
+            item_value = item_value.replace(/\r/g, "\\r");
+            item_value = item_value.replace(/\t/g, "\\t");
             let output = {};
             output.id = item.id;
-            output[field_name] = JSON.parse(item[field_name]);
+            output[field_name] = JSON.parse(item_value);
+            // output[field_name] = JSON.parse(item[field_name]);
             outputArray.push(output);
         })
     }

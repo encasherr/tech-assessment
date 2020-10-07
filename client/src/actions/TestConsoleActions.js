@@ -2,6 +2,7 @@ import config from '../config';
 import repository from '../repository';
 
 export const ADD_QUESTION_TO_TEST = 'ADD_QUESTION_TO_TEST';
+export const REMOVE_QUESTION_FROM_TEST = 'REMOVE_QUESTION_FROM_TEST';
 export const PUBLISH_TEST_SUCCESS = 'PUBLISH_TEST_SUCCESS';
 export const PUBLISH_TEST_FAIL = 'PUBLISH_TEST_FAIL';
 export const FETCH_TEST_SUCCESS = 'FETCH_TEST_SUCCESS';
@@ -39,45 +40,45 @@ export const FetchTest = (testId) => dispatch => {
 export const LoadTestMcqs = (testId) => dispatch => {
     let url = config.instance.getAdminApiUrl() + `getMcqsByTestId?testId=${testId}`;
     repository.getData(url)
-            .then((res) => {
-                dispatch({
-                    type: FETCH_TEST_MCQS_SUCCESS,
-                    payload: res.data
-                });
-            }).catch((err) => {
-                dispatch({
-                    type: FETCH_TEST_MCQS_FAIL,
-                    payload: err
-                })  
+        .then((res) => {
+            dispatch({
+                type: FETCH_TEST_MCQS_SUCCESS,
+                payload: res.data
             });
+        }).catch((err) => {
+            dispatch({
+                type: FETCH_TEST_MCQS_FAIL,
+                payload: err
+            })
+        });
 }
 
 export const LoadTestCandidates = (testId) => dispatch => {
     let url = config.instance.getAdminApiUrl() + `getCandidatesByTestId?testId=${testId}`;
     repository.getData(url)
-            .then((res) => {
-                dispatch({
-                    type: FETCH_TEST_CANDIDATES_SUCCESS,
-                    payload: res.data
-                });
-            }).catch((err) => {
-                dispatch({
-                    type: FETCH_TEST_CANDIDATES_FAIL,
-                    payload: err
-                })  
+        .then((res) => {
+            dispatch({
+                type: FETCH_TEST_CANDIDATES_SUCCESS,
+                payload: res.data
             });
+        }).catch((err) => {
+            dispatch({
+                type: FETCH_TEST_CANDIDATES_FAIL,
+                payload: err
+            })
+        });
 }
 
 export const AddMcqToTest = (mcqItem, testModel) => dispatch => {
     return new Promise((resolve, reject) => {
         let url = config.instance.getAdminApiUrl() + 'test';
-        
-        if(!testModel.test_meta.selectedMcqs){
+
+        if (!testModel.test_meta.selectedMcqs) {
             testModel.test_meta.selectedMcqs = [];
         }
         let mcqList = testModel.test_meta.selectedMcqs;
         let filterIndex = testModel.test_meta.selectedMcqs.findIndex(item => item.id === mcqItem.id);
-        if(filterIndex !== undefined && filterIndex > -1) {
+        if (filterIndex !== undefined && filterIndex > -1) {
             return;
         }
         else {
@@ -101,35 +102,43 @@ export const AddMcqToTest = (mcqItem, testModel) => dispatch => {
 }
 
 export const RemoveMcqFromTest = (mcqItem, testModel) => dispatch => {
-    let url = config.instance.getAdminApiUrl() + 'test';
-    
-    if(!testModel.test_meta.selectedMcqs){
-        testModel.test_meta.selectedMcqs = [];
-    }
-    let mcqList = testModel.test_meta.selectedMcqs;
-    let filterIndex = testModel.test_meta.selectedMcqs.findIndex(item => {
-        return item.mcqId === mcqItem.id
-    });
-    if(filterIndex !== undefined && filterIndex > -1) {
-        testModel.test_meta.selectedMcqs.splice(filterIndex, 1);
-    }
-    else {
-        return;
-    }
-    repository.updateData(url, testModel, history)
-        .then((res) => {
-            dispatch({
-                type: ADD_QUESTION_TO_TEST,
-                payload: res.data
-            });
-        })
-        .catch((err) => {
+    return new Promise((resolve, reject) => {
+        let url = config.instance.getAdminApiUrl() + 'test';
 
-        })
+        if (!testModel.test_meta.selectedMcqs) {
+            testModel.test_meta.selectedMcqs = [];
+        }
+        let mcqList = testModel.test_meta.selectedMcqs;
+        let filterIndex = testModel.test_meta.selectedMcqs.findIndex(item => {
+            return item.mcqId === mcqItem.id
+        });
+        if (filterIndex !== undefined && filterIndex > -1) {
+            console.log(`removed item: ${mcqItem.id}`);
+            testModel.test_meta.selectedMcqs.splice(filterIndex, 1);
+        }
+        else {
+            console.log(`could not find item to remove: ${mcqItem.id}`);
+            return;
+        }
+        repository.updateData(url, testModel, history)
+            .then((res) => {
+                dispatch({
+                    type: REMOVE_QUESTION_FROM_TEST,
+                    payload: res.data
+                });
+            })
+            .then((res) => {
+                resolve(true);
+            })
+            .catch((err) => {
+                console.log('error in removing mcq from test', err);
+                reject(err);
+            });
+    });
 }
 
 export const PublishTest = (testModel) => dispatch => {
-    
+
     let url = config.instance.getAdminApiUrl() + 'test';
     testModel.test_meta.status = 'published';
     repository.updateData(url, testModel, history)
@@ -145,7 +154,7 @@ export const PublishTest = (testModel) => dispatch => {
                 payload: err
             });
         });
-    
+
 }
 
 export const CloseSnackbar = () => dispatch => {

@@ -12,6 +12,14 @@ import LoadingComponent from '../../components/lib/LoadingComponent';
 import { KeyboardBackspace } from '@material-ui/icons';
 
 class TestConsoleContainer extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            snackOpen: false,
+            snackMessage: ''
+        };
+    }
     
     componentDidMount = () => {
         this.props.SetHistory(this.props.history);
@@ -41,11 +49,23 @@ class TestConsoleContainer extends React.Component {
         this.props.AddMcqToTest(mcqItem, this.props.current_test)
                 .then((res) => {
                     this.props.LoadTestMcqs(current_test.id);  
+                    this.setState({
+                        snackOpen: true,
+                        snackMessage: 'MCQ added to test'
+                    });
                 });
     }
     
     onRemoveMcqFromTest = (mcqItem) => {
-        this.props.RemoveMcqFromTest(mcqItem, this.props.current_test);
+        let { current_test } = this.props;
+        this.props.RemoveMcqFromTest(mcqItem, this.props.current_test)
+                    .then((res) => {
+                        this.props.LoadTestMcqs(current_test.id);  
+                        this.setState({
+                            snackOpen: true,
+                            snackMessage: 'MCQ removed from test'
+                        });
+                    })
     }
 
     onPublish = () => {
@@ -91,8 +111,8 @@ class TestConsoleContainer extends React.Component {
                 </Card>
                 }
                 <SnackbarComponent 
-                    openSnack={this.props.snack_open} handleClose={() => this.props.CloseSnackbar()} 
-                    snackMessage={"Data Saved Successfully!"} 
+                    openSnack={this.state.snackOpen} handleClose={() => this.setState({snackOpen: false})}
+                    snackMessage={this.state.snackMessage} 
                     /> 
                 </Grid>
             </Grid>

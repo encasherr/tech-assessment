@@ -6,7 +6,7 @@ import {
     FETCH_TEST_MCQS_SUCCESS,
     FETCH_TEST_CANDIDATES_SUCCESS
 } from "../actions/TestConsoleActions";
-import { ADD_QUESTION_TO_TEST } from "../actions/TestConsoleActions";
+import { ADD_QUESTION_TO_TEST, REMOVE_QUESTION_FROM_TEST } from "../actions/TestConsoleActions";
 
 export default (state = {}, action) => {
 switch(action.type) {
@@ -39,7 +39,18 @@ switch(action.type) {
        return {
             ...state,
             mcqAdded: !state.mcqAdded,
-            current_test: action.payload
+            current_test: action.payload,
+            operation: 'MCQ Added'
+        }
+   }
+   case REMOVE_QUESTION_FROM_TEST:
+   {
+       let mcqToAdd = action.payload;
+       return {
+            ...state,
+            mcqAdded: !state.mcqAdded,
+            current_test: action.payload,
+            operation: 'MCQ Removed'
         }
    }
    case OPEN_SNACKBAR:

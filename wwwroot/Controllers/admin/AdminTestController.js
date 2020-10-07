@@ -93,6 +93,8 @@ var AdminTestController = function (_BaseController) {
                     mcqModel.GetMcqsByIds(selectedMcqIds).then(function (mcqs) {
                         resp.status(200).send(mcqs);
                     }).catch(function (err) {
+                        console.log('error in get mcqs by test id');
+                        console.log(err);
                         resp.status(500).send(err);
                     });
                 }

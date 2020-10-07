@@ -3,10 +3,8 @@ import Snackbar from '@material-ui/core/Snackbar';
 import SnackbarContent from '@material-ui/core/SnackbarContent';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
-import Button from '@material-ui/core/Button';
-import { Typography } from '@material-ui/core';
 
-const SnackbarComponent = (props) => {
+const ToastMessageComponent = (props) => {
     let { openSnack } = props;
     return (
         <Snackbar
@@ -15,7 +13,7 @@ const SnackbarComponent = (props) => {
             horizontal: 'left',
           }}
           open={openSnack}
-          autoHideDuration={4000}
+          autoHideDuration={6000}
           onClose={props.handleClose}
           ContentProps={{
             'aria-describedby': 'message-id',
@@ -54,7 +52,7 @@ const SnackbarComponent = (props) => {
         </Snackbar>
     );
 }
-export default SnackbarComponent;
+export default ToastMessageComponent;
 const styles = {
     root: {
         backgroundColor: '#394'
