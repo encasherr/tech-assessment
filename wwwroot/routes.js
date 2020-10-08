@@ -36,8 +36,8 @@ api.get('/loadConfig', _admin.UserController.LoadConfig);
 
 /* Admin Routes */
 /* mcq endpoints */
-api.get('/admin/getAllMcqs', _admin.McqController.GetAll);
-// api.get('/admin/getAllMcqs', auth, McqController.GetAll);
+// api.get('/admin/getAllMcqs', McqController.GetAll);
+api.get('/admin/getAllMcqs', _auth2.default, _admin.McqController.GetAll);
 api.post('/admin/mcq', _auth2.default, _admin.McqController.Add);
 api.put('/admin/mcq', _auth2.default, _admin.McqController.Update);
 api.delete('/admin/mcq', _auth2.default, _admin.McqController.Delete);

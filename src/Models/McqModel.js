@@ -3,8 +3,9 @@ import db from '../db/mysqldb';
 import users from '../users';
 
 import { GetQueryConfig, 
-    HandlePromise,    
-    VIEW_MCQS } from '../commons/RoleDefinitions';
+    HandlePromise } from '../commons/RoleDefinitions';
+import { VIEW_MCQS } from '../commons/RoleBasedQueries/McqQueries';
+
 
 class McqModel {
     entityName = 'mcq';

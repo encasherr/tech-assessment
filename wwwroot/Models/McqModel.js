@@ -14,6 +14,8 @@ var _users2 = _interopRequireDefault(_users);
 
 var _RoleDefinitions = require('../commons/RoleDefinitions');
 
+var _McqQueries = require('../commons/RoleBasedQueries/McqQueries');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } } // import db from './db';
@@ -53,7 +55,7 @@ var McqModel = function McqModel() {
     };
 
     this.GetAll = function (userEntity) {
-        var queryConfig = (0, _RoleDefinitions.GetQueryConfig)(_RoleDefinitions.VIEW_MCQS);
+        var queryConfig = (0, _RoleDefinitions.GetQueryConfig)(_McqQueries.VIEW_MCQS);
         return (0, _RoleDefinitions.HandlePromise)(_mysqldb2.default, queryConfig, userEntity);
 
         /*return new Promise((resolve, reject) => {
