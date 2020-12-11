@@ -18,6 +18,8 @@ var _queries2 = _interopRequireDefault(_queries);
 
 var _RoleDefinitions = require('../commons/RoleDefinitions');
 
+var _UserQueries = require('../commons/RoleBasedQueries/UserQueries');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } } // import db from './db';
@@ -47,7 +49,7 @@ function UserModel() {
     this.entities = {};
 
     this.GetAll = function (userEntity) {
-        var queryConfig = (0, _RoleDefinitions.GetQueryConfig)(_RoleDefinitions.VIEW_USERS);
+        var queryConfig = (0, _RoleDefinitions.GetQueryConfig)(_UserQueries.VIEW_USERS);
         return (0, _RoleDefinitions.HandlePromise)(_mysqldb2.default, queryConfig, userEntity);
     };
 

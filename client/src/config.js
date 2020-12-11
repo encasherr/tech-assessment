@@ -31,41 +31,53 @@ export default class config {
 
     initialize = () => {
         return new Promise((resolve, reject) => {
-            if(configValues && configValues.site_url) return;
-    
-            var locationHref = window.location.href;
-            var apiUrl = locationHref.indexOf('localhost:3000') > -1 ? domain : '';
+            if (configValues && configValues.site_url) return;
+
+            
+            var apiUrl = this.isdevEnv() ? domain : '';
+                
             let url = apiUrl + '/api/loadConfig';
             axios.get(url)
                 .then((res) => {
                     console.log('config values', res.data);
                     configValues = res.data;
-                    if(configValues) {
-                        if(locationHref.indexOf('localhost:3000') > -1) {
+                    if (configValues) {
+                        if (this.isdevEnv()) {
                             configValues.site_url = domain;
                         }
                         resolve(configValues);
                     }
                 })
                 .catch((err) => {
-                    reject(err);  
+                    reject(err);
                 });
         })
     }
 
+    isdevEnv = () => {
+        var locationHref = window.location.href;
+        return (locationHref.indexOf('localhost:3000') > -1 ||
+                locationHref.indexOf('localhost:3001') > -1);
+    }
+
+    getSiteUrl = () => {
+        if(this.isdevEnv()) return domain;
+        return configValues.site_url;
+    }
+
     getAdminApiUrl = () => {
-        return configValues.site_url + configValues.admin_api;
+        return this.getSiteUrl() + configValues.admin_api;
     }
 
     getCandidateApiUrl = () => {
-        return configValues.site_url + configValues.candidate_api;
+        return this.getSiteUrl() + configValues.candidate_api;
     }
 
     getValue = (key) => {
         return configValues[key];
     }
-    
-    OrderedAlphabets = ['A','B','C','D','E','F','G','H','I','J'];
+
+    OrderedAlphabets = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
 
     validHeaders = validHeaders;
 }

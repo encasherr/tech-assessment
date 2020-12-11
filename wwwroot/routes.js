@@ -28,6 +28,10 @@ var _OrgController = require('./Controllers/admin/OrgController');
 
 var _OrgController2 = _interopRequireDefault(_OrgController);
 
+var _DashboardController = require('./Controllers/admin/DashboardController');
+
+var _DashboardController2 = _interopRequireDefault(_DashboardController);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var api = _express2.default.Router();
@@ -88,7 +92,12 @@ api.get('/candidate/invitation', _candidate.TestInviteController.GetInvitation);
 api.post('/candidate/sendInvite', _auth2.default, _candidate.TestInviteController.SendInvite);
 api.post('/candidate/startTest', _auth2.default, _candidate.TestInviteController.StartTest);
 api.post('/candidate/submitAnswers', _auth2.default, _candidate.TestInviteController.SubmitAnswers);
-api.post('/candidate/evaluateAnswers', _candidate.TestInviteController.EvaluateAnswers);
+api.post('/candidate/evaluateAnswers', _auth2.default, _candidate.TestInviteController.EvaluateAnswers);
+
+api.get('/admin/dashboard/test/count', _auth2.default, _DashboardController2.default.GetTestCount);
+api.get('/admin/dashboard/mcq/count', _auth2.default, _DashboardController2.default.GetMcqCount);
+api.get('/admin/dashboard/invitation/count', _auth2.default, _DashboardController2.default.GetInvitationCount);
+// api.get('/admin/dashboard', auth, DashboardController.GetAllStatistics);
 
 api.get('/admin/auth/google', _passport2.default.authenticate('google-token', { session: false, scope: ['https://www.googleapis.com/auth/plus.login'] }), function (req, res, next) {
     console.log('res next');

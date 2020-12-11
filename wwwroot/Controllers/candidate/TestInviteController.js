@@ -70,6 +70,7 @@ var TestInviteController = function TestInviteController() {
         model.GetAllInvitations(req.user).then(function (res) {
             resp.status(200).json(res);
         }).catch(function (err) {
+            console.log('error occurred in get invitations', err);
             var obj = { status: 500, message: err };
             resp.status(500).send(obj);
         });
@@ -151,10 +152,12 @@ var TestInviteController = function TestInviteController() {
 
                 testModel.GetTest(invitationEntity.invitation_meta.testId).then(function (testEntity) {
                     var selectedMcqIds = [];
+                    console.log('testEntity: ' + testEntity.test_meta);
                     testEntity.test_meta.selectedMcqs.map(function (item, index) {
                         selectedMcqIds.push(item.mcqId);
                     });
                     mcqModel.GetMcqsByIds(selectedMcqIds).then(function (mcqs) {
+                        console.log('get mcqs by id, length: ' + mcqs.length);
                         var mcqResponseMeta = {
                             testId: testEntity.id,
                             invitationId: invitationEntity.id,
@@ -165,19 +168,31 @@ var TestInviteController = function TestInviteController() {
                                 return mcqItem.id === item.mcqId;
                             });
                             if (filteredMcq && filteredMcq.length > 0) {
-                                item.mcq = filteredMcq[0];
+                                var item_value = filteredMcq[0];
+                                // item_value = item_value.replace(/\n/g, "\\n");
+                                // item_value = item_value.replace(/\r/g, "\\r");
+                                // item_value = item_value.replace(/\t/g, "\\t");
+                                item.mcq = item_value;
+                                // item.mcq = filteredMcq[0];
                                 item.candidateResponse = {
                                     responseKeys: []
                                 };
                                 mcqResponseMeta.mcqs.push(item);
                             }
                         });
+                        console.log('getting invitation entity now', invitationId);
                         mcqResponseModel.GetByInvitationId(invitationId).then(function (mcqResponseEntity) {
                             if (mcqResponseEntity) {
                                 console.log('existing mcq response returned');
                                 resp.status(200).json(mcqResponseEntity);
                             } else {
-                                mcqResponseModel.Add(mcqResponseMeta).then(function (responseId) {
+                                mcqResponseEntity = {
+                                    invitationId: parseInt(invitationId),
+                                    response_meta: mcqResponseMeta
+                                };
+                                console.log('adding new mcq invitation on invitation: ', invitationId);
+                                // mcqResponseModel.Add(mcqResponseMeta).then((responseId) => {
+                                mcqResponseModel.Add(mcqResponseEntity).then(function (responseId) {
                                     console.log('responseId', responseId);
                                     if (responseId > 0) {
                                         var updateInvitationEntity = _extends({}, invitationEntity, {
@@ -202,7 +217,7 @@ var TestInviteController = function TestInviteController() {
                         });
                     });
                 }).catch(function (err) {
-                    console.log('Error while loading testId: ' + testId + ' , error: ' + err);
+                    console.log('Error while loading test, error: ' + err);
                     resp.status(404).json({
                         message: err
                     });
@@ -276,6 +291,14 @@ var TestInviteController = function TestInviteController() {
         });
     };
 
+    this.getCurrentDateTime = function () {
+        var finalStr = '';
+        var dt = new Date();
+        finalStr = dt.getFullYear() + '-' + (dt.getMonth() + 1) + '-' + dt.getDate();
+        finalStr += ' ' + dt.getHours() + ':' + dt.getMinutes();
+        return finalStr;
+    };
+
     this.SubmitAnswers = function (req, resp) {
         console.log('Submit answers called');
         console.log(req.body);
@@ -287,7 +310,7 @@ var TestInviteController = function TestInviteController() {
             console.log('All Responses submitted');
             invitationModel.GetInvitation(entity.response_meta.invitationId).then(function (invitationEntity) {
 
-                invitationEntity.invitation_meta.completedOn = new Date().toLocaleDateString();
+                invitationEntity.invitation_meta.completedOn = _this.getCurrentDateTime();
                 invitationEntity.invitation_meta.status = _ServerConfig.Constants.InvitationTestStatus.Completed;
                 invitationModel.Update(invitationEntity).then(function (res) {
                     resp.status(200).json({ message: _ServerConfig.Constants.CandidateThanksMessage });
@@ -300,7 +323,7 @@ var TestInviteController = function TestInviteController() {
     };
 
     this.EvaluateAnswers = function (req, resp) {
-        console.log('Evaluate answers called');
+        console.log('Evaluate answers called by', req.user);
         console.log(req.body);
         var responseId = req.body.responseId;
         var mcqResponseModel = new _McqResponseModel2.default();
@@ -309,7 +332,16 @@ var TestInviteController = function TestInviteController() {
             evaluator.Evaluate(mcqResponse).then(function (evaluatedMcqResponse) {
                 mcqResponseModel.Update(evaluatedMcqResponse).then(function (updatedEntity) {
                     console.log('Evaluation done');
-                    _this.GetAll(req, resp);
+                    // this.GetAll(req, resp);
+
+                    var model = new _InvitationModel2.default();
+                    model.GetAllInvitations(req.user).then(function (res) {
+                        resp.status(200).json(res);
+                    }).catch(function (err) {
+                        console.log('error occurred in get invitations', err);
+                        var obj = { status: 500, message: err };
+                        resp.status(500).send(obj);
+                    });
                 }).catch(function (err) {
                     console.log('Error in evaluation: ', err);
                     res.status(500).json({ message: 'Error in evaluation: ' + err });

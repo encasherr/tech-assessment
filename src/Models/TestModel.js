@@ -1,10 +1,9 @@
 import db from '../db/mysqldb';
-import users from '../users';
 import queries from '../db/queries';
 
 import { GetQueryConfig, 
-    HandlePromise,    
-    VIEW_TESTS } from '../commons/RoleDefinitions';
+    HandlePromise } from '../commons/RoleDefinitions';
+import { VIEW_TESTS } from '../commons/RoleBasedQueries/TestQueries';
 
 class TestModel {
     entityName = 'tests';
@@ -40,10 +39,41 @@ class TestModel {
 
     GetTest = (testId) => {
         return new Promise((resolve, reject) => {
-            db.findOne(this.entityName, testId).then((res) => {
+            db.findOne(this.entityName, testId)
+            .then((res) => {
                 resolve(res);
             });
         })
+    }
+
+    serializeToJson = (data) => {
+        console.log('test data', data);
+        let test_meta = data['test_meta'];
+        // test_meta = test_meta.replace(/\n/g, "\\n");
+        // test_meta = test_meta.replace(/\r/g, "\\r");
+        // test_meta = test_meta.replace(/\t/g, "\\t");
+        let output = {};
+        output.id = data.id;
+        output['test_meta'] = JSON.parse(test_meta);
+        return output;
+        // output['user_meta'] = JSON.parse(data['user_meta']);
+       /* let outputArray = [];
+        console.log('data count', data.length);
+        if(data && data.length > 0) {
+            data.map((item, index) => {
+
+                let test_meta = item['test_meta'];
+                test_meta = test_meta.replace(/\n/g, "\\n");
+                test_meta = test_meta.replace(/\r/g, "\\r");
+                test_meta = test_meta.replace(/\t/g, "\\t");
+                let output = {};
+                output.id = item.id;
+                output['test_meta'] = JSON.parse(test_meta);
+                output['user_meta'] = JSON.parse(item['user_meta']);
+                outputArray.push(output);
+            })
+        }
+        return outputArray;*/
     }
 
     GetCandidatesByTestId = (testId) => {

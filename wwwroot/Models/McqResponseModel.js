@@ -65,6 +65,7 @@ var McqResponseModel = function McqResponseModel() {
         return new Promise(function (resolve, reject) {
             var sql = _queries2.default.getMcqResponseByInvitationId(invitationId);
             _mysqldb2.default.executeQuery(sql).then(function (res) {
+                console.log('mcqresp: ' + _this.entityName + ' - ' + res);
                 var data = _mysqldb2.default.serializeToJson(res, _this.entityName);
                 resolve(data[0]);
             }).catch(function (err) {
@@ -73,9 +74,33 @@ var McqResponseModel = function McqResponseModel() {
         });
     };
 
+    this.SerializeToJson = function (data, entityName) {
+        var outputArray = [];
+        var field_name = 'response_meta';
+        console.log('mcqresp count', data.length);
+        if (data && data.length > 0) {
+            data.map(function (item, index) {
+                console.log('item', item);
+                var item_value = item[field_name];
+                item_value = item_value.replace(/\n/g, "\\n");
+                item_value = item_value.replace(/\r/g, "\\r");
+                item_value = item_value.replace(/\t/g, "\\t");
+                var output = {};
+                output.id = item.id;
+                output[field_name] = JSON.parse(item_value);
+                // output[field_name] = JSON.parse(item[field_name]);
+                outputArray.push(output);
+            });
+        }
+        return outputArray;
+    };
+
     this.Add = function (entity) {
         return new Promise(function (resolve, reject) {
-            _mysqldb2.default.insert(_this.entityName, entity).then(function (insertId) {
+            // db.insert(this.entityName, entity).then((insertId) => {
+            //     resolve(insertId);
+            // });
+            _mysqldb2.default.insertCustom(_this.entityName, entity).then(function (insertId) {
                 resolve(insertId);
             });
         });

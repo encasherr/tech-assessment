@@ -4,8 +4,8 @@ import users from '../users';
 import queries from '../db/queries';
 
 import { GetQueryConfig, 
-    HandlePromise,    
-    VIEW_USERS } from '../commons/RoleDefinitions';
+    HandlePromise } from '../commons/RoleDefinitions';
+import { VIEW_USERS } from '../commons/RoleBasedQueries/UserQueries';
 
 class UserModel {
     entityName = 'users';

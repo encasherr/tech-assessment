@@ -1,8 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {    FetchTest, AddMcqToTest, PublishTest, CloseSnackbar, SetHistory,
-    RemoveMcqFromTest, LoadTestMcqs, LoadTestCandidates, OpenSnackbar } from '../../actions/TestConsoleActions';            
-import Link from '@material-ui/core/Link';
+    RemoveMcqFromTest, LoadTestMcqs, LoadTestCandidates, OpenSnackbar,
+    UpdateTestSettings } from '../../actions/TestConsoleActions';            
+// import Link from '@material-ui/core/Link';
+import { Link } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import SnackbarComponent from '../../components/lib/SnackbarComponent';
 import TestConsoleTabs from './TestConsoleTabs';
@@ -10,6 +12,9 @@ import { Button, Card, CardHeader } from '@material-ui/core';
 import TestConsoleQuestions from './TestConsoleQuestions';
 import LoadingComponent from '../../components/lib/LoadingComponent';
 import { KeyboardBackspace } from '@material-ui/icons';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
 
 class TestConsoleContainer extends React.Component {
 
@@ -73,11 +78,27 @@ class TestConsoleContainer extends React.Component {
         this.reload();
     }
 
+    handleSettingsFieldChange = (val, field) => {
+        this.props.SettingsFieldChange(val, field, this.props.currentTest);
+    }
+    
+    submitTestSettings = () => {
+        this.props.UpdateTestSettings(this.props.currentTest)
+        .then((res) => {
+            this.setState({
+                snackOpen: true,
+                snackMessage: 'Settings saved'
+            });
+        });
+    }
+
     render = () => {
         let { current_test, selectedMcqs, candidates } = this.props;
         if(current_test && current_test.selectedMcqs) {
             console.log(current_test.selectedMcqs);
         }
+        let { state } = this.props.location;
+        let selectedTabIndex = (state && state.selectedTabIndex) ? state.selectedTabIndex : 0;
         return(
             <Grid container spacing={16}>
                 <Grid item xs={12} sm={12}>
@@ -92,8 +113,8 @@ class TestConsoleContainer extends React.Component {
                         <Button style={styles.headerButton} variant="contained" color="primary" size="small"
                                 onClick={this.onPublish}
                         >Publish</Button>}
-                        <Link style={styles.headerButton} href="#" onClick={() => this.props.history.goBack()}>
-                            Back To Tests
+                        <Link color="inherit" to="/tests" >
+                            Back to Tests
                         </Link>
                         </div>
                     }
@@ -101,12 +122,15 @@ class TestConsoleContainer extends React.Component {
                      subheader={current_test.test_meta.status!=='draft' ? 'Published' : 'draft'}
                     />
                     <TestConsoleTabs 
-                        tabs={tabs} 
+                        tabs={tabs}
+                        selectedTabIndex={selectedTabIndex} 
                         onAddMcqToTest={(mcqItem) => this.onAddMcqToTest(mcqItem) }
                         onRemoveMcqFromTest={ (mcqItem) => this.onRemoveMcqFromTest(mcqItem) } 
                         selectedMcqs={selectedMcqs} 
                         candidates={candidates}
                         currentTest={current_test}
+                        onSettingsFieldChange={(val, field) => this.handleSettingsFieldChange(val, field)}
+                        onSubmitTestSettings={() => this.submitTestSettings()}
                         />
                 </Card>
                 }
@@ -130,6 +154,7 @@ const mapDispatchToProps = dispatch => ({
     FetchTest: (testId, history) => dispatch(FetchTest(testId, history)),
     LoadTestMcqs: (testId) => dispatch(LoadTestMcqs(testId)),
     LoadTestCandidates: (testId) => dispatch(LoadTestCandidates(testId)),
+    UpdateTestSettings: (testModel) => dispatch(UpdateTestSettings(testModel)),
     CloseSnackbar: () => dispatch(CloseSnackbar()),
     OpenSnackbar: () => dispatch(OpenSnackbar()),
 });

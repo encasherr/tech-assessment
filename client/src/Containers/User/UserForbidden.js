@@ -10,7 +10,7 @@ const UserForbidden = (props) => {
             <Typography variant="h6" >
                 User Forbidden or User Not Found. 
             </Typography>
-            <Typography variant="body1" >
+            <Typography variant="subtitle1" >
                 Please check with Admin if your emailId is added to user list. 
             </Typography>
             <div>

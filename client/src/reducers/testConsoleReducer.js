@@ -6,7 +6,8 @@ import {
     FETCH_TEST_MCQS_SUCCESS,
     FETCH_TEST_CANDIDATES_SUCCESS
 } from "../actions/TestConsoleActions";
-import { ADD_QUESTION_TO_TEST, REMOVE_QUESTION_FROM_TEST } from "../actions/TestConsoleActions";
+import { ADD_QUESTION_TO_TEST, REMOVE_QUESTION_FROM_TEST,
+    TEST_SETTINGS_FIELD_CHANGE } from "../actions/TestConsoleActions";
 
 export default (state = {}, action) => {
 switch(action.type) {
@@ -53,6 +54,13 @@ switch(action.type) {
             operation: 'MCQ Removed'
         }
    }
+   case TEST_SETTINGS_FIELD_CHANGE:
+    {
+        return {
+            ...state,
+            current_test: action.payload
+        }   
+    }
    case OPEN_SNACKBAR:
    {
        return {

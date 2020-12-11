@@ -31,7 +31,7 @@ const SendTestInvite = (props) => {
                 <FormControl variant="outlined" style={styles.formControl}>
                     <TextField
                         id="outlined-email"
-                        label="To"
+                        label="Candidate Email"
                         value={inviteInfo.emailTo}
                         onChange={(e) => props.onFieldChange(e.target.value, 'emailTo')}
                         margin="normal"
@@ -53,7 +53,7 @@ const SendTestInvite = (props) => {
                     You have been invited to attend the 
                     <Typography color="secondary"> {currentTest.test_meta.testName}
                     </Typography> 
-                    challenge. We wish you all the best!
+                    challenge. Wish you all the best!
                     </Typography>
 
                     <div style={styles.margintop}>

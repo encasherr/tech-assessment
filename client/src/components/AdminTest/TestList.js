@@ -56,8 +56,9 @@ const TestList = (props) => {
 }
 const CustomTableCell = withStyles(theme => ({
     head: {
-      backgroundColor: theme.palette.common.black,
-      color: theme.palette.common.white,
+    //   backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.black,
+      fontSize: 16
     },
     body: {
       fontSize: 14,

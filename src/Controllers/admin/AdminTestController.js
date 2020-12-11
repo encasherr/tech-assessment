@@ -19,6 +19,7 @@ class AdminTestController extends BaseController {
                 resp.send(res);
             })
             .catch((err) => {
+                console.log('error in get all tests', err);
                 var obj = { status: 500, message: err };
                 resp.status(500).send(obj);
             });

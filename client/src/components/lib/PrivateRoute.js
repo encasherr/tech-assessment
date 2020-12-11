@@ -3,11 +3,12 @@ import { Route, Redirect } from 'react-router-dom';
 import AuthHelper from '../../AuthHelper';
 
 const PrivateRoute = ({ component: Component, authed, ...rest}) => {
+    console.log('rest', rest);
     return (
         <Route 
             {...rest}
             render={(props) => isAuthorized() === true
-                ? <Component {...props} />
+                ? <Component {...rest} {...props} />
                 : <Redirect to={{pathname: '/login'}} />}
         />
     );

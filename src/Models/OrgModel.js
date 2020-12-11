@@ -1,8 +1,8 @@
 import db from '../db/mysqldb';
 import users from '../users';
 import { GetQueryConfig, 
-         HandlePromise,    
-    VIEW_ORGS } from '../commons/RoleDefinitions';
+         HandlePromise } from '../commons/RoleDefinitions';
+import { VIEW_ORGS } from '../commons/RoleBasedQueries/OrgQueries';
 
 class OrgModel {
     entityName = 'org';

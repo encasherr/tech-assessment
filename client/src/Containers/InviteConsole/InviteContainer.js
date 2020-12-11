@@ -6,11 +6,19 @@ import { Button, Card, CardHeader, CardContent, CardActions } from '@material-ui
 import LoadingComponent from '../../components/lib/LoadingComponent';
 import SendTestInvite from './SendTestInvite';
 import { KeyboardBackspace } from '@material-ui/icons';
-
+import { Link } from 'react-router-dom';
 import { SendInvite, InviteInfoFieldChange } from '../../actions/InviteConsoleActions';            
 import { FetchTest, CloseSnackbar, OpenSnackbar } from '../../actions/TestConsoleActions';            
 
 class InviteContainer extends React.Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            snackOpen: false,
+            snackMessage: ''
+        };
+    }
 
     componentDidMount = () => {
         this.reload();
@@ -31,8 +39,12 @@ class InviteContainer extends React.Component {
         let { current_test, inviteInfo } = this.props;
         console.log('after send invite current_test', current_test);
         this.props.SendInvite(current_test, inviteInfo).then((res) => {
+            this.setState({
+                snackOpen: true,
+                snackMessage: 'Invitation sent successfully'
+            });
             this.props.history.push({
-                pathname: '/testConsole', state: { testId: current_test.id }
+                pathname: '/testConsole', state: { testId: current_test.id, selectedTabIndex: 1 }
             });
         });
     }
@@ -48,10 +60,13 @@ class InviteContainer extends React.Component {
                 <Card>
                     <CardHeader 
                         action={
-                        <Button color="primary" size="large" variant="outlined"
-                                onClick={() => this.props.history.goBack() }>
-                            <KeyboardBackspace />
-                        </Button>
+                        // <Button color="primary" size="large" variant="outlined"
+                        //         onClick={() => this.props.history.goBack() }>
+                        //     <KeyboardBackspace />
+                        // </Button>
+                        <Link color="inherit" to="/testConsole" >
+                            Back to Test
+                        </Link>
                         }
                         title="Send Test Invites"
                         subheader={current_test.test_meta.testName}
@@ -73,10 +88,11 @@ class InviteContainer extends React.Component {
                     </CardActions>
                 </Card>
                 }
+                
                 <SnackbarComponent 
-                    openSnack={this.props.snack_open} handleClose={() => this.props.CloseSnackbar()} 
-                    snackMessage={"Data Saved Successfully!"} 
-                /> 
+                    openSnack={this.state.snackOpen} handleClose={() => this.setState({snackOpen: false})}
+                    snackMessage={this.state.snackMessage} 
+                    /> 
                 </Grid>
             </Grid>
         );

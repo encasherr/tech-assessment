@@ -10,6 +10,7 @@ import { generateToken, sendToken } from './utils/token.utils';
 import passport from 'passport';
 import auth from './utils/auth';
 import OrgController from './Controllers/admin/OrgController';
+import DashboardController from './Controllers/admin/DashboardController';
 
 
 let api = express.Router();
@@ -71,7 +72,12 @@ api.get('/candidate/invitation', TestInviteController.GetInvitation);
 api.post('/candidate/sendInvite', auth, TestInviteController.SendInvite);
 api.post('/candidate/startTest', auth, TestInviteController.StartTest);
 api.post('/candidate/submitAnswers', auth, TestInviteController.SubmitAnswers);
-api.post('/candidate/evaluateAnswers', TestInviteController.EvaluateAnswers);
+api.post('/candidate/evaluateAnswers', auth, TestInviteController.EvaluateAnswers);
+
+api.get('/admin/dashboard/test/count', auth, DashboardController.GetTestCount);
+api.get('/admin/dashboard/mcq/count', auth, DashboardController.GetMcqCount);
+api.get('/admin/dashboard/invitation/count', auth, DashboardController.GetInvitationCount);
+// api.get('/admin/dashboard', auth, DashboardController.GetAllStatistics);
 
 api.get('/admin/auth/google',
     passport.authenticate('google-token', { session: false, scope: ['https://www.googleapis.com/auth/plus.login'] }),

@@ -7,7 +7,7 @@ const HiTechAddress = (props) => {
             <Typography variant="caption">
             Highness Microelectronics Pvt. Ltd.<br></br>
             RMA Department (RMA#XXXXXXXX)</Typography>
-            <Typography variant="body2">
+            <Typography variant="subtitle1">
             8-C, 1 st Floor, New Tejpal Industrial Estate.,<br></br>
             Kurla Andheri Road, Sakinaka, Mumbai - 400072.</Typography><br></br>
         </div>

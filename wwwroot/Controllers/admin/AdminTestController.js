@@ -56,6 +56,7 @@ var AdminTestController = function (_BaseController) {
                 console.log('fetched tests');
                 resp.send(res);
             }).catch(function (err) {
+                console.log('error in get all tests', err);
                 var obj = { status: 500, message: err };
                 resp.status(500).send(obj);
             });

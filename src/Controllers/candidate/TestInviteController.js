@@ -21,6 +21,7 @@ class TestInviteController {
         model.GetAllInvitations(req.user).then((res) => {
             resp.status(200).json(res);
         }).catch((err) => {
+            console.log('error occurred in get invitations', err);
             var obj = { status: 500, message: err };
             resp.status(500).send(obj);
         });
@@ -105,10 +106,12 @@ class TestInviteController {
                 testModel.GetTest(invitationEntity.invitation_meta.testId)
                         .then((testEntity) => {
                             let selectedMcqIds = [];
+                            console.log(`testEntity: ${testEntity.test_meta}`);
                             testEntity.test_meta.selectedMcqs.map((item, index) => {
                                 selectedMcqIds.push(item.mcqId);
                             });
                             mcqModel.GetMcqsByIds(selectedMcqIds).then((mcqs) => {
+                                console.log(`get mcqs by id, length: ${mcqs.length}`);
                                 let mcqResponseMeta = {
                                     testId: testEntity.id,
                                     invitationId: invitationEntity.id,
@@ -119,13 +122,19 @@ class TestInviteController {
                                         return mcqItem.id === item.mcqId;
                                     });
                                     if(filteredMcq && filteredMcq.length > 0) {
-                                        item.mcq = filteredMcq[0];
+                                        let item_value = filteredMcq[0];
+                                        // item_value = item_value.replace(/\n/g, "\\n");
+                                        // item_value = item_value.replace(/\r/g, "\\r");
+                                        // item_value = item_value.replace(/\t/g, "\\t");
+                                        item.mcq = item_value;
+                                        // item.mcq = filteredMcq[0];
                                         item.candidateResponse = {
                                             responseKeys: []
                                         }
                                         mcqResponseMeta.mcqs.push(item);
                                     }
                                 });
+                                console.log('getting invitation entity now', invitationId);
                                 mcqResponseModel.GetByInvitationId(invitationId)
                                             .then((mcqResponseEntity) => {
                                                 if(mcqResponseEntity) {
@@ -133,7 +142,13 @@ class TestInviteController {
                                                     resp.status(200).json(mcqResponseEntity);
                                                 }
                                                 else {
-                                                    mcqResponseModel.Add(mcqResponseMeta).then((responseId) => {
+                                                    mcqResponseEntity = {
+                                                        invitationId: parseInt(invitationId),
+                                                        response_meta: mcqResponseMeta
+                                                    }
+                                                        console.log('adding new mcq invitation on invitation: ', invitationId);
+                                                        // mcqResponseModel.Add(mcqResponseMeta).then((responseId) => {
+                                                        mcqResponseModel.Add(mcqResponseEntity).then((responseId) => {
                                                         console.log('responseId', responseId);
                                                         if(responseId > 0) {
                                                             let updateInvitationEntity = {
@@ -163,7 +178,7 @@ class TestInviteController {
                             })
                         })
                         .catch((err) => {
-                            console.log(`Error while loading testId: ${testId} , error: ${err}`);
+                            console.log(`Error while loading test, error: ${err}`);
                             resp.status(404).json({
                                 message: err
                             });
@@ -240,6 +255,14 @@ class TestInviteController {
         }); 
     }
 
+    getCurrentDateTime = () => {
+        let finalStr = '';
+        let dt = new Date();
+        finalStr = `${dt.getFullYear()}-${dt.getMonth()+1}-${dt.getDate()}`;
+        finalStr += ` ${dt.getHours()}:${dt.getMinutes()}`;
+        return finalStr; 
+    }
+
     SubmitAnswers = (req, resp) => {
         console.log('Submit answers called');
         console.log(req.body);
@@ -251,7 +274,7 @@ class TestInviteController {
             console.log('All Responses submitted');
             invitationModel.GetInvitation(entity.response_meta.invitationId).then((invitationEntity) => {
                 
-                invitationEntity.invitation_meta.completedOn = (new Date()).toLocaleDateString();
+                invitationEntity.invitation_meta.completedOn = this.getCurrentDateTime();
                 invitationEntity.invitation_meta.status = Constants.InvitationTestStatus.Completed; 
                 invitationModel.Update(invitationEntity).then((res) => {
                     resp.status(200).json({message: Constants.CandidateThanksMessage });
@@ -264,7 +287,7 @@ class TestInviteController {
     }
 
     EvaluateAnswers = (req, resp) => {
-        console.log('Evaluate answers called');
+        console.log('Evaluate answers called by', req.user);
         console.log(req.body);
         let responseId = req.body.responseId;
         let mcqResponseModel = new McqResponseModel();
@@ -273,7 +296,16 @@ class TestInviteController {
             evaluator.Evaluate(mcqResponse).then((evaluatedMcqResponse) => {
                 mcqResponseModel.Update(evaluatedMcqResponse).then((updatedEntity) => {
                     console.log('Evaluation done');
-                    this.GetAll(req, resp);
+                    // this.GetAll(req, resp);
+
+                    let model = new InvitationModel();
+                    model.GetAllInvitations(req.user).then((res) => {
+                        resp.status(200).json(res);
+                    }).catch((err) => {
+                        console.log('error occurred in get invitations', err);
+                        var obj = { status: 500, message: err };
+                        resp.status(500).send(obj);
+                    });
                 }).catch((err) => {
                     console.log('Error in evaluation: ', err);
                     res.status(500).json({message: 'Error in evaluation: ' + err});

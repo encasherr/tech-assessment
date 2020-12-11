@@ -3,8 +3,8 @@ import db from '../db/mysqldb';
 import users from '../users';
 import queries from '../db/queries';
 import { GetQueryConfig, 
-    HandlePromise,    
-    VIEW_INVITATIONS } from '../commons/RoleDefinitions';
+    HandlePromise } from '../commons/RoleDefinitions';
+import { VIEW_INVITATIONS } from '../commons/RoleBasedQueries/InvitationQueries';
 
 class InvitationModel {
     entityName = 'invitations';
@@ -77,8 +77,10 @@ class InvitationModel {
         entity.status = "INITIATED";
         entity.invitedOn = (new Date()).toLocaleDateString();
         return new Promise((resolve, reject) => {
-            db.insert(this.entityName, entity);
-            resolve(true);
+            db.insert(this.entityName, entity)
+                .then((insertId) => {
+                    resolve(insertId);
+                });
         });
     }
 

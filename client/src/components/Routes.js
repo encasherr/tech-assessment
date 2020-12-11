@@ -38,7 +38,7 @@ const Routes = (props) => {
             <Route path="/unauthorizedUser" component={User401} />
             <Route path="/userForbidden" component={UserForbidden} />
             <Route path="/notFound" component={ResourceNotFound} />
-            <PrivateRoute path="/dashboard" component={DashboardComponent} />
+            <PrivateRoute {...props} path="/dashboard" component={DashboardComponent} />
             <PrivateRoute path="/tests" component={AdminTestContainer} />
             {/* <Route path="/testConsole" component={TestConsoleContainer} /> */}
             <PrivateRoute path="/testConsole" component={TestConsoleContainer} />
@@ -66,4 +66,5 @@ const Routes = (props) => {
         </div>
     );
 }
+
 export default Routes;

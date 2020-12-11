@@ -28,15 +28,15 @@ class DashobardModel {
 
         return new Promise((resolve, reject) => {
             Promise.all(promises).then((data) => {
-                console.log('data returned');
-                let invitationData = data[0];
-                let testData = data[1];
-                let mcqData = data[2];
+                console.log('data returned', data);
+                let invitationCount = data[0];
+                let testCount = data[1];
+                let mcqCount = data[2];
     
                 let statistics = {
-                    invitationData,
-                    testData,
-                    mcqData
+                    invitationCount,
+                    testCount,
+                    mcqCount
                 }
                 resolve(statistics);
             })
@@ -44,6 +44,21 @@ class DashobardModel {
                 reject(err);  
             });
         })
+    }
+
+    GetTestCount = (userEntity) => {
+        let queryConfig = GetQueryConfig(VIEW_DASHBOARD_TESTS_COUNT);
+        return HandlePromise(db, queryConfig, userEntity);
+    }
+
+    GetMcqCount = (userEntity) => {
+        let queryConfig = GetQueryConfig(VIEW_DASHBOARD_MCQ_COUNT);
+        return HandlePromise(db, queryConfig, userEntity);
+    }
+
+    GetInvitationCount = (userEntity) => {
+        let queryConfig = GetQueryConfig(VIEW_DASHBOARD_INVITATION_COUNT);
+        return HandlePromise(db, queryConfig, userEntity);
     }
 
 }

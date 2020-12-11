@@ -33,6 +33,10 @@ app.use(function(req, res, next) {
 });
 
 app.use('/api', routes);
+app.use('/*', (req, resp) => {
+    let fileName = path.resolve(__dirname + '/index.html');
+    resp.sendFile(fileName);
+});
 app.use('/testLanding', (req, resp) => {
     let fileName = path.resolve(__dirname + '/index.html');
     resp.sendFile(fileName);

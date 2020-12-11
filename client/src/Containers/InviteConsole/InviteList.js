@@ -12,6 +12,17 @@ import LoadingComponent from '../../components/lib/LoadingComponent';
 import { Typography } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 
+const getDateTime = (dateTime, withTime) => {
+    let finalStr = '';
+    if(dateTime) {
+        let dt = new Date(dateTime);
+        finalStr = `${dt.getFullYear()}-${dt.getMonth()+1}-${dt.getDate()}`;
+        if(withTime) {
+            finalStr += ` ${dt.getHours()}:${dt.getMinutes()}`;
+        }
+    }
+    return finalStr; 
+}
 
 const InviteList = (props) => {
     let { invitations } = props;
@@ -43,8 +54,8 @@ const InviteList = (props) => {
                             </CustomTableCell>
                             <CustomTableCell align="left">{invitation.candidateName}</CustomTableCell>
                             <CustomTableCell align="left">{invitation.invitationStatus}</CustomTableCell>
-                            <CustomTableCell align="left">{invitation.invitedOn}</CustomTableCell>
-                            <CustomTableCell align="left">{invitation.completedOn}</CustomTableCell>
+                            <CustomTableCell align="left">{getDateTime(invitation.invitedOn, true)}</CustomTableCell>
+                            <CustomTableCell align="left">{getDateTime(invitation.completedOn, true)}</CustomTableCell>
                             <CustomTableCell align="left">
                                 {
                                     invitation.result && 
@@ -84,8 +95,9 @@ const InviteList = (props) => {
 }
 const CustomTableCell = withStyles(theme => ({
     head: {
-      backgroundColor: theme.palette.common.black,
-      color: theme.palette.common.white,
+    //   backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.black,
+      fontSize: 16
     },
     body: {
       fontSize: 14,

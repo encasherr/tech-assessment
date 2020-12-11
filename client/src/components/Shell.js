@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles, createMuiTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { BrowserRouter as Router } from 'react-router-dom'
 import { connect } from 'react-redux';
@@ -14,12 +14,151 @@ import LoadingComponent from '../components/lib/LoadingComponent';
 import Routes from './Routes';
 import AuthHelper from '../AuthHelper';
 import config from '../config';
+import { info, primary, secondary, success, warning } from './lib/ColorCodes';
 
 const drawerWidth = 240;
 
-const styles = theme => ({
+const styles = theme => createMuiTheme({
   root: {
     display: 'flex',
+  },
+  verticalCenter: {
+    paddingTop: '10%'
+  },
+  dashboardHeight: {
+    // marginTop: '5%',
+    minHeight: '375px',
+    overflowY: 'auto'
+  },
+  actionButton: {
+      marginLeft: '70%'
+  },
+  bgSuccessMain: {
+    backgroundColor: success.main
+  },
+  bgSuccessDark: {
+    backgroundColor: success.dark
+  },
+  bgSuccessLight: {
+    backgroundColor: success.light
+  },
+  bgPrimaryMain: {
+    backgroundColor: primary.main,
+    color: '#fff'
+  },
+  bgPrimaryDark: {
+    backgroundColor: primary.dark
+  },
+  bgPrimaryLight: {
+    backgroundColor: primary.light
+  },
+  bgWarningMain: {
+    backgroundColor: warning.main
+  },
+  bgWarningDark: {
+    backgroundColor: warning.dark
+  },
+  bgWarningLight: {
+    backgroundColor: warning.light
+  },
+  bgInfoMain: {
+    backgroundColor: info.main
+  },
+  bgInfoDark: {
+    backgroundColor: info.dark
+  },
+  bgInfoLight: {
+    backgroundColor: info.light
+  },
+  bgSecondaryMain: {
+    backgroundColor: secondary.main
+  },
+  bgSecondaryDark: {
+    backgroundColor: secondary.dark
+  },
+  bgSecondaryLight: {
+    backgroundColor: secondary.light
+  },
+  paletteBorderLeftSuccessMain: {
+    borderLeft: `2px solid ${success.main}`
+  },
+  paletteBorderLeftSuccessLight: {
+    borderLeft: `2px solid ${success.light}`
+  },
+  paletteBorderLeftSuccessDark: {
+    borderLeft: `2px solid ${success.dark}`
+  },
+  paletteBorderLeftPrimaryMain: {
+    borderLeft: `2px solid ${primary.main}`
+  },
+  paletteBorderLeftPrimaryLight: {
+    borderLeft: `2px solid ${primary.light}`
+  },
+  paletteBorderLeftPrimaryDark: {
+    borderLeft: `2px solid ${primary.dark}`
+  },
+  paletteBorderLeftSecondaryMain: {
+    borderLeft: `2px solid ${secondary.main}`
+  },
+  paletteBorderLeftSecondaryLight: {
+    borderLeft: `2px solid ${secondary.light}`
+  },
+  paletteBorderLeftSecondaryDark: {
+    borderLeft: `2px solid ${secondary.dark}`
+  },
+  paletteBorderBottomSuccessMain: {
+    borderBottom: `2px solid ${success.main}`
+  },
+  paletteBorderBottomSuccessLight: {
+    borderBottom: `2px solid ${success.light}`
+  },
+  paletteBorderBottomSuccessDark: {
+    borderBottom: `2px solid ${success.dark}`
+  },
+  paletteBorderBottomPrimaryMain: {
+    borderBottom: `2px solid ${primary.main}`
+  },
+  paletteBorderBottomPrimaryLight: {
+    borderBottom: `2px solid ${primary.light}`
+  },
+  paletteBorderBottomPrimaryDark: {
+    borderBottom: `2px solid ${primary.dark}`
+  },
+  paletteBorderBottomSecondaryMain: {
+    borderBottom: `2px solid ${secondary.main}`
+  },
+  paletteBorderBottomSecondaryLight: {
+    borderBottom: `2px solid ${secondary.light}`
+  },
+  paletteBorderBottomSecondaryDark: {
+    borderBottom: `2px solid ${secondary.dark}`
+  },
+  palettePrimaryLight: {
+    backgroundColor: '#757ce8'
+  },
+  palettePrimaryMain: {
+    backgroundColor: '#3f50b5',
+    color: '#fff'
+  },
+  palettePrimaryDark: {
+    backgroundColor: '#002884',
+    color: '#fff'
+  },
+  palettePrimaryContrastText: {
+    backgroundColor: '#fff',
+    color: '#000'
+  },
+  paletteSecondaryLight: {
+    backgroundColor: '#ff7961'
+  },
+  paletteSecondaryMain: {
+    backgroundColor: '#f44336'
+  },
+  paletteSecondaryDark: {
+    backgroundColor: '#ba000d'
+  },
+  paletteSecondaryContrastText: {
+    backgroundColor: '#000'
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
@@ -157,7 +296,7 @@ class Shell extends React.Component {
                       />
               <main className={classes.content}>
                 <div className={classes.toolbar} />
-                    <Routes />
+                    <Routes classes={classes}/>
               </main>
             </Router>
           </div>

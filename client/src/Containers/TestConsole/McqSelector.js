@@ -72,7 +72,7 @@ class McqSelector extends Component {
                 onClose={this.handleClose}
                 >
                     <DialogTitle onClose={this.handleClose}>
-                        <Typography variant="title">
+                        <Typography variant="h6">
                             Select MCQ to Add
                         </Typography>
                         <IconButton onClick={this.handleClose} style={{right: '4%', top: '1%', position:'absolute'}}>

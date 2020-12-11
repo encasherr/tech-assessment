@@ -37,9 +37,14 @@ export const VIEW_TESTS_QUERY = {
             console.log('data count', data.length);
             if(data && data.length > 0) {
                 data.map((item, index) => {
+
+                    let test_meta = item['test_meta'];
+                    test_meta = test_meta.replace(/\n/g, "\\n");
+                    test_meta = test_meta.replace(/\r/g, "\\r");
+                    test_meta = test_meta.replace(/\t/g, "\\t");
                     let output = {};
                     output.id = item.id;
-                    output['test_meta'] = JSON.parse(item['test_meta']);
+                    output['test_meta'] = JSON.parse(test_meta);
                     output['user_meta'] = JSON.parse(item['user_meta']);
                     outputArray.push(output);
                 })

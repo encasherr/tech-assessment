@@ -14,6 +14,8 @@ var _users2 = _interopRequireDefault(_users);
 
 var _RoleDefinitions = require('../commons/RoleDefinitions');
 
+var _OrgQueries = require('../commons/RoleBasedQueries/OrgQueries');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -27,7 +29,7 @@ var OrgModel = function OrgModel() {
     this.entities = {};
 
     this.GetAll = function (userEntity) {
-        var queryConfig = (0, _RoleDefinitions.GetQueryConfig)(_RoleDefinitions.VIEW_ORGS);
+        var queryConfig = (0, _RoleDefinitions.GetQueryConfig)(_OrgQueries.VIEW_ORGS);
         return (0, _RoleDefinitions.HandlePromise)(_mysqldb2.default, queryConfig, userEntity);
     };
 

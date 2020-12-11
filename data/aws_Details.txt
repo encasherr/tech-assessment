@@ -28,10 +28,10 @@ TODO:
 2. Done: In test console, in reports tab, show list of candidates that have taken the test and their scores as well as results.
 3. Done: testLanding page should have instructions of taking the test and Start Test button.
 4. Done: Create a FAQ page for candidates to refer to for taking online test.
-5. Load all data in the dashboard.
-6. Collect candidate name while sending invitation.
+5. Done: Load all data in the dashboard.
+6. Done: Collect candidate name while sending invitation.
 7. Synchronize the email template between UI and server side.
-8. Remove double quotes that are displayed for field values in UI for all data.
+8. Done: Remove double quotes that are displayed for field values in UI for all data.
 9. Add standard data grid in all screens, with filter feature.
 10. Delete the related questions from test when question is deleted.
 11. Change back link text on test console screen to match invitaions/tests.
@@ -67,3 +67,5 @@ TODO:
     view org and admin mcqs
     view org users
 18. Users list grid, handle cancel editing
+19. Add filter in Question selector popup to filter by skill, category
+20. Add settings in test console: invite sender email, on send invite, ask password

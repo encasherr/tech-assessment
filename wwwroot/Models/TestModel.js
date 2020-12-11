@@ -8,15 +8,13 @@ var _mysqldb = require('../db/mysqldb');
 
 var _mysqldb2 = _interopRequireDefault(_mysqldb);
 
-var _users = require('../users');
-
-var _users2 = _interopRequireDefault(_users);
-
 var _queries = require('../db/queries');
 
 var _queries2 = _interopRequireDefault(_queries);
 
 var _RoleDefinitions = require('../commons/RoleDefinitions');
+
+var _TestQueries = require('../commons/RoleBasedQueries/TestQueries');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -31,7 +29,7 @@ var TestModel = function TestModel() {
     this.entities = {};
 
     this.GetAll = function (userEntity) {
-        var queryConfig = (0, _RoleDefinitions.GetQueryConfig)(_RoleDefinitions.VIEW_TESTS);
+        var queryConfig = (0, _RoleDefinitions.GetQueryConfig)(_TestQueries.VIEW_TESTS);
         return (0, _RoleDefinitions.HandlePromise)(_mysqldb2.default, queryConfig, userEntity);
 
         /*return new Promise((resolve, reject) => {
@@ -53,6 +51,35 @@ var TestModel = function TestModel() {
                 resolve(res);
             });
         });
+    };
+
+    this.serializeToJson = function (data) {
+        console.log('test data', data);
+        var test_meta = data['test_meta'];
+        // test_meta = test_meta.replace(/\n/g, "\\n");
+        // test_meta = test_meta.replace(/\r/g, "\\r");
+        // test_meta = test_meta.replace(/\t/g, "\\t");
+        var output = {};
+        output.id = data.id;
+        output['test_meta'] = JSON.parse(test_meta);
+        return output;
+        // output['user_meta'] = JSON.parse(data['user_meta']);
+        /* let outputArray = [];
+         console.log('data count', data.length);
+         if(data && data.length > 0) {
+             data.map((item, index) => {
+                   let test_meta = item['test_meta'];
+                 test_meta = test_meta.replace(/\n/g, "\\n");
+                 test_meta = test_meta.replace(/\r/g, "\\r");
+                 test_meta = test_meta.replace(/\t/g, "\\t");
+                 let output = {};
+                 output.id = item.id;
+                 output['test_meta'] = JSON.parse(test_meta);
+                 output['user_meta'] = JSON.parse(item['user_meta']);
+                 outputArray.push(output);
+             })
+         }
+         return outputArray;*/
     };
 
     this.GetCandidatesByTestId = function (testId) {

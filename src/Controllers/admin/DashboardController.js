@@ -24,5 +24,47 @@ class DashboardController extends BaseController {
             });
     }
 
+    GetTestCount = (req, resp) => {
+        let model = new DashboardModel();
+        model.GetTestCount(req.user)
+            .then((res) => {
+                console.log('test count fetched');
+                resp.status(200).json(res);
+            })
+            .catch((error) => {
+                let msg = "Error in fetching test count: " + error;
+                console.log(msg);
+                resp.status(500).send(msg);
+            });
+    }
+
+    GetMcqCount = (req, resp) => {
+        let model = new DashboardModel();
+        model.GetMcqCount(req.user)
+            .then((res) => {
+                console.log('mcq count fetched');
+                resp.status(200).json(res);
+            })
+            .catch((error) => {
+                let msg = "Error in fetching mcq count: " + error;
+                console.log(msg);
+                resp.status(500).send(msg);
+            });
+    }
+
+    GetInvitationCount = (req, resp) => {
+        let model = new DashboardModel();
+        model.GetInvitationCount(req.user)
+            .then((res) => {
+                console.log('invitation count fetched');
+                resp.status(200).json(res);
+            })
+            .catch((error) => {
+                let msg = "Error in fetching invitation count: " + error;
+                console.log(msg);
+                resp.status(500).send(msg);
+            });
+    }
+
 }
 export default new DashboardController();

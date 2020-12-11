@@ -4,6 +4,8 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var _mysql_repo = require('./mysql_repo');
 
 var _url = require('url');
@@ -46,6 +48,45 @@ var db = {
         return new Promise(function (resolve, reject) {
             var field_name = EntityFieldMapping[entityName];
             var sql = 'insert into ta_' + entityName + ' (' + field_name + ') \n                    values(\'' + JSON.stringify(entity) + '\');';
+            (0, _mysql_repo.executeQuery)(sql).then(function (res) {
+                // console.log(`${entityName} inserted, res: ${res}`); 
+                console.log(entityName + ' inserted, insertId: ' + res.insertId);
+                resolve(res ? res.insertId : -1);
+            });
+        });
+    },
+    insertCustom: function insertCustom(entityName, entity) {
+        return new Promise(function (resolve, reject) {
+            var field_name = EntityFieldMapping[entityName];
+            var fieldString = '',
+                valueString = '';
+            Object.keys(entity).forEach(function (prop, index) {
+                if (index === Object.keys(entity).length - 1) {
+                    fieldString += '' + prop;
+                    var fieldVal = entity[prop];
+                    if (typeof fieldVal === 'string') {
+                        valueString += '\'' + fieldVal + '\'';
+                    }
+                    if ((typeof fieldVal === 'undefined' ? 'undefined' : _typeof(fieldVal)) === 'object') {
+                        valueString += '\'' + JSON.stringify(fieldVal) + '\'';
+                    } else {
+                        valueString += '' + fieldVal;
+                    }
+                } else {
+                    fieldString += prop + ',';
+                    var _fieldVal = entity[prop];
+                    if (typeof _fieldVal === 'string') {
+                        valueString += '\'' + _fieldVal + '\'';
+                    }
+                    if ((typeof _fieldVal === 'undefined' ? 'undefined' : _typeof(_fieldVal)) === 'object') {
+                        valueString += '\'' + JSON.stringify(_fieldVal) + '\'';
+                    } else {
+                        valueString += '' + _fieldVal;
+                    }
+                    valueString += ',';
+                }
+            });
+            var sql = 'insert into ta_' + entityName + ' (' + fieldString + ') \n                    values(' + valueString + ');';
             (0, _mysql_repo.executeQuery)(sql).then(function (res) {
                 // console.log(`${entityName} inserted, res: ${res}`); 
                 console.log(entityName + ' inserted, insertId: ' + res.insertId);

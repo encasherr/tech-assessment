@@ -71,6 +71,18 @@ const resources = [
         allowedRoles: [ 'admin', 'orgadmin', 'staff' ] 
     },
     { 
+        resource: '/admin/dashboard/test/count',
+        allowedRoles: [ 'admin', 'orgadmin', 'staff' ] 
+    },
+    { 
+        resource: '/admin/dashboard/mcq/count',
+        allowedRoles: [ 'admin', 'orgadmin', 'staff' ] 
+    },
+    { 
+        resource: '/admin/dashboard/invitation/count',
+        allowedRoles: [ 'admin', 'orgadmin', 'staff' ] 
+    },
+    { 
         resource: '/candidate/startTest',
         allowedRoles: [ 'admin', 'candidate' ] 
     },

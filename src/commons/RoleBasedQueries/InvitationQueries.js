@@ -9,23 +9,48 @@ export const VIEW_INVITATIONS_QUERY = {
         getSql: (userEntity) => {
             switch(userEntity.role) {
                 case admin: {
-                    return globalQueries.getAllInvitationsQuery();
+                    return queries.getAllInvitationsQuery();
                 }
                 case staff:
                 case orgadmin: {
-                    return globalQueries.getInvitationsByOrgQuery(userEntity.orgId);
+                    return queries.getInvitationsByOrgQuery(userEntity.orgId);
                 }
                 default: handleRoleNotFound(userEntity.role);
             }
         },
+        /*serializeToJson: (data) => {
+            let outputArray = [];
+            console.log('data count', data.length);
+            if(data && data.length > 0) {
+                data.map((item, index) => {
+                    outputArray.push(item);
+                })
+            }
+            return outputArray;
+        },*/
         serializeToJson: (data) => {
             let outputArray = [];
             console.log('data count', data.length);
             if(data && data.length > 0) {
                 data.map((item, index) => {
                     let output = {};
-                    output.id = item.id;
-                    output['mcq_meta'] = JSON.parse(item['mcq_meta']);
+                    Object.keys(item).map((prop) => {
+                        if(prop === 'response_meta') {
+                            let metaObj = item[prop];
+                            if(metaObj) {
+                                metaObj = metaObj.replace(/\n/g, "\\n");
+                                metaObj = metaObj.replace(/\r/g, "\\r");
+                                metaObj = metaObj.replace(/\t/g, "\\t"); 
+                                let mObj = JSON.parse(metaObj);
+                                Object.keys(mObj).forEach((metaProp) => {
+                                    output[metaProp] = mObj[metaProp];
+                                })
+                            }
+                        }
+                        else {
+                            output[prop] = item[prop];
+                        }
+                    })
                     outputArray.push(output);
                 })
             }

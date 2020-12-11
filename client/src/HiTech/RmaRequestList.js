@@ -25,7 +25,7 @@ const RmaRequestList = (props) => {
                         </Button>
                     </Link>
                 }         
-            title={<Typography variant="body2">{`RMA Requests ${props.rmaRequests ? "("+props.rmaRequests.length+")" : "" }`}</Typography>}>
+            title={<Typography variant="subtitle1">{`RMA Requests ${props.rmaRequests ? "("+props.rmaRequests.length+")" : "" }`}</Typography>}>
             </CardHeader>
             <CardContent>
                 <Table>

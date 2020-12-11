@@ -8,7 +8,7 @@ class TestConsoleTabs extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: 0
+            value: props.selectedTabIndex || 0
         };
     }
 
@@ -18,6 +18,8 @@ class TestConsoleTabs extends Component {
 
     render = () => {
         let { value } = this.state;
+        value = this.props.selectedTabIndex || value;
+        console.log('props.selectedTabIndex', value);
         let { tabs, selectedMcqs, currentTest, candidates } = this.props;
         return(
         <div>
@@ -45,7 +47,10 @@ class TestConsoleTabs extends Component {
             </TabContainer>}
             {value === 2 && 
             <TabContainer>
-                <TestConsoleSettings /> 
+                <TestConsoleSettings
+                        currentTest={currentTest} 
+                        onFieldChange={(val, field) => this.props.onSettingsFieldChange(val, field)}
+                        onSubmitTestSettings={() => this.props.onSubmitTestSettings()} /> 
             </TabContainer>}
         </div>
         );

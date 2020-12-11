@@ -9,19 +9,27 @@ var _path = require('path');
 
 var _path2 = _interopRequireDefault(_path);
 
+var _queries = require('../db/queries');
+
+var _queries2 = _interopRequireDefault(_queries);
+
+var _mysqldb = require('../db/mysqldb');
+
+var _mysqldb2 = _interopRequireDefault(_mysqldb);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var EmailConfig = {
     emailSmtpHost: 'smtp.gmail.com',
     emailSmtpPort: 587,
     emailAuthUser: 'encasherr@gmail.com',
-    emailAuthPassword: 'actionChange',
+    emailAuthPassword: 'CFT@12345',
     inviteFromEmailId: 'encasherr@gmail.com',
     getTestLink: function getTestLink(domainUrl, invitationId) {
         if (!domainUrl) {
             domainUrl = 'http://localhost:3001/';
         }
-        return domainUrl + 'testLandingPage/' + invitationId;
+        return domainUrl + '/testLanding/' + invitationId;
     },
     getFaqLink: function getFaqLink(domainUrl, faqLink) {
         if (!domainUrl) {

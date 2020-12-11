@@ -21,17 +21,7 @@ export const VIEW_DASHBOARD_INVITATION = {
             }
         },
         serializeToJson: (data) => {
-            let outputArray = [];
-            console.log('data count', data.length);
-            if(data && data.length > 0) {
-                data.map((item, index) => {
-                    let output = {};
-                    output.invitationStatus = item.invitationStatus;
-                    output.invitationCount = item.invitationCount;
-                    outputArray.push(output);
-                })
-            }
-            return outputArray;
+            return data && data.length > 0 ? data[0].cnt : 0;
         }
     }
 }
@@ -52,17 +42,7 @@ export const VIEW_DASHBOARD_TESTS = {
             }
         },
         serializeToJson: (data) => {
-            let outputArray = [];
-            console.log('data count', data.length);
-            if(data && data.length > 0) {
-                data.map((item, index) => {
-                    let output = {};
-                    output.testStatus = item.testStatus;
-                    output.testCount = item.testCount;
-                    outputArray.push(output);
-                })
-            }
-            return outputArray;
+            return data && data.length > 0 ? data[0].cnt : 0;
         }
     }
 }
@@ -83,17 +63,7 @@ export const VIEW_DASHBOARD_MCQ = {
             }
         },
         serializeToJson: (data) => {
-            let outputArray = [];
-            console.log('data count', data.length);
-            if(data && data.length > 0) {
-                data.map((item, index) => {
-                    let output = {};
-                    output.mcqSkill = item.mcqSkill;
-                    output.mcqCount = item.mcqCount;
-                    outputArray.push(output);
-                })
-            }
-            return outputArray;
+            return data && data.length > 0 ? data[0].cnt : 0;
         }
     }
 }

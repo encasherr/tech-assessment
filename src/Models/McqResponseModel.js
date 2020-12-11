@@ -48,6 +48,7 @@ class McqResponseModel {
         return new Promise((resolve, reject) => {
             let sql = queries.getMcqResponseByInvitationId(invitationId);
             db.executeQuery(sql).then((res) => {
+                console.log(`mcqresp: ${this.entityName} - ${res}`);
                 let data = db.serializeToJson(res, this.entityName);
                 resolve(data[0]);
             }).catch((err) => {
@@ -56,9 +57,34 @@ class McqResponseModel {
         })
     }
 
+    SerializeToJson = (data, entityName) => {
+        let outputArray = [];
+        let field_name = 'response_meta';
+        console.log('mcqresp count', data.length);
+        if(data && data.length > 0) {
+            data.map((item, index) => {
+                console.log('item', item);
+                let item_value = item[field_name];
+                item_value = item_value.replace(/\n/g, "\\n");
+                item_value = item_value.replace(/\r/g, "\\r");
+                item_value = item_value.replace(/\t/g, "\\t");
+                let output = {};
+                output.id = item.id;
+                output[field_name] = JSON.parse(item_value);
+                // output[field_name] = JSON.parse(item[field_name]);
+                outputArray.push(output);
+            })
+        }
+        return outputArray;
+    }
+    
+
     Add = (entity) => {
         return new Promise((resolve, reject) => {
-            db.insert(this.entityName, entity).then((insertId) => {
+            // db.insert(this.entityName, entity).then((insertId) => {
+            //     resolve(insertId);
+            // });
+            db.insertCustom(this.entityName, entity).then((insertId) => {
                 resolve(insertId);
             });
         });

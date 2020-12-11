@@ -17,7 +17,7 @@ const RmaCustomerDetails = (props) => {
             {model && 
         <Card style={{padding: "1%"}}>
             <CardHeader 
-                title={<Typography variant="body2">Customer Details</Typography>}>
+                title={<Typography variant="subtitle1">Customer Details</Typography>}>
             </CardHeader>
             <CardContent>
                     <form  noValidate autoComplete="off">

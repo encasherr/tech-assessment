@@ -1,16 +1,18 @@
 import path from 'path';
+import queries from '../db/queries';
+import db from "../db/mysqldb";
 
 const EmailConfig = {
     emailSmtpHost: 'smtp.gmail.com',
     emailSmtpPort: 587,
     emailAuthUser: 'encasherr@gmail.com',
-    emailAuthPassword: 'actionChange',
+    emailAuthPassword: 'CFT@12345',
     inviteFromEmailId: 'encasherr@gmail.com',
     getTestLink: (domainUrl, invitationId) => {
         if(!domainUrl) {
             domainUrl = 'http://localhost:3001/'
         }
-        return `${domainUrl}testLandingPage/${invitationId}`;
+        return `${domainUrl}/testLanding/${invitationId}`;
     },
     getFaqLink: (domainUrl, faqLink) => {
         if(!domainUrl) {

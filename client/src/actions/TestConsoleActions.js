@@ -12,12 +12,39 @@ export const FETCH_TEST_MCQS_FAIL = 'FETCH_TEST_MCQS_FAIL';
 export const FETCH_TEST_CANDIDATES_SUCCESS = 'FETCH_TEST_CANDIDATES_SUCCESS';
 export const FETCH_TEST_CANDIDATES_FAIL = 'FETCH_TEST_CANDIDATES_FAIL';
 export const TEST_PUBLISHED = 'TEST_PUBLISHED';
+export const TEST_SETTINGS_FIELD_CHANGE = 'TEST_SETTINGS_FIELD_CHANGE';
+export const TEST_SETTINGS_UPDATE_SUCCESS = 'TEST_SETTINGS_UPDATE_SUCCESS';
+export const TEST_SETTINGS_UPDATE_FAIL = 'TEST_SETTINGS_UPDATE_FAIL';
 export const CLOSE_SNACKBAR = 'CLOSE_SNACKBAR';
 export const OPEN_SNACKBAR = 'OPEN_SNACKBAR';
 
 var history = {};
 export const SetHistory = (propsHistory) => dispatch => {
     history = propsHistory;
+}
+
+export const SettingsFieldChange = (val, field, model) => dispatch => {
+    if(model && model.test_meta){
+        if(!model.test_meta.settings) {
+            model.test_meta.settings = {};
+        }
+    }
+    switch(field)
+    {
+        case 'emailSubject':
+        {
+            model.test_meta.settings.emailSubject = val;
+            dispatch({
+                type: TEST_SETTINGS_FIELD_CHANGE,
+                payload: model
+            });
+            break;
+        }
+        default:
+        {
+            break;
+        }
+    }
 }
 
 export const FetchTest = (testId) => dispatch => {
@@ -154,6 +181,29 @@ export const PublishTest = (testModel) => dispatch => {
                 payload: err
             });
         });
+
+}
+
+export const UpdateTestSettings = (testModel) => dispatch => {
+    return new Promise((resolve, reject) => {
+
+    let url = config.instance.getAdminApiUrl() + 'test';
+    repository.updateData(url, testModel, history)
+        .then((res) => {
+            dispatch({
+                type: TEST_SETTINGS_UPDATE_SUCCESS,
+                payload: res.data
+            });
+            resolve(true);
+        })
+        .catch((err) => {
+            dispatch({
+                type: TEST_SETTINGS_UPDATE_SUCCESS,
+                payload: err
+            });
+            reject(err);
+        });
+    });
 
 }
 

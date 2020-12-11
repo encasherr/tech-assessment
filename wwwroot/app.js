@@ -60,6 +60,10 @@ app.use(function (req, res, next) {
 });
 
 app.use('/api', _routes2.default);
+app.use('/*', function (req, resp) {
+    var fileName = _path2.default.resolve(__dirname + '/index.html');
+    resp.sendFile(fileName);
+});
 app.use('/testLanding', function (req, resp) {
     var fileName = _path2.default.resolve(__dirname + '/index.html');
     resp.sendFile(fileName);

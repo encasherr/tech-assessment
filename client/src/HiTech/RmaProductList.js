@@ -20,7 +20,7 @@ const RmaProductList = (props) => {
                         onFieldChange={ (val, field) => props.onProductFieldChange(val, field) } 
                         />
                 }         
-            title={<Typography variant="body2">{`Products ${props.productList ? "("+props.productList.length+")" : "" }`}</Typography>}>
+            title={<Typography variant="subtitle1">{`Products ${props.productList ? "("+props.productList.length+")" : "" }`}</Typography>}>
             </CardHeader>
             <CardContent>
                 <Table>

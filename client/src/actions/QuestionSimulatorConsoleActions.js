@@ -117,4 +117,7 @@ export const SubmitAnswers = (candidateTestObject) => dispatch => {
                     payload: res.data
                 });
             })
+            .then(() => {
+                AuthHelper.LogOut();
+            });
 }

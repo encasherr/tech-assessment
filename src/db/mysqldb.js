@@ -48,6 +48,48 @@ const db = {
             });
         })
     },
+    insertCustom: (entityName, entity) => {
+        return new Promise((resolve, reject) => {
+            let field_name = EntityFieldMapping[entityName];
+            let fieldString = '', valueString = '';
+            Object.keys(entity).forEach((prop, index) => {
+                if(index === Object.keys(entity).length-1) {
+                    fieldString += `${prop}`;
+                    let fieldVal = entity[prop];
+                    if(typeof fieldVal === 'string') {
+                        valueString += `'${fieldVal}'`;
+                    }
+                    if(typeof fieldVal === 'object') {
+                        valueString += `'${JSON.stringify(fieldVal)}'`;
+                    }
+                    else {
+                        valueString += `${fieldVal}`;
+                    }
+                }
+                else {
+                    fieldString += `${prop},`;
+                    let fieldVal = entity[prop];
+                    if(typeof fieldVal === 'string') {
+                        valueString += `'${fieldVal}'`;
+                    }
+                    if(typeof fieldVal === 'object') {
+                        valueString += `'${JSON.stringify(fieldVal)}'`;
+                    }
+                    else {
+                        valueString += `${fieldVal}`;
+                    }
+                    valueString += ',';
+                }
+            })
+            let sql = `insert into ta_${entityName} (${fieldString}) 
+                    values(${valueString});`;
+            executeQuery(sql).then((res) => {
+                // console.log(`${entityName} inserted, res: ${res}`); 
+                console.log(`${entityName} inserted, insertId: ${res.insertId}`); 
+                resolve(res ? res.insertId : -1);
+            });
+        })
+    },
     update: (entityName, entity, id) => {
         return new Promise((resolve, reject) => {
             let field_name = EntityFieldMapping[entityName];

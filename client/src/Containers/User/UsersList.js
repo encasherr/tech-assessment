@@ -179,8 +179,8 @@ class UsersList extends Component {
 }
 const CustomTableCell = withStyles(theme => ({
     head: {
-      backgroundColor: theme.palette.common.black,
-      color: theme.palette.common.white,
+    //   backgroundColor: theme.palette.common.black,
+      color: theme.palette.common.black,
       fontSize: 18
     },
     body: {
