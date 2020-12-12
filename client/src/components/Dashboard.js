@@ -11,8 +11,8 @@ import { Link as InternalLink } from 'react-router-dom';
 import { Link } from '@material-ui/core';
 // import Box from '@material-ui/core/Box';
 // import Box from '../components/lib/Box';
-import { ThemeProvider } from 'styled-components'
-import { bgcolor } from '@material-ui/system';
+// import { ThemeProvider } from 'styled-components'
+// import { bgcolor } from '@material-ui/system';
 import { Book, Assessment, ViewQuilt, PermIdentity, Polymer, Airplay,
     SupervisorAccount, Work  } from '@material-ui/icons';
 import * as css from '../../src/App.css';
@@ -257,9 +257,6 @@ const styles = {
     cardHeader: {
         borderBottom: '1px solid #3f51b5',
         color: '#fff'
-    },
-    niceCard: {
-        bgcolor: 'primary.main'
     },
     alignCenter: {
         textAlign: 'center',
