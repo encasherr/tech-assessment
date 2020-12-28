@@ -44,7 +44,8 @@ const styles = theme => createMuiTheme({
   },
   bgPrimaryMain: {
     backgroundColor: primary.main,
-    color: '#fff'
+    color: '#fff',
+    fontWeight: '700'
   },
   bgPrimaryDark: {
     backgroundColor: primary.dark
@@ -116,7 +117,8 @@ const styles = theme => createMuiTheme({
     borderBottom: `2px solid ${success.dark}`
   },
   paletteBorderBottomPrimaryMain: {
-    borderBottom: `2px solid ${primary.main}`
+    borderBottom: `2px solid ${primary.main}`,
+    height: '150px'
   },
   paletteBorderBottomPrimaryLight: {
     borderBottom: `2px solid ${primary.light}`
@@ -133,16 +135,24 @@ const styles = theme => createMuiTheme({
   paletteBorderBottomSecondaryDark: {
     borderBottom: `2px solid ${secondary.dark}`
   },
+  paletteBorderBottomListItem: {
+    borderBottom: `1px solid #9AA59F`
+  },
   palettePrimaryLight: {
     backgroundColor: '#757ce8'
   },
   palettePrimaryMain: {
-    backgroundColor: '#3f50b5',
-    color: '#fff'
+    backgroundColor: primary.main,
+    color: '#fff',
+    borderRadius: '15px'
   },
   palettePrimaryDark: {
-    backgroundColor: '#002884',
-    color: '#fff'
+    // backgroundColor: primary.dark,
+    backgroundColor: '#E3D6DE',
+    textAlign: 'center'
+    // border: '2px solid',
+    // borderWidth: '0px',
+    // borderColor: primary.dark, 
   },
   palettePrimaryContrastText: {
     backgroundColor: '#fff',
@@ -159,6 +169,45 @@ const styles = theme => createMuiTheme({
   },
   paletteSecondaryContrastText: {
     backgroundColor: '#000'
+  },
+  paletteDashboardBox: {
+    // backgroundColor: '#CBC2E1'
+    minHeight: '300px',
+    border: '1px solid #CBC2E1'
+  },
+  paletteReportBox: {
+    border: '1px solid #CBC2E1',
+    padding: '4%',
+    borderRadius: '15px'    
+  },
+  profileBox: {
+    minHeight: '300px',
+    borderRadius: '15px'    
+  },
+  infoText: {
+    fontSize: '16px',
+    fontWeight: '700'
+  },
+  fontSubHeading: {
+    fontSize: '14px',
+    fontWeight: '700'
+  },
+  fontWhiteSecondary: {
+    color: '#fff',
+  },
+  fontBlackPrimary: {
+    color: '#38403B',
+    fontWeight: '700'
+  },
+  fontBlackSecondary: {
+    color: '#44594C',
+  },
+  squareIcon: {
+    width: '100%',
+    height: '100%',
+    // color: '#fff',
+    borderRadius: '10px',
+    // backgroundColor: '#ff5722',
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
@@ -216,6 +265,9 @@ const styles = theme => createMuiTheme({
     flexGrow: 1,
     padding: theme.spacing.unit * 3,
   },
+  paddingBottom: {
+    paddingBottom: '4%'
+  }
 });
 
 class Shell extends React.Component {

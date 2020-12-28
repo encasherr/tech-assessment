@@ -101,6 +101,14 @@ const resources = [
     {
         resource: '/loadConfig',
         allowedRoles: [ 'admin', 'orgadmin', null, undefined, '' ]
+    },
+    { 
+        resource: '/admin/getCandidateResponseReport',
+        allowedRoles: [ 'admin', 'orgadmin', 'staff' ] 
+    },
+    { 
+        resource: '/admin/getCandidateDetails',
+        allowedRoles: [ 'admin', 'orgadmin', 'staff' ] 
     }
 ];
 

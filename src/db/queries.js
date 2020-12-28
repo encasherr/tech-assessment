@@ -11,7 +11,7 @@ const queries =  {
                 JSON_UNQUOTE(JSON_EXTRACT(r.response_meta, '$.scorePercentage')) as 'scorePercentage', 
                 JSON_UNQUOTE(JSON_EXTRACT(r.response_meta, '$.result')) as 'result', 
                 JSON_UNQUOTE(JSON_EXTRACT(t.test_meta, '$.testName')) as 'testName', 
-                t.id as 'testId', r.id as 'responseId',
+                t.id as 'testId', r.id as 'responseId', c.id as 'candidateId',
                 r.response_meta as 'response_meta'
                 FROM ta_invitations i 
                 join ta_candidates c ON JSON_UNQUOTE(JSON_EXTRACT(i.invitation_meta , '$.candidateId')) = c.id 
@@ -117,6 +117,18 @@ const queries =  {
         `;
     },
 
+    getMcqResponseByResponseId: (responseId) => {
+        return `
+            SELECT  r.id,
+                    r.invitationId,
+                    r.response_meta,
+                    i.invitation_meta
+            FROM ta_mcqresponses r
+            JOIN ta_invitations i on r.invitationId = i.id
+            WHERE r.id = ${responseId}
+        `;
+    },
+
     getAllDbConfig: () => {
         return `
             SELECT meta_key, meta_value
@@ -149,6 +161,21 @@ const queries =  {
             LEFT JOIN ta_mcqresponses r ON JSON_EXTRACT(r.response_meta , '$.invitationId') = i.id
             WHERE t.id = ${testId}
             ORDER BY i.time_stamp DESC
+        `;
+    },
+
+    getCandidateDetails: (candidateId) => {
+        return `
+            SELECT c.candidate_meta,
+            i.invitation_meta,
+            t.test_meta,
+            r.response_meta
+            FROM ta_candidates c
+            JOIN ta_invitations i on JSON_EXTRACT(i.invitation_meta, '$.candidateId') = c.id
+            JOIN ta_tests t on JSON_EXTRACT(i.invitation_meta, '$.testId') = t.id
+            JOIN ta_mcqresponses r on i.id = r.id
+            WHERE c.id= ${candidateId}
+            AND i.isLive = 1
         `;
     }
 }

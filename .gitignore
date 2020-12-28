@@ -24,3 +24,4 @@ yarn-debug.log*
 yarn-error.log*
 data/dev.json
 data/dev.json
+wwwroot/app.js

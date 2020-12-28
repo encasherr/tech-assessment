@@ -16,7 +16,34 @@ import { Add, Search } from '@material-ui/icons';
 import LoadingComponent from '../lib/LoadingComponent';
 import User401 from '../../Containers/User/User401';
 
+import { Input, InputLabel, Select, MenuItem } from '@material-ui/core';
+
+
 //import BaseComponent from '../lib/BaseComponent';
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250,
+      },
+    },
+  };
+  
+  const names = [
+    'Oliver Hansen',
+    'Van Henry',
+    'April Tucker',
+    'Ralph Hubbard',
+    'Omar Alexander',
+    'Carlos Abbott',
+    'Miriam Wagner',
+    'Bradley Wilkerson',
+    'Virginia Andrews',
+    'Kelly Snyder',
+  ];
+  
 
 class McqList extends Component {
 
@@ -26,6 +53,24 @@ class McqList extends Component {
           selectedMcqs: []
        }
     }
+
+//     [personName, setPersonName] = useState([]);
+
+//    handleChange = (event) => {
+//     setPersonName(event.target.value);
+//   };
+
+//    handleChangeMultiple = (event) => {
+//     const { options } = event.target;
+//     const value = [];
+//     for (let i = 0, l = options.length; i < l; i += 1) {
+//       if (options[i].selected) {
+//         value.push(options[i].value);
+//       }
+//     }
+//     setPersonName(value);
+//   };
+
 
     componentDidMount = () => {
         this.props.FetchMcqs();
@@ -101,15 +146,33 @@ class McqList extends Component {
                     {search_enabled && 
                     <div>
                         <FormControl variant="outlined" style={styles.formControl}>
-                                        <TextField
-                                            id="outlined-name"
-                                            label="Search"
-                                            value={search_term}
-                                            className={styles.dense}
-                                            onChange={(e) => this.props.SearchMcq(e.target.value, mcqs)}
-                                            margin="normal"
-                                            variant="outlined"
-                                        />
+                            <TextField
+                                id="outlined-name"
+                                label="Search"
+                                value={search_term}
+                                className={styles.dense}
+                                onChange={(e) => this.props.SearchMcq(e.target.value, mcqs)}
+                                margin="normal"
+                                variant="outlined"
+                            />
+                            {/* <InputLabel id="demo-mutiple-checkbox-label">Tag</InputLabel>
+                            <Select
+                                labelId="demo-mutiple-checkbox-label"
+                                id="demo-mutiple-checkbox"
+                                multiple
+                                value={['personName']}
+                                onChange={(e) => this.handleFilters(e.target.value, 'category')}
+                                input={<Input />}
+                                // renderValue={(selected) => selected.join(', ')}
+                                MenuProps={MenuProps}
+                                >
+                                {names.map((name) => (
+                                    <MenuItem key={name} value={name}>
+                                    <Checkbox checked={'personName'.indexOf(name) > -1} />
+                                    <ListItemText primary={name} />
+                                    </MenuItem>
+                                ))}
+                            </Select> */}
                         </FormControl>
                         <FormControl variant="outlined" style={{width: '10%', marginTop: '2%'}}>
                             <Button  color="primary" size="small" onClick={() => this.props.EndSearch()} >

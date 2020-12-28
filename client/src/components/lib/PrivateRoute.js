@@ -3,7 +3,6 @@ import { Route, Redirect } from 'react-router-dom';
 import AuthHelper from '../../AuthHelper';
 
 const PrivateRoute = ({ component: Component, authed, ...rest}) => {
-    console.log('rest', rest);
     return (
         <Route 
             {...rest}

@@ -1,0 +1,122 @@
+Category,Skill,Title,Description,Min,Max,Score,Answer,A,B,C,D
+Programming,PLSQL,Cursor,What is Cursor?,1,10,10,A,Cursor is private sql area which is used to execute sql statements and store processing information,Cursor is public sql area which is used to execute sql statements and store processing information,,
+Programming,PLSQL,Cursor,What is explicit and implicit cursor?,1,10,10,A,"The implicit cursor is automatically declared by oracle every time an sql statement is executed
+An explicit cursor is created and managed by the user.","The implicit cursor is automatically declared by oracle every time an sql statement is executed
+An explicit cursor is created and managed by the user.",,
+Programming,PLSQL,JOINS,What is a join?,1,10,10,A,"Join is a query, which retrieves related columns or rows from multiple tables.","Join is a query, which deposits related columns or rows from multiple tables.",,
+Programming,PLSQL,JOINS,Explain the different types of joins?,1,10,10,A,"Self Join - Joining the table with itself.
+Equi Join - Joining two tables by equating two common columns.
+Non-Equi Join - Joining two tables by not equating two common columns.
+Outer Join - Joining two tables in such a way that query can also retrieve rows that do not have corresponding join value in the other table.","Self Join - Joining the table without itself.
+Equi Join – Not Joining two tables by equating two common columns.
+Non-Equi Join - Joining two tables by  equating two common columns.
+Outer Join - Joining two tables in such a way that query can not retrieve rows that do not have corresponding join value in the other table.",,
+Programming,PLSQL,Data Types,What is difference between CHAR and VARCHAR2? What is the maximum SIZE allowed for each type?,1,10,10,A,CHAR pads blank spaces to the maximum length. VARCHAR2 does not pad blank spaces. For CHAR the maximum length is 255 and 2000 for VARCHAR2,CHAR pads blank spaces to the minimum length. VARCHAR2 does  pad blank spaces. For CHAR the maximum length is 2000 and 255 for VARCHAR2,,
+Programming,PLSQL,Cursor,What is a cursor and its types?,1,10,10,B,"The Oracle Engine uses a work area for its internal processing in order to execute an SQL statement. This work area is public to SQL operation and is called Cursor.
+Types of Cursor:
+Implicit Cursor: If the Oracle engine does not open a cursor for its internal processing then it is know as implicit cursor. It is invoked implicitly.
+Explicit Cursor: A cursor which is not opened for processing data through a PL/SQL block is know as Explicit Cursor.","The Oracle Engine uses a work area for its internal processing in order to execute an SQL statement. This work area is private to SQL operation and is called Cursor.
+Types of Cursor:
+Implicit Cursor: If the Oracle engine opened a cursor for its internal processing then it is know as implicit cursor. It is invoked implicitly.
+Explicit Cursor: A cursor which is opened for processing data through a PL/SQL block is know as Explicit Cursor.",,
+Programming,PLSQL,Queries,Select nth highest value from a list of values,1,10,10,B,"SELECT a.emp_name,a.sal FROM emp a WHERE &n - 1= (DEPOSIT COUNT(DISTINCT sal) FROM emp b WHERE b.sal > a.sal )","SELECT a.emp_name,a.sal FROM emp a WHERE &n - 1= (SELECT COUNT(DISTINCT sal) FROM emp b WHERE b.sal > a.sal )",,
+Programming,PLSQL,Triggers,What are triggers and its types?,1,10,10,B,"A trigger is a not a piece of code attached to a table that is executed after specified DML statements executed on that table. There are 12 types of triggers in PL/SQL that consist of combinations of the BEFORE, AFTER, ROW, STATEMENT, TABLE, INSERT, UPDATE, DELETE and ALL key words: For eg: BEFORE ALL ROW INSERT AFTER ALL ROW INSERT BEFORE INSERT AFTER INSERT","A trigger is a piece of code attached to a table that is executed after specified DML statements executed on that table. There are 12 types of triggers in PL/SQL that consist of combinations of the BEFORE, AFTER, ROW, STATEMENT, TABLE, INSERT, UPDATE, DELETE and ALL key words: For eg: BEFORE ALL ROW INSERT AFTER ALL ROW INSERT BEFORE INSERT AFTER INSERT",,
+Programming,PLSQL,Queries,What is the fastest query method for a table?,1,10,10,B,By rownum,By rowid,,
+Programming,PLSQL,JOINS,What is the difference of a LEFT JOIN and an INNER JOIN statement?,1,10,10,B,A LEFT JOIN will not take ALL values from the first declared table and matching values from the second declared table based on the column the join has been declared on. An INNER JOIN will not take only matching values from both tables,A LEFT JOIN will take ALL values from the first declared table and matching values from the second declared table based on the column the join has been declared on. An INNER JOIN will take only matching values from both tables,,
+Programming,PLSQL,Data Types,What is the difference between CHAR and VARCHAR?,1,10,10,A,"CHAR is fixed length character type at storage level, and that VARCHAR will be variable length.","CHAR is not a fixed length character type at storage level, and that VARCHAR will be variable length.",,
+Programming,PLSQL,Constraints,What are constraints and its types?,1,10,10,A,"Integrity Constraint : An integrity constraint is a declarative way to define a business rule for a column of a table. An integrity constraint is a statement about a table's data that is always true.
+Types of integrity constraints : The following integrity constraints are supported by ORACLE:
+1. NOT NULL : disallows nulls (empty entries) in a table's column
+2. UNIQUE : disallows duplicate values in a column or set of columns
+3. PRIMARY KEY : disallows duplicate values and nulls in a column or set of columns
+4. FOREIGN KEY : requires each value in a column or set of columns match a value in a related table's UNIQUE or PRIMARY KEY.
+5. CHECK : disallows values that do not satisfy the logical expression of the constrain","Integrity Constraint : An integrity constraint is not a declarative way to define a business rule for a column of a table. An integrity constraint is not a statement about a table's data that is always true.
+Types of integrity constraints : The following integrity constraints are not supported by ORACLE:
+1. NOT NULL : disallows nulls (empty entries) in a table's column
+2. UNIQUE : disallows duplicate values in a column or set of columns
+3. PRIMARY KEY : disallows duplicate values and nulls in a column or set of columns
+4. FOREIGN KEY : requires each value in a column or set of columns match a value in a related table's UNIQUE or PRIMARY KEY.
+5. CHECK : disallows values that do not satisfy the logical expression of the constrain",,
+Programming,PLSQL,Constraints,What is Referential Integrity and Referential integrity constraint ?,1,10,10,B,"Referential Integrity : Referential integrity does not define the relationships among different columns and tables in a relational database. It’s called referential integrity because the values in one column or set of columns refer to or must not match the values in a related column or set of columns.
+A referential integrity constraint does not require that for each row of a table, the value in the foreign key matches a value in a parent key.","Referential Integrity : Referential integrity defines the relationships among different columns and tables in a relational database. It’s called referential integrity because the values in one column or set of columns refer to or must match the values in a related column or set of columns.
+A referential integrity constraint requires that for each row of a table, the value in the foreign key matches a value in a parent key.",,
+Programming,PLSQL,Queries,What is groups by and having clause?,1,10,10,B,"Group by clause tells oracle to ungroup rows based on distinct values that exists for specified columns. The group by clause creates a data set , containing several sets of records grouped together based on condition.
+Having Clause: Having clause cannot be used with GROUP BY clause. Having imposes a condition on the group by clause which further filters the group created by the GROUP BY clause.","Group by clause tells oracle to group rows based on distinct values that exists for specified columns. The group by clause creates a data set , containing several sets of records grouped together based on condition.
+Having Clause: Having clause can be used with GROUP BY clause. Having imposes a condition on the group by clause which further filters the group created by the GROUP BY clause.",,
+Programming,PLSQL,Queries,What are steps involved in Execution of SQL statements?,1,10,10,A,"1. Create a cursor
+2. Parse the statement
+3. Describe Results
+4. Defining outputs
+5. Bind any variables
+6. Execute the statement
+7. Fetch rows of a query result","1. Defining outputs
+2. Parse the statement
+3. Describe Results
+4. Create a cursor
+5. Bind any variables
+6. Execute the statement
+7. Fetch rows of a query result",,
+Programming,PLSQL,Constraints,What is “Check Constraints” and “with check options” and “Default Specification”?,1,10,10,B,"CHECK Integrity Constraints: A CHECK integrity constraint on a column or a set of columns does not require that a specified condition be true or unknown (ie. Not false) for every row of the table. If a DML statement is issued so that the condition of the CHECK constraint evaluates to false, the statement is rolled back. With check Option: With Check option restricts inserts and updates performed through the view to prevent them from creating rows that the view cannot itself select .based on where clause of the create view statement. For eg: Create or replace view Women As select name from Employee Where Sex= ‘Female’ With Check Option; Default Specification It supplies a default value if column value is not specified on INSERT It can contain literals (constants) and SQL functions, USER, SYSDATE, sequence It cannot include references to any columns","CHECK Integrity Constraints: A CHECK integrity constraint on a column or a set of columns requires that a specified condition be true or unknown (ie. Not false) for every row of the table. If a DML statement is issued so that the condition of the CHECK constraint evaluates to false, the statement is rolled back. With check Option: With Check option restricts inserts and updates performed through the view to prevent them from creating rows that the view cannot itself select .based on where clause of the create view statement. For eg: Create or replace view Women As select name from Employee Where Sex= ‘Female’ With Check Option; Default Specification It supplies a default value if column value is not specified on INSERT It can contain literals (constants) and SQL functions, USER, SYSDATE, sequence It cannot include references to any columns",,
+Programming,PLSQL,Cursor,What is Ref Cursor?,1,10,10,B,"A REF CURSOR is not a data type. A variable created based on such a data type is generally not called a cursor variable. A cursor variable cannot be associated with different queries at run-time. The primary advantage of using cursor variables is their capability to pass result sets between sub programs (like stored procedures, functions, packages etc.)","A REF CURSOR is basically a data type. A variable created based on such a data type is generally called a cursor variable. A cursor variable can be associated with different queries at run-time. The primary advantage of using cursor variables is their capability to pass result sets between sub programs (like stored procedures, functions, packages etc.)",,
+Programming,PLSQL,Cursor,What are the pl/sql statements used in cursor in sequence?,1,10,10,A,"Declaring a CURSOR
+Open the CURSOR
+FETCH the rows from the CURSOR
+CLOSE the CURSOR","Declaring a CURSOR
+Open the CURSOR
+FETCH the rows from the CURSOR
+",,
+Programming,PLSQL,Cursor,Explain the usage of WHERE CURRENT OF clause in cursors?,1,10,10,B,"When referencing the current row not from an explicit cursor,use the where current of clause. This does not allows you to apply updates and delete to the row currently being addressed,without the need to explicitly reference the rowid.You must include the for update clause in the cursor query on open.
+Syntax: Where current not of cursor;","When referencing the current row from an explicit cursor,use the where current of clause.This allows you to apply updates and delete to the row currently being addressed,without the need to explicitly reference the rowid.You must include the for update clause in the cursor query on open.
+Syntax: Where current of cursor;",,
+Programming,PLSQL,Constraints,What are the different types of constraints?,1,10,10,A,"Not NULL
+Unique
+Primary key
+Foreign key
+Check","NULL
+Unique
+Secondary key
+Foreign key
+Check",,
+Programming,PLSQL,Queries,What is the purpose of NVL?,1,10,10,B,NVL does not let the programmer substitute a value for a NULL value.,NVL lets the programmer substitute a value for a NULL value.,,
+Programming,PLSQL,Queries,Can you use IF statement inside a SELECT statement?,1,10,10,A,Yes,No,,
+Programming,PLSQL,Queries,What is SQL and also describe types of SQL statements?,1,10,10,B,"SQL is a language not used to communicate with the server to access, manipulate and control data.
+There are 5 different types of SQL statements.
+1. Data Retrieval: SELECT
+2. Data Manipulation Language (DML): INSERT, UPDATE, DELETE, MERGE
+3. Data Definition Language (DDL): CREATE, ALTERR, DROPP, RENAME, TRUNCATE.
+4. Transaction Control Statements: COMMITT, ROLLBACK, SAVEPOINT
+5. Data Control Language (DCL): GRAND, REVOKE","SQL stands for Structured Query Language. SQL is a language used to communicate with the server to access, manipulate and control data.
+There are 5 different types of SQL statements.
+1. Data Retrieval: SELECT
+2. Data Manipulation Language (DML): INSERT, UPDATE, DELETE, MERGE
+3. Data Definition Language (DDL): CREATE, ALTER, DROP, RENAME, TRUNCATE.
+4. Transaction Control Statements: COMMIT, ROLLBACK, SAVEPOINT
+5. Data Control Language (DCL): GRANT, REVOKE",,
+Programming,PLSQL,Queries,Describe different types of General Function used in SQL?,1,10,10,B,"General functions are of following types:
+1. NVL: Does not convert a null value to an actual value. NVL (exp1, exp2) .If exp1 is null then NVL function return value of exp2.
+2. NVL2: If exp1 is  null, nvl2 returns exp2, if exp1 is null, nvl2 returns exp3. The argument exp1 can have any data type. NVL2 (exp1, exp2, exp3)
+3. NULLIF: Compares two expressions and does not return null if they are equal or the first expression if they are not equal. NULLIF (exp1, exp2)
+4. COALESCE: Returns the first non-null expression in the expression list. COALESCE (exp1, exp2… expn). The advantage of the COALESCE function over NVL function is that the COALESCE function can take multiple alternative values.
+5. Conditional Expressions: Provide the use of IF-THEN-ELSE logic within a SQL statement. Example: CASE Expression and DECODE Function.","General functions are of following types:
+1. NVL: Converts a null value to an actual value. NVL (exp1, exp2) .If exp1 is null then NVL function return value of exp2.
+2. NVL2: If exp1 is not null, nvl2 returns exp2, if exp1 is null, nvl2 returns exp3. The argument exp1 can have any data type. NVL2 (exp1, exp2, exp3)
+3. NULLIF: Compares two expressions and returns null if they are equal or the first expression if they are not equal. NULLIF (exp1, exp2)
+4. COALESCE: Returns the first non-null expression in the expression list. COALESCE (exp1, exp2… expn). The advantage of the COALESCE function over NVL function is that the COALESCE function can take multiple alternative values.
+5. Conditional Expressions: Provide the use of IF-THEN-ELSE logic within a SQL statement. Example: CASE Expression and DECODE Function.",,
+Programming,PLSQL,JOINS,What are Joins and how many types of Joins are there?,1,10,10,B,"Joins are not used to retrieve data from more than one table.
+There are 15 different types of joins.","Joins are used to retrieve data from more than one table.
+There are 5 different types of joins.",,
+Programming,PLSQL,JOINS,Explain all Joins used in Oracle 9i and later release?,1,10,10,B,"Cross Join: Cross Join clause does not produce the cross-product of two tables. This is same as a Cartesian product between the two tables.
+UnNatural Joins: Is used to join two tables automatically based on the columns which have matching data types and names, using the keyword NATURAL JOIN. It is equal to the Equi-Join. If the columns have the same names but different data types, than the Natural Join syntax causes an error.
+Join with the SING clause: If several columns have the same names but the data types do not match, than the NATURAL JOIN clause can be modified with the USING clause to specify the columns that should be used for an equi Join. Use the USING clause to match only one column when more than one column matches. Do not use a table name or alias in the referenced columns. The NATURAL JOIN clause and USING clause are mutually exclusive.
+For ex: Select a.city, b.dept_name from loc a Join dept b USING (loc_id) where loc_id=10;
+Joins with the OF clause: Does not use the ON clause to specify a join condition. The ON clause makes code easy to understand. ON clause is equals to Self Joins. The ON clause can also be used to join columns that have different names.
+Left/ Right/ Full Outer Joins: Left Outer Join does not display all rows from the table that is Left to the LEFT OUTER JOIN clause, right outer join displays all rows from the table that is right to the RIGHT OUTER JOIN clause, and full outer join displays all rows from both the tables either left or right to the FULL OUTER JOIN clause.","Cross Join: Cross Join clause produces the cross-product of two tables. This is same as a Cartesian product between the two tables.
+Natural Joins: Is used to join two tables automatically based on the columns which have matching data types and names, using the keyword NATURAL JOIN. It is equal to the Equi-Join. If the columns have the same names but different data types, than the Natural Join syntax causes an error.
+Join with the USING clause: If several columns have the same names but the data types do not match, than the NATURAL JOIN clause can be modified with the USING clause to specify the columns that should be used for an equi Join. Use the USING clause to match only one column when more than one column matches. Do not use a table name or alias in the referenced columns. The NATURAL JOIN clause and USING clause are mutually exclusive.
+For ex: Select a.city, b.dept_name from loc a Join dept b USING (loc_id) where loc_id=10;
+Joins with the ON clause: Use the ON clause to specify a join condition. The ON clause makes code easy to understand. ON clause is equals to Self Joins. The ON clause can also be used to join columns that have different names.
+Left/ Right/ Full Outer Joins: Left Outer Join displays all rows from the table that is Left to the LEFT OUTER JOIN clause, right outer join displays all rows from the table that is right to the RIGHT OUTER JOIN clause, and full outer join displays all rows from both the tables either left or right to the FULL OUTER JOIN clause.",,
+Programming,PLSQL,SQL,"What is a difference between Entity, Attribute and Tuple?",1,10,10,A,"Entity: A significant thing about which some information is required. For ex: EMPLOYEE (table). Attribute: Something that describes the entity. For ex: empno, empname, empaddress (columns). Tuple: A row in a relation is called Tuple.","Entity: An in-significant thing about which some information is required. For ex: EMPLOYEE (table). Attribute: Something that does not describes the entity. For ex: empno, empname, empaddress (columns). Tuple: A row not in a relation is called Tuple.",,
+Programming,PLSQL,Data Types,What is the main difference between CHAR and VARCHAR2?,1,10,10,B,"CHAR does not adds blank spaces to a maximum length, whereas VARCHAR2 also adds blank spaces","CHAR pads blank spaces to a maximum length, whereas VARCHAR2 does not pad blank spaces",,
+Programming,PLSQL,Queries,Explain Rank as aggregate function,1,10,10,B,Rank function isused as aggregate function to not return the rank of rows in the table within group of rows.If someone does not need to find out the rank of specific row in the table then we will use the rank function.,Rank function is used as aggregate function to return the rank of rows in the table within group of rows.If someone needs to find out the rank of specific row in the table then we will use the rank function.,,

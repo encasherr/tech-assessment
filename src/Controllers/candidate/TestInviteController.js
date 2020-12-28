@@ -14,7 +14,7 @@ import users from '../../users';
 import DbConfig from '../../commons/DbConfig';
 
 class TestInviteController {
-    
+
     GetAll = (req, resp) => {
         console.log('get all invitations called', req.user);
         let model = new InvitationModel();
@@ -42,34 +42,34 @@ class TestInviteController {
     AuthenticateCandidate = (req, resp, done) => {
         console.log('authenticate candidate called');
         console.log(req.body);
-        let { invitationId } = req.body; 
+        let { invitationId } = req.body;
         let invitationModel = new InvitationModel();
         invitationModel.GetCandidateInfoByInvitationId(invitationId)
-                    .then((candidateInfo) => {
-                        if(candidateInfo) {
-                            let userEntity = {
-                                id: candidateInfo.candidateId,
-                                emailId: candidateInfo.candidateEmail,
-                                name: candidateInfo.candidateName ? candidateInfo.candidateName : candidateInfo.candidateEmail,
-                                role: users.UserRoles.candidate
-                            };
-                            console.log('candidate found', userEntity);
-                            req.user = userEntity;
-                            done(null, userEntity);
-                        }
-                        else {
-                            console.log('unknown candidate login being attempted');
-                            
-                            const newUser = {
-                                emailId: emailId,
-                                status: 'not found',
-                                name: emailId,
-                                role: 'guest'
-                            }
-                            
-                            done(null, newUser);
-                        }
-                    });
+            .then((candidateInfo) => {
+                if (candidateInfo) {
+                    let userEntity = {
+                        id: candidateInfo.candidateId,
+                        emailId: candidateInfo.candidateEmail,
+                        name: candidateInfo.candidateName ? candidateInfo.candidateName : candidateInfo.candidateEmail,
+                        role: users.UserRoles.candidate
+                    };
+                    console.log('candidate found', userEntity);
+                    req.user = userEntity;
+                    done(null, userEntity);
+                }
+                else {
+                    console.log('unknown candidate login being attempted');
+
+                    const newUser = {
+                        emailId: emailId,
+                        status: 'not found',
+                        name: emailId,
+                        role: 'guest'
+                    }
+
+                    done(null, newUser);
+                }
+            });
 
     }
 
@@ -93,7 +93,7 @@ class TestInviteController {
 
         let invitationModel = new InvitationModel();
         invitationModel.GetInvitation(invitationId).then((invitationEntity) => {
-            if(!invitationEntity){
+            if (!invitationEntity) {
                 resp.status(404).json({
                     message: "Not found"
                 });
@@ -104,85 +104,85 @@ class TestInviteController {
                 let mcqResponseModel = new McqResponseModel();
 
                 testModel.GetTest(invitationEntity.invitation_meta.testId)
-                        .then((testEntity) => {
-                            let selectedMcqIds = [];
-                            console.log(`testEntity: ${testEntity.test_meta}`);
+                    .then((testEntity) => {
+                        let selectedMcqIds = [];
+                        console.log(`testEntity: ${testEntity.test_meta}`);
+                        testEntity.test_meta.selectedMcqs.map((item, index) => {
+                            selectedMcqIds.push(item.mcqId);
+                        });
+                        mcqModel.GetMcqsByIds(selectedMcqIds).then((mcqs) => {
+                            console.log(`get mcqs by id, length: ${mcqs.length}`);
+                            let mcqResponseMeta = {
+                                testId: testEntity.id,
+                                invitationId: invitationEntity.id,
+                                mcqs: []
+                            };
                             testEntity.test_meta.selectedMcqs.map((item, index) => {
-                                selectedMcqIds.push(item.mcqId);
-                            });
-                            mcqModel.GetMcqsByIds(selectedMcqIds).then((mcqs) => {
-                                console.log(`get mcqs by id, length: ${mcqs.length}`);
-                                let mcqResponseMeta = {
-                                    testId: testEntity.id,
-                                    invitationId: invitationEntity.id,
-                                    mcqs: []
-                                };
-                                testEntity.test_meta.selectedMcqs.map((item, index) => {
-                                    let filteredMcq = mcqs.filter((mcqItem, index) => {
-                                        return mcqItem.id === item.mcqId;
-                                    });
-                                    if(filteredMcq && filteredMcq.length > 0) {
-                                        let item_value = filteredMcq[0];
-                                        // item_value = item_value.replace(/\n/g, "\\n");
-                                        // item_value = item_value.replace(/\r/g, "\\r");
-                                        // item_value = item_value.replace(/\t/g, "\\t");
-                                        item.mcq = item_value;
-                                        // item.mcq = filteredMcq[0];
-                                        item.candidateResponse = {
-                                            responseKeys: []
-                                        }
-                                        mcqResponseMeta.mcqs.push(item);
-                                    }
+                                let filteredMcq = mcqs.filter((mcqItem, index) => {
+                                    return mcqItem.id === item.mcqId;
                                 });
-                                console.log('getting invitation entity now', invitationId);
-                                mcqResponseModel.GetByInvitationId(invitationId)
-                                            .then((mcqResponseEntity) => {
-                                                if(mcqResponseEntity) {
-                                                    console.log('existing mcq response returned');
-                                                    resp.status(200).json(mcqResponseEntity);
+                                if (filteredMcq && filteredMcq.length > 0) {
+                                    let item_value = filteredMcq[0];
+                                    // item_value = item_value.replace(/\n/g, "\\n");
+                                    // item_value = item_value.replace(/\r/g, "\\r");
+                                    // item_value = item_value.replace(/\t/g, "\\t");
+                                    item.mcq = item_value;
+                                    // item.mcq = filteredMcq[0];
+                                    item.candidateResponse = {
+                                        responseKeys: []
+                                    }
+                                    mcqResponseMeta.mcqs.push(item);
+                                }
+                            });
+                            console.log('getting invitation entity now', invitationId);
+                            mcqResponseModel.GetByInvitationId(invitationId)
+                                .then((mcqResponseEntity) => {
+                                    if (mcqResponseEntity) {
+                                        console.log('existing mcq response returned');
+                                        resp.status(200).json(mcqResponseEntity);
+                                    }
+                                    else {
+                                        mcqResponseEntity = {
+                                            invitationId: parseInt(invitationId),
+                                            response_meta: mcqResponseMeta
+                                        }
+                                        console.log('adding new mcq invitation on invitation: ', invitationId);
+                                        // mcqResponseModel.Add(mcqResponseMeta).then((responseId) => {
+                                        mcqResponseModel.Add(mcqResponseEntity).then((responseId) => {
+                                            console.log('responseId', responseId);
+                                            if (responseId > 0) {
+                                                let updateInvitationEntity = {
+                                                    ...invitationEntity,
+                                                    status: Constants.InvitationTestStatus.Started
                                                 }
-                                                else {
-                                                    mcqResponseEntity = {
-                                                        invitationId: parseInt(invitationId),
+                                                invitationModel.Update(updateInvitationEntity).then((res) => {
+                                                    let mcqResponse = {
+                                                        id: responseId,
                                                         response_meta: mcqResponseMeta
                                                     }
-                                                        console.log('adding new mcq invitation on invitation: ', invitationId);
-                                                        // mcqResponseModel.Add(mcqResponseMeta).then((responseId) => {
-                                                        mcqResponseModel.Add(mcqResponseEntity).then((responseId) => {
-                                                        console.log('responseId', responseId);
-                                                        if(responseId > 0) {
-                                                            let updateInvitationEntity = {
-                                                                ...invitationEntity,
-                                                                status: Constants.InvitationTestStatus.Started 
-                                                            }
-                                                            invitationModel.Update(updateInvitationEntity).then((res) => {
-                                                                let mcqResponse = {
-                                                                    id: responseId,
-                                                                    response_meta: mcqResponseMeta
-                                                                }
-                                                                resp.status(200).json(mcqResponse);
-                                                            });
-                                                        }
-                                                        else {
-                                                            console.log('Nothing inserted as response to table');
-                                                            resp.status(500).json({message: 'Error in loading response' });
-                                                        }
-                                                    }).catch((err) => {
-                                                            console.log('Exception in inserting response to table', err);
-                                                            resp.status(500).json({message: 'Error in adding response' })
-                                                    });
-                                                    
-                                                }
-                                            })
+                                                    resp.status(200).json(mcqResponse);
+                                                });
+                                            }
+                                            else {
+                                                console.log('Nothing inserted as response to table');
+                                                resp.status(500).json({ message: 'Error in loading response' });
+                                            }
+                                        }).catch((err) => {
+                                            console.log('Exception in inserting response to table', err);
+                                            resp.status(500).json({ message: 'Error in adding response' })
+                                        });
 
-                            })
+                                    }
+                                })
+
                         })
-                        .catch((err) => {
-                            console.log(`Error while loading test, error: ${err}`);
-                            resp.status(404).json({
-                                message: err
-                            });
+                    })
+                    .catch((err) => {
+                        console.log(`Error while loading test, error: ${err}`);
+                        resp.status(404).json({
+                            message: err
                         });
+                    });
             }
 
         });
@@ -199,14 +199,14 @@ class TestInviteController {
 
         let siteUrl = '';
         dbConfig.Initialize().then((KeyValues) => {
-            siteUrl = KeyValues ? 
-                    (KeyValues.site_url ? KeyValues.site_url : '') : '';
+            siteUrl = KeyValues ?
+                (KeyValues.site_url ? KeyValues.site_url : '') : '';
         })
         // let siteUrl = dbConfig.KeyValues ? 
         //                     (dbConfig.KeyValues.site_url ? dbConfig.KeyValues.site_url : '') : '';
 
         let emailIds = entity.emailTo.split(";");
-        if(emailIds && emailIds.length > 0){
+        if (emailIds && emailIds.length > 0) {
             emailIds.map((emailId, index) => {
                 let candidateMeta = {
                     name: entity.name,
@@ -215,9 +215,9 @@ class TestInviteController {
                 candidateModel.Add(candidateMeta).then((candidateId) => {
                     testModel.GetTest(entity.testId).then((testEntity) => {
                         let invitationEntity = {
-                            candidateId: candidateId, 
+                            candidateId: candidateId,
                             testId: testEntity.id,
-                            createdBy: req.user.id                            
+                            createdBy: req.user.id
                         }
                         invitationModel.Add(invitationEntity).then((invitationId) => {
                             let emailInfo = {
@@ -232,11 +232,11 @@ class TestInviteController {
                             emailHelper.SendEmail(emailInfo);
                             resp.status(200).json(testEntity);
                         })
-                    });        
+                    });
                 }).catch((err) => {
-                    resp.status(500).json({message: 'error occured in sending invite:' + err});
-                });  
-            }); 
+                    resp.status(500).json({ message: 'error occured in sending invite:' + err });
+                });
+            });
         }
 
     }
@@ -251,16 +251,19 @@ class TestInviteController {
             resp.status(200).json(updatedRecord);
         }).catch((err) => {
             console.log('Exception occurred in Capturing response', err);
-            resp.status(500).json({message: `Error in capturing response: ${err}`});  
-        }); 
+            resp.status(500).json({ message: `Error in capturing response: ${err}` });
+        });
     }
 
     getCurrentDateTime = () => {
         let finalStr = '';
         let dt = new Date();
-        finalStr = `${dt.getFullYear()}-${dt.getMonth()+1}-${dt.getDate()}`;
-        finalStr += ` ${dt.getHours()}:${dt.getMinutes()}`;
-        return finalStr; 
+        finalStr = `${dt.getFullYear()}-${dt.getMonth() + 1}-${dt.getDate()}`;
+        // finalStr += ` ${dt.getHours()}:${dt.getMinutes()}`;
+        let h = (dt.getHours() < 10 ? '0' : '') + dt.getHours(),
+            m = (dt.getMinutes() < 10 ? '0' : '') + dt.getMinutes();
+        finalStr += ` ${h}:${m}`;
+        return finalStr;
     }
 
     SubmitAnswers = (req, resp) => {
@@ -269,21 +272,21 @@ class TestInviteController {
         let entity = req.body;
         let mcqResponseModel = new McqResponseModel();
         let invitationModel = new InvitationModel();
-        
+
         mcqResponseModel.Update(entity).then((updatedRecord) => {
             console.log('All Responses submitted');
             invitationModel.GetInvitation(entity.response_meta.invitationId).then((invitationEntity) => {
-                
+
                 invitationEntity.invitation_meta.completedOn = this.getCurrentDateTime();
-                invitationEntity.invitation_meta.status = Constants.InvitationTestStatus.Completed; 
+                invitationEntity.invitation_meta.status = Constants.InvitationTestStatus.Completed;
                 invitationModel.Update(invitationEntity).then((res) => {
-                    resp.status(200).json({message: Constants.CandidateThanksMessage });
+                    resp.status(200).json({ message: Constants.CandidateThanksMessage });
                 })
             })
         }).catch((err) => {
             console.log('Exception occurred in submitting answers', err);
-            resp.status(500).json({message: `Error in submitting answers: ${err}`});  
-        }); 
+            resp.status(500).json({ message: `Error in submitting answers: ${err}` });
+        });
     }
 
     EvaluateAnswers = (req, resp) => {
@@ -308,7 +311,7 @@ class TestInviteController {
                     });
                 }).catch((err) => {
                     console.log('Error in evaluation: ', err);
-                    res.status(500).json({message: 'Error in evaluation: ' + err});
+                    res.status(500).json({ message: 'Error in evaluation: ' + err });
                 })
             });
         })

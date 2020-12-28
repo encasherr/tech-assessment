@@ -29,6 +29,7 @@ import RmaRequestList from '../HiTech/RmaRequestListContainer';
 import ViewRmaRequest from '../HiTech/ViewRmaRequest';
 
 import PrivateRoute from '../components/lib/PrivateRoute';
+import CandidateConsoleContainer from '../Containers/CandidateConsole/CandidateConsoleContainer';
 
 const Routes = (props) => {
     return (
@@ -41,9 +42,10 @@ const Routes = (props) => {
             <PrivateRoute {...props} path="/dashboard" component={DashboardComponent} />
             <PrivateRoute path="/tests" component={AdminTestContainer} />
             {/* <Route path="/testConsole" component={TestConsoleContainer} /> */}
-            <PrivateRoute path="/testConsole" component={TestConsoleContainer} />
-            <PrivateRoute path="/inviteConsole" component={InviteContainer} />
-            <PrivateRoute path="/invitations" component={InviteConsoleContainer} />
+            <PrivateRoute {...props} path="/testConsole" component={TestConsoleContainer} />
+            <PrivateRoute {...props} path="/candidateConsole" component={CandidateConsoleContainer} />
+            <PrivateRoute {...props} path="/inviteConsole" component={InviteContainer} />
+            <PrivateRoute {...props} path="/invitations" component={InviteConsoleContainer} />
             <PrivateRoute path="/mcqs" component={McqList} />
             <PrivateRoute path="/addMcq" component={McqContainer} />
             <PrivateRoute path="/bulkMcq" component={BulkMcq} />

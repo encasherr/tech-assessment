@@ -11,6 +11,7 @@ import passport from 'passport';
 import auth from './utils/auth';
 import OrgController from './Controllers/admin/OrgController';
 import DashboardController from './Controllers/admin/DashboardController';
+import CandidateResponseController from './Controllers/admin/CandidateResponseController';
 
 
 let api = express.Router();
@@ -64,6 +65,10 @@ api.get('/admin/getAllUsers', auth,  UserController.GetAll);
 api.post('/admin/user', auth, UserController.Add);
 api.put('/admin/user', auth, UserController.Update);
 api.delete('/admin/user', auth, UserController.Delete);
+
+/* Candidate Response Endpoints */
+api.get('/admin/getCandidateResponseReport', auth, CandidateResponseController.GetCandidateResponse);
+api.get('/admin/getCandidateDetails', auth, CandidateResponseController.GetCandidateDetails);
 
 /* Candidate Routes */
 /* Test Invite endpoints */

@@ -14,7 +14,7 @@ import { Link } from '@material-ui/core';
 // import { ThemeProvider } from 'styled-components'
 // import { bgcolor } from '@material-ui/system';
 import { Book, Assessment, ViewQuilt, PermIdentity, Polymer, Airplay,
-    SupervisorAccount, Work  } from '@material-ui/icons';
+    SupervisorAccount, Work, Launch  } from '@material-ui/icons';
 import * as css from '../../src/App.css';
 import InviteList from '../Containers/InviteConsole/InviteList';
     // import { styled } from '@material-ui/core/styles';
@@ -30,6 +30,7 @@ import { BorderLinearProgressPrimary, BorderLinearProgressInfo, BorderLinearProg
     BorderLinearProgressWarning} from './lib/ProgressBars';
 import LocalLoginComponent from './lib/LocalLoginComponent';
 import { primary } from './lib/ColorCodes';
+import { getDateTime } from '../Utils';
 
 const theme = {
     spacing: 4,
@@ -49,7 +50,8 @@ class Dashboard extends Component {
     
     render = () => {
         let { classes, testCount, mcqCount, invitationCount, recentResponses } = this.props;
-        console.log('props', this.props);
+        let totalCompletedCount = 0;
+        // console.log('props', this.props);
         if(!classes){
             return (
                 <div>
@@ -62,19 +64,39 @@ class Dashboard extends Component {
                 </div>
             )
         }
+        let completedTests = []; 
+        let pendingTests = [];
+        if(recentResponses && recentResponses.length) {
+            recentResponses.forEach((invitation, index) => {
+                if(invitation.invitationStatus !== 'COMPLETED') {
+                    pendingTests.push(invitation);
+                }
+                else {
+                    completedTests.push(invitation);
+                }
+            })
+            
+            if(completedTests) {
+                totalCompletedCount = completedTests.length;
+                completedTests = completedTests.sort().slice(0, 5);
+            }
+            if(pendingTests) {
+                pendingTests = pendingTests.sort().slice(0, 5);
+            }
+        }
         return (
             <div>
-                <Grid container>
-                    <Grid item xs={2} sm={2}>
+                <Grid container spacing={32}>
+                    <Grid item xs={3} sm={3}>
                         <Card className={classes.paletteBorderLeftSuccessMain}>
                             <CardContent>
-                                <Grid container>
+                                <Grid container spacing={32}>
                                     <Grid item xs={3} sm={3} className={classes.verticalCenter}>
-                                        <Avatar variant="rounded" className={classes.bgSuccessMain}>
+                                        <Avatar variant="square" className={classes.bgSuccessMain}>
                                             <Assessment />
                                         </Avatar>
                                     </Grid>
-                                    <Grid item xs={1} sm={1}></Grid>
+                                    {/* <Grid item xs={1} sm={1}></Grid> */}
                                     <Grid item xs={8} sm={8}>
                                         <div>
                                             <Typography variant="caption">Tests taken</Typography>
@@ -85,17 +107,17 @@ class Dashboard extends Component {
                             </CardContent>
                         </Card>
                     </Grid>
-                    <Grid item xs={1} sm={1} />
-                    <Grid item xs={2} sm={2}>
+                    {/* <Grid item xs={1} sm={1} /> */}
+                    <Grid item xs={3} sm={3}>
                         <Card className={classes.paletteBorderLeftPrimaryMain}>
                             <CardContent>
-                                <Grid container>
+                                <Grid container spacing={32}>
                                     <Grid item xs={3} sm={3} className={classes.verticalCenter}>
-                                        <Avatar variant="rounded" className={classes.bgPrimaryMain}>
+                                        <Avatar variant="rounded" className={classes.bgSuccessMain}>
                                             <Assessment />
                                         </Avatar>
                                     </Grid>
-                                    <Grid item xs={1} sm={1}></Grid>
+                                    {/* <Grid item xs={1} sm={1}></Grid> */}
                                     <Grid item xs={8} sm={8}>
                                         <div>
                                             <Typography variant="caption">MCQ Library</Typography>
@@ -107,42 +129,42 @@ class Dashboard extends Component {
                             </CardContent>
                         </Card>
                     </Grid>
-                    <Grid item xs={1} sm={1} />
-                    <Grid item xs={2} sm={2}>
+                    {/* <Grid item xs={1} sm={1} /> */}
+                    <Grid item xs={3} sm={3}>
                         <Card className={classes.paletteBorderLeftSecondaryMain}>
                             <CardContent>
-                                <Grid container>
+                                <Grid container spacing={32}>
                                     <Grid item xs={3} sm={3} className={classes.verticalCenter}>
-                                        <Avatar variant="rounded" className={classes.bgSecondaryLight}>
+                                        <Avatar variant="rounded" className={classes.bgSuccessMain}>
                                             <Assessment />
                                         </Avatar>
                                     </Grid>
-                                    <Grid item xs={1} sm={1}></Grid>
+                                    {/* <Grid item xs={1} sm={1}></Grid> */}
                                     <Grid item xs={8} sm={8}>
                                         <div>
                                             <Typography variant="caption">Invitations</Typography>
-                                            <Typography variant="h3">{invitationCount}</Typography>Candidates invited
+                                            <Typography variant="h3">{invitationCount}</Typography>Candidates Invited
                                         </div>
                                     </Grid>
                                 </Grid>
                             </CardContent>
                         </Card>
                     </Grid>
-                    <Grid item xs={1} sm={1} />
-                    <Grid item xs={2} sm={2}>
+                    {/* <Grid item xs={1} sm={1} /> */}
+                    <Grid item xs={3} sm={3}>
                         <Card className={classes.paletteBorderLeftSecondaryMain}>
                             <CardContent>
-                                <Grid container>
+                                <Grid container spacing={32}>
                                     <Grid item xs={3} sm={3} className={classes.verticalCenter}>
-                                        <Avatar variant="rounded" className={classes.bgSecondaryLight}>
+                                        <Avatar variant="rounded" className={classes.bgSuccessMain}>
                                             <Assessment />
                                         </Avatar>
                                     </Grid>
-                                    <Grid item xs={1} sm={1}></Grid>
+                                    {/* <Grid item xs={1} sm={1}></Grid> */}
                                     <Grid item xs={8} sm={8}>
                                         <div>
-                                            <Typography variant="caption">Invitations</Typography>
-                                            <Typography variant="h3">{invitationCount}</Typography>Candidates invited
+                                            <Typography variant="caption">Candidate Response</Typography>
+                                            <Typography variant="h3">{totalCompletedCount}</Typography>Tests Completed
                                         </div>
                                     </Grid>
                                 </Grid>
@@ -152,9 +174,9 @@ class Dashboard extends Component {
                     
                 </Grid>
                 <Grid container style={{marginTop: '5%'}}>
-                    <Grid item xs={5} sm={5}>
-                        <Card className={classes.paletteBorderLeftSuccessMain}>
-                            <CardHeader className={classes.paletteBorderBottomSuccessLight} title={<Typography variant="subtitle2">Candidate Performance</Typography> }></CardHeader>
+                    <Grid item xs={4} sm={4}>
+                        <Card className={classNames(classes.paletteDashboardBox, classes.profileBox)}>
+                            <CardHeader className={classes.paletteBorderBottomSuccessLight} title={<Typography variant="h6">Candidate Performance</Typography> }></CardHeader>
                             <CardContent className={classNames(classes.dashboardHeight)}>
                                 <List>
                                     <ListItem>
@@ -176,7 +198,7 @@ class Dashboard extends Component {
                                         <ListItemText 
                                             primary={<div>
                                                 <Typography variant="subtitle1">Angular</Typography>
-                                            <BorderLinearProgressSecondary variant="determinate" value={80} />
+                                            <BorderLinearProgressInfo variant="determinate" value={80} />
                                             </div>}
                                             secondary={<Typography variant="caption">% of candidates hired</Typography>} />
                                     </ListItem>
@@ -194,38 +216,113 @@ class Dashboard extends Component {
                         </Card>
                     </Grid>
                     <Grid item xs={1} sm={1}></Grid>
-                    <Grid item xs={5} sm={5}>
+                    <Grid item xs={3} sm={3}>
                         {!recentResponses && <LoadingComponent /> }
-                {recentResponses && recentResponses.length === 0 && <Typography align="center" variant="subtitle1">No recent candidate actions </Typography> }
-                {recentResponses && recentResponses.length > 0 && 
-                        <Card className={classes.paletteBorderLeftSuccessMain}>
-                            <CardHeader className={classes.paletteBorderBottomSuccessLight} title={<Typography variant="subtitle2">Candidate Responses</Typography> }></CardHeader>
+                        {recentResponses && recentResponses.length === 0 && <Typography align="center" variant="subtitle1">No recent candidate actions </Typography> }
+                        {completedTests && completedTests.length > 0 && 
+                        <Card className={classNames(classes.paletteDashboardBox)}>
+                            <CardHeader 
+                                action={
+                                    <InternalLink title="View All" to={ {pathname: "/invitations"} }>
+                                        <Launch  variant="filled" color="primary" />
+                                    </InternalLink>
+                                        } 
+                                className={classes.paletteBorderBottomSuccessLight} title={<Typography variant="h6">Completed Tests</Typography> }></CardHeader>
                             <CardContent className={classNames(classes.dashboardHeight)}>
-                            {recentResponses.map((invitation, index) => {
-                                let candidateResponseStatusText = `${invitation.candidateName} completed test on ${invitation.completedOn}`;
-                                if(invitation.invitationStatus !== 'COMPLETED') {
-                                    candidateResponseStatusText = `${invitation.candidateName} yet to take test`;
-                                }
+                            <List>
+                            <ListItem>
+                                    <Grid container spacing={16}>
+                                        <Grid item xs={6} sm={6}>
+                                            <ListItemText primary="Candidate" />
+                                        </Grid>
+                                        <Grid item xs={6} sm={6}>
+                                            <ListItemText primary="Completed" />
+                                        </Grid>
+                                        {/* <Grid item xs={2} sm={2}>
+                                        </Grid> */}
+                                    </Grid>
+                            </ListItem>
+                            {
+                                completedTests.map((invitation, index) => {
+                                // let candidateResponseStatusText = `${invitation.candidateName} completed test on ${invitation.completedOn}`;
+                                // if(invitation.invitationStatus !== 'COMPLETED') {
+                                //     candidateResponseStatusText = `${invitation.candidateName} yet to take test`;
+                                // }
                                 return(
-                            <List key={index}>
                                 <ListItem>
-                                    <ListItemAvatar>
-                                        <Avatar className={classes.bgSecondaryLight}>
-                                            <PermIdentity />
-                                        </Avatar>
-                                    </ListItemAvatar>
-                                    <ListItemText
-                                        primary={candidateResponseStatusText}
-                                        // secondary={secondary ? 'Secondary text' : null}
-                                    />
-                                    <ListItemSecondaryAction>
-                                        <InternalLink to={ {pathname: "/invitations"} }>
-                                            <Button className={classes.bgPrimaryMain}>View</Button>
-                                        </InternalLink>
-                                    </ListItemSecondaryAction>
+                                    <Grid container spacing={16}>
+                                        <Grid item xs={6} sm={6}>
+                                            <ListItemText secondary={invitation.candidateName} />
+                                        </Grid>
+                                        <Grid item xs={6} sm={6}>
+                                            <ListItemText secondary={getDateTime(invitation.completedOn, true)} />
+                                        </Grid>
+                                        {/* <Grid item xs={2} sm={2}>
+                                                <InternalLink to={ {pathname: "/invitations"} }>
+                                                    <Launch variant="filled" color="primary" />
+                                                </InternalLink>
+                                        </Grid> */}
+                                    </Grid>
                                 </ListItem>
-                            </List>)
+                                )
                             })}
+                            </List>
+                            </CardContent>
+                        </Card>}
+                    </Grid>
+                    <Grid item xs={1} sm={1}></Grid>
+                    <Grid item xs={3} sm={3}>
+                        
+                    {!recentResponses && <LoadingComponent /> }
+                        {recentResponses && recentResponses.length === 0 && <Typography align="center" variant="subtitle1">No recent candidate actions </Typography> }
+                        {pendingTests && pendingTests.length > 0 && 
+                        <Card className={classNames(classes.paletteDashboardBox)}>
+                            <CardHeader 
+                                action={
+                                    <InternalLink title="View All" to={ {pathname: "/invitations"} }>
+                                        <Launch  variant="filled" color="primary" />
+                                    </InternalLink>
+                                        } 
+                                className={classes.paletteBorderBottomSuccessLight} title={<Typography variant="h6">Pending Tests</Typography> }></CardHeader>
+                            <CardContent className={classNames(classes.dashboardHeight)}>
+                            <List>
+                            <ListItem>
+                                    <Grid container spacing={16}>
+                                        <Grid item xs={6} sm={6}>
+                                            <ListItemText primary="Candidate" />
+                                        </Grid>
+                                        <Grid item xs={6} sm={6}>
+                                            <ListItemText primary="Invited" />
+                                        </Grid>
+                                        {/* <Grid item xs={2} sm={2}>
+                                        </Grid> */}
+                                    </Grid>
+                            </ListItem>
+                            {
+                                pendingTests.map((invitation, index) => {
+                                // let candidateResponseStatusText = `${invitation.candidateName} completed test on ${invitation.completedOn}`;
+                                // if(invitation.invitationStatus !== 'COMPLETED') {
+                                //     candidateResponseStatusText = `${invitation.candidateName} yet to take test`;
+                                // }
+                                return(
+                                <ListItem>
+                                    <Grid container spacing={16}>
+                                        <Grid item xs={6} sm={6}>
+                                            <ListItemText secondary={invitation.candidateName} />
+                                        </Grid>
+                                        <Grid item xs={6} sm={6}>
+                                            <ListItemText secondary={getDateTime(invitation.invitedOn, true)} />
+                                        </Grid>
+                                        {/* <Grid item xs={2} sm={2}>
+                                                <InternalLink to={ {pathname: "/invitations"} }>
+                                                    <Launch variant="filled" color="primary" />
+                                                </InternalLink>
+                                        </Grid> */}
+                                    </Grid>
+                                </ListItem>
+                                )
+                            })}
+                            </List>
                             </CardContent>
                         </Card>}
                     </Grid>

@@ -35,9 +35,6 @@ export default (state = {}, action) => {
             }
             case FETCH_RECENT_RESPONSES_SUCCESS: {
                 let recentResponses = action.payload;
-                if(recentResponses) {
-                    recentResponses = recentResponses.sort().slice(0, 5);
-                }
                 return {
                     ...state,
                     error: null,

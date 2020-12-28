@@ -1,5 +1,5 @@
 export const success = {
-    light: '#81c784',
+    light: '#CBC2E1',// '#81c784',
     main: '#4caf50',
     dark: '#388e3c'
 };
@@ -25,7 +25,7 @@ export const error = {
 };
 export const info = {
     light: '#64b5f6',
-    main: '#2196f3',
+    main: '#9C5CC4',
     dark: '#1976d2'
 };
 

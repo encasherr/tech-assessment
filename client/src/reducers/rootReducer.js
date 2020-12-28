@@ -10,6 +10,7 @@ import userReducer from './userReducer';
 import questionSimulatorConsoleReducer from './questionSimulatorConsoleReducer';
 import orgReducer from './orgReducer';
 import dashboardReducer from './dashboardReducer';
+import candidateConsoleReducer from './candidateConsoleReducer';
 
 import rmaReducer from '../HiTech/rmaReducer';
 
@@ -25,6 +26,7 @@ const appReducer = combineReducers({
     questionSimulatorConsoleReducer,
     orgReducer,
     dashboardReducer,
+    candidateConsoleReducer,
     rmaReducer
 });
 
