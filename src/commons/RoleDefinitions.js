@@ -2,8 +2,8 @@ import globalQueries from '../db/queries';
 import { VIEW_DASHBOARD_INVITATION,
         VIEW_DASHBOARD_TESTS,
         VIEW_DASHBOARD_MCQ } from './RoleBasedQueries/DashboardQueries';
-import { VIEW_MCQS_QUERY } from './RoleBasedQueries/McqQueries';
-import { VIEW_TESTS, VIEW_TESTS_QUERY } from './RoleBasedQueries/TestQueries';
+import { VIEW_MCQS_QUERY, VIEW_MCQS_BY_SKILL_QUERY } from './RoleBasedQueries/McqQueries';
+import { VIEW_TESTS, VIEW_TESTS_QUERY, VIEW_TEST_BY_ID_QUERY } from './RoleBasedQueries/TestQueries';
 import { VIEW_INVITATIONS_QUERY } from './RoleBasedQueries/InvitationQueries';
 import { VIEW_USERS_QUERY } from './RoleBasedQueries/UserQueries';
 import { VIEW_ORGS_QUERY } from './RoleBasedQueries/OrgQueries';
@@ -37,6 +37,27 @@ export const HandlePromise = (db, queryConfig, userEntity) => {
     });
 }
 
+export const HandlePromiseWithParams = (db, queryConfig, params) => {
+    return new Promise((resolve, reject) => {
+        if(queryConfig) {
+            console.log(`${params.skill} params`);
+            let sql = queryConfig.value.getSql(params);
+            if(!sql) reject('unauthorized');
+            db.executeQuery(sql).then((res) => {
+                if(res) {
+                    let output = queryConfig.value.serializeToJson(res);
+                    resolve(output);
+                }
+            }).catch((err) => {
+                reject(err);
+            });
+        }
+        else {
+            reject('No query configuration found');
+        }
+    });
+}
+
 export const GetQueryConfig = (action) => {
     let queryConfigs = RoleDefinitions.queries.filter((queryItem, idx) => {
         return queryItem.key === action;
@@ -54,7 +75,9 @@ export const RoleDefinitions = {
         ],
         queries: [
             VIEW_MCQS_QUERY,
+            VIEW_MCQS_BY_SKILL_QUERY,
             VIEW_TESTS_QUERY,
+            VIEW_TEST_BY_ID_QUERY,
             VIEW_INVITATIONS_QUERY,
             VIEW_USERS_QUERY,
             VIEW_ORGS_QUERY,

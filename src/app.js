@@ -1,3 +1,5 @@
+import "babel-core/register";
+import "babel-polyfill";
 import express from 'express';
 import http from 'http';
 import routes from './routes';

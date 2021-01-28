@@ -56,9 +56,18 @@ switch(action.type) {
    }
    case TEST_SETTINGS_FIELD_CHANGE:
     {
+        let newObj = action.payload;
         return {
             ...state,
-            current_test: action.payload
+            current_test: {
+                ...newObj,
+                test_meta: {
+                    ...newObj.test_meta,
+                    settings: {
+                        ...newObj.test_meta.settings   
+                    }
+                }
+            }
         }   
     }
    case OPEN_SNACKBAR:

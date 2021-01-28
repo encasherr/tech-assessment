@@ -65,6 +65,22 @@ var McqController = function (_BaseController) {
                 console.log(msg);
                 resp.status(500).send(msg);
             });
+        }, _this.GetMcqsBySkill = function (req, resp) {
+            console.log('get mcqsBySkill called', req.user);
+            var skill = req.query.skill;
+
+            var model = new _McqModel2.default();
+            req.user = {
+                role: _users2.default.UserRoles.admin
+            };
+            model.GetMcqsBySkill(req.user, skill).then(function (res) {
+                console.log('mcq by skill retrieved');
+                resp.status(200).send(res);
+            }).catch(function (error) {
+                var msg = "Error in fetch MCQs by skill: " + error;
+                console.log(msg);
+                resp.status(500).send(msg);
+            });
         }, _this.Add = function (req, resp) {
             console.log('Add Mcq called');
             console.log(req.body);

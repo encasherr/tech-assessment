@@ -57,7 +57,7 @@ const Header = (props) => {
                         {config.instance.getValue('site_title')}
                     </a>
             </Typography>
-            {userInfo &&
+            {userInfo && props.isLogoutButtonRequired &&
             <Typography variant="subtitle1" color="inherit" noWrap style={styles.welcomeMessage}>
                 {userInfo.name}
             </Typography>
@@ -94,12 +94,12 @@ const Header = (props) => {
                 </Menu>
                 </div>
             }
-            {
+            {/* {
                 props.isTickerRequired &&
                 <IconButton style={styles.paddingLeft}>
                     <TickComponent />
                 </IconButton>
-            }
+            } */}
             
             </Toolbar>
             </AppBar>

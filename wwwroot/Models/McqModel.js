@@ -78,6 +78,11 @@ var McqModel = function McqModel() {
         })*/
     };
 
+    this.GetMcqsBySkill = function (userEntity, skill) {
+        var queryConfig = (0, _RoleDefinitions.GetQueryConfig)(_McqQueries.VIEW_MCQS_BY_SKILL);
+        return (0, _RoleDefinitions.HandlePromiseWithParams)(_mysqldb2.default, queryConfig, { userEntity: userEntity, skill: skill });
+    };
+
     this.BulkAddMcq = function (jsonData) {
         return new Promise(function (resolve, reject) {
             var mcqs = jsonData.mcqs;
@@ -204,7 +209,6 @@ var McqModel = function McqModel() {
         return promise;
     };
 }
-
 /*GetMcqsByUser = (userEntity) => {
     if(this.entities.data && this.entities.data.length > 0 && userEntity) {
         let filteredMcqs = this.entities.data.filter((item, index) => {

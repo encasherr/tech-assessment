@@ -69,10 +69,16 @@ TODO:
 18. Users list grid, handle cancel editing
 19. Add filter in Question selector popup to filter by skill, category
 20. Add settings in test console: invite sender email, on send invite, ask password
-21. Fix the time format of "Test completed on" of candidate
+21. Done: Fix the time format of "Test completed on" of candidate
 22. Show the count of records in MCQ list, Test MCQ list, Invitation list, Candidate list, Test list
-23. Add new screen for showing the candidate response on a given test
+23. Done: Add new screen for showing the candidate response on a given test
 24. Check why Evaluate button appears in Test->Candidates screen even if result is already evaluated, refer invitation screen query
 25. Remove test name column from Test->Candidates screen grid
 26. Add select all button in MCQ selector popup, to select all and add them to the test. Note that only displayed MCQs are added.
 27. Restrict a test from being submitted more than once.
+28. When an organisation is added, add organisation admin as well. Ask for the required details.
+29. See how formatting of question and answer can be retained. From MCQ page and also from excel upload.
+30. Candidate details tab does not show correct score percentage.
+31. Same candidate same test invitation should not be sent, instead reminder should be sent or the old invitation should be cancelled
+32. Introduce in Test Settings that who should receive test results, once evaluated
+33. Have a feature to genrerate Pdf report of test results which can be downloaded by org admin

@@ -9,6 +9,7 @@ export const CANDIDATE_RESPONSE_CHANGED = 'CANDIDATE_RESPONSE_CHANGED';
 export const SUBMIT_ANSWERS_SUCCESS = 'SUBMIT_ANSWERS_SUCCESS';
 export const SET_CANDIDATE_INFO = 'SET_CANDIDATE_INFO';
 export const INVITATION_FETCH_FAILED = 'INVITATION_FETCH_FAILED';
+export const SHOW_RESPONSE_ALREADY_SUBMITTED = 'SHOW_RESPONSE_ALREADY_SUBMITTED';
 
 export const ResponseChange = (responseKey, currentQuestion, mcqList) => dispatch => {
     console.log('response changed', currentQuestion);
@@ -22,7 +23,7 @@ export const ResponseChange = (responseKey, currentQuestion, mcqList) => dispatc
                 mcqItem.candidateResponse.responseKeys) {
                     let removeKeyIndex = mcqItem.candidateResponse.responseKeys.indexOf(responseKey);
                     if(removeKeyIndex > -1) {
-                        mcqItem.candidateResponse.responseKeys.slice(removeKeyIndex, 1);
+                        mcqItem.candidateResponse.responseKeys.splice(removeKeyIndex, 1);
                     }
                     else {
                         mcqItem.candidateResponse.responseKeys.push(responseKey);
@@ -72,10 +73,20 @@ export const LoadExamSimulator = (invitationId) => dispatch => {
     };
     repository.saveData(url, invitationModel)
             .then((res) => {
-                dispatch({
-                    type: LOAD_EXAM_SIMULATOR_SUCCESS,
-                    payload: res.data
-                });
+                console.log('loadexamsimulator', res);
+                if(res && res.data && res.data.message) {
+                    dispatch({
+                        type: SUBMIT_ANSWERS_SUCCESS,
+                        payload: res.data
+                    });
+                    AuthHelper.LogOut();
+                }
+                else {
+                    dispatch({
+                        type: LOAD_EXAM_SIMULATOR_SUCCESS,
+                        payload: res.data
+                    });
+                }
             })
 }
 

@@ -40,6 +40,15 @@ export const SettingsFieldChange = (val, field, model) => dispatch => {
             });
             break;
         }
+        case 'testVisibility':
+        {
+            model.test_meta.settings.testVisibility = val;
+            dispatch({
+                type: TEST_SETTINGS_FIELD_CHANGE,
+                payload: model
+            });
+            break;
+        }
         default:
         {
             break;

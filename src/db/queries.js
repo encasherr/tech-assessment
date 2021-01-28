@@ -24,6 +24,29 @@ const queries =  {
         `;
     },
 
+    getCandidatesByTestId: (testId) => {
+        return `
+            SELECT 
+            JSON_UNQUOTE(JSON_EXTRACT(c.candidate_meta, '$.name')) as 'candidateName', 
+            JSON_UNQUOTE(JSON_EXTRACT(c.candidate_meta, '$.email')) as 'candidateEmail', 
+            JSON_UNQUOTE(JSON_EXTRACT(i.invitation_meta, '$.status')) as 'invitationStatus', 
+            i.time_stamp as 'invitedOn', 
+            JSON_UNQUOTE(JSON_EXTRACT(i.invitation_meta, '$.completedOn')) as 'completedOn', 
+            JSON_UNQUOTE(JSON_EXTRACT(r.response_meta, '$.scorePercentage')) as 'scorePercentage', 
+            JSON_UNQUOTE(JSON_EXTRACT(r.response_meta, '$.result')) as 'result', 
+            JSON_UNQUOTE(JSON_EXTRACT(t.test_meta, '$.testName')) as 'testName', 
+            t.id as 'testId', r.id as 'responseId', c.id as 'candidateId',
+            r.response_meta as 'response_meta'
+            FROM ta_invitations i 
+            join ta_candidates c ON JSON_UNQUOTE(JSON_EXTRACT(i.invitation_meta , '$.candidateId')) = c.id 
+            join ta_tests t ON JSON_UNQUOTE(JSON_EXTRACT(i.invitation_meta , '$.testId')) = t.id 
+            left join ta_mcqresponses r ON r.invitationId = i.id
+            where i.isLive=1
+            and t.id = ${testId}
+            order by i.time_stamp DESC
+        `;
+    },
+
     getInvitationCountForAdmin: () => {
         return `
                 SELECT COUNT(*) as cnt
@@ -141,26 +164,6 @@ const queries =  {
             SELECT meta_key, meta_value
             FROM ta_config
             WHERE meta_key='${key}'
-        `;
-    },
-
-    getCandidatesByTestId: (testId) => {
-        return `
-            SELECT JSON_UNQUOTE(JSON_EXTRACT(c.candidate_meta, '$.name')) as 'candidateName', 
-            JSON_UNQUOTE(JSON_EXTRACT(c.candidate_meta, '$.email')) as 'candidateEmail', 
-            JSON_UNQUOTE(JSON_EXTRACT(i.invitation_meta, '$.status')) as 'invitationStatus', 
-            i.time_stamp as 'invitedOn', 
-            JSON_UNQUOTE(JSON_EXTRACT(i.invitation_meta, '$.completedOn')) as 'completedOn', 
-            JSON_UNQUOTE(JSON_EXTRACT(r.response_meta, '$.scorePercentage')) as 'scorePercentage', 
-            JSON_UNQUOTE(JSON_EXTRACT(r.response_meta, '$.result')) as 'result', 
-            JSON_UNQUOTE(JSON_EXTRACT(t.test_meta, '$.testName')) as 'testName', 
-            t.id as 'testId', r.id as 'responseId' 
-            FROM ta_invitations i 
-            JOIN ta_candidates c ON JSON_EXTRACT(i.invitation_meta , '$.candidateId') = c.id 
-            JOIN ta_tests t ON JSON_EXTRACT(i.invitation_meta , '$.testId') = t.id 
-            LEFT JOIN ta_mcqresponses r ON JSON_EXTRACT(r.response_meta , '$.invitationId') = i.id
-            WHERE t.id = ${testId}
-            ORDER BY i.time_stamp DESC
         `;
     },
 

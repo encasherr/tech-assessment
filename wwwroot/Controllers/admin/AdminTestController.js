@@ -63,20 +63,20 @@ var AdminTestController = function (_BaseController) {
         }, _this.GetTest = function (req, resp) {
             var testId = req.query.testId;
             console.log('get test called: ' + testId);
-            _mysqldb2.default.findOne(_this.entityName, testId).then(function (data) {
-                resp.status(200).send(data);
+
+            var testModel = new _TestModel2.default();
+            testModel.GetTestById(req.user, testId).then(function (testEntity) {
+                resp.status(200).send(testEntity);
             }).catch(function (err) {
+                console.log('error in get mcqs by test id');
+                console.log(err);
                 resp.status(500).send(err);
             });
-            // let tests = this.initializeCollection();
-            // // let test = tests.findOne({ '$loki': testId });
-            // let filteredTests = tests.where((item) => {
-            //     console.log(`item: ${item['$loki']}, testId: ${testId}, result: ${item['$loki'] == testId}`); 
-            //     return item['$loki'] == testId;    
-            // });
-
-            // console.log(filteredTests[0]);
-            // resp.send(filteredTests[0]);
+            // db.findOne(this.entityName, testId).then((data) => {
+            //     resp.status(200).send(data);
+            // }).catch((err) => {
+            //     resp.status(500).send(err);
+            // })
         }, _this.GetMcqsByTestId = function (req, resp) {
             var testId = req.query.testId;
             console.log('get mcqs by testid called: ', testId);

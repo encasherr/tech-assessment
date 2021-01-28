@@ -23,6 +23,7 @@ api.get('/loadConfig', UserController.LoadConfig);
 /* mcq endpoints */
 // api.get('/admin/getAllMcqs', McqController.GetAll);
 api.get('/admin/getAllMcqs', auth, McqController.GetAll);
+api.get('/admin/getMcqsBySkill', auth, McqController.GetMcqsBySkill);
 api.post('/admin/mcq', auth, McqController.Add);
 api.put('/admin/mcq', auth, McqController.Update);
 api.delete('/admin/mcq', auth, McqController.Delete);

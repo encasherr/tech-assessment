@@ -1,34 +1,38 @@
-'use strict';
+"use strict";
 
-var _express = require('express');
+require("babel-core/register");
+
+require("babel-polyfill");
+
+var _express = require("express");
 
 var _express2 = _interopRequireDefault(_express);
 
-var _http = require('http');
+var _http = require("http");
 
 var _http2 = _interopRequireDefault(_http);
 
-var _routes = require('./routes');
+var _routes = require("./routes");
 
 var _routes2 = _interopRequireDefault(_routes);
 
-var _bodyParser = require('body-parser');
+var _bodyParser = require("body-parser");
 
 var _bodyParser2 = _interopRequireDefault(_bodyParser);
 
-var _path = require('path');
+var _path = require("path");
 
 var _path2 = _interopRequireDefault(_path);
 
-var _cors = require('cors');
+var _cors = require("cors");
 
 var _cors2 = _interopRequireDefault(_cors);
 
-var _passport = require('./passport');
+var _passport = require("./passport");
 
 var _passport2 = _interopRequireDefault(_passport);
 
-var _passport3 = require('passport');
+var _passport3 = require("passport");
 
 var _passport4 = _interopRequireDefault(_passport3);
 

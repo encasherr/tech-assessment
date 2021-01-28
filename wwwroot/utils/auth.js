@@ -9,6 +9,9 @@ var resources = [{
     resource: '/admin/getAllMcqs',
     allowedRoles: ['admin', 'orgadmin', 'staff']
 }, {
+    resource: '/admin/getMcqsBySkill',
+    allowedRoles: ['admin', 'orgadmin', 'staff']
+}, {
     resource: '/admin/mcq',
     allowedRoles: ['admin', 'orgadmin', 'staff']
 }, {
@@ -80,6 +83,12 @@ var resources = [{
 }, {
     resource: '/loadConfig',
     allowedRoles: ['admin', 'orgadmin', null, undefined, '']
+}, {
+    resource: '/admin/getCandidateResponseReport',
+    allowedRoles: ['admin', 'orgadmin', 'staff']
+}, {
+    resource: '/admin/getCandidateDetails',
+    allowedRoles: ['admin', 'orgadmin', 'staff']
 }];
 
 module.exports = function (req, res, next) {

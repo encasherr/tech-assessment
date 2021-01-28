@@ -63,6 +63,9 @@ A {
     padding: 4%
 }
 
+.noBorderRadius {
+  border-radius: 0px !important;
+}
 
 @media only screen and (min-width: 375px) and (max-width: 969px) {
   .info_text {

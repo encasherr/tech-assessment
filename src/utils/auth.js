@@ -7,6 +7,10 @@ const resources = [
         allowedRoles: [ 'admin', 'orgadmin', 'staff' ] 
     },
     { 
+        resource: '/admin/getMcqsBySkill',
+        allowedRoles: [ 'admin', 'orgadmin', 'staff' ] 
+    },
+    { 
         resource: '/admin/mcq',
         allowedRoles: [ 'admin', 'orgadmin', 'staff' ] 
     },

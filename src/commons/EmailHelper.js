@@ -77,8 +77,9 @@ class EmailHelper {
     CreateHtml = (emailInfo) => {
         let html = this.GetHtmlTemplateByType(emailInfo);
         if(emailInfo.notificationType === 'test') {
-            html = html.replace('$$test_name$$', emailInfo.testName + ' Challenge');
+            html = html.replace('$$test_name$$', emailInfo.testName);
             html = html.replace('$$test_link$$', emailInfo.testLink);
+            html = html.replace('$$test_duration$$', emailInfo.testDuration);
             html = html.replace('$$faq_link$$', emailInfo.faqLink);
         }
         if(emailInfo.notificationType === 'rma') {

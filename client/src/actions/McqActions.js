@@ -254,18 +254,60 @@ export const EndSearch = () => dispatch => {
     });
 }
 
- export const SearchMcq = (searchTerm, mcqList) => dispatch => {
+const matchesQuestion = (item, searchTerm) => {
+    return  item.question && 
+            searchTerm &&
+            item.question.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1;
+}
+
+const matchesDescription = (item, searchTerm) => {
+    return  item.description &&
+            searchTerm &&
+            item.description.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1;
+}
+
+const matchesSkill = (item, searchTerm) => {
+    let skillArray = searchTerm.split(",");
+    return  item.skill &&
+            skillArray &&
+            skillArray.includes(item.skill);
+            // item.skill.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1;
+}
+
+const matchesCategory = (item, searchTerm) => {
+    return  item.category &&
+            searchTerm &&
+            item.category.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1;
+}
+
+ export const SearchMcq = (searchCriteria, searchTerm, mcqList) => dispatch => {
     if(mcqList && mcqList.length > 0) {
-        let filteredCategories = mcqList.filter((mcqItem) => {
-            let item = mcqItem.mcq_meta;
-            return (
-                    item.question &&
-                    item.question.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1
-                    ) ||
-                    (
-                        item.description &&
-                        item.description.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1);
-        });
+        let filteredCategories = mcqList;
+        switch(searchCriteria) {
+            case 'QUEST_OR_DESC': {
+                filteredCategories = mcqList.filter((mcqItem) => {
+                    let item = mcqItem.mcq_meta;
+                    return  matchesQuestion(item, searchTerm) ||
+                            matchesDescription(item, searchTerm);
+                });
+                
+                break;
+            }
+            case 'SKILL': {
+                filteredCategories = mcqList.filter((mcqItem) => {
+                    let item = mcqItem.mcq_meta;
+                    return  matchesSkill(item, searchTerm);
+                });
+                break;
+            }
+            case 'CATEGORY': {
+                filteredCategories = mcqList.filter((mcqItem) => {
+                    let item = mcqItem.mcq_meta;
+                    return  matchesCategory(item, searchTerm);
+                });
+                break;
+            }
+        }
         if(filteredCategories && filteredCategories.length > 0) {
             dispatch({
                 type: MCQ_SEARCH_SUCCESS,

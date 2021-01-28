@@ -28,20 +28,22 @@ class AdminTestController extends BaseController {
     GetTest = (req, resp) => {
         let testId = req.query.testId;
         console.log('get test called: ' + testId);
-        db.findOne(this.entityName, testId).then((data) => {
-            resp.status(200).send(data);
-        }).catch((err) => {
+        
+        let testModel = new TestModel();
+        testModel.GetTestById(req.user, testId).then((testEntity) => {
+            resp.status(200).send(testEntity);
+        })
+        .catch((err) => {
+            console.log('error in get mcqs by test id');
+            console.log(err);
             resp.status(500).send(err);
         })
-        // let tests = this.initializeCollection();
-        // // let test = tests.findOne({ '$loki': testId });
-        // let filteredTests = tests.where((item) => {
-        //     console.log(`item: ${item['$loki']}, testId: ${testId}, result: ${item['$loki'] == testId}`); 
-        //     return item['$loki'] == testId;    
-        // });
-
-        // console.log(filteredTests[0]);
-        // resp.send(filteredTests[0]);
+        // db.findOne(this.entityName, testId).then((data) => {
+        //     resp.status(200).send(data);
+        // }).catch((err) => {
+        //     resp.status(500).send(err);
+        // })
+        
     }
 
     GetMcqsByTestId = (req, resp) => {

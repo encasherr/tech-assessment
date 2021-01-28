@@ -69,6 +69,12 @@ const SendTestInvite = (props) => {
                     </div>
                     <Divider style={styles.margintop}/>
                     <Typography gutterBottom align="center" variant="subtitle2" style={styles.margintop}>
+                        It is recommended to use Chrome or Firefox browser to take the test.
+                    </Typography>
+                    <Typography gutterBottom align="center" variant="subtitle2" style={styles.margintop}>
+                        This is an automated message. Do not reply to this email as it is not being monitored.
+                    </Typography>
+                    <Typography gutterBottom align="center" variant="subtitle2" style={styles.margintop}>
                         For any technical queries, please refer to <a href="#">FAQ</a> or email us at support@techassessment.com
                     </Typography>
         </div>

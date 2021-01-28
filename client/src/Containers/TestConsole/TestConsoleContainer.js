@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import {    FetchTest, AddMcqToTest, PublishTest, CloseSnackbar, SetHistory,
     RemoveMcqFromTest, LoadTestMcqs, LoadTestCandidates, OpenSnackbar,
-    UpdateTestSettings } from '../../actions/TestConsoleActions';            
+    SettingsFieldChange, UpdateTestSettings } from '../../actions/TestConsoleActions';            
 // import Link from '@material-ui/core/Link';
 import { Link } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
@@ -79,11 +79,11 @@ class TestConsoleContainer extends React.Component {
     }
 
     handleSettingsFieldChange = (val, field) => {
-        this.props.SettingsFieldChange(val, field, this.props.currentTest);
+        this.props.SettingsFieldChange(val, field, this.props.current_test);
     }
     
     submitTestSettings = () => {
-        this.props.UpdateTestSettings(this.props.currentTest)
+        this.props.UpdateTestSettings(this.props.current_test)
         .then((res) => {
             this.setState({
                 snackOpen: true,
@@ -93,9 +93,9 @@ class TestConsoleContainer extends React.Component {
     }
 
     render = () => {
-        let { current_test, selectedMcqs, candidates } = this.props;
+        let { current_test, selectedMcqs, candidates, classes } = this.props;
         if(current_test && current_test.selectedMcqs) {
-            console.log(current_test.selectedMcqs);
+            console.log('current_test',current_test);
         }
         let { state } = this.props.location;
         let selectedTabIndex = (state && state.selectedTabIndex) ? state.selectedTabIndex : 0;
@@ -122,6 +122,7 @@ class TestConsoleContainer extends React.Component {
                      subheader={current_test.test_meta.status!=='draft' ? 'Published' : 'draft'}
                     />
                     <TestConsoleTabs 
+                        classes={classes}
                         tabs={tabs}
                         selectedTabIndex={selectedTabIndex} 
                         onAddMcqToTest={(mcqItem) => this.onAddMcqToTest(mcqItem) }
@@ -154,6 +155,7 @@ const mapDispatchToProps = dispatch => ({
     FetchTest: (testId, history) => dispatch(FetchTest(testId, history)),
     LoadTestMcqs: (testId) => dispatch(LoadTestMcqs(testId)),
     LoadTestCandidates: (testId) => dispatch(LoadTestCandidates(testId)),
+    SettingsFieldChange: (val, field, model) => dispatch(SettingsFieldChange(val, field, model)),
     UpdateTestSettings: (testModel) => dispatch(UpdateTestSettings(testModel)),
     CloseSnackbar: () => dispatch(CloseSnackbar()),
     OpenSnackbar: () => dispatch(OpenSnackbar()),

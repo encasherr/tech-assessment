@@ -4,8 +4,6 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 var _mysqldb = require('../../db/mysqldb');
 
 var _mysqldb2 = _interopRequireDefault(_mysqldb);
@@ -52,7 +50,13 @@ var _DbConfig = require('../../commons/DbConfig');
 
 var _DbConfig2 = _interopRequireDefault(_DbConfig);
 
+var _CandidateRepo = require('./CandidateRepo');
+
+var _CandidateRepo2 = _interopRequireDefault(_CandidateRepo);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } } // import db from '../../db';
 
@@ -133,98 +137,132 @@ var TestInviteController = function TestInviteController() {
         });
     };
 
-    this.StartTest = function (req, resp) {
-        console.log('start test called');
-        var invitationId = req.body.invitationId;
+    this.StartTest = function () {
+        var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(req, resp) {
+            var invitationId, invitationModel, invitationEntity, testModel, mcqModel, mcqResponseModel, invitationStatus, testEntity, mcqResponseEntity, mcqResponseMeta, mcqResponse;
+            return regeneratorRuntime.wrap(function _callee$(_context) {
+                while (1) {
+                    switch (_context.prev = _context.next) {
+                        case 0:
+                            console.log('start test called');
+                            invitationId = req.body.invitationId;
 
-        console.log('req.body', req.body);
+                            console.log('req.body', req.body);
 
-        var invitationModel = new _InvitationModel2.default();
-        invitationModel.GetInvitation(invitationId).then(function (invitationEntity) {
-            if (!invitationEntity) {
-                resp.status(404).json({
-                    message: "Not found"
-                });
-            } else {
-                var testModel = new _TestModel2.default();
-                var mcqModel = new _McqModel2.default();
-                var mcqResponseModel = new _McqResponseModel2.default();
+                            invitationModel = new _InvitationModel2.default();
+                            _context.next = 6;
+                            return invitationModel.GetInvitation(invitationId);
 
-                testModel.GetTest(invitationEntity.invitation_meta.testId).then(function (testEntity) {
-                    var selectedMcqIds = [];
-                    console.log('testEntity: ' + testEntity.test_meta);
-                    testEntity.test_meta.selectedMcqs.map(function (item, index) {
-                        selectedMcqIds.push(item.mcqId);
-                    });
-                    mcqModel.GetMcqsByIds(selectedMcqIds).then(function (mcqs) {
-                        console.log('get mcqs by id, length: ' + mcqs.length);
-                        var mcqResponseMeta = {
-                            testId: testEntity.id,
-                            invitationId: invitationEntity.id,
-                            mcqs: []
-                        };
-                        testEntity.test_meta.selectedMcqs.map(function (item, index) {
-                            var filteredMcq = mcqs.filter(function (mcqItem, index) {
-                                return mcqItem.id === item.mcqId;
+                        case 6:
+                            invitationEntity = _context.sent;
+
+                            if (invitationEntity) {
+                                _context.next = 11;
+                                break;
+                            }
+
+                            resp.status(404).json({
+                                message: "Not found"
                             });
-                            if (filteredMcq && filteredMcq.length > 0) {
-                                var item_value = filteredMcq[0];
-                                // item_value = item_value.replace(/\n/g, "\\n");
-                                // item_value = item_value.replace(/\r/g, "\\r");
-                                // item_value = item_value.replace(/\t/g, "\\t");
-                                item.mcq = item_value;
-                                // item.mcq = filteredMcq[0];
-                                item.candidateResponse = {
-                                    responseKeys: []
-                                };
-                                mcqResponseMeta.mcqs.push(item);
+                            _context.next = 36;
+                            break;
+
+                        case 11:
+                            testModel = new _TestModel2.default();
+                            mcqModel = new _McqModel2.default();
+                            mcqResponseModel = new _McqResponseModel2.default();
+                            invitationStatus = invitationEntity.invitation_meta.status;
+
+                            if (!(invitationStatus && invitationStatus === 'COMPLETED')) {
+                                _context.next = 18;
+                                break;
                             }
-                        });
-                        console.log('getting invitation entity now', invitationId);
-                        mcqResponseModel.GetByInvitationId(invitationId).then(function (mcqResponseEntity) {
-                            if (mcqResponseEntity) {
-                                console.log('existing mcq response returned');
-                                resp.status(200).json(mcqResponseEntity);
+
+                            resp.status(200).json({
+                                message: 'Response for this test is already submitted and the same has been shared with recruiter.'
+                            });
+                            return _context.abrupt('return');
+
+                        case 18:
+                            _context.next = 20;
+                            return testModel.GetTest(invitationEntity.invitation_meta.testId);
+
+                        case 20:
+                            testEntity = _context.sent;
+                            _context.next = 23;
+                            return mcqResponseModel.GetByInvitationId(invitationId);
+
+                        case 23:
+                            mcqResponseEntity = _context.sent;
+
+                            if (!mcqResponseEntity) {
+                                _context.next = 29;
+                                break;
+                            }
+
+                            console.log('existing mcq response returned');
+                            resp.status(200).json(mcqResponseEntity);
+                            _context.next = 36;
+                            break;
+
+                        case 29:
+                            _context.next = 31;
+                            return _CandidateRepo2.default.createNewMcqResponseMeta(testEntity, invitationEntity);
+
+                        case 31:
+                            mcqResponseMeta = _context.sent;
+                            _context.next = 34;
+                            return _CandidateRepo2.default.startNewTest(invitationEntity, mcqResponseMeta);
+
+                        case 34:
+                            mcqResponse = _context.sent;
+
+                            if (mcqResponse) {
+                                resp.status(200).json(mcqResponse);
                             } else {
-                                mcqResponseEntity = {
-                                    invitationId: parseInt(invitationId),
-                                    response_meta: mcqResponseMeta
-                                };
-                                console.log('adding new mcq invitation on invitation: ', invitationId);
-                                // mcqResponseModel.Add(mcqResponseMeta).then((responseId) => {
-                                mcqResponseModel.Add(mcqResponseEntity).then(function (responseId) {
-                                    console.log('responseId', responseId);
-                                    if (responseId > 0) {
-                                        var updateInvitationEntity = _extends({}, invitationEntity, {
-                                            status: _ServerConfig.Constants.InvitationTestStatus.Started
-                                        });
-                                        invitationModel.Update(updateInvitationEntity).then(function (res) {
-                                            var mcqResponse = {
-                                                id: responseId,
-                                                response_meta: mcqResponseMeta
-                                            };
-                                            resp.status(200).json(mcqResponse);
-                                        });
-                                    } else {
-                                        console.log('Nothing inserted as response to table');
-                                        resp.status(500).json({ message: 'Error in loading response' });
-                                    }
-                                }).catch(function (err) {
-                                    console.log('Exception in inserting response to table', err);
-                                    resp.status(500).json({ message: 'Error in adding response' });
-                                });
+                                resp.status(500).json({ message: 'Error in loading Test' });
                             }
-                        });
-                    });
-                }).catch(function (err) {
-                    console.log('Error while loading test, error: ' + err);
-                    resp.status(404).json({
-                        message: err
-                    });
-                });
-            }
-        });
-    };
+                            /*mcqResponseEntity = {
+                                invitationId: parseInt(invitationId),
+                                response_meta: mcqResponseMeta
+                            }
+                            console.log('adding new mcq invitation on invitationId: ', invitationId);
+                            mcqResponseModel.Add(mcqResponseEntity).then((responseId) => {
+                                console.log('responseId', responseId);
+                                if (responseId > 0) {
+                                    let updateInvitationEntity = {
+                                        ...invitationEntity,
+                                        status: Constants.InvitationTestStatus.Started
+                                    }
+                                    invitationModel.Update(updateInvitationEntity).then((res) => {
+                                        let mcqResponse = {
+                                            id: responseId,
+                                            response_meta: mcqResponseMeta
+                                        }
+                                        resp.status(200).json(mcqResponse);
+                                    });
+                                }
+                                else {
+                                    console.log('Nothing inserted as response to table');
+                                    resp.status(500).json({ message: 'Error in loading response' });
+                                }
+                            }).catch((err) => {
+                                console.log('Exception in inserting response to table', err);
+                                resp.status(500).json({ message: 'Error in adding response' })
+                            });*/
+
+                        case 36:
+                        case 'end':
+                            return _context.stop();
+                    }
+                }
+            }, _callee, _this);
+        }));
+
+        return function (_x, _x2) {
+            return _ref.apply(this, arguments);
+        };
+    }();
 
     this.SendInvite = function (req, resp) {
         console.log('send invite called');
@@ -239,8 +277,6 @@ var TestInviteController = function TestInviteController() {
         dbConfig.Initialize().then(function (KeyValues) {
             siteUrl = KeyValues ? KeyValues.site_url ? KeyValues.site_url : '' : '';
         });
-        // let siteUrl = dbConfig.KeyValues ? 
-        //                     (dbConfig.KeyValues.site_url ? dbConfig.KeyValues.site_url : '') : '';
 
         var emailIds = entity.emailTo.split(";");
         if (emailIds && emailIds.length > 0) {
@@ -261,6 +297,7 @@ var TestInviteController = function TestInviteController() {
                                 to: emailId,
                                 subject: entity.emailSubject,
                                 testName: testEntity.test_meta.testName,
+                                testDuration: testEntity.test_meta.duration,
                                 testLink: _ServerConfig.EmailConfig.getTestLink(dbConfig.KeyValues.site_url, invitationId),
                                 faqLink: _ServerConfig.EmailConfig.getFaqLink(dbConfig.KeyValues.site_url, dbConfig.KeyValues.faq_link),
                                 notificationType: 'test'
@@ -295,7 +332,10 @@ var TestInviteController = function TestInviteController() {
         var finalStr = '';
         var dt = new Date();
         finalStr = dt.getFullYear() + '-' + (dt.getMonth() + 1) + '-' + dt.getDate();
-        finalStr += ' ' + dt.getHours() + ':' + dt.getMinutes();
+        // finalStr += ` ${dt.getHours()}:${dt.getMinutes()}`;
+        var h = (dt.getHours() < 10 ? '0' : '') + dt.getHours(),
+            m = (dt.getMinutes() < 10 ? '0' : '') + dt.getMinutes();
+        finalStr += ' ' + h + ':' + m;
         return finalStr;
     };
 

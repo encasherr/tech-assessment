@@ -22,6 +22,9 @@ const styles = theme => createMuiTheme({
   root: {
     display: 'flex',
   },
+  hide: {
+    display: 'none'
+  },
   verticalCenter: {
     paddingTop: '10%'
   },
@@ -314,7 +317,7 @@ class Shell extends React.Component {
                   <CssBaseline />
                   <Header classes={classes} 
                         openState={this.state.open} 
-                        isTickerRequired={true}
+                        //isTickerRequired={true}
                         isDrawerRequired={false}
                         isLogoutButtonRequired={false}
                         isTokenExpired={isTokenExpired}
@@ -335,7 +338,7 @@ class Shell extends React.Component {
                     openState={this.state.open} 
                     onDrawerOpen={this.handleDrawerOpen}
                     onLogout={() => this.Logout()}
-                    isTickerRequired={false}
+                    //isTickerRequired={false}
                     isDrawerRequired={true}
                     isLogoutButtonRequired={true}
                     isTokenExpired={isTokenExpired}

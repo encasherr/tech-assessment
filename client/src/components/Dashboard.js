@@ -30,7 +30,7 @@ import { BorderLinearProgressPrimary, BorderLinearProgressInfo, BorderLinearProg
     BorderLinearProgressWarning} from './lib/ProgressBars';
 import LocalLoginComponent from './lib/LocalLoginComponent';
 import { primary } from './lib/ColorCodes';
-import { getDateTime } from '../Utils';
+import { getDateTime, sortDescending } from '../Utils';
 
 const theme = {
     spacing: 4,
@@ -51,7 +51,7 @@ class Dashboard extends Component {
     render = () => {
         let { classes, testCount, mcqCount, invitationCount, recentResponses } = this.props;
         let totalCompletedCount = 0;
-        // console.log('props', this.props);
+        console.log('props-ds', this.props);
         if(!classes){
             return (
                 <div>
@@ -78,9 +78,12 @@ class Dashboard extends Component {
             
             if(completedTests) {
                 totalCompletedCount = completedTests.length;
-                completedTests = completedTests.sort().slice(0, 5);
+                // completedTests = completedTests.sort().slice(0, 5);
+                completedTests = sortDescending(completedTests, 'completedOn');
+                completedTests = completedTests.slice(0, 5);
             }
             if(pendingTests) {
+                pendingTests = sortDescending(pendingTests, 'invitedOn');
                 pendingTests = pendingTests.sort().slice(0, 5);
             }
         }
@@ -175,7 +178,7 @@ class Dashboard extends Component {
                 </Grid>
                 <Grid container style={{marginTop: '5%'}}>
                     <Grid item xs={4} sm={4}>
-                        <Card className={classNames(classes.paletteDashboardBox, classes.profileBox)}>
+                        <Card className={classNames(classes.paletteDashboardBox)}>
                             <CardHeader className={classes.paletteBorderBottomSuccessLight} title={<Typography variant="h6">Candidate Performance</Typography> }></CardHeader>
                             <CardContent className={classNames(classes.dashboardHeight)}>
                                 <List>

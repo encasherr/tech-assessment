@@ -18,16 +18,6 @@ export const VIEW_INVITATIONS_QUERY = {
                 default: handleRoleNotFound(userEntity.role);
             }
         },
-        /*serializeToJson: (data) => {
-            let outputArray = [];
-            console.log('data count', data.length);
-            if(data && data.length > 0) {
-                data.map((item, index) => {
-                    outputArray.push(item);
-                })
-            }
-            return outputArray;
-        },*/
         serializeToJson: (data) => {
             let outputArray = [];
             console.log('data count', data.length);

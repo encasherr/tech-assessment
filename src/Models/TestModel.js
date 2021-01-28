@@ -3,7 +3,7 @@ import queries from '../db/queries';
 
 import { GetQueryConfig, 
     HandlePromise } from '../commons/RoleDefinitions';
-import { VIEW_TESTS } from '../commons/RoleBasedQueries/TestQueries';
+import { VIEW_TESTS, VIEW_TESTS_BY_ID } from '../commons/RoleBasedQueries/TestQueries';
 
 class TestModel {
     entityName = 'tests';
@@ -25,7 +25,10 @@ class TestModel {
             });
         })*/
     }
-
+    GetTestById = (userEntity, testId) => {
+        let queryConfig = GetQueryConfig(VIEW_TESTS_BY_ID);
+        return HandlePromise(db, queryConfig, { userEntity: userEntity, testId: testId });
+    }
     /*GetTestsByUser = (userEntity) => {
         if(this.entities.data && this.entities.data.length > 0 && userEntity) {
             let filteredTests = this.entities.data.filter((item, index) => {
@@ -80,11 +83,41 @@ class TestModel {
         return new Promise((resolve, reject) => {
             let sql = queries.getCandidatesByTestId(testId);
             db.executeQuery(sql).then((res) => {
-                resolve(res);
+                // resolve(res);
+                resolve(this.mapCandidatesResult(res));
             }).catch((err) => {
                 reject(err);
             });
         });
+    }
+
+    mapCandidatesResult = (data) => {
+            let outputArray = [];
+            console.log('data count', data.length);
+            if(data && data.length > 0) {
+                data.map((item, index) => {
+                    let output = {};
+                    Object.keys(item).map((prop) => {
+                        if(prop === 'response_meta') {
+                            let metaObj = item[prop];
+                            if(metaObj) {
+                                metaObj = metaObj.replace(/\n/g, "\\n");
+                                metaObj = metaObj.replace(/\r/g, "\\r");
+                                metaObj = metaObj.replace(/\t/g, "\\t"); 
+                                let mObj = JSON.parse(metaObj);
+                                Object.keys(mObj).forEach((metaProp) => {
+                                    output[metaProp] = mObj[metaProp];
+                                })
+                            }
+                        }
+                        else {
+                            output[prop] = item[prop];
+                        }
+                    })
+                    outputArray.push(output);
+                })
+            }
+            return outputArray;
     }
 
     Add = (entity) => {

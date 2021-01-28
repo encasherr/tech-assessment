@@ -46,7 +46,7 @@ class SimulatorShell extends Component {
                         })
               } else {
                   this.setState({
-                      errorMessage: 'Candidate not registered. Please try again.'
+                      errorMessage: 'Candidate not registered. Please try again after some time. If this continues, please check with your recruiter.'
                   });    
               }
           }).catch((err) => {

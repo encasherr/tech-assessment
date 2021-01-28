@@ -19,7 +19,8 @@ class SimulatorConsoleContainer extends React.Component {
     }
 
     render = () => {
-        let { candidateTestObject, currentQuestion, status } = this.props;
+        let { candidateTestObject, currentQuestion, status, classes } = this.props;
+        console.log('sc-props', this.props);
 
         if(!candidateTestObject) {
             if(status) {
@@ -34,6 +35,7 @@ class SimulatorConsoleContainer extends React.Component {
         return (
         <div>
         {    <QuestionSimulatorConsoleContainer 
+                classes={classes}
                 model={candidateTestObject}
                 currentQuestion={currentQuestion} 
                 onResponseChange={ (choiceKey) => this.props.ResponseChange(choiceKey, currentQuestion, candidateTestObject.response_meta.mcqs)}

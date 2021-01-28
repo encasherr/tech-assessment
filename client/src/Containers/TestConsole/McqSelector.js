@@ -24,7 +24,8 @@ class McqSelector extends Component {
 
     componentDidMount = () => {
             
-        let url = config.instance.getAdminApiUrl() + 'getAllMcqs';
+        // let url = config.instance.getAdminApiUrl() + 'getAllMcqs';
+        let url = config.instance.getAdminApiUrl() + 'getMcqsBySkill?skill=JAVA';
         repository.getData(url)
             .then((res) => {
                 console.log('MCQ fetched');

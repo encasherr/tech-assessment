@@ -32,6 +32,10 @@ var _DashboardController = require('./Controllers/admin/DashboardController');
 
 var _DashboardController2 = _interopRequireDefault(_DashboardController);
 
+var _CandidateResponseController = require('./Controllers/admin/CandidateResponseController');
+
+var _CandidateResponseController2 = _interopRequireDefault(_CandidateResponseController);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var api = _express2.default.Router();
@@ -42,6 +46,7 @@ api.get('/loadConfig', _admin.UserController.LoadConfig);
 /* mcq endpoints */
 // api.get('/admin/getAllMcqs', McqController.GetAll);
 api.get('/admin/getAllMcqs', _auth2.default, _admin.McqController.GetAll);
+api.get('/admin/getMcqsBySkill', _auth2.default, _admin.McqController.GetMcqsBySkill);
 api.post('/admin/mcq', _auth2.default, _admin.McqController.Add);
 api.put('/admin/mcq', _auth2.default, _admin.McqController.Update);
 api.delete('/admin/mcq', _auth2.default, _admin.McqController.Delete);
@@ -84,6 +89,10 @@ api.get('/admin/getAllUsers', _auth2.default, _admin.UserController.GetAll);
 api.post('/admin/user', _auth2.default, _admin.UserController.Add);
 api.put('/admin/user', _auth2.default, _admin.UserController.Update);
 api.delete('/admin/user', _auth2.default, _admin.UserController.Delete);
+
+/* Candidate Response Endpoints */
+api.get('/admin/getCandidateResponseReport', _auth2.default, _CandidateResponseController2.default.GetCandidateResponse);
+api.get('/admin/getCandidateDetails', _auth2.default, _CandidateResponseController2.default.GetCandidateDetails);
 
 /* Candidate Routes */
 /* Test Invite endpoints */

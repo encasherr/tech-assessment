@@ -29,6 +29,25 @@ class McqController extends BaseController {
             })
     }
     
+    GetMcqsBySkill = (req, resp) => {
+        console.log('get mcqsBySkill called', req.user);
+        let { skill } = req.query;
+        let model = new McqModel();
+        req.user = {
+            role: users.UserRoles.admin
+        }
+        model.GetMcqsBySkill(req.user, skill)
+            .then((res) => {
+                console.log('mcq by skill retrieved');
+                resp.status(200).send(res);
+            })
+            .catch((error) => {
+                let msg = "Error in fetch MCQs by skill: " + error;
+                console.log(msg);
+                resp.status(500).send(msg);
+            })
+    }
+
     // GetMcqsByRecruiter = (req, resp) => {
     //     console.log('get all mcqs by recruiter called', req.user);
     //     let mcqs = this.initializeCollection();

@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.RoleDefinitions = exports.GetQueryConfig = exports.HandlePromise = exports.handleRoleNotFound = exports.staff = exports.orgadmin = exports.admin = undefined;
+exports.RoleDefinitions = exports.GetQueryConfig = exports.HandlePromiseWithParams = exports.HandlePromise = exports.handleRoleNotFound = exports.staff = exports.orgadmin = exports.admin = undefined;
 
 var _queries = require('../db/queries');
 
@@ -51,6 +51,26 @@ var HandlePromise = exports.HandlePromise = function HandlePromise(db, queryConf
     });
 };
 
+var HandlePromiseWithParams = exports.HandlePromiseWithParams = function HandlePromiseWithParams(db, queryConfig, params) {
+    return new Promise(function (resolve, reject) {
+        if (queryConfig) {
+            console.log(params.skill + ' params');
+            var sql = queryConfig.value.getSql(params);
+            if (!sql) reject('unauthorized');
+            db.executeQuery(sql).then(function (res) {
+                if (res) {
+                    var output = queryConfig.value.serializeToJson(res);
+                    resolve(output);
+                }
+            }).catch(function (err) {
+                reject(err);
+            });
+        } else {
+            reject('No query configuration found');
+        }
+    });
+};
+
 var GetQueryConfig = exports.GetQueryConfig = function GetQueryConfig(action) {
     var queryConfigs = RoleDefinitions.queries.filter(function (queryItem, idx) {
         return queryItem.key === action;
@@ -62,6 +82,6 @@ var GetQueryConfig = exports.GetQueryConfig = function GetQueryConfig(action) {
 var RoleDefinitions = exports.RoleDefinitions = {
     role: admin,
     allowedActions: ['addMcq', 'addTest', 'addUser', 'addCategory', 'addSkill', 'addOrganization', 'sendInvitation', 'viewTests', 'viewMcqs', 'viewUsers', 'viewOrgs'],
-    queries: [_McqQueries.VIEW_MCQS_QUERY, _TestQueries.VIEW_TESTS_QUERY, _InvitationQueries.VIEW_INVITATIONS_QUERY, _UserQueries.VIEW_USERS_QUERY, _OrgQueries.VIEW_ORGS_QUERY, _DashboardQueries.VIEW_DASHBOARD_INVITATION, _DashboardQueries.VIEW_DASHBOARD_TESTS, _DashboardQueries.VIEW_DASHBOARD_MCQ]
+    queries: [_McqQueries.VIEW_MCQS_QUERY, _McqQueries.VIEW_MCQS_BY_SKILL_QUERY, _TestQueries.VIEW_TESTS_QUERY, _TestQueries.VIEW_TEST_BY_ID_QUERY, _InvitationQueries.VIEW_INVITATIONS_QUERY, _UserQueries.VIEW_USERS_QUERY, _OrgQueries.VIEW_ORGS_QUERY, _DashboardQueries.VIEW_DASHBOARD_INVITATION, _DashboardQueries.VIEW_DASHBOARD_TESTS, _DashboardQueries.VIEW_DASHBOARD_MCQ]
 };
 //# sourceMappingURL=RoleDefinitions.js.map

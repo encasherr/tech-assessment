@@ -11,11 +11,14 @@ class TestConsoleQuestions extends Component {
         let { selectedMcqs, currentTest } = this.props;
         return (
             <Card>
-                {currentTest && currentTest.test_meta.status==='draft' &&
-                <CardHeader title={selectedMcqs && <Typography variant="subtitle1">{selectedMcqs.length} Questions</Typography>} action={
-                    <McqSelector 
-                        onSelectMcq={(mcqItem) => this.props.onSelectMcq(mcqItem)} 
-                        selectedMcqs={selectedMcqs}
+                {currentTest && 
+                <CardHeader title={selectedMcqs && <Typography variant="subtitle1">{selectedMcqs.length} Questions</Typography>} 
+                    action={
+                        currentTest.test_meta.status==='draft' &&
+                        <McqSelector 
+                            skill={currentTest.test_meta.skill}
+                            onSelectMcq={(mcqItem) => this.props.onSelectMcq(mcqItem)} 
+                            selectedMcqs={selectedMcqs}
                         />
                 }
                 />

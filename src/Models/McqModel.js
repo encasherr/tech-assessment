@@ -3,8 +3,9 @@ import db from '../db/mysqldb';
 import users from '../users';
 
 import { GetQueryConfig, 
-    HandlePromise } from '../commons/RoleDefinitions';
-import { VIEW_MCQS } from '../commons/RoleBasedQueries/McqQueries';
+    HandlePromise, 
+    HandlePromiseWithParams} from '../commons/RoleDefinitions';
+import { VIEW_MCQS, VIEW_MCQS_BY_SKILL } from '../commons/RoleBasedQueries/McqQueries';
 
 
 class McqModel {
@@ -61,6 +62,10 @@ class McqModel {
         })*/
     }
 
+    GetMcqsBySkill = (userEntity, skill) => {
+        let queryConfig = GetQueryConfig(VIEW_MCQS_BY_SKILL);
+        return HandlePromiseWithParams(db, queryConfig, { userEntity: userEntity, skill: skill });
+    }
     /*GetMcqsByUser = (userEntity) => {
         if(this.entities.data && this.entities.data.length > 0 && userEntity) {
             let filteredMcqs = this.entities.data.filter((item, index) => {

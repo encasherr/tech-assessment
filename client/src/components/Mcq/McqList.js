@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { connect } from 'react-redux';
 import {    FetchMcqs, DeleteMcq, BulkDeleteMcq,
             CloseSnackbar,
@@ -50,7 +50,8 @@ class McqList extends Component {
     constructor (props) {
        super(props);
        this.state = {
-          selectedMcqs: []
+          selectedMcqs: [],
+          selectedSkills: []
        }
     }
 
@@ -112,6 +113,23 @@ class McqList extends Component {
         }
     }
 
+    handleFilterChange = (e) => {
+        let criteria = e.target.attributes.getNamedItem("data-criteria").value;
+        console.log('criteria', criteria);
+        switch(criteria) {
+            case 'SKILL': {
+                this.setState({
+                    selectedSkills: e.target.value
+                })
+                break;
+            }
+            case 'QUEST_DESC': {
+                break;
+            }
+        }
+        this.props.SearchMcq(criteria, e.target.value, this.props.mcqs);
+    }
+
     render = () => {
         let { mcqs, search_term, filteredCategories, search_enabled, error } = this.props;
         let { selectedMcqs } = this.state;
@@ -121,6 +139,7 @@ class McqList extends Component {
                 <LoadingComponent />
             )
         }
+        
         return (
             <Card>
                 <CardHeader
@@ -130,10 +149,10 @@ class McqList extends Component {
                             <Button color="primary" onClick={() => this.bulkDeleteMcq()} size="small">
                                 Delete
                             </Button>}
-                            {!search_enabled &&
-                            <Button color="primary" onClick={() => this.props.BeginSearch()} size="small">
+                            {/* {!search_enabled &&
+                            <Button className={styles.hide} color="primary" onClick={() => this.props.BeginSearch()} size="small">
                                 <Search />
-                            </Button>}
+                            </Button>} */}
                             <Link to="/bulkMcq" >
                                 <Button variant="contained" color="primary">Bulk Upload Mcq</Button>
                             </Link>
@@ -151,28 +170,30 @@ class McqList extends Component {
                                 label="Search"
                                 value={search_term}
                                 className={styles.dense}
-                                onChange={(e) => this.props.SearchMcq(e.target.value, mcqs)}
+                                // onChange={(e) => this.props.SearchMcq(e.target.value, mcqs)}
+                                onChange={this.handleFilterChange}
                                 margin="normal"
                                 variant="outlined"
+                                inputProps={{ 'data-criteria': 'QUEST_OR_DESC' }}
                             />
-                            {/* <InputLabel id="demo-mutiple-checkbox-label">Tag</InputLabel>
+                            <InputLabel id="demo-mutiple-checkbox-label">Tag</InputLabel>
                             <Select
-                                labelId="demo-mutiple-checkbox-label"
                                 id="demo-mutiple-checkbox"
                                 multiple
-                                value={['personName']}
-                                onChange={(e) => this.handleFilters(e.target.value, 'category')}
+                                value={this.state.selectedSkills}
+                                onChange={this.handleFilterChange}
+                                inputProps={{ 'data-criteria': 'SKILL' }}
                                 input={<Input />}
-                                // renderValue={(selected) => selected.join(', ')}
-                                MenuProps={MenuProps}
+                                renderValue={(selected) => selected.join(', ')}
+                                // MenuProps={MenuProps}
                                 >
-                                {names.map((name) => (
+                                {skills.map((name) => (
                                     <MenuItem key={name} value={name}>
-                                    <Checkbox checked={'personName'.indexOf(name) > -1} />
+                                    <Checkbox checked={this.state.selectedSkills.indexOf(name) > -1} />
                                     <ListItemText primary={name} />
                                     </MenuItem>
                                 ))}
-                            </Select> */}
+                            </Select>
                         </FormControl>
                         <FormControl variant="outlined" style={{width: '10%', marginTop: '2%'}}>
                             <Button  color="primary" size="small" onClick={() => this.props.EndSearch()} >
@@ -220,11 +241,22 @@ const mapDispatchToProps = dispatch => ({
     OpenSnackbar: () => dispatch(OpenSnackbar()),
     BeginSearch: () => dispatch(BeginSearch()),
     EndSearch: () => dispatch(EndSearch()),
-    SearchMcq: (searchTerm, mcqList) => dispatch(SearchMcq(searchTerm, mcqList)),
+    SearchMcq: (searchCriteria, searchTerm, mcqList) => dispatch(SearchMcq(searchCriteria, searchTerm, mcqList)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(McqList);
 const styles = {
     formControl: {
         width: '70%'
+    },
+    hide: {
+        display: 'none'
     }
 }
+
+const skills = [
+    'JAVA',
+    'ANGULAR',
+    'REACT',
+    'PLSQL',
+    'DEVOPS'
+]

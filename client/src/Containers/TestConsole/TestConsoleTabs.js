@@ -24,15 +24,17 @@ class TestConsoleTabs extends Component {
         return(
         <div>
             <AppBar position="static">
-                <Tabs variant="fullWidth" value={value} onChange={this.handleChange}>
+                <Tabs variant="fullWidth" value={value} 
+                        onChange={this.handleChange}>
                     <LinkTab label="Questions" href="page1" />
                     <LinkTab label="Candidates" href="page2" />
-                    <LinkTab label="Settings" href="page3" />
+                    <LinkTab label="Details" href="page3" />
                 </Tabs>
             </AppBar>
             {value === 0 && 
             <TabContainer>
                 <TestConsoleQuestions   
+                            classes={this.props.classes}
                             selectedMcqs={selectedMcqs} 
                             onSelectMcq={ (mcqItem) => this.props.onAddMcqToTest(mcqItem) } 
                             onRemoveMcqFromTest={ (mcqItem) => this.props.onRemoveMcqFromTest(mcqItem) } 
@@ -48,6 +50,7 @@ class TestConsoleTabs extends Component {
             {value === 2 && 
             <TabContainer>
                 <TestConsoleSettings
+                        classes={this.props.classes}
                         currentTest={currentTest} 
                         onFieldChange={(val, field) => this.props.onSettingsFieldChange(val, field)}
                         onSubmitTestSettings={() => this.props.onSubmitTestSettings()} /> 
@@ -66,6 +69,13 @@ const TabContainer = (props) => {
 }
 
 const LinkTab = (props) => {
-    return <Tab component="a" onClick={event => event.preventDefault()} {...props} />;
+    return <Tab onClick={event => event.preventDefault()} {...props} />;
 }
+function a11yProps(index) {
+    return {
+      id: `nav-tab-${index}`,
+      'aria-controls': `nav-tabpanel-${index}`,
+    };
+  }
+  
 export default TestConsoleTabs;

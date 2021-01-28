@@ -30,6 +30,7 @@ import ViewRmaRequest from '../HiTech/ViewRmaRequest';
 
 import PrivateRoute from '../components/lib/PrivateRoute';
 import CandidateConsoleContainer from '../Containers/CandidateConsole/CandidateConsoleContainer';
+import SimulatorRoute from './lib/SimulatorRoute';
 
 const Routes = (props) => {
     return (
@@ -57,7 +58,7 @@ const Routes = (props) => {
             {/* <Route path="/addCandidate" component={CandidatesContainer} /> */}
             <PrivateRoute path="/users" component={UsersComponent} />
 
-            <Route path="/startTest/:inviteid" component={SimulatorConsoleContainer} />
+            <PrivateRoute {...props} path="/startTest/:inviteid" component={SimulatorConsoleContainer} />
             <Route path="/testLanding/:inviteid" component={SimulatorShell} />
 
             {/* Routes for HiTech*/}

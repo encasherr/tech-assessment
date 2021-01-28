@@ -45,6 +45,11 @@ var TestModel = function TestModel() {
         })*/
     };
 
+    this.GetTestById = function (userEntity, testId) {
+        var queryConfig = (0, _RoleDefinitions.GetQueryConfig)(_TestQueries.VIEW_TESTS_BY_ID);
+        return (0, _RoleDefinitions.HandlePromise)(_mysqldb2.default, queryConfig, { userEntity: userEntity, testId: testId });
+    };
+
     this.GetTest = function (testId) {
         return new Promise(function (resolve, reject) {
             _mysqldb2.default.findOne(_this.entityName, testId).then(function (res) {
@@ -86,11 +91,40 @@ var TestModel = function TestModel() {
         return new Promise(function (resolve, reject) {
             var sql = _queries2.default.getCandidatesByTestId(testId);
             _mysqldb2.default.executeQuery(sql).then(function (res) {
-                resolve(res);
+                // resolve(res);
+                resolve(_this.mapCandidatesResult(res));
             }).catch(function (err) {
                 reject(err);
             });
         });
+    };
+
+    this.mapCandidatesResult = function (data) {
+        var outputArray = [];
+        console.log('data count', data.length);
+        if (data && data.length > 0) {
+            data.map(function (item, index) {
+                var output = {};
+                Object.keys(item).map(function (prop) {
+                    if (prop === 'response_meta') {
+                        var metaObj = item[prop];
+                        if (metaObj) {
+                            metaObj = metaObj.replace(/\n/g, "\\n");
+                            metaObj = metaObj.replace(/\r/g, "\\r");
+                            metaObj = metaObj.replace(/\t/g, "\\t");
+                            var mObj = JSON.parse(metaObj);
+                            Object.keys(mObj).forEach(function (metaProp) {
+                                output[metaProp] = mObj[metaProp];
+                            });
+                        }
+                    } else {
+                        output[prop] = item[prop];
+                    }
+                });
+                outputArray.push(output);
+            });
+        }
+        return outputArray;
     };
 
     this.Add = function (entity) {
@@ -129,7 +163,6 @@ var TestModel = function TestModel() {
         return promise;
     };
 }
-
 /*GetTestsByUser = (userEntity) => {
     if(this.entities.data && this.entities.data.length > 0 && userEntity) {
         let filteredTests = this.entities.data.filter((item, index) => {
