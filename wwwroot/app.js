@@ -36,6 +36,8 @@ var _passport3 = require("passport");
 
 var _passport4 = _interopRequireDefault(_passport3);
 
+var _general = require("./utils/general");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var port_number = process.env.PORT || 3001;
@@ -63,11 +65,18 @@ app.use(function (req, res, next) {
     next();
 });
 
+(0, _general.createPrerequisitesDir)();
+
 app.use('/api', _routes2.default);
+
+global.appRoot = _path2.default.resolve(__dirname);
+console.log('global.appRoot', global.appRoot);
+
 app.use('/*', function (req, resp) {
     var fileName = _path2.default.resolve(__dirname + '/index.html');
     resp.sendFile(fileName);
 });
+
 app.use('/testLanding', function (req, resp) {
     var fileName = _path2.default.resolve(__dirname + '/index.html');
     resp.sendFile(fileName);

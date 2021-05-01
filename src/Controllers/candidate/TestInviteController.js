@@ -13,6 +13,7 @@ import Evaluator from '../../commons/Evaluator';
 import users from '../../users';
 import DbConfig from '../../commons/DbConfig';
 import candidateRepo from './CandidateRepo';
+import invitationRepo from './InvitationRepo';
 
 class TestInviteController {
 
@@ -205,20 +206,40 @@ class TestInviteController {
     SendInvite = (req, resp) => {
         console.log('send invite called');
         console.log(req.body);
-        let entity = req.body.invitation_meta;
-        let invitationModel = new InvitationModel();
-        let candidateModel = new CandidateModel();
-        let testModel = new TestModel();
-        let dbConfig = new DbConfig();
+        // let entity = req.body.invitation_meta;
+        let { testId, invitees } = req.body;
+        if(!invitees || (invitees && invitees.length === 0)) {
+            let response = { message: 'No invitees to send email to.' };
+            console.log(response);
+            resp.status(500).json(response);
+            return;
+        }
 
-        let siteUrl = '';
-        dbConfig.Initialize().then((KeyValues) => {
-            siteUrl = KeyValues ?
-                (KeyValues.site_url ? KeyValues.site_url : '') : '';
-        })
+        invitationRepo.sendInvite(req.user.id, invitees, testId)
+            .then(async () => {
+                let testModel = new TestModel();
+                let testEntity = await testModel.GetTest(testId);    
+                resp.status(200).json(testEntity);
+            })
+            .catch((err) => {
+                let response = { message: 'Error occured in sending invite:' + err };
+                console.log(response);
+                resp.status(500).json(response);
+                return;
+            });
+        // let invitationModel = new InvitationModel();
+        // let candidateModel = new CandidateModel();
+        // let testModel = new TestModel();
+        // let dbConfig = new DbConfig();
 
-        let emailIds = entity.emailTo.split(";");
-        if (emailIds && emailIds.length > 0) {
+        // let siteUrl = '';
+        // dbConfig.Initialize().then((KeyValues) => {
+        //     siteUrl = KeyValues ?
+        //         (KeyValues.site_url ? KeyValues.site_url : '') : '';
+        // })
+
+        // let emailIds = entity.emailTo.split(";");
+        /*if (emailIds && emailIds.length > 0) {
             emailIds.map((emailId, index) => {
                 let candidateMeta = {
                     name: entity.name,
@@ -250,7 +271,7 @@ class TestInviteController {
                     resp.status(500).json({ message: 'error occured in sending invite:' + err });
                 });
             });
-        }
+        }*/
 
     }
 

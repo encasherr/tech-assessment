@@ -7,8 +7,34 @@ import {    AddMcq, FetchMcqs, UpdateMcq, FetchCategories, FetchSkills,
             BeginSearch, SearchMcq } from '../actions/McqActions';
 import Grid from '@material-ui/core/Grid';
 import SnackbarComponent from '../components/lib/SnackbarComponent';
+import { EditorState, convertToRaw } from 'draft-js';
+import draftToHtml from 'draftjs-to-html';
 
 class McqContainer extends React.Component {
+
+    constructor(props){
+        super(props);
+        this.state = {
+            questionEditorState: EditorState.createEmpty(),
+            choiceEditorState: EditorState.createEmpty(),
+        }
+    }
+
+    onQuestionEditorStateChange = (questionEditorState) => {
+        this.setState({
+            questionEditorState,
+        });
+        let data = draftToHtml(convertToRaw(questionEditorState.getCurrentContent()));
+        this.props.CurrentMcqFieldChange(data, 'description', this.props.current_mcq);
+    };
+
+    onChoiceEditorChange = (choiceEditorState) => {
+        this.setState({
+            choiceEditorState,
+        });
+        let data = draftToHtml(convertToRaw(choiceEditorState.getCurrentContent()));
+        this.props.CurrentAnswerFieldChange(data, 'content', this.props.currentAnswer);
+    };
 
     componentDidMount = () => {
         this.reload();
@@ -49,6 +75,7 @@ class McqContainer extends React.Component {
         if(state && state.mcq) {
             mcq = state.mcq;
         }
+        let { questionEditorState, choiceEditorState } = this.state;
         return(
             <Grid container spacing={16}>
                 <Grid item xs={12} sm={12}>
@@ -64,6 +91,10 @@ class McqContainer extends React.Component {
                         onFieldChange={ (val, field, model) => this.props.CurrentMcqFieldChange(val, field, model) } 
                         onAnswerFieldChange={ (val, field, model) => this.props.CurrentAnswerFieldChange(val, field, model) } 
                         history={this.props.history}
+                        questionEditorState={questionEditorState}
+                        onQuestionEditorStateChange={this.onQuestionEditorStateChange}
+                        choiceEditorState={choiceEditorState}
+                        onChoiceEditorChange={this.onChoiceEditorChange}
                         />
                 </Grid>
             </Grid>

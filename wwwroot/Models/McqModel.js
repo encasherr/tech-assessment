@@ -4,6 +4,8 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _mysqldb = require('../db/mysqldb');
 
 var _mysqldb2 = _interopRequireDefault(_mysqldb);
@@ -118,7 +120,13 @@ var McqModel = function McqModel() {
                     });
                 }
             }
-            _mysqldb2.default.insert(_this.entityName, entity).then(function (insertId) {
+            var mcqEntity = {
+                mcq_meta: entity,
+                skill: entity.skill,
+                category: entity.category
+
+                //   db.insert(this.entityName, entity)
+            };_mysqldb2.default.insertCustom(_this.entityName, mcqEntity).then(function (insertId) {
                 resolve(insertId);
             }).catch(function (err) {
                 reject(err);
@@ -126,10 +134,30 @@ var McqModel = function McqModel() {
         });
     };
 
-    this.GetMcqsByIds = function (mcqIds) {
+    this.GetMcqsByIds = function (selectedMcqs) {
         return new Promise(function (resolve, reject) {
+            var mcqIds = [];
+            selectedMcqs.forEach(function (selectedMcq) {
+                mcqIds.push(selectedMcq.mcqId);
+            });
             _mysqldb2.default.getByIds(_this.entityName, mcqIds).then(function (mcqs) {
-                resolve(mcqs);
+                var mcqsWithIndex = [];
+                if (mcqs && mcqs.length > 0) {
+                    mcqs.map(function (mcqItem) {
+                        var matchingSelectedMcq = selectedMcqs.filter(function (smItem) {
+                            return smItem.mcqId === mcqItem.id;
+                        });
+
+                        if (matchingSelectedMcq && matchingSelectedMcq.length > 0) {
+                            mcqsWithIndex.push(_extends({
+                                questionOrderIndex: matchingSelectedMcq[0].questionOrderIndex
+                            }, mcqItem));
+                        }
+                    });
+                }
+
+                resolve(mcqsWithIndex);
+                // resolve(mcqs);
             }).catch(function (err) {
                 reject(err);
             });
@@ -154,7 +182,7 @@ var McqModel = function McqModel() {
                 db.saveDatabase(() => {
                   this.EmailSnapshot('CategoryAdd');
               });
-                      resolve(true);
+                        resolve(true);
             }
             else {
                 console.log('nothing to update');

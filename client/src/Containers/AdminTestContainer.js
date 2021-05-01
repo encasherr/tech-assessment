@@ -8,6 +8,7 @@ import Grid from '@material-ui/core/Grid';
 import SnackbarComponent from '../components/lib/SnackbarComponent';
 import { Button, Card, CardHeader } from '@material-ui/core';
 import TestList from '../components/AdminTest/TestList';
+import config from '../config';
 
 class AdminTestContainer extends React.Component {
     
@@ -23,6 +24,9 @@ class AdminTestContainer extends React.Component {
     }
 
     onAddTest = (model) => {
+        model.test_meta.settings = {
+            testVisibility: config.instance.TestVisibility.InvitedCandidates
+        }
         this.props.AddTest(model, this.props.editMode, this.props.history)
                 .then((res) => {
                     this.reload();  

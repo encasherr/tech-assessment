@@ -44,7 +44,8 @@ class TestConsoleTabs extends Component {
             {value === 1 && 
             <TabContainer>
                 <TestConsoleCandidates 
-                    candidates={candidates}
+                    {...this.props}
+                    // candidates={candidates}
                 /> 
             </TabContainer>}
             {value === 2 && 

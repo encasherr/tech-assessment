@@ -50,21 +50,29 @@ class CandidateResponseModel {
             data.forEach((item) => {
 
                 let candidate_meta = item.candidate_meta;
-                candidate_meta = candidate_meta.replace(/\n/g, "\\n");
-                candidate_meta = candidate_meta.replace(/\r/g, "\\r");
-                candidate_meta = candidate_meta.replace(/\t/g, "\\t");
+                if(candidate_meta) {
+                    candidate_meta = candidate_meta.replace(/\n/g, "\\n");
+                    candidate_meta = candidate_meta.replace(/\r/g, "\\r");
+                    candidate_meta = candidate_meta.replace(/\t/g, "\\t");
+                }
                 let invitation_meta = item.invitation_meta;
-                invitation_meta = invitation_meta.replace(/\n/g, "\\n");
-                invitation_meta = invitation_meta.replace(/\r/g, "\\r");
-                invitation_meta = invitation_meta.replace(/\t/g, "\\t");
+                if(invitation_meta) {
+                    invitation_meta = invitation_meta.replace(/\n/g, "\\n");
+                    invitation_meta = invitation_meta.replace(/\r/g, "\\r");
+                    invitation_meta = invitation_meta.replace(/\t/g, "\\t");
+                }
                 let test_meta = item.test_meta;
-                test_meta = test_meta.replace(/\n/g, "\\n");
-                test_meta = test_meta.replace(/\r/g, "\\r");
-                test_meta = test_meta.replace(/\t/g, "\\t");
+                if(test_meta) {
+                    test_meta = test_meta.replace(/\n/g, "\\n");
+                    test_meta = test_meta.replace(/\r/g, "\\r");
+                    test_meta = test_meta.replace(/\t/g, "\\t");
+                }
                 let response_meta = item.response_meta;
-                response_meta = response_meta.replace(/\n/g, "\\n");
-                response_meta = response_meta.replace(/\r/g, "\\r");
-                response_meta = response_meta.replace(/\t/g, "\\t");
+                if(response_meta) {
+                    response_meta = response_meta.replace(/\n/g, "\\n");
+                    response_meta = response_meta.replace(/\r/g, "\\r");
+                    response_meta = response_meta.replace(/\t/g, "\\t");
+                }
                 
                 let output = {};
                 output['candidate_meta'] = JSON.parse(candidate_meta);

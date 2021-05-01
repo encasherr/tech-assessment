@@ -22,6 +22,7 @@ const MenuItems = [
     { routeName: 'invitations', routeCaption: 'Invitations', icon: SupervisorAccount, app: 'TeachAssesment' },
     { routeName: 'categories', routeCaption: 'Categories', icon: ViewQuilt, app: 'TeachAssesment' },
     { routeName: 'skills', routeCaption: 'Skills', icon: Polymer, app: 'TeachAssesment' },
+    { routeName: 'grades', routeCaption: 'Grades', icon: Polymer, app: 'TeachAssesment' },
     { routeName: 'orgs', routeCaption: 'Organizations', icon: Work, app: 'TeachAssesment' },
     { routeName: 'users', routeCaption: 'Users', icon: PermIdentity, app: 'TeachAssesment' },
 

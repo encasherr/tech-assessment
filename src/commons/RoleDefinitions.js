@@ -3,14 +3,17 @@ import { VIEW_DASHBOARD_INVITATION,
         VIEW_DASHBOARD_TESTS,
         VIEW_DASHBOARD_MCQ } from './RoleBasedQueries/DashboardQueries';
 import { VIEW_MCQS_QUERY, VIEW_MCQS_BY_SKILL_QUERY } from './RoleBasedQueries/McqQueries';
-import { VIEW_TESTS, VIEW_TESTS_QUERY, VIEW_TEST_BY_ID_QUERY } from './RoleBasedQueries/TestQueries';
+import { VIEW_TESTS, VIEW_TESTS_QUERY, VIEW_TEST_BY_ID_QUERY, VIEW_MY_TESTS_QUERY } from './RoleBasedQueries/TestQueries';
 import { VIEW_INVITATIONS_QUERY } from './RoleBasedQueries/InvitationQueries';
 import { VIEW_USERS_QUERY } from './RoleBasedQueries/UserQueries';
 import { VIEW_ORGS_QUERY } from './RoleBasedQueries/OrgQueries';
+import { VIEW_GRADES_QUERY } from './RoleBasedQueries/GradeQueries';
 
 export const admin = 'admin';
 export const orgadmin = 'orgadmin';
 export const staff = 'staff';
+export const candidate = 'candidate';
+export const teacher = 'teacher';
 
 export const handleRoleNotFound = (role) => {
     console.log(`${role} role not found`);
@@ -77,13 +80,15 @@ export const RoleDefinitions = {
             VIEW_MCQS_QUERY,
             VIEW_MCQS_BY_SKILL_QUERY,
             VIEW_TESTS_QUERY,
+            VIEW_MY_TESTS_QUERY,
             VIEW_TEST_BY_ID_QUERY,
             VIEW_INVITATIONS_QUERY,
             VIEW_USERS_QUERY,
             VIEW_ORGS_QUERY,
             VIEW_DASHBOARD_INVITATION,
             VIEW_DASHBOARD_TESTS,
-            VIEW_DASHBOARD_MCQ
+            VIEW_DASHBOARD_MCQ,
+            VIEW_GRADES_QUERY
         ]
     }
    

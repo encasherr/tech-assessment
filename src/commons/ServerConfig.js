@@ -1,6 +1,7 @@
 import path from 'path';
 import queries from '../db/queries';
 import db from "../db/mysqldb";
+import { encrypt } from '../utils/general';
 
 const EmailConfig = {
     emailSmtpHost: 'smtp.gmail.com',
@@ -19,6 +20,13 @@ const EmailConfig = {
             domainUrl = 'http://localhost:3001/'
         }
         return `${domainUrl}${faqLink}`;
+    },
+    getVerificationLink: (domainUrl, encryptedObject) => {
+        if(!domainUrl) {
+            domainUrl = 'http://localhost:3001'
+        }
+        let verificationLink = `${domainUrl}/api/candidate/verifyUser?userIv=${encryptedObject.iv}&userContent=${encryptedObject.content}`;
+        return verificationLink;
     }
 }
 const AuthConfig = {

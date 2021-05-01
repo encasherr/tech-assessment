@@ -44,12 +44,14 @@ class LocalLoginComponent extends Component {
                 })
             } else {
                 this.setState({
-                    errorMessage: 'Wrong Credentials. Please try again.'
-                });
+                        errorMessage: 'Wrong Credentials. Please try again.',
+                        logInButtonText: 'LOG IN'
+                    });
             }
         }).catch((err) => {
             this.setState({
-                errorMessage: 'Invalid Credentials. Please check entered email and enter correct password.'
+                errorMessage: 'Invalid Credentials. Please check entered email and enter correct password.',
+                logInButtonText: 'LOG IN'
             });
         });
     }
@@ -75,11 +77,7 @@ class LocalLoginComponent extends Component {
                 <div className="row h-100 justify-content-center align-items-center">
                     {userInfo === null &&
                         <form noValidate autoComplete="off" onSubmit={(e) => this.localHandler(e)}>
-                            {/* <CardHeader title="Login"
-                                subheader={errorMessage}
-                            >
-                            </CardHeader> */}
-                            <CardContent>
+                           <CardContent>
                             <div className="row">
                                 <h2 className="col-md-12 text-center">Login</h2>
                             </div>
@@ -107,30 +105,19 @@ class LocalLoginComponent extends Component {
                                     </FormControl>
                                 </div>
                                 <div className="row mt-4">
-                                    <button className="btn btn-primary btn-block" type="submit"
-                                            // onClick={() => this.localHandler()}
-                                            >
+                                    <button className="btn btn-primary btn-block" type="submit">
                                                 {logInButtonText}
                                     </button>
                                     </div>
                             </CardContent>
-                            {/* <CardActions>
-                                <div className="row">
-                                <div className="col-md-12">
-                                <button className="w-100 btn btn-primary btn-block" type="submit" 
-                                        // onClick={() => this.localHandler()}
-                                        >
-                                            LOG IN
-                                </button>
-                                </div>
-                                </div>
-                            </CardActions> */}
                         </form>
                     }
                 </div>
+                <p className="col-md-12 text-center text-danger">{errorMessage}</p>
             </div>
         )
     }
+
 }
 const mapStateToProps = state => ({
     ...state.userReducer

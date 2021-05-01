@@ -18,7 +18,12 @@ const Question = (props) => {
     return (
         <div>
             <Typography variant="subtitle1">
-                {model.mcq.mcq_meta.description}
+                {/* {model.mcq.mcq_meta.description} */}
+                <div
+                    dangerouslySetInnerHTML={{
+                        __html: model.mcq.mcq_meta.description
+                    }}>
+                </div>
             </Typography>
             <FormControl component="fieldset">
                 <FormLabel component="legend">Options</FormLabel>
@@ -37,7 +42,12 @@ const Question = (props) => {
                                             {/* <Badge color="secondary" badgeContent={choiceItem.key} /> */}
                                     </div>
                                     <div className="col-md-10">
-                                        {choiceItem.content}
+                                        {/* {choiceItem.content} */}
+                                        <div
+                                            dangerouslySetInnerHTML={{
+                                                __html: choiceItem.content
+                                            }}>
+                                        </div>
                                     </div>
                             </div>
                         )

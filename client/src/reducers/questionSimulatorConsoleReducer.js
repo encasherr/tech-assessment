@@ -23,7 +23,7 @@ export default (state = {}, action) => {
                     currentQuestion: (testObject && testObject.response_meta &&
                         testObject.response_meta.mcqs &&
                         testObject.response_meta.mcqs.length > 0) ?
-                        testObject.response_meta.mcqs[13] : {}
+                        testObject.response_meta.mcqs[0] : {}
                 }
             }
         case CANDIDATE_RESPONSE_CHANGED:

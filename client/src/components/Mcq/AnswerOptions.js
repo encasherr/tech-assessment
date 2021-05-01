@@ -23,7 +23,14 @@ const AnswerOptions = (props) => {
                                 </Avatar>
                             </ListItemIcon>
                             <ListItemText
-                                primary={item.content}
+                                // primary={item.content}
+                                primary={
+                                    <div
+                                        dangerouslySetInnerHTML={{
+                                            __html: item.content
+                                        }}>
+                                    </div>
+                                }
                                 secondary={item.isCorrect ? 'Correct' : 'Wrong'}
                                 />
                             </ListItem>)

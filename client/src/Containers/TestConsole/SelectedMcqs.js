@@ -1,6 +1,7 @@
 import React from 'react';
 import { Typography, List } from '@material-ui/core';
 import McqItem from './McqItem';
+import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
 class SelectedMcqs extends React.Component {
 
@@ -19,12 +20,14 @@ class SelectedMcqs extends React.Component {
             {orderedSelectedMcqs && orderedSelectedMcqs.length > 0 &&
                 <List>
                     {orderedSelectedMcqs.map((item, index) => {
+                        console.log('orderedmcqs', item);
                         return (
                             <McqItem mcqItem={item}  key={index}
                                         onSelect={ () => this.props.openMcq(item) }
                                         onRemoveMcqFromTest={ () => this.props.onRemoveMcqFromTest(item) }
                                         isDeletable={true}
                                         isSelectable={false} />
+
                         );
                     })}
                 </List>

@@ -12,6 +12,10 @@ var _users = require('../users');
 
 var _users2 = _interopRequireDefault(_users);
 
+var _queries = require('../db/queries');
+
+var _queries2 = _interopRequireDefault(_queries);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } } // import db from './db';
@@ -52,6 +56,15 @@ var CandidateModel = function CandidateModel() {
     this.GetCandidate = function (candidateId) {
         return new Promise(function (resolve, reject) {
             _mysqldb2.default.findOne(_this.entityName, candidateId).then(function (res) {
+                resolve(res);
+            });
+        });
+    };
+
+    this.GetCandidateByEmail = function (emailId) {
+        return new Promise(function (resolve, reject) {
+            var sql = _queries2.default.getCandidateByEmailQuery(emailId);
+            _mysqldb2.default.executeQuery(sql).then(function (res) {
                 resolve(res);
             });
         });

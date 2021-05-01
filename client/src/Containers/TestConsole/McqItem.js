@@ -45,6 +45,10 @@ class McqItem extends Component {
                 isDeletable, isChecked } = this.props;
         let mcq = mcqItem ? mcqItem.mcq_meta : null; 
         // console.log(`mcq: ${JSON.parse(mcqItem.mcq_meta)}`);
+        let questionOrderIndex = '';
+        if(mcqItem && mcqItem.questionOrderIndex) {
+            questionOrderIndex = `${mcqItem.questionOrderIndex + 1}`;
+        }
 
         return (
             <div>
@@ -57,7 +61,7 @@ class McqItem extends Component {
                     >
                     <ListItemText 
                                 primary={ mcq.question }
-                                secondary={ `${mcq.category} - ${mcq.skill} ` } >
+                                secondary={ `Q ${questionOrderIndex}: ${mcq.category} - ${mcq.skill} ` } >
                     </ListItemText>
                     {isSelectable && 
                     <ListItemSecondaryAction>
@@ -103,7 +107,12 @@ class McqItem extends Component {
                     </DialogTitle>
                     <Divider />
                     <DialogContent style={{padding: '4%'}}>
-                        <p>{mcq.description}</p>
+                        {/* <p>{this.htmlDecode(mcq.description)}</p> */}
+                        <div
+                            dangerouslySetInnerHTML={{
+                                __html: mcq.description
+                            }}>
+                        </div>
                         <AnswerOptions choices={mcq.choices}/>
                     </DialogContent>
                     {isEditable &&

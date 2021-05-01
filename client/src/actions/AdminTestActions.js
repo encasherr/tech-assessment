@@ -58,9 +58,18 @@ export const CurrentTestFieldChange = (val, field, model) => dispatch => {
             });
             break;
         }
-        case 'experienceYears':
+        case 'grade':
         {
-            model.test_meta.experienceYears = val;
+            model.test_meta.grade = val;
+            dispatch({
+                type: CURRENT_TEST_FIELD_CHANGE,
+                payload: model
+            });
+            break;
+        }
+        case 'subject':
+        {
+            model.test_meta.subject = val;
             dispatch({
                 type: CURRENT_TEST_FIELD_CHANGE,
                 payload: model
@@ -83,6 +92,7 @@ export const AddTest = (testModel, editMode) => dispatch => {
         });
         let url = config.instance.getAdminApiUrl() + 'test';
         testModel.test_meta.status = 'draft';
+        
         repository.saveData(url, testModel)
             .then((res) => {
                 dispatch({

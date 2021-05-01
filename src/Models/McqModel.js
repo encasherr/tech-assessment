@@ -2,9 +2,11 @@
 import db from '../db/mysqldb';
 import users from '../users';
 
-import { GetQueryConfig, 
-    HandlePromise, 
-    HandlePromiseWithParams} from '../commons/RoleDefinitions';
+import {
+    GetQueryConfig,
+    HandlePromise,
+    HandlePromiseWithParams
+} from '../commons/RoleDefinitions';
 import { VIEW_MCQS, VIEW_MCQS_BY_SKILL } from '../commons/RoleBasedQueries/McqQueries';
 
 
@@ -35,13 +37,13 @@ class McqModel {
     };
 
     constructor() {
-      //this.initializeCollection();
+        //this.initializeCollection();
     }
 
     GetAll = (userEntity) => {
         let queryConfig = GetQueryConfig(VIEW_MCQS);
         return HandlePromise(db, queryConfig, userEntity);
-    
+
         /*return new Promise((resolve, reject) => {
             
             this.initializeCollection().then((res) => {
@@ -85,42 +87,49 @@ class McqModel {
     BulkAddMcq = (jsonData) => {
         return new Promise((resolve, reject) => {
             let mcqs = jsonData.mcqs;
-            if(mcqs && mcqs.length > 0) {
+            if (mcqs && mcqs.length > 0) {
                 mcqs.map((item, index) => {
                     item.mcq_meta.addedBy = jsonData.addedBy;
                     this.Add(item.mcq_meta)
-                      .then((res) => {
-                          console.log('mcq added');
-                      })
-                      .catch((error) => {
-                          console.log('mcq add failed: ' + error);
-                      });
+                        .then((res) => {
+                            console.log('mcq added');
+                        })
+                        .catch((error) => {
+                            console.log('mcq add failed: ' + error);
+                        });
                 })
-            } 
+            }
             resolve(true);
         })
     }
 
     Add = (entity) => {
-      return new Promise((resolve, reject) => {
-          console.log('mcq insert called');
-          let correctOptions = ['A','B','C','D','E','F'];
-          if(entity.correctAnswer && correctOptions.indexOf(entity.correctAnswer) > -1) {
-                if(entity.choices && entity.choices.length > 0) {
+        return new Promise((resolve, reject) => {
+            console.log('mcq insert called');
+            let correctOptions = ['A', 'B', 'C', 'D', 'E', 'F'];
+            if (entity.correctAnswer && correctOptions.indexOf(entity.correctAnswer) > -1) {
+                if (entity.choices && entity.choices.length > 0) {
                     entity.choices.map((choice, chIndex) => {
-                        if(chIndex === correctOptions.indexOf(entity.correctAnswer)) {
-                            choice.isCorrect = true;              
+                        if (chIndex === correctOptions.indexOf(entity.correctAnswer)) {
+                            choice.isCorrect = true;
                         }
                         else {
                             choice.isCorrect = false;
                         }
-                        if(!choice.key) {
+                        if (!choice.key) {
                             choice.key = correctOptions[chIndex];
                         }
                     })
                 }
-          }
-          db.insert(this.entityName, entity)
+            }
+            let mcqEntity = {
+                mcq_meta: entity,
+                skill: entity.skill,
+                category: entity.category
+            }
+
+            //   db.insert(this.entityName, entity)
+            db.insertCustom(this.entityName, mcqEntity)
                 .then((insertId) => {
                     resolve(insertId);
                 })
@@ -128,13 +137,34 @@ class McqModel {
                     reject(err);
                 })
 
-      });
+        });
     }
 
-    GetMcqsByIds = (mcqIds) => {
+    GetMcqsByIds = (selectedMcqs) => {
         return new Promise((resolve, reject) => {
+            let mcqIds = [];
+            selectedMcqs.forEach((selectedMcq) => {
+                mcqIds.push(selectedMcq.mcqId);
+            })
             db.getByIds(this.entityName, mcqIds).then((mcqs) => {
-                resolve(mcqs);
+                let mcqsWithIndex = [];
+                if (mcqs && mcqs.length > 0) {
+                    mcqs.map((mcqItem) => {
+                        let matchingSelectedMcq = selectedMcqs.filter((smItem) => {
+                            return smItem.mcqId === mcqItem.id;
+                        })
+
+                        if (matchingSelectedMcq && matchingSelectedMcq.length > 0) {
+                            mcqsWithIndex.push({
+                                questionOrderIndex: matchingSelectedMcq[0].questionOrderIndex,
+                                ...mcqItem
+                            })
+                        }
+                    })
+                }
+
+                resolve(mcqsWithIndex);
+                // resolve(mcqs);
             }).catch((err) => {
                 reject(err);
             })
@@ -142,31 +172,31 @@ class McqModel {
     }
 
     Update = (entity) => {
-      return new Promise((resolve, reject) => {
-          // let mcqs = this.initializeCollection();
+        return new Promise((resolve, reject) => {
+            // let mcqs = this.initializeCollection();
             db.update(this.entityName, entity.mcq_meta, entity.id).then((res) => {
                 resolve(res);
             });
-          /*
-          let mcqToUpdate = this.entities.find({ '$loki': entity.$loki });
-          if(mcqToUpdate && mcqToUpdate.length > 0) {
-              mcqToUpdate[0].title = entity.title;
-              mcqToUpdate[0].description = entity.description;
-              if(entity.user) {
-                  mcqToUpdate[0].updatedBy = entity.emailId;
-              }
-              this.entities.update(mcqToUpdate[0]);
-              db.saveDatabase(() => {
-                this.EmailSnapshot('CategoryAdd');
-            });
-    
-              resolve(true);
-          }
-          else {
-              console.log('nothing to update');
-              reject("nothing to update");
-          }*/
-      })
+            /*
+            let mcqToUpdate = this.entities.find({ '$loki': entity.$loki });
+            if(mcqToUpdate && mcqToUpdate.length > 0) {
+                mcqToUpdate[0].title = entity.title;
+                mcqToUpdate[0].description = entity.description;
+                if(entity.user) {
+                    mcqToUpdate[0].updatedBy = entity.emailId;
+                }
+                this.entities.update(mcqToUpdate[0]);
+                db.saveDatabase(() => {
+                  this.EmailSnapshot('CategoryAdd');
+              });
+      
+                resolve(true);
+            }
+            else {
+                console.log('nothing to update');
+                reject("nothing to update");
+            }*/
+        })
     }
 
     DeleteByIds = (mcqIds) => {
@@ -180,28 +210,28 @@ class McqModel {
     }
 
     Delete = (entity) => {
-      return new Promise((resolve, reject) => {
-          db.delete(this.entityName, entity.id)
-                    .then((res) => {
-                        resolve(entity.mcq_meta);
-                    })
-                    .catch((err) => {
-                        reject(err);
-                    })
-        //   let mcqToDelete = this.entities.chain().find({ '$loki': entity.$loki });
-        //   if(mcqToDelete) {
-        //       mcqToDelete.remove();
-        //         db.saveDatabase(() => {
-        //             this.EmailSnapshot('CategoryAdd');
-        //         });
-    
-        //       resolve(true);
-        //   }
-        //   else {
-        //       console.log('nothing to delete');
-        //       reject("nothing to delete");
-        //   }
-      })
+        return new Promise((resolve, reject) => {
+            db.delete(this.entityName, entity.id)
+                .then((res) => {
+                    resolve(entity.mcq_meta);
+                })
+                .catch((err) => {
+                    reject(err);
+                })
+            //   let mcqToDelete = this.entities.chain().find({ '$loki': entity.$loki });
+            //   if(mcqToDelete) {
+            //       mcqToDelete.remove();
+            //         db.saveDatabase(() => {
+            //             this.EmailSnapshot('CategoryAdd');
+            //         });
+
+            //       resolve(true);
+            //   }
+            //   else {
+            //       console.log('nothing to delete');
+            //       reject("nothing to delete");
+            //   }
+        })
     }
 
     // initializeCollection = () => {

@@ -42,30 +42,48 @@ export const FetchInvitations = () => dispatch => {
 }
 
 export const EvaluateResults = (responseId) => dispatch => {
-    let url = config.instance.getCandidateApiUrl() + 'evaluateAnswers';
-    repository.saveData(url, { responseId: responseId})
-                .then((res) => {
-                    dispatch({
-                        type: EVALUATION_SUCCESS,
-                        payload: res.data
+    return new Promise((resolve, reject) => {
+        let url = config.instance.getCandidateApiUrl() + 'evaluateAnswers';
+
+        repository.saveData(url, { responseId: responseId})
+                    .then((res) => {
+                        dispatch({
+                            type: EVALUATION_SUCCESS,
+                            payload: res.data
+                        });
+                    }).catch((err) => {
+                        dispatch({
+                            type: EVALUATION_FAILED,
+                            payload: err
+                        });
                     });
-                }).catch((err) => {
-                    dispatch({
-                        type: EVALUATION_FAILED,
-                        payload: err
-                    });
-                });
+    })
 }
 
-export const SendInvite = (testModel, inviteInfo) => dispatch => {
+// export const SendInvite = (testModel, inviteInfo) => dispatch => {
+export const SendInvite = (model) => dispatch => {
     let url = config.instance.getCandidateApiUrl() + 'sendInvite';
     
-    let model = {
-        invitation_meta: {
-            ...inviteInfo,
-            testId: testModel.id
-        }
-    }
+    // let model = {
+    //     invitation_meta: {
+    //         ...inviteInfo,
+    //         testId: testModel.id
+    //     }
+    // }
+    
+    // let model = {
+    //     testId: testModel.id,
+    //     emailSubject: inviteInfo.emailSubject,
+    //     invitations: [
+    //         {
+    //             invitation_meta: {
+    //                 name: inviteInfo.name,
+    //                 testId: testModel.id
+    //             }
+    //         }
+    //     ]
+    // }
+
     return new Promise((resolve, reject) => {
         repository.saveData(url, model)
         .then((res) => {
@@ -83,7 +101,11 @@ export const SendInvite = (testModel, inviteInfo) => dispatch => {
         });
     });
 }
+
 export const InviteInfoFieldChange = (val, field, model) => dispatch => {
+    if(!model) {
+        model = {};
+    }
     switch(field)
     {
         case 'name':

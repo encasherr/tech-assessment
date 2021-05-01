@@ -57,6 +57,30 @@ const queries =  {
             `;
     },
 
+    getInvitationCountForUser: (userId) => {
+        return `
+                SELECT COUNT(*) as cnt
+                FROM ta_invitations i 
+                join ta_candidates c ON JSON_EXTRACT(i.invitation_meta , '$.candidateId') = c.id 
+                join ta_tests t ON JSON_EXTRACT(i.invitation_meta , '$.testId') = t.id 
+                join ta_users u ON JSON_EXTRACT(i.invitation_meta, '$.createdBy') = u.id 
+                left join ta_mcqresponses r ON JSON_EXTRACT(r.response_meta , '$.invitationId') = i.id
+                WHERE u.id = ${userId} 
+            `;
+    },
+
+    getInvitationCountByOrgId: (orgId) => {
+        return `
+                SELECT COUNT(*) as cnt
+                FROM ta_invitations i 
+                join ta_candidates c ON JSON_EXTRACT(i.invitation_meta , '$.candidateId') = c.id 
+                join ta_tests t ON JSON_EXTRACT(i.invitation_meta , '$.testId') = t.id 
+                join ta_users u ON JSON_EXTRACT(i.invitation_meta, '$.createdBy') = u.id 
+                left join ta_mcqresponses r ON JSON_EXTRACT(r.response_meta , '$.invitationId') = i.id
+                WHERE JSON_EXTRACT(u.user_meta, '$.orgId') = ${orgId}
+            `;
+    },
+
     getInvitationsByOrgQuery: (orgId) => {
         return `
                 SELECT JSON_UNQUOTE(JSON_EXTRACT(c.candidate_meta, '$.name')) as 'candidateName', 
@@ -78,6 +102,29 @@ const queries =  {
             `;
     },
 
+    getInvitationsByCreateUserQuery: (userId) => {
+        return `
+                SELECT 
+                c.id as 'candidateId',
+                JSON_UNQUOTE(JSON_EXTRACT(c.candidate_meta, '$.name')) as 'candidateName', 
+                JSON_UNQUOTE(JSON_EXTRACT(c.candidate_meta, '$.email')) as 'candidateEmail', 
+                JSON_UNQUOTE(JSON_EXTRACT(i.invitation_meta, '$.status')) as 'invitationStatus', 
+                i.time_stamp as 'invitedOn', 
+                JSON_UNQUOTE(JSON_EXTRACT(i.invitation_meta, '$.completedOn')) as 'completedOn', 
+                JSON_UNQUOTE(JSON_EXTRACT(r.response_meta, '$.scorePercentage')) as 'scorePercentage', 
+                JSON_UNQUOTE(JSON_EXTRACT(r.response_meta, '$.result')) as 'result', 
+                JSON_UNQUOTE(JSON_EXTRACT(t.test_meta, '$.testName')) as 'testName', 
+                t.id as 'testId', r.id as 'responseId' 
+                FROM ta_invitations i 
+                join ta_candidates c ON JSON_EXTRACT(i.invitation_meta , '$.candidateId') = c.id 
+                join ta_tests t ON JSON_EXTRACT(i.invitation_meta , '$.testId') = t.id
+                join ta_users u ON JSON_EXTRACT(i.invitation_meta, '$.createdBy') = u.id 
+                left join ta_mcqresponses r ON JSON_EXTRACT(r.response_meta , '$.invitationId') = i.id
+                WHERE u.id = ${userId}
+                order by i.time_stamp DESC
+            `;
+    },
+
     getTestCountForAdmin: () => {
         return `
                 SELECT COUNT(*) as cnt
@@ -94,10 +141,28 @@ const queries =  {
             `;
     },
 
+    getTestCountByUser: (userId) => {
+        return `
+                SELECT COUNT(*) as cnt
+                FROM ta_tests t
+                join ta_users u ON JSON_EXTRACT(t.test_meta, '$.createdBy') = u.id 
+                WHERE u.id = ${userId}
+            `;
+    },
+
     getMcqCountForAdmin: () => {
         return `
             SELECT COUNT(*) as cnt
             FROM ta_mcq
+        `;
+    },
+
+    getMcqCountByUser: (userId) => {
+        return `
+            SELECT COUNT(*) as cnt
+            FROM ta_mcq m
+            join ta_users u ON JSON_EXTRACT(m.mcq_meta, '$.createdBy') = u.id 
+            WHERE u.id = ${userId}
         `;
     },
     
@@ -119,6 +184,14 @@ const queries =  {
             FROM ta_invitations i
             JOIN ta_candidates c ON JSON_EXTRACT(i.invitation_meta,'$.candidateId')=c.id
             WHERE i.id = ${invitationId}
+        `;
+    },
+
+    getCandidateByEmailQuery: (emailId) => {
+        return `
+            SELECT *
+            FROM ta_candidates c
+            WHERE JSON_EXTRACT(c.candidate_meta, '$.email') = '${emailId}'
         `;
     },
 
@@ -176,9 +249,21 @@ const queries =  {
             FROM ta_candidates c
             JOIN ta_invitations i on JSON_EXTRACT(i.invitation_meta, '$.candidateId') = c.id
             JOIN ta_tests t on JSON_EXTRACT(i.invitation_meta, '$.testId') = t.id
-            JOIN ta_mcqresponses r on i.id = r.id
+            LEFT JOIN ta_mcqresponses r on i.id = r.invitationId
             WHERE c.id= ${candidateId}
             AND i.isLive = 1
+        `;
+    },
+
+    getAllRegistrationsQuery: () => {
+        return `
+        
+        `;
+    },
+
+    getAllRegistrationsQuery: (orgId) => {
+        return `
+        
         `;
     }
 }

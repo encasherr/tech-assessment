@@ -31,18 +31,11 @@ var TestModel = function TestModel() {
     this.GetAll = function (userEntity) {
         var queryConfig = (0, _RoleDefinitions.GetQueryConfig)(_TestQueries.VIEW_TESTS);
         return (0, _RoleDefinitions.HandlePromise)(_mysqldb2.default, queryConfig, userEntity);
+    };
 
-        /*return new Promise((resolve, reject) => {
-            this.initializeCollection().then((res) => {
-                if(userEntity && userEntity.role === users.UserRoles.admin) {
-                    console.log(this.entities.data.length);
-                    resolve(this.entities.data);
-                }
-                else {
-                    resolve(this.GetTestsByUser(userEntity));
-                }
-            });
-        })*/
+    this.GetMy = function (userEntity) {
+        var queryConfig = (0, _RoleDefinitions.GetQueryConfig)(_TestQueries.VIEW_MY_TESTS);
+        return (0, _RoleDefinitions.HandlePromise)(_mysqldb2.default, queryConfig, userEntity);
     };
 
     this.GetTestById = function (userEntity, testId) {

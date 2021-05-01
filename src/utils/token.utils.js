@@ -16,6 +16,7 @@ const createToken = (auth) => {
     // }, 'my-secret',
         {
             expiresIn: 60 * 120
+            // expiresIn: 15
         });
 };
 

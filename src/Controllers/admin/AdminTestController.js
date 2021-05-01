@@ -13,13 +13,27 @@ class AdminTestController extends BaseController {
         console.log('get all tests called', req.user);
         let model = new TestModel();
         model.GetAll(req.user)
-        // this.initializeCollection()
             .then((res) => {
                 console.log('fetched tests');
                 resp.send(res);
             })
             .catch((err) => {
                 console.log('error in get all tests', err);
+                var obj = { status: 500, message: err };
+                resp.status(500).send(obj);
+            });
+    }
+
+    GetMy = (req, resp) => {
+        console.log('get my tests called', req.user);
+        let model = new TestModel();
+        model.GetMy(req.user)
+            .then((res) => {
+                console.log('fetched tests');
+                resp.send(res);
+            })
+            .catch((err) => {
+                console.log('error in get my tests', err);
                 var obj = { status: 500, message: err };
                 resp.status(500).send(obj);
             });
@@ -38,12 +52,6 @@ class AdminTestController extends BaseController {
             console.log(err);
             resp.status(500).send(err);
         })
-        // db.findOne(this.entityName, testId).then((data) => {
-        //     resp.status(200).send(data);
-        // }).catch((err) => {
-        //     resp.status(500).send(err);
-        // })
-        
     }
 
     GetMcqsByTestId = (req, resp) => {
@@ -58,7 +66,7 @@ class AdminTestController extends BaseController {
             else {
                 let selectedMcqIds = [];
                 testEntity.test_meta.selectedMcqs.map((item, index) => {
-                    selectedMcqIds.push(item.mcqId);
+                    selectedMcqIds.push({ mcqId: item.mcqId, questionOrderIndex: item.questionOrderIndex });
                 });
                 let mcqModel = new McqModel();
                 mcqModel.GetMcqsByIds(selectedMcqIds).then((mcqs) => {
@@ -92,27 +100,16 @@ class AdminTestController extends BaseController {
     Add = (req, resp) => {
         console.log('Add Test called');
         console.log(req.body);
-        // let tests = this.initializeCollection();
-        // let test = tests.insert(req.body);
-        // db.saveDatabase(() => {
-        //     this.EmailSnapshot('CategoryAdd');
-        // });
-
         let { test_meta } = req.body;
         test_meta.createdOn = (new Date()).toLocaleDateString();
         test_meta.createdBy = req.user.id ? req.user.id : '';
         db.insert(this.entityName, req.body.test_meta);
         resp.status(200).send('success');
-        // console.log(test);
-        // resp.send(test);
     }
 
     Update = (req, resp) => {
         console.log('update test called');
         console.log(req.body);
-        // let testId = req.body.id;
-        // let testId = req.body.$loki;
-        // let entity = this.UpdateTest(testId, req.body.test_meta);
         let testModel = new TestModel();
         let newEntity = req.body;
         
@@ -122,76 +119,33 @@ class AdminTestController extends BaseController {
             resp.status(500).send(err);
         });
 
-        
-        // let filteredTests = tests.where((item) => {
-        //     console.log(`item: ${item['$loki']}, testId: ${testId}, result: ${item['$loki'] == testId}`); 
-        //     return item['$loki'] == testId;    
-        // });
-        // console.log(testId);
-        // if(filteredTests && filteredTests.length > 0) {
-        //     let testToUpdate = filteredTests[0];
-        //     let entityToUpdate = this.replaceEntity(testToUpdate, req.body);
-        //     tests.update(entityToUpdate);
-        //     db.saveDatabase();
-        //     resp.send(entityToUpdate);
-        // }
-        // else {
-        //     console.log('nothing to update');
-        //     resp.send('nothing to update');
-        // }
     }
 
     UpdateTest = (testId, newEntity, test_link) => {
-        // let tests = this.initializeCollection();
-        // let filteredTests = tests.where((item) => {
-        //     console.log(`item: ${item['$loki']}, testId: ${testId}, result: ${item['$loki'] == testId}`); 
-        //     return item['$loki'] == testId;    
-        // });
         console.log(testId);
-        // if(filteredTests && filteredTests.length > 0) {
-        //     let testToUpdate = filteredTests[0];
-            if(newEntity && newEntity.invitations && newEntity.invitations.length > 0) {
-                let invitations = [];
-                newEntity.invitations.map((invitation, index) => {
-                    let filteredInvitations = invitations.filter((item,id) => {
-                        return item.emailTo === invitation.emailTo;
-                    });
-                    if(filteredInvitations && filteredInvitations.length > 0) {
-                    } else {
-                        invitation.test_link = test_link;
-                        invitations.push(invitation);
-                    }
+        if(newEntity && newEntity.invitations && newEntity.invitations.length > 0) {
+            let invitations = [];
+            newEntity.invitations.map((invitation, index) => {
+                let filteredInvitations = invitations.filter((item,id) => {
+                    return item.emailTo === invitation.emailTo;
                 });
-                newEntity.invitations = [];
-                newEntity.invitations = invitations;
-            }
-            // let entityToUpdate = this.replaceEntity(testToUpdate, newEntity);
-            // tests.update(entityToUpdate);
-            // db.saveDatabase(() => {
-            //     this.EmailSnapshot('CategoryAdd');
-            // });
-            db.update(this.entityName, newEntity, testId);
-    
-            // return entityToUpdate;
-        // }
-        // else {
-        //     console.log('nothing to update');
-        //     return null;
-        // }
+                if(filteredInvitations && filteredInvitations.length > 0) {
+                } else {
+                    invitation.test_link = test_link;
+                    invitations.push(invitation);
+                }
+            });
+            newEntity.invitations = [];
+            newEntity.invitations = invitations;
+        }
+        db.update(this.entityName, newEntity, testId);
+
     }
 
     Delete = (req, resp) => {
         console.log('delete test called');
         resp.send('delete test called');
     }
-
-    // initializeCollection = () => {
-    //     let tests = db.getCollection('tests');
-    //     if(!tests) {
-    //         tests = db.addCollection('tests');
-    //     }
-    //     return tests;
-    // }
 
     initializeCollection = () => {
         var promise = new Promise((resolve, reject) => {

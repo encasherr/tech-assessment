@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.RoleDefinitions = exports.GetQueryConfig = exports.HandlePromiseWithParams = exports.HandlePromise = exports.handleRoleNotFound = exports.staff = exports.orgadmin = exports.admin = undefined;
+exports.RoleDefinitions = exports.GetQueryConfig = exports.HandlePromiseWithParams = exports.HandlePromise = exports.handleRoleNotFound = exports.teacher = exports.candidate = exports.staff = exports.orgadmin = exports.admin = undefined;
 
 var _queries = require('../db/queries');
 
@@ -21,11 +21,15 @@ var _UserQueries = require('./RoleBasedQueries/UserQueries');
 
 var _OrgQueries = require('./RoleBasedQueries/OrgQueries');
 
+var _GradeQueries = require('./RoleBasedQueries/GradeQueries');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var admin = exports.admin = 'admin';
 var orgadmin = exports.orgadmin = 'orgadmin';
 var staff = exports.staff = 'staff';
+var candidate = exports.candidate = 'candidate';
+var teacher = exports.teacher = 'teacher';
 
 var handleRoleNotFound = exports.handleRoleNotFound = function handleRoleNotFound(role) {
     console.log(role + ' role not found');
@@ -82,6 +86,6 @@ var GetQueryConfig = exports.GetQueryConfig = function GetQueryConfig(action) {
 var RoleDefinitions = exports.RoleDefinitions = {
     role: admin,
     allowedActions: ['addMcq', 'addTest', 'addUser', 'addCategory', 'addSkill', 'addOrganization', 'sendInvitation', 'viewTests', 'viewMcqs', 'viewUsers', 'viewOrgs'],
-    queries: [_McqQueries.VIEW_MCQS_QUERY, _McqQueries.VIEW_MCQS_BY_SKILL_QUERY, _TestQueries.VIEW_TESTS_QUERY, _TestQueries.VIEW_TEST_BY_ID_QUERY, _InvitationQueries.VIEW_INVITATIONS_QUERY, _UserQueries.VIEW_USERS_QUERY, _OrgQueries.VIEW_ORGS_QUERY, _DashboardQueries.VIEW_DASHBOARD_INVITATION, _DashboardQueries.VIEW_DASHBOARD_TESTS, _DashboardQueries.VIEW_DASHBOARD_MCQ]
+    queries: [_McqQueries.VIEW_MCQS_QUERY, _McqQueries.VIEW_MCQS_BY_SKILL_QUERY, _TestQueries.VIEW_TESTS_QUERY, _TestQueries.VIEW_MY_TESTS_QUERY, _TestQueries.VIEW_TEST_BY_ID_QUERY, _InvitationQueries.VIEW_INVITATIONS_QUERY, _UserQueries.VIEW_USERS_QUERY, _OrgQueries.VIEW_ORGS_QUERY, _DashboardQueries.VIEW_DASHBOARD_INVITATION, _DashboardQueries.VIEW_DASHBOARD_TESTS, _DashboardQueries.VIEW_DASHBOARD_MCQ, _GradeQueries.VIEW_GRADES_QUERY]
 };
 //# sourceMappingURL=RoleDefinitions.js.map

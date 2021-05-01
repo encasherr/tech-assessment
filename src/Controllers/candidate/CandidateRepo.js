@@ -10,35 +10,40 @@ const createNewMcqResponseMeta = async (testEntity, invitationEntity) => {
 
     let selectedMcqIds = [];
     console.log(`testEntity: ${testEntity.test_meta}`);
+    // testEntity.test_meta.selectedMcqs.map((item, index) => {
+    //     selectedMcqIds.push(item.mcqId);
+    // });
     testEntity.test_meta.selectedMcqs.map((item, index) => {
-        selectedMcqIds.push(item.mcqId);
+        selectedMcqIds.push({ mcqId: item.mcqId, questionOrderIndex: item.questionOrderIndex });
     });
+    let isVideoMonitringRequired = testEntity.test_meta &&
+                                    testEntity.test_meta.settings &&
+                                    testEntity.test_meta.settings.videoMonitoringRequired;
     let mcqResponseMeta = {
         testId: testEntity.id,
         invitationId: invitationEntity.id,
         duration: testEntity.test_meta.duration,
+        videoMonitoringRequired: !!isVideoMonitringRequired,
         mcqs: []
     };
     let mcqs = await mcqModel.GetMcqsByIds(selectedMcqIds);
-    // .then((mcqs) => {
-        console.log(`fetched mcqs by id, length: ${mcqs.length}`);
+    console.log(`fetched mcqs by id, length: ${mcqs.length}`);
 
-        testEntity.test_meta.selectedMcqs.map((item, index) => {
-            console.log('mcqs filtering', mcqs.length);
-            let filteredMcq = mcqs.filter((mcqItem, index) => {
-                return mcqItem.id === item.mcqId;
-            });
-            if (filteredMcq && filteredMcq.length > 0) {
-                // console.log('adding mcq to response object');
-                let item_value = filteredMcq[0];
-                item.mcq = item_value;
-                item.candidateResponse = {
-                    responseKeys: []
-                }
-                mcqResponseMeta.mcqs.push(item);
-            }
+    testEntity.test_meta.selectedMcqs.map((item, index) => {
+        console.log('mcqs filtering', mcqs.length);
+        let filteredMcq = mcqs.filter((mcqItem, index) => {
+            return mcqItem.id === item.mcqId;
         });
-    // });
+        if (filteredMcq && filteredMcq.length > 0) {
+            // console.log('adding mcq to response object');
+            let item_value = filteredMcq[0];
+            item.mcq = item_value;
+            item.candidateResponse = {
+                responseKeys: []
+            }
+            mcqResponseMeta.mcqs.push(item);
+        }
+    });
     console.log('mcqs added to response', mcqResponseMeta.mcqs.length);
     return mcqResponseMeta;
 }

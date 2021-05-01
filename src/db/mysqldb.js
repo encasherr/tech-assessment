@@ -59,7 +59,7 @@ const db = {
                     if(typeof fieldVal === 'string') {
                         valueString += `'${fieldVal}'`;
                     }
-                    if(typeof fieldVal === 'object') {
+                    else if(typeof fieldVal === 'object') {
                         valueString += `'${JSON.stringify(fieldVal)}'`;
                     }
                     else {
@@ -72,7 +72,7 @@ const db = {
                     if(typeof fieldVal === 'string') {
                         valueString += `'${fieldVal}'`;
                     }
-                    if(typeof fieldVal === 'object') {
+                    else if(typeof fieldVal === 'object') {
                         valueString += `'${JSON.stringify(fieldVal)}'`;
                     }
                     else {
@@ -106,11 +106,13 @@ const db = {
         })
     },
     delete: (entityName, id) => {
-        let sql = `delete from ta_${entityName} where id=${id};`;
-        executeQuery(sql).then((res) => {
-            console.log(`${entityName} deleted, id: ${id}`);  
-            resolve(res);
-        })
+        return new Promise((resolve, reject) => {
+            let sql = `delete from ta_${entityName} where id=${id};`;
+            executeQuery(sql).then((res) => {
+                console.log(`${entityName} deleted, id: ${id}`);  
+                resolve(res);
+            })
+        });
     },
     findOne: (entityName, id) => {
         return findOneRecord(entityName, id);
@@ -204,6 +206,7 @@ const EntityFieldMapping = {
     invitations: 'invitation_meta',
     candidates: 'candidate_meta',
     mcqresponses: 'response_meta',
-    org: 'org_meta'
+    org: 'org_meta',
+    grade: 'grade_meta'
 }
 export default db;

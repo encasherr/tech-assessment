@@ -135,7 +135,8 @@ switch(action.type) {
    {
        return {
            ...state,
-           currentUserLocal: action.payload
+           currentUserLocal: action.payload,
+           isTokenExpired: false
        }
    }
    case LOGOUT_CURRENT_USER:

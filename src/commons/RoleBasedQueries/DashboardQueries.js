@@ -1,5 +1,5 @@
 import queries from '../../db/queries';
-import { handleRoleNotFound, admin, orgadmin, staff } from '../RoleDefinitions';
+import { handleRoleNotFound, admin, orgadmin, staff, teacher } from '../RoleDefinitions';
 
 export const VIEW_DASHBOARD_TESTS_COUNT = 'VIEW_DASHBOARD_TESTS_COUNT';
 export const VIEW_DASHBOARD_INVITATION_COUNT = 'VIEW_DASHBOARD_INVITATION_COUNT';
@@ -16,6 +16,9 @@ export const VIEW_DASHBOARD_INVITATION = {
                 case staff:
                 case orgadmin: {
                     return queries.getInvitationCountByOrgId(userEntity.orgId);
+                }
+                case teacher: {
+                    return queries.getInvitationCountForUser(userEntity.id);
                 }
                 default: handleRoleNotFound(userEntity.role);
             }
@@ -38,6 +41,9 @@ export const VIEW_DASHBOARD_TESTS = {
                 case orgadmin: {
                     return queries.getTestCountByOrgId(userEntity.orgId);
                 }
+                case teacher: {
+                    return queries.getTestCountByUser(userEntity.id);
+                }
                 default: handleRoleNotFound(userEntity.role);
             }
         },
@@ -58,6 +64,9 @@ export const VIEW_DASHBOARD_MCQ = {
                 case staff:
                 case orgadmin: {
                     return queries.getMcqCountByOrgId(userEntity.orgId);
+                }
+                case teacher: {
+                    return queries.getMcqCountByUser(userEntity.id);
                 }
                 default: handleRoleNotFound(userEntity.role);
             }

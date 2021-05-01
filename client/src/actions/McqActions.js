@@ -99,6 +99,7 @@ export const CurrentMcqFieldChange = (val, field, model) => dispatch => {
         {
         }
     }
+    console.log('model.mcq_meta.description',model.mcq_meta.description);
     dispatch({
         type: CURRENT_MCQ_FIELD_CHANGE_END
     });
@@ -129,6 +130,7 @@ export const CurrentAnswerFieldChange = (val, field, model) => dispatch => {
         {
         }
     }
+    console.log('model.content',model.content);
     dispatch({
         type: CURRENT_ANSWER_FIELD_CHANGE_END
     });

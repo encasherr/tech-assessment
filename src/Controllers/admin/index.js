@@ -5,6 +5,7 @@ import CandidateController from './CandidateController';
 import AdminTestController from './AdminTestController';
 // import InviteController from './InviteController';
 import UserController from './UserController';
+import GradeController from './GradeController';
 
 export {
     McqController,
@@ -13,5 +14,6 @@ export {
     CandidateController,
     AdminTestController,
     // InviteController
-    UserController
+    UserController,
+    GradeController
 }

@@ -1,6 +1,7 @@
 // import db from './db';
 import db from '../db/mysqldb';
 import users from '../users';
+import queries from '../db/queries';
 
 class CandidateModel {
     entityName = 'candidates';
@@ -34,6 +35,15 @@ class CandidateModel {
     GetCandidate = (candidateId) => {
         return new Promise((resolve, reject) => {
             db.findOne(this.entityName, candidateId).then((res) => {
+                resolve(res);
+            });
+        })
+    }
+    
+    GetCandidateByEmail = (emailId) => {
+        return new Promise((resolve, reject) => {
+            let sql = queries.getCandidateByEmailQuery(emailId);
+            db.executeQuery(sql).then((res) => {
                 resolve(res);
             });
         })

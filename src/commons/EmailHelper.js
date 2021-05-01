@@ -78,6 +78,7 @@ class EmailHelper {
         let html = this.GetHtmlTemplateByType(emailInfo);
         if(emailInfo.notificationType === 'test') {
             html = html.replace('$$test_name$$', emailInfo.testName);
+            html = html.replace('$$test_title$$', emailInfo.testName);
             html = html.replace('$$test_link$$', emailInfo.testLink);
             html = html.replace('$$test_duration$$', emailInfo.testDuration);
             html = html.replace('$$faq_link$$', emailInfo.faqLink);
@@ -89,6 +90,10 @@ class EmailHelper {
                 html = html.replace('$$contact_person$$', emailInfo.rmaRequest.customerDetails.contactPerson);
                 html = html.replace('$$rma_link$$', emailInfo.rmaLink);
             }
+        }
+        if(emailInfo.notificationType === 'verify_user_email') {
+            html = html.replace('$$user_name$$', emailInfo.user_name);
+            html = html.replace('$$verification_link$$', emailInfo.verification_link);
         }
         return html;
     }
@@ -108,6 +113,13 @@ class EmailHelper {
             case 'rma':
             {
                 let file = path.resolve(__dirname + '/rmatemplate.html');
+                console.log('template path', file); 
+                html = fs.readFileSync(file, {encoding: 'utf8'});
+                break;
+            }
+            case 'verify_user_email':
+            {
+                let file = path.resolve(__dirname + '/EmailTemplates/VerifyUserTemplate.html');
                 console.log('template path', file); 
                 html = fs.readFileSync(file, {encoding: 'utf8'});
                 break;

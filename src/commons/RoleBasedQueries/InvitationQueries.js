@@ -1,5 +1,5 @@
 import queries from '../../db/queries';
-import { handleRoleNotFound, admin, orgadmin, staff } from '../RoleDefinitions';
+import { handleRoleNotFound, admin, orgadmin, staff, teacher } from '../RoleDefinitions';
 
 export const VIEW_INVITATIONS = 'VIEW_INVITATIONS'; 
 
@@ -14,6 +14,9 @@ export const VIEW_INVITATIONS_QUERY = {
                 case staff:
                 case orgadmin: {
                     return queries.getInvitationsByOrgQuery(userEntity.orgId);
+                }
+                case teacher: {
+                    return queries.getInvitationsByCreateUserQuery(userEntity.id);
                 }
                 default: handleRoleNotFound(userEntity.role);
             }

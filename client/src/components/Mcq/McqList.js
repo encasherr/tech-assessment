@@ -12,7 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import McqItem from '../../Containers/TestConsole/McqItem';
 import SnackbarComponent from '../lib/SnackbarComponent';
 import Fab from '@material-ui/core/Fab';
-import { Add, Search } from '@material-ui/icons';
+import { Add, Search, ArrowUpward, Delete } from '@material-ui/icons';
 import LoadingComponent from '../lib/LoadingComponent';
 import User401 from '../../Containers/User/User401';
 
@@ -146,15 +146,19 @@ class McqList extends Component {
                     action={
                         <div>
                             {selectedMcqs && selectedMcqs.length > 0 &&
-                            <Button color="primary" onClick={() => this.bulkDeleteMcq()} size="small">
-                                Delete
-                            </Button>}
+                            <Link onClick={() => this.bulkDeleteMcq()} size="small" title="Delete Selected">
+                                <Delete color="secondary" />
+                            </Link>}
                             {/* {!search_enabled &&
                             <Button className={styles.hide} color="primary" onClick={() => this.props.BeginSearch()} size="small">
                                 <Search />
                             </Button>} */}
-                            <Link to="/bulkMcq" >
-                                <Button variant="contained" color="primary">Bulk Upload Mcq</Button>
+                            <Link to="/addMcq" title="Add New MCQ">
+                                <Add color="secondary" />
+                            </Link>
+                            <Link to="/bulkMcq" title="Bulk Upload MCQs" >
+                                <ArrowUpward color="secondary" />
+                                {/* <Button variant="contained" color="primary">Bulk Upload Mcq</Button> */}
                             </Link>
                         </div>
                     }
@@ -204,7 +208,7 @@ class McqList extends Component {
                     }
                     {mcqToDisplay && 
                                     <Typography variant="caption">
-                                        {mcqToDisplay.length} MCQs found
+                                        {mcqToDisplay.length} MCQs
                                     </Typography>}
                     <Link to="/addMcq" >
                         <Fab color="primary" aria-label="Add" style={{right: 20, position: 'fixed', bottom: 20}}>

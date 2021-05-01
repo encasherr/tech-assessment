@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import {    FetchTest, AddMcqToTest, PublishTest, CloseSnackbar, SetHistory,
     RemoveMcqFromTest, LoadTestMcqs, LoadTestCandidates, OpenSnackbar,
     SettingsFieldChange, UpdateTestSettings } from '../../actions/TestConsoleActions';            
+import { SendInvite, EvaluateResults } from '../../actions/InviteConsoleActions';
 // import Link from '@material-ui/core/Link';
 import { Link } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
@@ -15,6 +16,8 @@ import { KeyboardBackspace } from '@material-ui/icons';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import { GetCurrentUserRole } from '../../common/HelperFunctions';
+import { DoneAll, ArrowBack } from '@material-ui/icons';
 
 class TestConsoleContainer extends React.Component {
 
@@ -92,6 +95,41 @@ class TestConsoleContainer extends React.Component {
         });
     }
 
+    sendInvites = (model) => {
+        this.props.SendInvite(model)
+            .then(() => {
+                this.setState({
+                    snackOpen: true,
+                    snackMessage: 'Invitations sent'
+                });
+                this.props.LoadTestCandidates(model.testId);
+            })
+            .catch((err) => {
+                this.setState({
+                    snackOpen: true,
+                    snackMessage: 'Could not send invites. Please try later.'
+                });
+            })
+    }
+
+    evaluateResults = (responseId) => {
+        let { current_test } = this.props;
+        this.props.EvaluateResults(responseId)
+        .then(() => {
+            this.setState({
+                snackOpen: true,
+                snackMessage: 'Evaluation done successfully'
+            });
+            this.props.LoadTestCandidates(current_test.id);
+        })
+        .catch((err) => {
+            this.setState({
+                snackOpen: true,
+                snackMessage: 'Could not evaluate now. Please try later.'
+            });
+        })
+    }
+
     render = () => {
         let { current_test, selectedMcqs, candidates, classes } = this.props;
         if(current_test && current_test.selectedMcqs) {
@@ -110,11 +148,12 @@ class TestConsoleContainer extends React.Component {
                         {current_test.test_meta.status === 'draft' && 
                         current_test.test_meta.selectedMcqs && 
                         current_test.test_meta.selectedMcqs.length > 0 &&
-                        <Button style={styles.headerButton} variant="contained" color="primary" size="small"
+                        // !this.props.publishWithInvites &&
+                        <Button title="Publish" color="primary" size="small"
                                 onClick={this.onPublish}
-                        >Publish</Button>}
-                        <Link color="inherit" to="/tests" >
-                            Back to Tests
+                        ><DoneAll /></Button>}
+                        <Link color="inherit" to={`${GetCurrentUserRole()==='teacher' ? '/ophome' : '/tests'}`} >
+                            <ArrowBack />
                         </Link>
                         </div>
                     }
@@ -132,6 +171,8 @@ class TestConsoleContainer extends React.Component {
                         currentTest={current_test}
                         onSettingsFieldChange={(val, field) => this.handleSettingsFieldChange(val, field)}
                         onSubmitTestSettings={() => this.submitTestSettings()}
+                        onSendInvitations={(model) => this.sendInvites(model)}
+                        evaluateResults={(responseId) => this.evaluateResults(responseId) }
                         />
                 </Card>
                 }
@@ -157,6 +198,8 @@ const mapDispatchToProps = dispatch => ({
     LoadTestCandidates: (testId) => dispatch(LoadTestCandidates(testId)),
     SettingsFieldChange: (val, field, model) => dispatch(SettingsFieldChange(val, field, model)),
     UpdateTestSettings: (testModel) => dispatch(UpdateTestSettings(testModel)),
+    SendInvite: (model) => dispatch(SendInvite(model)),
+    EvaluateResults: (responseId) => dispatch(EvaluateResults(responseId)),
     CloseSnackbar: () => dispatch(CloseSnackbar()),
     OpenSnackbar: () => dispatch(OpenSnackbar()),
 });

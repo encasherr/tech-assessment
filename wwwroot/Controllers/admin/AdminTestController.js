@@ -50,13 +50,22 @@ var AdminTestController = function (_BaseController) {
         return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = AdminTestController.__proto__ || Object.getPrototypeOf(AdminTestController)).call.apply(_ref, [this].concat(args))), _this), _this.entityName = 'tests', _this.tests = {}, _this.GetAll = function (req, resp) {
             console.log('get all tests called', req.user);
             var model = new _TestModel2.default();
-            model.GetAll(req.user)
-            // this.initializeCollection()
-            .then(function (res) {
+            model.GetAll(req.user).then(function (res) {
                 console.log('fetched tests');
                 resp.send(res);
             }).catch(function (err) {
                 console.log('error in get all tests', err);
+                var obj = { status: 500, message: err };
+                resp.status(500).send(obj);
+            });
+        }, _this.GetMy = function (req, resp) {
+            console.log('get my tests called', req.user);
+            var model = new _TestModel2.default();
+            model.GetMy(req.user).then(function (res) {
+                console.log('fetched tests');
+                resp.send(res);
+            }).catch(function (err) {
+                console.log('error in get my tests', err);
                 var obj = { status: 500, message: err };
                 resp.status(500).send(obj);
             });
@@ -72,11 +81,6 @@ var AdminTestController = function (_BaseController) {
                 console.log(err);
                 resp.status(500).send(err);
             });
-            // db.findOne(this.entityName, testId).then((data) => {
-            //     resp.status(200).send(data);
-            // }).catch((err) => {
-            //     resp.status(500).send(err);
-            // })
         }, _this.GetMcqsByTestId = function (req, resp) {
             var testId = req.query.testId;
             console.log('get mcqs by testid called: ', testId);
@@ -88,7 +92,7 @@ var AdminTestController = function (_BaseController) {
                 } else {
                     var selectedMcqIds = [];
                     testEntity.test_meta.selectedMcqs.map(function (item, index) {
-                        selectedMcqIds.push(item.mcqId);
+                        selectedMcqIds.push({ mcqId: item.mcqId, questionOrderIndex: item.questionOrderIndex });
                     });
                     var mcqModel = new _McqModel2.default();
                     mcqModel.GetMcqsByIds(selectedMcqIds).then(function (mcqs) {
@@ -117,26 +121,15 @@ var AdminTestController = function (_BaseController) {
         }, _this.Add = function (req, resp) {
             console.log('Add Test called');
             console.log(req.body);
-            // let tests = this.initializeCollection();
-            // let test = tests.insert(req.body);
-            // db.saveDatabase(() => {
-            //     this.EmailSnapshot('CategoryAdd');
-            // });
-
             var test_meta = req.body.test_meta;
 
             test_meta.createdOn = new Date().toLocaleDateString();
             test_meta.createdBy = req.user.id ? req.user.id : '';
             _mysqldb2.default.insert(_this.entityName, req.body.test_meta);
             resp.status(200).send('success');
-            // console.log(test);
-            // resp.send(test);
         }, _this.Update = function (req, resp) {
             console.log('update test called');
             console.log(req.body);
-            // let testId = req.body.id;
-            // let testId = req.body.$loki;
-            // let entity = this.UpdateTest(testId, req.body.test_meta);
             var testModel = new _TestModel2.default();
             var newEntity = req.body;
 
@@ -145,32 +138,8 @@ var AdminTestController = function (_BaseController) {
             }).catch(function (err) {
                 resp.status(500).send(err);
             });
-
-            // let filteredTests = tests.where((item) => {
-            //     console.log(`item: ${item['$loki']}, testId: ${testId}, result: ${item['$loki'] == testId}`); 
-            //     return item['$loki'] == testId;    
-            // });
-            // console.log(testId);
-            // if(filteredTests && filteredTests.length > 0) {
-            //     let testToUpdate = filteredTests[0];
-            //     let entityToUpdate = this.replaceEntity(testToUpdate, req.body);
-            //     tests.update(entityToUpdate);
-            //     db.saveDatabase();
-            //     resp.send(entityToUpdate);
-            // }
-            // else {
-            //     console.log('nothing to update');
-            //     resp.send('nothing to update');
-            // }
         }, _this.UpdateTest = function (testId, newEntity, test_link) {
-            // let tests = this.initializeCollection();
-            // let filteredTests = tests.where((item) => {
-            //     console.log(`item: ${item['$loki']}, testId: ${testId}, result: ${item['$loki'] == testId}`); 
-            //     return item['$loki'] == testId;    
-            // });
             console.log(testId);
-            // if(filteredTests && filteredTests.length > 0) {
-            //     let testToUpdate = filteredTests[0];
             if (newEntity && newEntity.invitations && newEntity.invitations.length > 0) {
                 var invitations = [];
                 newEntity.invitations.map(function (invitation, index) {
@@ -185,19 +154,7 @@ var AdminTestController = function (_BaseController) {
                 newEntity.invitations = [];
                 newEntity.invitations = invitations;
             }
-            // let entityToUpdate = this.replaceEntity(testToUpdate, newEntity);
-            // tests.update(entityToUpdate);
-            // db.saveDatabase(() => {
-            //     this.EmailSnapshot('CategoryAdd');
-            // });
             _mysqldb2.default.update(_this.entityName, newEntity, testId);
-
-            // return entityToUpdate;
-            // }
-            // else {
-            //     console.log('nothing to update');
-            //     return null;
-            // }
         }, _this.Delete = function (req, resp) {
             console.log('delete test called');
             resp.send('delete test called');
@@ -223,14 +180,6 @@ var AdminTestController = function (_BaseController) {
             return oldEntity;
         }, _temp), _possibleConstructorReturn(_this, _ret);
     }
-
-    // initializeCollection = () => {
-    //     let tests = db.getCollection('tests');
-    //     if(!tests) {
-    //         tests = db.addCollection('tests');
-    //     }
-    //     return tests;
-    // }
 
     return AdminTestController;
 }(_BaseController3.default);

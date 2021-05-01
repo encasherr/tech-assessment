@@ -21,7 +21,11 @@ encasherr@gmail.com
 encasherr
 Action@7654321
 
-
+packages being removed for cleanup activity from client app:
+"draft-js": "^0.10.5",
+"draftjs-to-html": "^0.8.4",
+"html-to-draftjs": "^1.4.0",
+"react-draft-wysiwyg": "^1.13.2",
 
 TODO:
 1. Done: Display question numbers in simulator - both current and total e.g. 5 / 20.
@@ -82,3 +86,45 @@ TODO:
 31. Same candidate same test invitation should not be sent, instead reminder should be sent or the old invitation should be cancelled
 32. Introduce in Test Settings that who should receive test results, once evaluated
 33. Have a feature to genrerate Pdf report of test results which can be downloaded by org admin
+34. MCQ Library home page - 
+    if current user is recruiter, Show all skills from 'recruitment' category on left side which user can use to filter
+    if current user is teacher, Show all subjects from 'academic' category on left side which user can use to filter
+    user can see questions posted by him / his organisation or institute / admin
+35. MCQ selector of Test console - 
+    if current user is recruiter, Show all skills from 'recruitment' category on left side which user can use to filter
+    if current user is teacher, Show all classes from academic category and then show subjects from selected class 
+    on left side which user can use to filter
+    user can select from questions posted by him / his organisation or institute / admin
+    default the score of each question to 5 and leave an option for user to amend it
+36. Test settings -
+    test duration is mandatory - can be edited
+    test name/title is mandatory
+    test category is default to 'recruitment' for recruiters and 'academic' for teachers
+    for recruitment test:
+    - test skill is mandatory
+    for academic test:
+    - class is mandatory
+    - test subject is mandatory
+37. Add MCQ -
+    For recruiter:
+    skill is mandatory
+    category is default to 'recruitment'
+    no score is required
+    For teacher:
+    class is mandatory
+    subject is mandatory
+    no score is required
+    allow choices to be edited or removed once added
+38. Placeholder for adding "Match the following" question type
+    - [requirements]
+/* Features that can be provided */
+=> An automated application screening.
+=> Suggest the best matching candidates.
+=> Suggest the best matching jobs.
+=> Invite matching candidate.
+=> Promote jobs on free job boards, social media, website.
+=> Automate notifications and task management.
+
+/* Revenue generating features */
+A. Increase website audience to an extent that businesses like Employers, Schools, Coaching institutes find the website useful
+enough to find candidates there

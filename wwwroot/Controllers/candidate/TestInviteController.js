@@ -54,6 +54,10 @@ var _CandidateRepo = require('./CandidateRepo');
 
 var _CandidateRepo2 = _interopRequireDefault(_CandidateRepo);
 
+var _InvitationRepo = require('./InvitationRepo');
+
+var _InvitationRepo2 = _interopRequireDefault(_InvitationRepo);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
@@ -267,51 +271,90 @@ var TestInviteController = function TestInviteController() {
     this.SendInvite = function (req, resp) {
         console.log('send invite called');
         console.log(req.body);
-        var entity = req.body.invitation_meta;
-        var invitationModel = new _InvitationModel2.default();
-        var candidateModel = new _CandidateModel2.default();
-        var testModel = new _TestModel2.default();
-        var dbConfig = new _DbConfig2.default();
+        // let entity = req.body.invitation_meta;
+        var _req$body = req.body,
+            testId = _req$body.testId,
+            invitees = _req$body.invitees;
 
-        var siteUrl = '';
-        dbConfig.Initialize().then(function (KeyValues) {
-            siteUrl = KeyValues ? KeyValues.site_url ? KeyValues.site_url : '' : '';
+        if (!invitees || invitees && invitees.length === 0) {
+            var response = { message: 'No invitees to send email to.' };
+            console.log(response);
+            resp.status(500).json(response);
+            return;
+        }
+
+        _InvitationRepo2.default.sendInvite(req.user.id, invitees, testId).then(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
+            var testModel, testEntity;
+            return regeneratorRuntime.wrap(function _callee2$(_context2) {
+                while (1) {
+                    switch (_context2.prev = _context2.next) {
+                        case 0:
+                            testModel = new _TestModel2.default();
+                            _context2.next = 3;
+                            return testModel.GetTest(testId);
+
+                        case 3:
+                            testEntity = _context2.sent;
+
+                            resp.status(200).json(testEntity);
+
+                        case 5:
+                        case 'end':
+                            return _context2.stop();
+                    }
+                }
+            }, _callee2, _this);
+        }))).catch(function (err) {
+            var response = { message: 'Error occured in sending invite:' + err };
+            console.log(response);
+            resp.status(500).json(response);
+            return;
         });
+        // let invitationModel = new InvitationModel();
+        // let candidateModel = new CandidateModel();
+        // let testModel = new TestModel();
+        // let dbConfig = new DbConfig();
 
-        var emailIds = entity.emailTo.split(";");
-        if (emailIds && emailIds.length > 0) {
-            emailIds.map(function (emailId, index) {
-                var candidateMeta = {
+        // let siteUrl = '';
+        // dbConfig.Initialize().then((KeyValues) => {
+        //     siteUrl = KeyValues ?
+        //         (KeyValues.site_url ? KeyValues.site_url : '') : '';
+        // })
+
+        // let emailIds = entity.emailTo.split(";");
+        /*if (emailIds && emailIds.length > 0) {
+            emailIds.map((emailId, index) => {
+                let candidateMeta = {
                     name: entity.name,
                     email: emailId
-                };
-                candidateModel.Add(candidateMeta).then(function (candidateId) {
-                    testModel.GetTest(entity.testId).then(function (testEntity) {
-                        var invitationEntity = {
+                }
+                candidateModel.Add(candidateMeta).then((candidateId) => {
+                    testModel.GetTest(entity.testId).then((testEntity) => {
+                        let invitationEntity = {
                             candidateId: candidateId,
                             testId: testEntity.id,
                             createdBy: req.user.id
-                        };
-                        invitationModel.Add(invitationEntity).then(function (invitationId) {
-                            var emailInfo = {
+                        }
+                        invitationModel.Add(invitationEntity).then((invitationId) => {
+                            let emailInfo = {
                                 to: emailId,
                                 subject: entity.emailSubject,
                                 testName: testEntity.test_meta.testName,
                                 testDuration: testEntity.test_meta.duration,
-                                testLink: _ServerConfig.EmailConfig.getTestLink(dbConfig.KeyValues.site_url, invitationId),
-                                faqLink: _ServerConfig.EmailConfig.getFaqLink(dbConfig.KeyValues.site_url, dbConfig.KeyValues.faq_link),
+                                testLink: EmailConfig.getTestLink(dbConfig.KeyValues.site_url, invitationId),
+                                faqLink: EmailConfig.getFaqLink(dbConfig.KeyValues.site_url, dbConfig.KeyValues.faq_link),
                                 notificationType: 'test'
                             };
-                            var emailHelper = new _EmailHelper2.default();
+                            let emailHelper = new EmailHelper();
                             emailHelper.SendEmail(emailInfo);
                             resp.status(200).json(testEntity);
-                        });
+                        })
                     });
-                }).catch(function (err) {
+                }).catch((err) => {
                     resp.status(500).json({ message: 'error occured in sending invite:' + err });
                 });
             });
-        }
+        }*/
     };
 
     this.CaptureResponse = function (req, resp) {

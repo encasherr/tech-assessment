@@ -70,9 +70,9 @@ var McqController = function (_BaseController) {
             var skill = req.query.skill;
 
             var model = new _McqModel2.default();
-            req.user = {
-                role: _users2.default.UserRoles.admin
-            };
+            // req.user = {
+            //     role: users.UserRoles.admin
+            // }
             model.GetMcqsBySkill(req.user, skill).then(function (res) {
                 console.log('mcq by skill retrieved');
                 resp.status(200).send(res);

@@ -7,7 +7,9 @@ import LoadingComponent from '../../components/lib/LoadingComponent';
 import { KeyboardBackspace } from '@material-ui/icons';
 // import OrgList from './OrgList';
 // import AddOrgComponent from './AddOrg';
-import { FetchCandidateResponseReport, FetchCandidateDetails 
+import { FetchCandidateResponseReport, 
+        FetchCandidateDetails,
+        FetchRecordings
         } from '../../actions/CandidateConsoleActions';
 import CandidateConsoleTabs from './CandidateConsoleTabs';
 
@@ -56,7 +58,8 @@ const mapStateToProps = state => ({
 });
 const mapDispatchToProps = dispatch => ({
     FetchCandidateResponseReport: (responseId) => dispatch(FetchCandidateResponseReport(responseId)),
-    FetchCandidateDetails: (candidateId) => dispatch(FetchCandidateDetails(candidateId))
+    FetchCandidateDetails: (candidateId) => dispatch(FetchCandidateDetails(candidateId)),
+    FetchRecordings: (responseId) => dispatch(FetchRecordings(responseId))
     // FetchOrgs: () => dispatch(FetchOrgs()),
     // AddOrg: (model) => dispatch(AddOrg(model)),
     // UpdateOrg: (model) => dispatch(UpdateOrg(model)),

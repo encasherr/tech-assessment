@@ -33,7 +33,7 @@ class QuestionSimulatorConsoleContainer extends React.Component {
                 currentQuestionIndex = (qEntity.questionOrderIndex+1);
                 totalQuestions = model.response_meta.mcqs.length;
                 questionNumberText = 'Q.' + currentQuestionIndex + ' of ' + totalQuestions;
-                testDurtion = model.response_meta.durtion;
+                testDurtion = model.response_meta.duration;
                 console.log('current-q: ', currentQuestion);
             }
         }

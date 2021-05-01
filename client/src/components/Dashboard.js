@@ -31,6 +31,8 @@ import { BorderLinearProgressPrimary, BorderLinearProgressInfo, BorderLinearProg
 import LocalLoginComponent from './lib/LocalLoginComponent';
 import { primary } from './lib/ColorCodes';
 import { getDateTime, sortDescending } from '../Utils';
+import { GetCurrentUserRole } from '../common/HelperFunctions';
+import TeacherDashboard from './TeacherDashboard';
 
 const theme = {
     spacing: 4,
@@ -52,18 +54,7 @@ class Dashboard extends Component {
         let { classes, testCount, mcqCount, invitationCount, recentResponses } = this.props;
         let totalCompletedCount = 0;
         console.log('props-ds', this.props);
-        if(!classes){
-            return (
-                <div>
-                    <Typography color="secondary" variant="h6">Token expired.</Typography>
-                    
-                    <Link color="inherit" href="/login" onClick={() => AuthHelper.LogOut()} >
-                            Login
-                    </Link>
-
-                </div>
-            )
-        }
+        
         let completedTests = []; 
         let pendingTests = [];
         if(recentResponses && recentResponses.length) {
@@ -86,6 +77,19 @@ class Dashboard extends Component {
                 pendingTests = sortDescending(pendingTests, 'invitedOn');
                 pendingTests = pendingTests.sort().slice(0, 5);
             }
+        }
+
+        if(GetCurrentUserRole() === 'teacher') {
+            return (
+                <TeacherDashboard 
+                testCount={testCount}
+                mcqCount={mcqCount}
+                invitationCount={invitationCount}
+                totalCompletedCount={totalCompletedCount}
+                completedTests={completedTests}
+                pendingTests={pendingTests}
+                />
+            )
         }
         return (
             <div>

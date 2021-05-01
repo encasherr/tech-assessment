@@ -3,7 +3,7 @@ import queries from '../db/queries';
 
 import { GetQueryConfig, 
     HandlePromise } from '../commons/RoleDefinitions';
-import { VIEW_TESTS, VIEW_TESTS_BY_ID } from '../commons/RoleBasedQueries/TestQueries';
+import { VIEW_TESTS, VIEW_MY_TESTS, VIEW_TESTS_BY_ID } from '../commons/RoleBasedQueries/TestQueries';
 
 class TestModel {
     entityName = 'tests';
@@ -12,19 +12,13 @@ class TestModel {
     GetAll = (userEntity) => {
         let queryConfig = GetQueryConfig(VIEW_TESTS);
         return HandlePromise(db, queryConfig, userEntity);
-
-        /*return new Promise((resolve, reject) => {
-            this.initializeCollection().then((res) => {
-                if(userEntity && userEntity.role === users.UserRoles.admin) {
-                    console.log(this.entities.data.length);
-                    resolve(this.entities.data);
-                }
-                else {
-                    resolve(this.GetTestsByUser(userEntity));
-                }
-            });
-        })*/
     }
+    
+    GetMy = (userEntity) => {
+        let queryConfig = GetQueryConfig(VIEW_MY_TESTS);
+        return HandlePromise(db, queryConfig, userEntity);
+    }
+    
     GetTestById = (userEntity, testId) => {
         let queryConfig = GetQueryConfig(VIEW_TESTS_BY_ID);
         return HandlePromise(db, queryConfig, { userEntity: userEntity, testId: testId });

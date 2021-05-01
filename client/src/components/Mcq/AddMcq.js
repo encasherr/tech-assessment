@@ -18,12 +18,25 @@ import AddIcon from '@material-ui/icons/Add';
 // import { withRouter } from 'react-router-dom';
 import { KeyboardBackspace } from '@material-ui/icons';
 
+//import CKEditor from 'ckeditor4-react';
+//import CKEditor from '../../../node_modules/ckeditor4-react/dist/ckeditor.js';
+import { Editor } from 'react-draft-wysiwyg';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import { GetCurrentUserRole } from '../../common/HelperFunctions';
+import AddAcademicMcq from './AddAcademicMcq';
+
 const AddMcq = (props) => {
         let { model, editMode } = props;
 
         const onSubmitExperience = (min, max) => {
             props.onFieldChange(min, 'minimumExperience', props.model)
             props.onFieldChange(max, 'maximumExperience', props.model)
+        }
+
+        if(GetCurrentUserRole() === 'teacher') {
+            return (
+                <AddAcademicMcq {...props} />
+            )
         }
 
         return (
@@ -126,6 +139,20 @@ const AddMcq = (props) => {
                                     />
                                 </FormControl>
                                 <FormControl variant="outlined" style={styles.formControl}>
+                                    {/* <CKEditor
+                                        data={model.mcq_meta.description}
+                                        onChange={(e) => props.onFieldChange(e.editor.getData(), 'description', props.model)}
+                                        /> */}
+                                        <Editor
+                                            editorState={props.questionEditorState}
+                                            toolbarClassName="toolbar-class"
+                                            wrapperClassName="wrapper-class"
+                                            editorClassName="editor-class"
+                                        // onEditorStateChange={(e) => props.onFieldChange(model.mcq_meta.description, 'description', props.model)}
+                                        onEditorStateChange={props.onQuestionEditorStateChange}
+                                        />
+                                </FormControl>
+                                {/* <FormControl variant="outlined" style={styles.formControl}>
                                     <TextField
                                         id="outlined-name"
                                         label="Question Description"
@@ -137,7 +164,7 @@ const AddMcq = (props) => {
                                         margin="normal"
                                         variant="outlined"
                                     />
-                                </FormControl>
+                                </FormControl> */}
                                 <AddAnswerOptionComponent>
                                     {props}
                                 </AddAnswerOptionComponent>

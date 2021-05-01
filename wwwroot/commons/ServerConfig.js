@@ -17,6 +17,8 @@ var _mysqldb = require('../db/mysqldb');
 
 var _mysqldb2 = _interopRequireDefault(_mysqldb);
 
+var _general = require('../utils/general');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var EmailConfig = {
@@ -36,6 +38,13 @@ var EmailConfig = {
             domainUrl = 'http://localhost:3001/';
         }
         return '' + domainUrl + faqLink;
+    },
+    getVerificationLink: function getVerificationLink(domainUrl, encryptedObject) {
+        if (!domainUrl) {
+            domainUrl = 'http://localhost:3001';
+        }
+        var verificationLink = domainUrl + '/api/candidate/verifyUser?userIv=' + encryptedObject.iv + '&userContent=' + encryptedObject.content;
+        return verificationLink;
     }
 };
 var AuthConfig = {

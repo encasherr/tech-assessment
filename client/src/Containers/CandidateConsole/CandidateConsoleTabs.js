@@ -5,6 +5,7 @@ import { Link as InternalLink } from 'react-router-dom';
 
 import CandidateResponseReport from './CandidateResponseReport';
 import CandidateResponseDetail from './CandidateResponseDetails';
+import CandidateRecording from './CandidateRecording';
 
 class CandidateConsoleTabs extends Component {
     constructor(props) {
@@ -21,17 +22,17 @@ class CandidateConsoleTabs extends Component {
     render = () => {
         let { value } = this.state;
         value = this.props.selectedTabIndex || value;
-        let { candidateDetails, candidateResponses, classes } = this.props;
+        let { candidateDetails, candidateResponses, responseRecordings, classes } = this.props;
         return(
         <div>
-            <InternalLink to={ {pathname: `${this.props.backLink}`, state: { responseId: this.props.responseId } } }>
+            {/* <InternalLink to={ {pathname: `${this.props.backLink}`, state: { responseId: this.props.responseId } } }>
                 <Button >Back</Button>
-            </InternalLink>
+            </InternalLink> */}
             <AppBar position="static">
                 <Tabs variant="fullWidth" value={value} onChange={this.handleChange}>
                     <LinkTab label="Candidate Response Report" href="page1" />
                     <LinkTab label="Candidate Details" href="page2" />
-                    {/* <LinkTab label="Settings" href="page3" /> */}
+                    <LinkTab label="Recording" href="page3" />
                 </Tabs>
             </AppBar>
             {value === 0 && 
@@ -52,13 +53,15 @@ class CandidateConsoleTabs extends Component {
                     candidateDetails={candidateDetails}
                 /> 
             </TabContainer>}
-            {/* {value === 2 && 
+            {value === 2 && 
             <TabContainer>
-                <TestConsoleSettings
-                        currentTest={currentTest} 
-                        onFieldChange={(val, field) => this.props.onSettingsFieldChange(val, field)}
-                        onSubmitTestSettings={() => this.props.onSubmitTestSettings()} /> 
-            </TabContainer>} */}
+                <CandidateRecording   
+                    classes={classes}
+                    responseId={this.props.responseId}
+                    fetchRecordings={this.props.FetchRecordings}
+                    responseRecordings={responseRecordings}
+                /> 
+            </TabContainer>}
         </div>
         );
     }

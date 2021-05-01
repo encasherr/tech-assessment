@@ -49,6 +49,15 @@ export const SettingsFieldChange = (val, field, model) => dispatch => {
             });
             break;
         }
+        case 'videoMonitoringRequired':
+        {
+            model.test_meta.settings.videoMonitoringRequired = val;
+            dispatch({
+                type: TEST_SETTINGS_FIELD_CHANGE,
+                payload: model
+            });
+            break;
+        }
         default:
         {
             break;

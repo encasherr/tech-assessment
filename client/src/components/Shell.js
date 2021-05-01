@@ -15,6 +15,8 @@ import Routes from './Routes';
 import AuthHelper from '../AuthHelper';
 import config from '../config';
 import { info, primary, secondary, success, warning } from './lib/ColorCodes';
+import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import OpMenu from '../OnlinePortal/Home/OpMenu';
 
 const drawerWidth = 240;
 
@@ -276,7 +278,8 @@ const styles = theme => createMuiTheme({
 class Shell extends React.Component {
   state = {
     open: false,
-    config: {}
+    config: {},
+    showStandbyPage: false
   };
 
   handleDrawerOpen = () => {
@@ -288,24 +291,55 @@ class Shell extends React.Component {
   };
   
   componentDidMount = () => {
-    config.instance.initialize()
-        .then((res) => {
-            this.setState({
-              config: res
-            });
-        })
-
+      console.log('config already', config.instance.getAdminApiUrl());
+      if(!config.instance.getSiteTitle()) {
+        config.instance.initialize()
+          .then((res) => {
+            console.log('res', res);
+              if(res){
+                this.setState({
+                  config: res
+                });
+              }
+          })
+          .catch((err) => {
+            // alert('err in shell');
+            //   this.setState({
+            //     showStandbyPage: true
+            //   })
+          })
+      }
   }
+
   Logout = () => {
     this.props.LogoutCurrentUser();
+  }
+
+  StandbyMessage = () => {
+    return (
+    <div className="container text-center">
+      <div className="card bg-default mt-4">
+        <div className="card-header">
+          This Website is currently unavailable, will be back soon.
+        </div>
+        <div className="card-body">
+          Please email to <span className="font-italic">support@cloudsolutionshub.com</span> if problem continues.
+        </div>
+      </div>
+    </div>
+    )
   }
 
   render() {
         const { classes, theme, isTokenExpired } = this.props;
         let user = AuthHelper.GetUserInfo();
 
-        let { config } = this.state;
+        let { config, showStandbyPage } = this.state;
         if(!config.site_title) {
+          if(showStandbyPage) {
+            return this.StandbyMessage();
+          }
+          // alert(config.site_title);
           return (
             <LoadingComponent />
           )
@@ -317,19 +351,60 @@ class Shell extends React.Component {
                   <CssBaseline />
                   <Header classes={classes} 
                         openState={this.state.open} 
+                        onLogout={() => this.Logout()}
                         //isTickerRequired={true}
                         isDrawerRequired={false}
-                        isLogoutButtonRequired={false}
+                        isLogoutButtonRequired={true}
                         isTokenExpired={isTokenExpired}
                         />
                     <Router>
                       <main className={classes.content}>
                         <div className={classes.toolbar} />
-                            <Routes />
+                          <div className="row">
+                              <div className="col-md-2" />
+                              <div className="col-md-8">
+                                <Routes />
+                              </div>
+                              <div className="col-md-2" />
+                            </div>
                       </main>
                     </Router>
               </div>
             );
+        }
+        
+        if(user && user.role === 'teacher') {
+          return (
+            <div className={classes.root}>
+                <CssBaseline />
+                <Header classes={classes} 
+                      openState={this.state.open} 
+                      onLogout={() => this.Logout()}
+                      isDrawerRequired={false}
+                      isLogoutButtonRequired={true}
+                      isTokenExpired={isTokenExpired}
+                      />
+                  <Router>
+                    <main className={classes.content}>
+                      <div className={classes.toolbar} />
+                        <div className="row">
+                            <div className="col-md-2" />
+                            <div className="col-md-8">
+                              <OpMenu />
+                            </div>
+                            <div className="col-md-2" />
+                        </div>
+                        <div className="row">
+                            <div className="col-md-2" />
+                            <div className="col-md-8">
+                              <Routes />
+                            </div>
+                            <div className="col-md-2" />
+                        </div>
+                    </main>
+                  </Router>
+            </div>
+          );
         }
         return (
           <div className={classes.root}>
@@ -350,8 +425,9 @@ class Shell extends React.Component {
                       theme={theme}
                       />
               <main className={classes.content}>
-                <div className={classes.toolbar} />
-                    <Routes classes={classes}/>
+                  <div className={classes.toolbar} />
+                      <Routes classes={classes}/>
+                  
               </main>
             </Router>
           </div>

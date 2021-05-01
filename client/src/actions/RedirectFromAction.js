@@ -3,11 +3,18 @@ import AuthHelper from "../AuthHelper";
 // import createHistory from 'history/createBrowserHistory';
 
 
-const RedirectFromAction = (page) => {
+const RedirectFromAction = (page, props) => {
+    if(page === 'login') {
+        window.location.reload(); 
+    }
     let hist = AuthHelper.GetHistory();
     console.log('redirect called', typeof(hist));
     if(typeof(hist.push) === 'function'){
-        hist.push('/' + page);
+        // hist.push('/' + page);
+        hist.push({
+            pathname:  `/${page}`,
+            state: props
+        });
     }
 }
 // let history = createHistory();

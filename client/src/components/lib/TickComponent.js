@@ -62,11 +62,9 @@ class TickComponent extends React.Component {
     render = () => {
         let { currentTick } = this.state;
         return (
-            // <Typography variant="h6" color="primary">
             <div>
                 <span className="text-primary"> Time Remaining: </span><span className="font-weight-bold text-dark"> {currentTick.minutes}:{currentTick.seconds}</span><span className="text-primary"> minutes</span>
             </div>
-            // </Typography>
         );
     }
 }

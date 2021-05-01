@@ -1,5 +1,5 @@
 import queries from '../../db/queries';
-import { handleRoleNotFound, admin, orgadmin, staff } from '../RoleDefinitions';
+import { handleRoleNotFound, admin, orgadmin, staff, teacher } from '../RoleDefinitions';
 
 export const VIEW_MCQS = 'VIEW_MCQS'; 
 export const VIEW_MCQS_BY_SKILL = 'VIEW_MCQS_BY_SKILL';
@@ -20,6 +20,9 @@ export const VIEW_MCQS_QUERY = {
                         WHERE JSON_EXTRACT(u.user_meta, '$.orgId') = ${userEntity.orgId}
                     `;
                 }
+                case teacher: {
+                    return `SELECT * FROM ta_mcq m where skill='Academic'`;
+                }
                 default: handleRoleNotFound(userEntity.role);
             }
         },
@@ -34,8 +37,13 @@ export const VIEW_MCQS_QUERY = {
                     mcq_meta = mcq_meta.replace(/\t/g, "\\t");
                     let output = {};
                     output.id = item.id;
-                    output['mcq_meta'] = JSON.parse(mcq_meta);
-                    outputArray.push(output);
+                    try {
+                        output['mcq_meta'] = JSON.parse(mcq_meta);
+                        outputArray.push(output);
+                    }
+                    catch(exception) {
+                        console.log('exception in parsing mcqMeta', mcq_meta);
+                    }
                 })
             }
             return outputArray;
@@ -58,7 +66,7 @@ export const VIEW_MCQS_BY_SKILL_QUERY = {
             switch(params.userEntity.role) {
                 case admin: {
                     return `SELECT * FROM ta_mcq m
-                    WHERE LOWER(JSON_EXTRACT(m.mcq_meta, ('$.skill'))) = JSON_QUOTE('${skill}')
+                    WHERE LOWER(m.skill) = '${skill}'
                     `;
                 }
                 case staff:
@@ -66,7 +74,14 @@ export const VIEW_MCQS_BY_SKILL_QUERY = {
                     return `SELECT * FROM ta_mcq m 
                         JOIN ta_users u ON JSON_EXTRACT(m.mcq_meta, '$.createdBy') = u.id
                         WHERE JSON_EXTRACT(u.user_meta, '$.orgId') = ${params.userEntity.orgId}
-                        AND JSON_EXTRACT(m.mcq_meta, '$.skill') = '${params.skill}'
+                        AND LOWER(m.skill) = '${skill}'
+                    `;
+                }
+                case teacher: {
+                    return `SELECT * FROM ta_mcq m 
+                        JOIN ta_users u ON m.addedBy = u.id
+                        WHERE LOWER(m.skill) = '${skill}'
+                        AND (u.id = ${params.userEntity.id} OR JSON_EXTRACT(u.user_meta, '$.role') = '${admin}')
                     `;
                 }
                 default: return handleRoleNotFound(params.userEntity.role);
@@ -90,8 +105,13 @@ const serializeToJson = (data) => {
             mcq_meta = mcq_meta.replace(/\t/g, "\\t");
             let output = {};
             output.id = item.id;
-            output['mcq_meta'] = JSON.parse(mcq_meta);
-            outputArray.push(output);
+            try {
+                output['mcq_meta'] = JSON.parse(mcq_meta);
+                outputArray.push(output);
+            }
+            catch(exception) {
+                console.log('exception in parsing mcqMeta', mcq_meta);
+            }
         })
     }
     return outputArray;

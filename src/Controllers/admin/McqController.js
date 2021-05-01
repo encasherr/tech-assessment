@@ -33,9 +33,9 @@ class McqController extends BaseController {
         console.log('get mcqsBySkill called', req.user);
         let { skill } = req.query;
         let model = new McqModel();
-        req.user = {
-            role: users.UserRoles.admin
-        }
+        // req.user = {
+        //     role: users.UserRoles.admin
+        // }
         model.GetMcqsBySkill(req.user, skill)
             .then((res) => {
                 console.log('mcq by skill retrieved');

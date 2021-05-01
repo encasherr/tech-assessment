@@ -66,8 +66,7 @@ var db = {
                     var fieldVal = entity[prop];
                     if (typeof fieldVal === 'string') {
                         valueString += '\'' + fieldVal + '\'';
-                    }
-                    if ((typeof fieldVal === 'undefined' ? 'undefined' : _typeof(fieldVal)) === 'object') {
+                    } else if ((typeof fieldVal === 'undefined' ? 'undefined' : _typeof(fieldVal)) === 'object') {
                         valueString += '\'' + JSON.stringify(fieldVal) + '\'';
                     } else {
                         valueString += '' + fieldVal;
@@ -77,8 +76,7 @@ var db = {
                     var _fieldVal = entity[prop];
                     if (typeof _fieldVal === 'string') {
                         valueString += '\'' + _fieldVal + '\'';
-                    }
-                    if ((typeof _fieldVal === 'undefined' ? 'undefined' : _typeof(_fieldVal)) === 'object') {
+                    } else if ((typeof _fieldVal === 'undefined' ? 'undefined' : _typeof(_fieldVal)) === 'object') {
                         valueString += '\'' + JSON.stringify(_fieldVal) + '\'';
                     } else {
                         valueString += '' + _fieldVal;
@@ -109,10 +107,12 @@ var db = {
         });
     },
     delete: function _delete(entityName, id) {
-        var sql = 'delete from ta_' + entityName + ' where id=' + id + ';';
-        (0, _mysql_repo.executeQuery)(sql).then(function (res) {
-            console.log(entityName + ' deleted, id: ' + id);
-            (0, _url.resolve)(res);
+        return new Promise(function (resolve, reject) {
+            var sql = 'delete from ta_' + entityName + ' where id=' + id + ';';
+            (0, _mysql_repo.executeQuery)(sql).then(function (res) {
+                console.log(entityName + ' deleted, id: ' + id);
+                resolve(res);
+            });
         });
     },
     findOne: function findOne(entityName, id) {
@@ -206,7 +206,8 @@ var EntityFieldMapping = {
     invitations: 'invitation_meta',
     candidates: 'candidate_meta',
     mcqresponses: 'response_meta',
-    org: 'org_meta'
+    org: 'org_meta',
+    grade: 'grade_meta'
 };
 exports.default = db;
 //# sourceMappingURL=mysqldb.js.map

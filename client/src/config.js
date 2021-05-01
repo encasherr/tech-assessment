@@ -1,4 +1,5 @@
 import axios from 'axios';
+import RedirectFromAction from './actions/RedirectFromAction';
 
 var domain = 'http://localhost:3001';
 //domain = '';
@@ -50,27 +51,50 @@ export default class config {
                 })
                 .catch((err) => {
                     reject(err);
+                    //window.location.href = "/userForbidden";
+                    //alert('err');
+                    //RedirectFromAction('userForbidden');
                 });
         })
     }
 
     isdevEnv = () => {
-        var locationHref = window.location.href;
+        let locationHref = window.location.href;
         return (locationHref.indexOf('localhost:3000') > -1 ||
                 locationHref.indexOf('localhost:3001') > -1);
     }
 
+    getSiteTitle = () => {
+        return configValues.site_title;
+    }
+
     getSiteUrl = () => {
-        if(this.isdevEnv()) return domain;
+        // if(this.isdevEnv()) return domain;
+        let locationHref = window.location.href;
+        if(locationHref.indexOf('localhost:3000') > -1) return `http://localhost:3000`
+        if(locationHref.indexOf('localhost:3001') > -1) return `http://localhost:3001`
         return configValues.site_url;
     }
 
+    getApiHomeUrl = () => {
+        let apiHomeUrl = this.getSiteUrl();
+        let locationHref = window.location.href;
+        if(locationHref.indexOf('localhost:3000') > -1) apiHomeUrl = `http://localhost:3001`;
+        if(locationHref.indexOf('localhost:3001') > -1) apiHomeUrl = `http://localhost:3001`;
+        return apiHomeUrl;
+    }
+
     getAdminApiUrl = () => {
-        return this.getSiteUrl() + configValues.admin_api;
+        // let apiHomeUrl = this.getSiteUrl();
+        // let locationHref = window.location.href;
+        // if(locationHref.indexOf('localhost:3000') > -1) apiHomeUrl = `http://localhost:3001`;
+        // if(locationHref.indexOf('localhost:3001') > -1) apiHomeUrl = `http://localhost:3001`;
+        return this.getApiHomeUrl() + configValues.admin_api;
     }
 
     getCandidateApiUrl = () => {
-        return this.getSiteUrl() + configValues.candidate_api;
+        // return this.getSiteUrl() + configValues.candidate_api;
+        return this.getApiHomeUrl() + configValues.candidate_api;
     }
 
     getValue = (key) => {
@@ -80,4 +104,16 @@ export default class config {
     OrderedAlphabets = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
 
     validHeaders = validHeaders;
+
+    Grades = [1,2,3,,5,6,7,8,9,10,11,12];
+
+    TestVisibility = {
+        InvitedCandidates: 'InvitedCandidates',
+        Public: 'Public'
+    }
+
+    Roles = {
+        Candidate: 'candidate',
+        Teacher: 'teacher'
+    }
 }

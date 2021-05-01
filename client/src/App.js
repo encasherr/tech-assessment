@@ -52,28 +52,9 @@ class App extends Component {
             user: res.data
           });
     });
-    // axios.post(url, tokenBlob)
-    //       .then(r => {
-    //         console.log('internal server response', r);
-    //         const token = r.headers.get('x-auth-token');
-    //         r.json().then(user => {
-    //             if (token) {
-    //                 this.setState({
-    //                   isAuthenticated: true,
-    //                   user,
-    //                   token
-    //                 });
-    //             }
-    //         });
-    //       });
   };
-/*
-client_id="350931387343-l9s3gs4fnmbj4rk4r4nfvh5siega0s5g.apps.googleusercontent.com",
-client_secret="nMaeSsEr8e9-j26dstZ6VAJc"
-*/
+
   render() {
-    const { isAuthenticated, user } = this.state;
-    console.log('user', user);
     return (
       <Provider store={configureStore()}>
         <Shell />

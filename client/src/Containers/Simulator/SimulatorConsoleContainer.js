@@ -6,35 +6,83 @@ import { LoadExamSimulator, ResponseChange, SubmitAnswers,
         GetInvitation,
         GoToPrevious, GoToNext } from '../../actions/QuestionSimulatorConsoleActions';
 import LoadingComponent from '../../components/lib/LoadingComponent';
+import { RecordingComponent } from '../../components/lib/RecordingComponent';
+import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import config from '../../config';
 
 class SimulatorConsoleContainer extends React.Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            deviceAccess: 'denied'
+        }
+    }
     componentDidMount = () => {
+        config.instance.initialize();
         let { inviteid } = this.props.match.params;
         this.props.LoadExamSimulator(inviteid);
     }
 
-    handle = () => {
-        this.props.history.push('/testLanding/3');
+    SetDeviceAccess = (access) => {
+        this.setState({
+            deviceAccess: access
+        });
+        // this.props.history.push('/testLanding/3');
     }
 
     render = () => {
         let { candidateTestObject, currentQuestion, status, classes } = this.props;
+        let { deviceAccess } = this.state;
+
         console.log('sc-props', this.props);
+        console.log('deviceAccess', deviceAccess);
 
         if(!candidateTestObject) {
             if(status) {
                 return (
                     <div>
-                        {status.message}
+                        <div className="alert alert-info">
+                            {status.message}
+                        </div>
+                        <br/>
+                            <a href="#" onClick={() => window.close()} 
+                            className="btn btn-secondary">Close and exit the test session</a>
+                        
                     </div>
                 )
             }
             return <LoadingComponent />
         }
+        /*if(candidateTestObject &&
+            candidateTestObject.response_meta && 
+            candidateTestObject.response_meta.videoMonitoringRequired && 
+            deviceAccess === 'denied') {
+            return (
+                <>
+                    <RecordingComponent 
+                        setDeviceAccess={(access) => this.SetDeviceAccess(access)}    
+                    />
+                </>
+            )
+        }*/
         return (
         <div>
-        {    <QuestionSimulatorConsoleContainer 
+            {
+                candidateTestObject &&
+                candidateTestObject.response_meta && 
+                candidateTestObject.response_meta.videoMonitoringRequired &&
+                <RecordingComponent   
+                    responseId={candidateTestObject.id}
+                    setDeviceAccess={(access) => this.SetDeviceAccess(access)}    
+                />
+            }
+        {     
+            (deviceAccess === 'granted' || 
+            candidateTestObject &&
+                candidateTestObject.response_meta && 
+                !candidateTestObject.response_meta.videoMonitoringRequired) &&
+            <QuestionSimulatorConsoleContainer 
                 classes={classes}
                 model={candidateTestObject}
                 currentQuestion={currentQuestion} 

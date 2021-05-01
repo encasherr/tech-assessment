@@ -10,15 +10,20 @@ import { withStyles, makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 
 import InviteList from '../InviteConsole/InviteList';
+import OpPublishTest from '../../OnlinePortal/Tests/OpPublishTest';
 
 class TestConsoleCandidates extends Component {
 
     render = () => {
         let { candidates } = this.props;
         return (
+          <>
+            <OpPublishTest {...this.props} />
             <InviteList
+                {...this.props}
                 invitations={candidates}
                 />
+          </>
         )
 
 

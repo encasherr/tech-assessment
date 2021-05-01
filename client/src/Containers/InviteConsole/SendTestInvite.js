@@ -8,8 +8,9 @@ import { FormControl,
 // import { Editor } from 'react-draft-wysiwyg';
 // import draftToHtml from 'draftjs-to-html';
 // import htmlToDraft from 'html-to-draftjs';
-import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import 'draft-js/dist/Draft.css';
+
+// import '../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+// import 'draft-js/dist/Draft.css';
 
 
 const SendTestInvite = (props) => {
@@ -21,7 +22,7 @@ const SendTestInvite = (props) => {
                     <TextField
                         id="outlined-name"
                         label="Candidate Name"
-                        value={inviteInfo.name}
+                        value={inviteInfo ? inviteInfo.name : ''}
                         onChange={(e) => props.onFieldChange(e.target.value, 'name')}
                         margin="normal"
                         variant="outlined"
@@ -32,7 +33,7 @@ const SendTestInvite = (props) => {
                     <TextField
                         id="outlined-email"
                         label="Candidate Email"
-                        value={inviteInfo.emailTo}
+                        value={inviteInfo ? inviteInfo.emailTo : ''}
                         onChange={(e) => props.onFieldChange(e.target.value, 'emailTo')}
                         margin="normal"
                         variant="outlined"
@@ -43,7 +44,7 @@ const SendTestInvite = (props) => {
                     <TextField
                         id="outlined-subject"
                         label="Subject"
-                        value={inviteInfo.emailSubject}
+                        value={inviteInfo ? inviteInfo.emailSubject : ''}
                         onChange={(e) => props.onFieldChange(e.target.value, 'emailSubject')}
                         margin="normal"
                         variant="outlined"

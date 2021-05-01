@@ -8,6 +8,7 @@ import path from 'path';
 import cors from 'cors';
 import p from './passport';
 import passport from 'passport';
+import { setConfig, createPrerequisitesDir } from "./utils/general";
 
 let port_number = process.env.PORT || 3001;
 let app = express();
@@ -34,11 +35,19 @@ app.use(function(req, res, next) {
     next();
 });
 
+
+createPrerequisitesDir();
+
 app.use('/api', routes);
+
+global.appRoot = path.resolve(__dirname);
+console.log('global.appRoot', global.appRoot);
+
 app.use('/*', (req, resp) => {
     let fileName = path.resolve(__dirname + '/index.html');
     resp.sendFile(fileName);
 });
+
 app.use('/testLanding', (req, resp) => {
     let fileName = path.resolve(__dirname + '/index.html');
     resp.sendFile(fileName);

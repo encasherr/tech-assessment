@@ -3,7 +3,7 @@ export const getDateTime = (dateTime, withTime) => {
     let finalStr = '';
     if (dateTime) {
         let dt = new Date(dateTime);
-        let mm = getTwoDigitTime(dt.getMonth()+1),
+        let mm = getTwoDigitTime(dt.getMonth() + 1),
             dd = getTwoDigitTime(dt.getDate());
         // finalStr = `${dt.getFullYear()}-${dt.getMonth() + 1}-${dt.getDate()}`;
         finalStr = `${dt.getFullYear()}-${mm}-${dd}`;
@@ -39,4 +39,8 @@ export const sortDescending = (array, key) => {
         var x = a[key]; var y = b[key];
         return ((x > y) ? -1 : ((x < y) ? 1 : 0));
     });
+}
+
+export const wait = (delayInMS) => {
+    return new Promise(resolve => setTimeout(resolve, delayInMS));
 }

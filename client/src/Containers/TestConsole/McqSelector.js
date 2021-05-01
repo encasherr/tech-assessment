@@ -4,7 +4,7 @@ import { Dialog, DialogContent, DialogTitle,
 import config from '../../config';
 import axios from 'axios';
 import McqItem from './McqItem';
-import { Close } from '@material-ui/icons';
+import { Close, Add } from '@material-ui/icons';
 import repository from '../../repository';
 
 const Transition = (props) => {
@@ -23,9 +23,8 @@ class McqSelector extends Component {
     }
 
     componentDidMount = () => {
-            
-        // let url = config.instance.getAdminApiUrl() + 'getAllMcqs';
-        let url = config.instance.getAdminApiUrl() + 'getMcqsBySkill?skill=JAVA';
+        let url = config.instance.getAdminApiUrl() + 'getAllMcqs';
+        // let url = config.instance.getAdminApiUrl() + 'getMcqsBySkill' + `${this.props.skill ? '?skill=' + this.props.skill : ''}`;
         repository.getData(url)
             .then((res) => {
                 console.log('MCQ fetched');
@@ -64,7 +63,7 @@ class McqSelector extends Component {
         return (
             <div>
             <Card>   
-                <Button variant="contained" color="primary" onClick={this.handleClickOpen}>Add Mcq To Test</Button>
+                <Button color="primary" onClick={this.handleClickOpen}><Add /></Button>
                 <Dialog
                 TransitionComponent={Transition}
                 fullScreen

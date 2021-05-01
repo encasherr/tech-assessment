@@ -41,6 +41,10 @@ const getData = (url) => {
         })
         .catch((err) => {
             console.log('err', err);
+            if(err.data && err.data.message === 'Invalid token.') {
+                AuthHelper.LogOut();
+                RedirectFromAction('login');
+            }
             reject(err);
         })
     });

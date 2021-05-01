@@ -10,16 +10,19 @@
     "lincopy": "cp -a client/build/. \"wwwroot/\"",
     "start": "npm run uibuild && npm run wincopy && npm run build && node wwwroot/app.js",
     "linuxstart": "npm run uibuild && npm run lincopy && npm run build && node wwwroot/app.js",
-    "serverstart": "npm run build && node wwwroot/app.js"
+    "serverstart": "npm run build && set NODE_ENV=dev && node wwwroot/app.js",
+    "devserverstart": "npm run build && node wwwroot/app.js"
   },
   "author": "Alok Jha",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
+    "crypto-js": "^4.0.0",
     "express": "^4.16.4",
     "jsonwebtoken": "^8.5.1",
     "lokijs": "^1.5.6",
+    "multer": "^1.4.2",
     "mysql": "^2.18.1",
     "nodemailer": "^6.1.1",
     "passport": "^0.4.0",

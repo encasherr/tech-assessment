@@ -1,5 +1,5 @@
 import queries from '../../db/queries';
-import { handleRoleNotFound, admin, orgadmin, staff } from '../RoleDefinitions';
+import { handleRoleNotFound, admin, orgadmin, staff, teacher } from '../RoleDefinitions';
 
 export const VIEW_USERS = 'VIEW_USERS'; 
 
@@ -27,6 +27,16 @@ export const VIEW_USERS_QUERY = {
                         LEFT JOIN ta_org o ON JSON_EXTRACT(u.user_meta, '$.orgId') = o.id
                         WHERE JSON_EXTRACT(u.user_meta, '$.orgId') = ${userEntity.orgId}
                     `;        
+                }
+                case teacher: {
+                    return `SELECT 
+                    u.id as 'id',
+                    JSON_EXTRACT(u.user_meta, '$') as 'user_meta',
+                    JSON_EXTRACT(o.org_meta, '$') as 'org_meta'
+                    FROM ta_users u
+                    LEFT JOIN ta_org o ON JSON_EXTRACT(u.user_meta, '$.orgId') = o.id
+                    WHERE JSON_EXTRACT(u.user_meta, '$.role') = 'candidate'
+                    `;
                 }
                 default: handleRoleNotFound(userEntity.role);
             }

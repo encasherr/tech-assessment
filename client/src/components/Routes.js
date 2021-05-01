@@ -31,18 +31,28 @@ import ViewRmaRequest from '../HiTech/ViewRmaRequest';
 import PrivateRoute from '../components/lib/PrivateRoute';
 import CandidateConsoleContainer from '../Containers/CandidateConsole/CandidateConsoleContainer';
 import SimulatorRoute from './lib/SimulatorRoute';
+import OpSignup from '../OnlinePortal/Home/OpSignup';
+import OpLogin from '../OnlinePortal/Home/OpLogin';
+import OpLoginSignup from '../OnlinePortal/Home/OpLoginSignup';
+import OpEmailVerifiedSuccess from '../OnlinePortal/Home/OpEmailVerifiedSuccess';
+import OpContent from '../OnlinePortal/Home/OpContent';
+import TestLandingPage from './Simulator/TestLandingPage';
+import OpShell from '../OnlinePortal/Home';
+import OpTestContainer from '../OnlinePortal/Tests/OpTestContainer';
+import OpTestConsole from '../OnlinePortal/Tests/OpTestConsole';
+import GradeContainer from '../Containers/GradeContainer';
 
 const Routes = (props) => {
     return (
         <div>
             <PrivateRoute exact path="/" component={DashboardComponent} />
-            <Route path="/login" component={LocalLoginComponent} />
+            {/* <Route path="/login" component={LocalLoginComponent} /> */}
+            <Route path="/login" component={OpLoginSignup} />
             <Route path="/unauthorizedUser" component={User401} />
             <Route path="/userForbidden" component={UserForbidden} />
             <Route path="/notFound" component={ResourceNotFound} />
             <PrivateRoute {...props} path="/dashboard" component={DashboardComponent} />
             <PrivateRoute path="/tests" component={AdminTestContainer} />
-            {/* <Route path="/testConsole" component={TestConsoleContainer} /> */}
             <PrivateRoute {...props} path="/testConsole" component={TestConsoleContainer} />
             <PrivateRoute {...props} path="/candidateConsole" component={CandidateConsoleContainer} />
             <PrivateRoute {...props} path="/inviteConsole" component={InviteContainer} />
@@ -54,12 +64,23 @@ const Routes = (props) => {
             <PrivateRoute path="/orgs" component={OrgContainer} />
             <PrivateRoute path="/skills" component={SkillsContainer} />
             <PrivateRoute path="/addCategory" component={AddCategoryComponent} />
+            <PrivateRoute path="/users" component={UsersComponent} />
             {/* <Route path="/candidates" component={CandidateList} /> */}
             {/* <Route path="/addCandidate" component={CandidatesContainer} /> */}
-            <PrivateRoute path="/users" component={UsersComponent} />
 
-            <PrivateRoute {...props} path="/startTest/:inviteid" component={SimulatorConsoleContainer} />
-            <Route path="/testLanding/:inviteid" component={SimulatorShell} />
+            <Route path="/startTest/:inviteid" component={SimulatorConsoleContainer} />
+            <Route path="/testLanding/:inviteid" component={TestLandingPage} />
+            <Route path="/simulatorShell/:inviteid" component={SimulatorShell} />
+
+            {/* Routes for OP */}
+            
+            <Route path="/emailVerified" component={OpEmailVerifiedSuccess} />
+            {/* <PrivateRoute path="/opContent" component={OpContent} /> */}
+            <PrivateRoute path="/ophome" component={DashboardComponent} />
+            <PrivateRoute path="/optests" component={OpTestContainer} />
+            <PrivateRoute path="/opTestConsole" component={OpTestConsole} />
+            <PrivateRoute path="/grades" component={GradeContainer} />
+
 
             {/* Routes for HiTech*/}
             <Route path="/rmaRequests" component={RmaRequestList} />

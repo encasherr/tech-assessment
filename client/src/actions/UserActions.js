@@ -35,6 +35,13 @@ export const SetHistory = (propsHistory) => dispatch => {
 }
 
 export const CurrentUserFieldChange = (val, field, model) => dispatch => {
+    if(!model) {
+        model = {
+            user_meta: {
+                
+            }
+        }
+    }
     switch(field)
     {
         case 'emailId':

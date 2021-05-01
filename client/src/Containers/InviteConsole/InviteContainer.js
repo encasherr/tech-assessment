@@ -37,8 +37,22 @@ class InviteContainer extends React.Component {
     
     onSendInvite = () => {
         let { current_test, inviteInfo } = this.props;
-        console.log('after send invite current_test', current_test);
-        this.props.SendInvite(current_test, inviteInfo).then((res) => {
+        // console.log('after send invite current_test', current_test);
+        
+        let model = {
+            testId: current_test.id,
+            emailSubject: inviteInfo.emailSubject,
+            invitations: [
+                {
+                    invitation_meta: {
+                        name: inviteInfo.name,
+                        testId: current_test.id
+                    }
+                }
+            ]
+        }
+        // this.props.SendInvite(current_test, inviteInfo).then((res) => {
+        this.props.SendInvite(model).then((res) => {
             this.setState({
                 snackOpen: true,
                 snackMessage: 'Invitation sent successfully'
@@ -100,7 +114,8 @@ class InviteContainer extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    ...state.inviteConsoleReducer
+    ...state.inviteConsoleReducer,
+    ...state.testConsoleReducer
 });
 const mapDispatchToProps = dispatch => ({
     SendInvite: (inviteInfo, testModel) => dispatch(SendInvite(inviteInfo, testModel)),

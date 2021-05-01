@@ -1,7 +1,7 @@
 import express  from 'express';
 import { McqController, CategoryController, SkillController,
         CandidateController, AdminTestController, InviteController,
-        UserController } from './Controllers/admin';
+        UserController, GradeController } from './Controllers/admin';
 import { TestInviteController } from './Controllers/candidate';
 
 import { RmaRequestController } from './Controllers/hitech';
@@ -12,12 +12,18 @@ import auth from './utils/auth';
 import OrgController from './Controllers/admin/OrgController';
 import DashboardController from './Controllers/admin/DashboardController';
 import CandidateResponseController from './Controllers/admin/CandidateResponseController';
+import MediaController from './Controllers/candidate/MediaController';
+import multer from 'multer';
 
+import fs from 'fs';
+import path from 'path';
+import Constants from './commons/Constants';
 
 let api = express.Router();
 
 
 api.get('/loadConfig', UserController.LoadConfig);
+api.get('/validateUserToken', auth, UserController.LoadConfig);
 
 /* Admin Routes */
 /* mcq endpoints */
@@ -41,6 +47,12 @@ api.get('/admin/getAllSkills', auth, SkillController.GetAll);
 api.post('/admin/skill', auth, SkillController.Add);
 api.delete('/admin/skill', auth, SkillController.Delete);
 
+/* class/grade endpoints */
+api.get('/admin/getAllGrades', auth, GradeController.GetAll);
+api.post('/admin/grade', auth, GradeController.Add);
+api.put('/admin/grade', auth, GradeController.Update);
+api.delete('/admin/grade', auth, GradeController.Delete);
+
 /* org endpoints */
 api.get('/admin/getAllOrgs', auth, OrgController.GetAll);
 api.post('/admin/org', auth, OrgController.Add);
@@ -54,6 +66,7 @@ api.get('/hitech/deleteRmaRequest', RmaRequestController.Delete);
 
 /* Admin Test endpoints */
 api.get('/admin/getAllTests', auth, AdminTestController.GetAll);
+api.get('/admin/getMyTests', auth, AdminTestController.GetMy);
 api.get('/admin/getMcqsByTestId', auth, AdminTestController.GetMcqsByTestId);
 api.get('/admin/getCandidatesByTestId', auth, AdminTestController.GetCandidatesByTestId);
 api.get('/admin/getTest', auth, AdminTestController.GetTest);
@@ -66,6 +79,39 @@ api.get('/admin/getAllUsers', auth,  UserController.GetAll);
 api.post('/admin/user', auth, UserController.Add);
 api.put('/admin/user', auth, UserController.Update);
 api.delete('/admin/user', auth, UserController.Delete);
+
+
+/* Online portal endpoints */
+api.post('/candidate/user', UserController.AddNewUserToBeVerified);
+api.get('/candidate/verifyUser', UserController.VerifyUser);
+//let upload = multer({ dest: 'uploads/responseRecordiings' })
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        console.log('s1', req.files);
+        console.log('s2', file);
+        // let uploadDir = path.resolve(`uploads/responseRecordiings/${file.fieldname}`);
+        let uploadDir = path.resolve(`${Constants.Paths.recordingBaseDir}\\${file.fieldname}`);
+        console.log('uploaddir', uploadDir);
+        if(!fs.existsSync(uploadDir)) {
+            fs.mkdirSync(uploadDir);
+        }
+        cb(null, uploadDir);
+    },
+    filename: function (req, file, cb) {
+        console.log('filename', file);
+      //const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+      cb(null, file.fieldname + '_' + file.originalname)
+    }
+  })
+  
+let upload = multer({ storage: storage })
+api.post('/candidate/submitRecording', upload.any(), MediaController.SubmitRecording);
+api.get('/candidate/getRecordingFileNames', MediaController.GetRecordingFileNames);
+api.get('/candidate/getRecording', MediaController.GetRecording);
+
+api.post('/teacher/user', UserController.AddNewUserToBeVerified)
+api.get('/teacher/verifyUser', UserController.VerifyUser);
+// api.get('/teacher/pubslisAndSendInvites', AdminTestController.PubslisAndSendInvites);
 
 /* Candidate Response Endpoints */
 api.get('/admin/getCandidateResponseReport', auth, CandidateResponseController.GetCandidateResponse);

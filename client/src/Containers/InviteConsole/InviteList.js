@@ -73,8 +73,8 @@ const InviteList = (props) => {
                                         (invitation.result.indexOf('FAILED') > -1 ||
                                         invitation.result.indexOf('CLEARED') > -1) &&
                                         <Link to={ {pathname: "/candidateConsole", state: { responseId: invitation.responseId,
-                                        candidateId: invitation.candidateId, backLink: 'invitations' } }}>
-                                            View Details
+                                            candidateId: invitation.candidateId, backLink: 'invitations' } }}>
+                                                View Details
                                         </Link>
                                     }
                                     {/* {

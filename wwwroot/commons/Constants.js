@@ -14,6 +14,11 @@ var Constants = {
 
     ResponseValues: {
         NotResponded: 0
+    },
+
+    Paths: {
+        uploadBaseDir: 'uploads',
+        recordingBaseDir: 'uploads\\responseRecordings'
     }
 };
 

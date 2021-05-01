@@ -37,137 +37,54 @@ class CandidateResponseReport extends Component {
         let completedOn = invitation_meta ? getDateTime(invitation_meta.completedOn, true) : 'NA';
         let result = response_meta ? response_meta.result : 'NA';
 
-        let resultCss = classNames(classes.paletteReportBox, classes.palettePrimaryDark);
-        if(result === 'CLEARED') {
-            resultCss = classNames(classes.paletteReportBox, classes.bgSuccessMain);
-        }
+        // let resultCss = classNames(classes.paletteReportBox, classes.palettePrimaryDark);
+        // if(result === 'CLEARED') {
+        //     resultCss = classNames(classes.paletteReportBox, classes.bgSuccessMain);
+        // }
 
         return (
             <div>
                 {!mcqs && <LoadingComponent />}
                 {mcqs && mcqs.length === 0 && <Typography align="center" variant="subtitle1">No Responses Found </Typography>}
                 {mcqs && mcqs.length > 0 &&
-                <div>
-                    <div className="row">
-                        <div className="col-md-3">
-                        <div className={classNames(classes.paletteReportBox, classes.palettePrimaryDark)}>
-                            <div className={classNames("row")}>
-                                <div className="col-md-6">
-                                    Total Questions
+                <>
+                <div className="card bg-secondary text-light">
+                    <div className="card-body">
+                        <div className="row">
+                            <div className="col-md-4">
+                                <div className="row">
+                                    <div className="col-md-10">
+                                        Total Questions: {totalQuestions} ({response_meta.totalScore})
+                                    </div>
                                 </div>
-                                <div className={classNames("col-md-6", classes.infoText)}>
-                                    {totalQuestions}
+                            </div>
+                            <div className="col-md-4">
+                                <div className="row">
+                                    <div className="col-md-10">
+                                    Correct: {candidateScore} %
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-md-4">
+                                <div className="row">
+                                    <div className="col-md-10">
+                                    Result: {result}
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        </div>
-                        <div className="col-md-3">
-                        <div className={classNames(classes.paletteReportBox, classes.palettePrimaryDark)}>
-                            <div className={classNames("row")}>
-                                <div className="col-md-4">
-                                Score
-                                </div>
-                                <div className={classNames("col-md-6", classes.infoText)}>
-                                    {candidateScore} %
-                                </div>
+                        
+                        <div className="row mt-4">
+                            <div className="col-md-12">
+                            Completed On: {completedOn}
                             </div>
-                            </div>
-                        </div>
-                        <div className="col-md-3">
-                        <div className={classNames(classes.paletteReportBox, classes.palettePrimaryDark)}>
-                            <div className={classNames("row")}>
-                                <div className="col-md-6">
-                                Completed On
-                                </div>
-                                <div className={classNames("col-md-6", classes.infoText)}>
-                                    {completedOn}
-                                </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-md-3">
-                        <div className={resultCss}>
-                            <div className={classNames("row")}>
-                                <div className="col-md-4">
-                                Result
-                                </div>
-                                <div className={classNames("col-md-6", classes.infoText)}>
-                                    {result}
-                                </div>
-                            </div>
-                        </div>
                         </div>
                     </div>
-                {/* <Grid container spacing={32} className={classNames(classes.paletteBorderBottomPrimaryMain, classes.paddingBottom)}>
-                    <Grid item xs={3} sm={3}>
-                        <Card className={classes.paletteBorderLeftSuccessMain}>
-                            <CardContent>
-                                <Grid container spacing={32}>
-                                    <Grid item xs={6} sm={6}>
-                                        <div>
-                                            <Typography variant="h6">Total Questions</Typography>
-                                        </div>
-                                    </Grid>
-                                    <Grid item xs={6} sm={6} className={classes.verticalCenter}>
-                                        <Typography className="info_text">{totalQuestions}</Typography> 
-                                    </Grid>
-                                </Grid>
-                            </CardContent>
-                        </Card>
-                    </Grid>
-                    <Grid item xs={2} sm={2}>
-                        <Card className={classes.paletteBorderLeftSuccessMain}>
-                            <CardContent>
-                                <Grid container spacing={32}>
-                                    <Grid item xs={4} sm={4}>
-                                        <div>
-                                            <Typography variant="h6">Score</Typography>
-                                        </div>
-                                    </Grid>
-                                    <Grid item xs={8} sm={8} className={classes.verticalCenter}>
-                                        <Typography variant="h4">{candidateScore}</Typography> 
-                                    </Grid>
-                                </Grid>
-                            </CardContent>
-                        </Card>
-                    </Grid>
-                    <Grid item xs={4} sm={4}>
-                        <Card className={classes.paletteBorderLeftSuccessMain}>
-                            <CardContent>
-                                <Grid container spacing={32}>
-                                    <Grid item xs={5} sm={5}>
-                                        <div>
-                                            <Typography variant="h6">Completed On</Typography>
-                                        </div>
-                                    </Grid>
-                                    <Grid item xs={7} sm={7} className={classes.verticalCenter}>
-                                        <Typography variant="h4">{completedOn}</Typography> 
-                                    </Grid>
-                                </Grid>
-                            </CardContent>
-                        </Card>
-                    </Grid>
-                    <Grid item xs={3} sm={3}>
-                        <Card className={classes.paletteBorderLeftSuccessMain}>
-                            <CardContent>
-                                <Grid container spacing={32}>
-                                    <Grid item xs={6} sm={6}>
-                                        <div>
-                                            <Typography variant="h6">Result</Typography>
-                                        </div>
-                                    </Grid>
-                                    <Grid item xs={6} sm={6} className={classes.verticalCenter}>
-                                        <Typography variant="h4">{result}</Typography> 
-                                    </Grid>
-                                </Grid>
-                            </CardContent>
-                        </Card>
-                    </Grid>
-                </Grid> */}
+                </div>
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <CustomTableCell align="left">Category</CustomTableCell>
+                            <CustomTableCell align="left">Number</CustomTableCell>
                             <CustomTableCell align="left">Topic</CustomTableCell>
                             <CustomTableCell align="left">Question</CustomTableCell>
                             <CustomTableCell align="left">Correct</CustomTableCell>
@@ -178,27 +95,35 @@ class CandidateResponseReport extends Component {
                     <TableBody>
                         {mcqs.map((mcqItem, index) => {
                             let mcq = mcqItem.mcq.mcq_meta;
-                            let candidateResponse = mcqItem.candidateResponse ? mcqItem.candidateResponse.responseKeys.join() : '';
-                            // let mcq_meta = { mcq };
+                            let candidateResponse = mcqItem.candidateResponse ? mcqItem.candidateResponse.responseKeys.sort().join("") : '';
+                            let correctAnswer = '';
+                            mcq.choices.forEach((choiceItem) => {
+                                if(choiceItem.isCorrect === true) {
+                                    correctAnswer += choiceItem.key;
+                                }
+                            })
                             console.log('mcq_meta', mcq);
                         return (
-                            <TableRow key={index}>
-                                <CustomTableCell align="left">{mcq.category}</CustomTableCell>
-                                <CustomTableCell align="left">{mcq.question}</CustomTableCell>
-                                <CustomTableCell align="left">{mcq.description}</CustomTableCell>
-                                <CustomTableCell align="center">{mcq.correctAnswer}</CustomTableCell>
+                            <TableRow key={index}
+                                className={candidateResponse===correctAnswer ? 'bg-warning' : 'bg-danger text-white'}    
+                            >
+                                <CustomTableCell align="center">{mcqItem.questionOrderIndex+1}</CustomTableCell>
+                                <CustomTableCell align="left">{mcq.question}
+                                </CustomTableCell>
+                                <CustomTableCell align="left"
+                                    dangerouslySetInnerHTML={{
+                                        __html: mcq.description
+                                    }}>
+                                </CustomTableCell>
+                                {/* <CustomTableCell align="left">{mcq.description}</CustomTableCell> */}
+                                <CustomTableCell align="center">{correctAnswer}</CustomTableCell>
                                 <CustomTableCell align="center">{candidateResponse}</CustomTableCell>
-                                {/* <CustomTableCell align="center" scope="row" component="th">
-                                <Link to={ {pathname: "/inviteConsole", state: { testId: invitation.testId } }}>
-                                    <PersonAdd />
-                                </Link>
-                            </CustomTableCell> */}
                             </TableRow>
                         )})}
                     </TableBody>
                 </Table>
-                </div>
-            }
+                </>
+                }
             </div>
         )
     }

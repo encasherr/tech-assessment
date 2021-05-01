@@ -6,6 +6,9 @@ import queries from '../db/queries';
 import { GetQueryConfig, 
     HandlePromise } from '../commons/RoleDefinitions';
 import { VIEW_USERS } from '../commons/RoleBasedQueries/UserQueries';
+import { getSiteUrl, encrypt, decrypt } from '../utils/general';
+import EmailHelper from '../commons/EmailHelper';
+import { EmailConfig } from '../commons/ServerConfig';
 
 class UserModel {
     entityName = 'users';
@@ -59,6 +62,38 @@ class UserModel {
             db.delete(this.entityName, entity.id);
             resolve(entity.user_meta);
         });
+    }
+
+    VerifyUser = async (userIv, userContent) => {
+        let userId = decrypt(userIv, userContent);
+        console.log('decryption result: ', userId);
+        if(userId) {
+            let userEntity = await this.GetUser(userId);
+            return userEntity;
+        }
+        return null;
+    }
+
+    SendVerificationEmail = async (userId) => {
+        let userEntity = await this.GetUser(userId);
+        let userDetail = {
+            userId: userId, 
+            email: userEntity.user_meta.emailId,
+            name: userEntity.user_meta.name
+        }
+        let encryptedObject = encrypt(`${userDetail.userId}`); 
+        console.log('encryptedObject in model: ', encryptedObject);
+        let verificationLink = EmailConfig.getVerificationLink(await getSiteUrl(), encryptedObject);
+        console.log('verification link: ', verificationLink);
+        let emailInfo = {
+            to: userDetail.email,
+            subject: `Welcome - Verify user email`,
+            user_name: userEntity.user_meta.name,
+            verification_link: verificationLink,
+            notificationType: 'verify_user_email'
+        };
+        let emailHelper = new EmailHelper();
+        emailHelper.SendEmail(emailInfo);
     }
 
     /*initializeCollection = () => {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Typography } from '@material-ui/core';
-import LoginComponent from '../../components/lib/LoginComponent';
-import LocalLoginComponent from '../../components/lib/LocalLoginComponent';
+// import LoginComponent from '../../components/lib/LoginComponent';
+// import LocalLoginComponent from '../../components/lib/LocalLoginComponent';
 
 const UserForbidden = (props) => {
 
@@ -15,7 +15,7 @@ const UserForbidden = (props) => {
             </Typography>
             <div>
                 {/* <LoginComponent /> */}
-                <LocalLoginComponent />
+                {/* <LocalLoginComponent /> */}
             </div>
         </div>
     )
