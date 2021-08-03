@@ -54,6 +54,22 @@ class AdminTestController extends BaseController {
         })
     }
 
+    GetTestsAvailableForMe = (req, resp) => {
+        console.log('GetTestsAvailableForMe called', req.user);
+        let model = new TestModel();
+        let grade = '6';
+        model.GetTestsAvailableForMe(req.user, grade)
+            .then((res) => {
+                console.log('fetched tests');
+                resp.send(res);
+            })
+            .catch((err) => {
+                console.log('error in get my tests', err);
+                var obj = { status: 500, message: err };
+                resp.status(500).send(obj);
+            });
+    }
+
     GetMcqsByTestId = (req, resp) => {
         let testId = req.query.testId;
         console.log('get mcqs by testid called: ', testId);

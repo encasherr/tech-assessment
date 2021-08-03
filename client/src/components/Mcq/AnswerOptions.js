@@ -4,6 +4,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import { Typography, Avatar } from '@material-ui/core';
+import { EscapeSpecialCharacters } from '../../common/HelperFunctions';
 
 const AnswerOptions = (props) => {
         return (
@@ -27,7 +28,7 @@ const AnswerOptions = (props) => {
                                 primary={
                                     <div
                                         dangerouslySetInnerHTML={{
-                                            __html: item.content
+                                            __html: EscapeSpecialCharacters(item.content)
                                         }}>
                                     </div>
                                 }

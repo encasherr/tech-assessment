@@ -75,7 +75,7 @@ const Routes = (props) => {
             {/* Routes for OP */}
             
             <Route path="/emailVerified" component={OpEmailVerifiedSuccess} />
-            {/* <PrivateRoute path="/opContent" component={OpContent} /> */}
+            <PrivateRoute path="/opContent" component={OpContent} />
             <PrivateRoute path="/ophome" component={DashboardComponent} />
             <PrivateRoute path="/optests" component={OpTestContainer} />
             <PrivateRoute path="/opTestConsole" component={OpTestConsole} />

@@ -13,6 +13,7 @@ export const VIEW_INVITATIONS_QUERY = {
                 }
                 case staff:
                 case orgadmin: {
+                    console.log('current user org Id: ', userEntity.orgId);
                     return queries.getInvitationsByOrgQuery(userEntity.orgId);
                 }
                 case teacher: {

@@ -285,6 +285,15 @@ const matchesCategory = (item, searchTerm) => {
  export const SearchMcq = (searchCriteria, searchTerm, mcqList) => dispatch => {
     if(mcqList && mcqList.length > 0) {
         let filteredCategories = mcqList;
+        if(searchTerm === 'ALL') {
+            dispatch({
+                type: MCQ_SEARCH_SUCCESS,
+                payload: {
+                    filteredCategories,
+                    searchTerm
+                }
+            });
+        }
         switch(searchCriteria) {
             case 'QUEST_OR_DESC': {
                 filteredCategories = mcqList.filter((mcqItem) => {
@@ -303,6 +312,7 @@ const matchesCategory = (item, searchTerm) => {
                 break;
             }
             case 'CATEGORY': {
+                console.log('category filter', searchTerm);
                 filteredCategories = mcqList.filter((mcqItem) => {
                     let item = mcqItem.mcq_meta;
                     return  matchesCategory(item, searchTerm);

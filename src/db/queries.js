@@ -1,3 +1,5 @@
+import { admin } from "../commons/RoleDefinitions";
+
 const queries =  {
     getAllInvitationsQuery: () => {
         return `
@@ -77,7 +79,9 @@ const queries =  {
                 join ta_tests t ON JSON_EXTRACT(i.invitation_meta , '$.testId') = t.id 
                 join ta_users u ON JSON_EXTRACT(i.invitation_meta, '$.createdBy') = u.id 
                 left join ta_mcqresponses r ON JSON_EXTRACT(r.response_meta , '$.invitationId') = i.id
-                WHERE JSON_EXTRACT(u.user_meta, '$.orgId') = ${orgId}
+                WHERE (JSON_EXTRACT(u.user_meta, '$.orgId') = ${orgId}
+                OR JSON_EXTRACT(u.user_meta, '$.role') = '${admin}')
+                AND i.isLive = 1
             `;
     },
 
@@ -167,12 +171,18 @@ const queries =  {
     },
     
     getMcqCountByOrgId: (orgId) => {
-        return `
-            SELECT COUNT(*) as cnt
-            FROM ta_mcq m
-            join ta_users u ON JSON_EXTRACT(m.mcq_meta, '$.createdBy') = u.id 
-            WHERE JSON_EXTRACT(u.user_meta, '$.orgId') = ${orgId}
-        `;
+        // return `
+        //     SELECT COUNT(*) as cnt
+        //     FROM ta_mcq m
+        //     join ta_users u ON JSON_EXTRACT(m.mcq_meta, '$.createdBy') = u.id 
+        //     WHERE JSON_EXTRACT(u.user_meta, '$.orgId') = ${orgId}
+        // `;
+        return `SELECT count(*) as cnt 
+            FROM ta_mcq m 
+            JOIN ta_users u ON m.addedBy = u.id
+            WHERE (JSON_EXTRACT(u.user_meta, '$.orgId') = ${orgId}
+                OR JSON_EXTRACT(u.user_meta, '$.role') = '${admin}')
+                AND m.category in ('Programming', 'Aptitude')`
     },
 
     getCandidateInfoByInvitationId: (invitationId) => {

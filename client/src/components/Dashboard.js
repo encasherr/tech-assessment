@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { SetUserInfo } from '../actions/UserActions';
 import { FetchTestCount, FetchMcqCount, FetchInvitationCount,
     FetchRecentResponses } from '../actions/DashboardActions';
+import { FetchPublicTests, RegisterForTest } from '../actions/OpTests/OpTestActions';
 import { Card, CardHeader, CardContent, Typography, CardActions, Button, Grid, MuiThemeProvider,
 Paper, Avatar, ListItemSecondaryAction } from '@material-ui/core';
 import { Link as InternalLink } from 'react-router-dom';
@@ -33,6 +34,7 @@ import { primary } from './lib/ColorCodes';
 import { getDateTime, sortDescending } from '../Utils';
 import { GetCurrentUserRole } from '../common/HelperFunctions';
 import TeacherDashboard from './TeacherDashboard';
+import StudentDashboard from './StudentDashboard';
 
 const theme = {
     spacing: 4,
@@ -47,11 +49,23 @@ class Dashboard extends Component {
         this.props.FetchMcqCount();
         this.props.FetchInvitationCount();
         this.props.FetchRecentResponses();
+        if(GetCurrentUserRole() === 'student') {
+            this.props.FetchPublicTests();
+        }
     }
     
+    registerForTest = (testId) => {
+        this.props.RegisterForTest(testId)
+            .then(() => {
+                this.props.FetchPublicTests();
+            });
+    }
     
     render = () => {
-        let { classes, testCount, mcqCount, invitationCount, recentResponses } = this.props;
+        let { classes, testCount, mcqCount, invitationCount, 
+            recentResponses,
+            tests } = this.props;
+        classes = classes || {};
         let totalCompletedCount = 0;
         console.log('props-ds', this.props);
         
@@ -91,6 +105,16 @@ class Dashboard extends Component {
                 />
             )
         }
+
+        if(GetCurrentUserRole() === 'student') {
+            console.log('student available tests: ', tests);
+            return (
+                <StudentDashboard
+                    tests={tests}
+                />
+            )
+        }
+
         return (
             <div>
                 <Grid container spacing={32}>
@@ -340,14 +364,16 @@ class Dashboard extends Component {
 }
 
 const mapStateToProps = state => ({
-    ...state.dashboardReducer
+    ...state.dashboardReducer,
+    ...state.adminTestReducer
 });
 const mapDispatchToProps = dispatch => ({
     SetUserInfo: (userInfo) => dispatch(SetUserInfo(userInfo)),
     FetchTestCount: () => dispatch(FetchTestCount()),
     FetchMcqCount: () => dispatch(FetchMcqCount()),
     FetchInvitationCount: () => dispatch(FetchInvitationCount()),
-    FetchRecentResponses: () => dispatch(FetchRecentResponses())
+    FetchRecentResponses: () => dispatch(FetchRecentResponses()),
+    FetchPublicTests: () => dispatch(FetchPublicTests())
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
 

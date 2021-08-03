@@ -2,8 +2,10 @@ import db from '../db/mysqldb';
 import queries from '../db/queries';
 
 import { GetQueryConfig, 
-    HandlePromise } from '../commons/RoleDefinitions';
-import { VIEW_TESTS, VIEW_MY_TESTS, VIEW_TESTS_BY_ID } from '../commons/RoleBasedQueries/TestQueries';
+    HandlePromise, 
+    HandlePromiseWithParams} from '../commons/RoleDefinitions';
+import { VIEW_TESTS, VIEW_MY_TESTS, VIEW_TESTS_BY_ID,
+    VIEW_TESTS_AVAILABLE_FOR_ME } from '../commons/RoleBasedQueries/TestQueries';
 
 class TestModel {
     entityName = 'tests';
@@ -19,20 +21,15 @@ class TestModel {
         return HandlePromise(db, queryConfig, userEntity);
     }
     
+    GetTestsAvailableForMe = (userEntity, grade) => {
+        let queryConfig = GetQueryConfig(VIEW_TESTS_AVAILABLE_FOR_ME);
+        return HandlePromiseWithParams(db, queryConfig, { userEntity, grade });
+    }
+    
     GetTestById = (userEntity, testId) => {
         let queryConfig = GetQueryConfig(VIEW_TESTS_BY_ID);
         return HandlePromise(db, queryConfig, { userEntity: userEntity, testId: testId });
     }
-    /*GetTestsByUser = (userEntity) => {
-        if(this.entities.data && this.entities.data.length > 0 && userEntity) {
-            let filteredTests = this.entities.data.filter((item, index) => {
-                return item.test_meta.addedBy = userEntity.emailId;
-            });
-            console.log(filteredTests.length);
-            return filteredTests;
-        }
-        return [];
-    }*/
 
     GetTest = (testId) => {
         return new Promise((resolve, reject) => {
@@ -41,6 +38,12 @@ class TestModel {
                 resolve(res);
             });
         })
+    }
+
+    DeleteMcqFromTestsIfExists = (mcqId) => {
+        // return new Promise((resolve, reject) => {
+
+        // })
     }
 
     serializeToJson = (data) => {

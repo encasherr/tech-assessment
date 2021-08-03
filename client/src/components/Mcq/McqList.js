@@ -4,6 +4,10 @@ import {    FetchMcqs, DeleteMcq, BulkDeleteMcq,
             CloseSnackbar,
             OpenSnackbar, 
             BeginSearch, EndSearch, SearchMcq } from '../../actions/McqActions';
+
+import { FetchCategories } from '../../actions/CategoryActions';
+import { FetchSkills } from '../../actions/SkillActions';
+
 import { Link } from 'react-router-dom';
 import { FormControl, Grid, Card, CardHeader, Button, CardContent, 
          List, ListItem, ListItemText, ListItemSecondaryAction,
@@ -12,7 +16,7 @@ import Typography from '@material-ui/core/Typography';
 import McqItem from '../../Containers/TestConsole/McqItem';
 import SnackbarComponent from '../lib/SnackbarComponent';
 import Fab from '@material-ui/core/Fab';
-import { Add, Search, ArrowUpward, Delete } from '@material-ui/icons';
+import { Add, Search, ArrowUpward, Delete, Refresh } from '@material-ui/icons';
 import LoadingComponent from '../lib/LoadingComponent';
 import User401 from '../../Containers/User/User401';
 
@@ -74,7 +78,13 @@ class McqList extends Component {
 
 
     componentDidMount = () => {
+        this.reload();
+    }
+
+    reload = () => {
         this.props.FetchMcqs();
+        this.props.FetchCategories();
+        this.props.FetchSkills();
     }
 
     onAddMcqToTest = (mcqId) => {
@@ -123,15 +133,44 @@ class McqList extends Component {
                 })
                 break;
             }
+            case 'CATEGORY': {
+                
+                break;
+            }
             case 'QUEST_DESC': {
                 break;
             }
         }
-        this.props.SearchMcq(criteria, e.target.value, this.props.mcqs);
+        console.log('e.target', e.target.value);
+        let searchTerm = e.target.value;
+        if(!searchTerm) {
+            searchTerm = e.target.innerHTML;
+            if(searchTerm && 
+                searchTerm.toLowerCase() === 'programming' &&
+                criteria === 'CATEGORY') {
+                this.setState({
+                    skillCriteriaEnabled: true
+                })
+            }
+            else if (criteria === 'CATEGORY') {
+                this.setState({
+                    skillCriteriaEnabled: false
+                })
+            }
+        }
+        this.props.SearchMcq(criteria, searchTerm, this.props.mcqs);
+    }
+
+    clearFilters = () => {
+        this.props.SearchMcq('ALL', '', this.props.mcqs);
+        this.setState({
+            skillCriteriaEnabled: false
+        })
     }
 
     render = () => {
-        let { mcqs, search_term, filteredCategories, search_enabled, error } = this.props;
+        let { mcqs, search_term, filteredCategories, search_enabled, error, 
+            categoryList, skillList } = this.props;
         let { selectedMcqs } = this.state;
         let mcqToDisplay = filteredCategories ? filteredCategories : mcqs;
         if(!mcqToDisplay){
@@ -139,6 +178,15 @@ class McqList extends Component {
                 <LoadingComponent />
             )
         }
+        // search_enabled = true;
+        console.log('categoryList', categoryList);
+        console.log('skillList', skillList);
+        let criteriaObj = { 
+            categoryList, 
+            skillList, 
+            skillCriteriaEnabled: this.state.skillCriteriaEnabled,
+            clearFilters: this.clearFilters
+        };
         
         return (
             <Card>
@@ -153,6 +201,9 @@ class McqList extends Component {
                             <Button className={styles.hide} color="primary" onClick={() => this.props.BeginSearch()} size="small">
                                 <Search />
                             </Button>} */}
+                            <Button color="primary" onClick={() => this.reload()} size="small">
+                                <Refresh color="secondary" />
+                            </Button>
                             <Link to="/addMcq" title="Add New MCQ">
                                 <Add color="secondary" />
                             </Link>
@@ -162,11 +213,12 @@ class McqList extends Component {
                             </Link>
                         </div>
                     }
-                    title="MCQ List"
+                    title={`MCQ List (${mcqToDisplay.length})`}
                     subheader="Multiple Choice Questions">
                 </CardHeader>
                 <CardContent>
-                    {search_enabled && 
+                    {renderFilters(criteriaObj, this.handleFilterChange)}
+                    {search_enabled &&
                     <div>
                         <FormControl variant="outlined" style={styles.formControl}>
                             <TextField
@@ -206,10 +258,10 @@ class McqList extends Component {
                         </FormControl>
                     </div>
                     }
-                    {mcqToDisplay && 
+                    {/* {mcqToDisplay && 
                                     <Typography variant="caption">
                                         {mcqToDisplay.length} MCQs
-                                    </Typography>}
+                                    </Typography>} */}
                     <Link to="/addMcq" >
                         <Fab color="primary" aria-label="Add" style={{right: 20, position: 'fixed', bottom: 20}}>
                             <Add />
@@ -234,13 +286,56 @@ class McqList extends Component {
     }
 }
 
+const renderFilters = (criteriaObj, handleFilterChange) => {
+    // console.log('categories', criteriaObj);
+    return (
+        <>
+            <>
+                {criteriaObj.categoryList && criteriaObj.categoryList.length > 0 &&
+                    <div className="row">
+                        <div className="col-md-2 text-primary">Categories</div>
+                        <div className="col-md-10">
+                            {criteriaObj.categoryList.map((categoryItem, ix) => {
+                                return (
+                                        <button key={ix} type="button" className="ml-1 btn btn-secondary btn-sm" data-criteria='CATEGORY' onClick={handleFilterChange}>{categoryItem.category_meta.title}</button>
+                                )
+                            })}
+                            <button type="button" className="ml-1 btn btn-warning btn-sm" data-criteria='CATEGORY' onClick={criteriaObj.clearFilters}>All</button>
+                        </div>
+                    </div>
+                }
+            </>
+            <>
+                    
+                {criteriaObj.skillCriteriaEnabled && criteriaObj.skillList && criteriaObj.skillList.length > 0 &&
+                    <div className="row mt-2">
+                        <div className="col-md-2 text-primary">Skills</div>
+                        <div className="col-md-10">
+                            {criteriaObj.skillList.map((skillItem) => {
+                                return (
+                                        <button type="button" className="ml-1 btn btn-secondary btn-sm" data-criteria='SKILL' onClick={handleFilterChange}>{skillItem.skill_meta.skill}</button>
+                                )
+                            })}
+                        </div>
+                    </div>
+                }
+
+            </>
+        </>
+    )
+}
+
 const mapStateToProps = state => ({
     ...state.mcqReducer,
+    ...state.categoryReducer,
+    ...state.skillReducer
 });
 const mapDispatchToProps = dispatch => ({
     FetchMcqs: () => dispatch(FetchMcqs()),
     DeleteMcq: (mcq) => dispatch(DeleteMcq(mcq)),
     BulkDeleteMcq: (mcqs) => dispatch(BulkDeleteMcq(mcqs)),
+    FetchCategories: () => dispatch(FetchCategories()),
+    FetchSkills: () => dispatch(FetchSkills()),
     CloseSnackbar: () => dispatch(CloseSnackbar()),
     OpenSnackbar: () => dispatch(OpenSnackbar()),
     BeginSearch: () => dispatch(BeginSearch()),

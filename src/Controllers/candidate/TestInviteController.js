@@ -203,6 +203,28 @@ class TestInviteController {
         // });
     }
 
+    RegisterForTest = (req, resp) => {
+        console.log('RegisterForTest called');
+        let { testId } = req.body;
+        let invitees = [{
+            emailId: req.user.emailId,
+            name: req.user.name
+        }]
+
+        invitationRepo.sendInvite(req.user.id, invitees, testId)
+            .then(async () => {
+                let testModel = new TestModel();
+                let testEntity = await testModel.GetTest(testId);    
+                resp.status(200).json(testEntity);
+            })
+            .catch((err) => {
+                let response = { message: 'Error occured in register for test:' + err };
+                console.log(response);
+                resp.status(500).json(response);
+                return;
+            });
+    }
+
     SendInvite = (req, resp) => {
         console.log('send invite called');
         console.log(req.body);

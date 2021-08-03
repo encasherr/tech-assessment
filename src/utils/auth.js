@@ -43,6 +43,10 @@ const resources = [
         allowedRoles: [ 'admin', 'orgadmin', 'staff', 'candidate', 'teacher' ] 
     },
     { 
+        resource: '/admin/testsAvailableForMe',
+        allowedRoles: [ 'admin', 'orgadmin', 'staff', 'candidate', 'teacher', 'student' ] 
+    },
+    { 
         resource: '/admin/getMyTests',
         allowedRoles: [ 'admin', 'orgadmin', 'staff', 'candidate', 'teacher' ] 
     },

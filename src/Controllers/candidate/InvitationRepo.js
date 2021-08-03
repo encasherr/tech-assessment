@@ -4,6 +4,7 @@ import TestModel from '../../Models/TestModel';
 import DbConfig from '../../commons/DbConfig';
 import EmailHelper from '../../commons/EmailHelper';
 import { EmailConfig, Constants } from '../../commons/ServerConfig';
+import { getCurrentDateTime } from '../../commons/HelperFunctions';
 
 const sendInvite = async (userId, invitees, testId) => {
     let promises = [];
@@ -34,6 +35,38 @@ const sendInvite = async (userId, invitees, testId) => {
         });
     }
     return Promise.all(promises);
+}
+
+const sendInviteAndGetLink = (userId, invitee, testId) => {
+    let promise = new Promise(async (resolve, reject) => {
+        let candidateId = await AddCandidateIfNotExist(invitee, reject);
+        if(candidateId <= 0) {
+            reject(`Candidate '${invitee.name}', ${invitee.emailId} could not be created`);
+        }
+        else {
+            let dbConfig = new DbConfig();
+    
+            let KeyValues = await dbConfig.Initialize();
+            let siteUrl = KeyValues ?
+                    (KeyValues.site_url ? KeyValues.site_url : '') : '';
+            let invitationId = await AddInvitation(userId, candidateId, testId);
+            let testLink = EmailConfig.getTestLink(siteUrl, invitationId);
+            
+            resolve(testLink);
+            
+        }          
+    })
+    return promise;
+}
+
+const getTestLink = async (invitationId) => {
+    let dbConfig = new DbConfig();
+    
+    let KeyValues = await dbConfig.Initialize();
+    let siteUrl = KeyValues ?
+            (KeyValues.site_url ? KeyValues.site_url : '') : '';
+    let testLink = EmailConfig.getTestLink(siteUrl, invitationId);
+    return testLink;            
 }
 
 const getEmailSubject = (testEntity) => {
@@ -79,6 +112,20 @@ const AddInvitation = async (userId, candidateId, testId) => {
     return invitationId;
 }
 
+const updateInvitationStatus = async (invitationId, emailStatusObject) => {
+    let invitationModel = new InvitationModel();
+    let invitationEntity = await invitationModel.GetInvitation(invitationId);
+    if(emailStatusObject.invitationEmailStatus) {
+        invitationEntity.invitation_meta.invitationEmailStatus = emailStatusObject.invitationEmailStatus;
+    }
+    if(emailStatusObject.resultEmailStatus) {
+        invitationEntity.invitation_meta.resultEmailStatus = emailStatusObject.resultEmailStatus;
+    }
+    await invitationModel.Update(invitationEntity);
+    console.log(`InvitationId updated email status: ${invitationId}`);
+    return invitationId;
+}
+
 const sendEmail = (invitationId, invitee, testEntity, siteUrl, faqLink) => {
     let emailInfo = {
         to: invitee.emailId,
@@ -91,9 +138,20 @@ const sendEmail = (invitationId, invitee, testEntity, siteUrl, faqLink) => {
     };
     let emailHelper = new EmailHelper();
     console.log(`Sending email to : ${invitee.emailId}`);
-    emailHelper.SendEmail(emailInfo);
+    emailHelper.SendEmail(emailInfo)
+        .then(() => {
+            updateInvitationStatus(invitationId, { invitationEmailStatus: `Invite sent on ${getCurrentDateTime()}` });
+        })
+        .catch((error) => {
+            console.log('Email sending failed');
+            console.log(error);
+            updateInvitationStatus(invitationId, { invitationEmailStatus: `Email Sending Failed` });
+        })
 }
 
 export default {
-    sendInvite
+    sendInvite,
+    sendInviteAndGetLink,
+    getTestLink,
+    updateInvitationStatus
 }

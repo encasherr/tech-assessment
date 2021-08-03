@@ -13,9 +13,9 @@ class OrgModel {
         return HandlePromise(db, queryConfig, userEntity);
     }
 
-    GetCandidate = (candidateId) => {
+    GetOrg = (orgId) => {
         return new Promise((resolve, reject) => {
-            db.findOne(this.entityName, candidateId).then((res) => {
+            db.findOne(this.entityName, orgId).then((res) => {
                 resolve(res);
             });
         })

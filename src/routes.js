@@ -111,6 +111,7 @@ api.get('/candidate/getRecording', MediaController.GetRecording);
 
 api.post('/teacher/user', UserController.AddNewUserToBeVerified)
 api.get('/teacher/verifyUser', UserController.VerifyUser);
+api.get('/admin/testsAvailableForMe', auth, AdminTestController.GetTestsAvailableForMe);
 // api.get('/teacher/pubslisAndSendInvites', AdminTestController.PubslisAndSendInvites);
 
 /* Candidate Response Endpoints */
@@ -125,6 +126,7 @@ api.post('/candidate/sendInvite', auth, TestInviteController.SendInvite);
 api.post('/candidate/startTest', auth, TestInviteController.StartTest);
 api.post('/candidate/submitAnswers', auth, TestInviteController.SubmitAnswers);
 api.post('/candidate/evaluateAnswers', auth, TestInviteController.EvaluateAnswers);
+api.post('/candidate/registerForTest', auth, TestInviteController.RegisterForTest);
 
 api.get('/admin/dashboard/test/count', auth, DashboardController.GetTestCount);
 api.get('/admin/dashboard/mcq/count', auth, DashboardController.GetMcqCount);

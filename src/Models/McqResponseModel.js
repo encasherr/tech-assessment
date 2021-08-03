@@ -36,14 +36,6 @@ class McqResponseModel {
         })
     }
 
-    GetInvitation = (invitationId) => {
-        return new Promise((resolve, reject) => {
-            db.findOne(this.entityName, invitationId).then((res) => {
-                resolve(res);
-            });
-        })
-    }
-
     GetByInvitationId = (invitationId) => {
         return new Promise((resolve, reject) => {
             let sql = queries.getMcqResponseByInvitationId(invitationId);

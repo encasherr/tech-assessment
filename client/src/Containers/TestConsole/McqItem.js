@@ -8,6 +8,7 @@ import { Card, CardContent, CardActions, ListItem, ListItemText,
         Checkbox} from '@material-ui/core';
 import { AddBox, Close, Remove, Edit, Delete } from '@material-ui/icons';
 import AnswerOptions from '../../components/Mcq/AnswerOptions';
+import { EscapeSpecialCharacters } from '../../common/HelperFunctions';
 
 const Transition = (props) => {
     return <Slide direction="up" {...props} />
@@ -44,7 +45,7 @@ class McqItem extends Component {
         let { mcqItem, isSelectable, isEditable, 
                 isDeletable, isChecked } = this.props;
         let mcq = mcqItem ? mcqItem.mcq_meta : null; 
-        // console.log(`mcq: ${JSON.parse(mcqItem.mcq_meta)}`);
+        // console.log(`mcq: ${JSON.parse(mcq)}`);
         let questionOrderIndex = '';
         if(mcqItem && mcqItem.questionOrderIndex) {
             questionOrderIndex = `${mcqItem.questionOrderIndex + 1}`;
@@ -60,8 +61,9 @@ class McqItem extends Component {
                     button={true}
                     >
                     <ListItemText 
-                                primary={ mcq.question }
-                                secondary={ `Q ${questionOrderIndex}: ${mcq.category} - ${mcq.skill} ` } >
+                        primary={ mcq.question ? mcq.question : mcq.description }
+                        secondary={ 
+                            `Q ${questionOrderIndex}: ${mcq.category} - ${mcq.skill ? mcq.skill : `${mcq.grade} Chapter No:${mcq.chapterNo}` } ` } >
                     </ListItemText>
                     {isSelectable && 
                     <ListItemSecondaryAction>
@@ -110,7 +112,7 @@ class McqItem extends Component {
                         {/* <p>{this.htmlDecode(mcq.description)}</p> */}
                         <div
                             dangerouslySetInnerHTML={{
-                                __html: mcq.description
+                                __html: EscapeSpecialCharacters(mcq.description)
                             }}>
                         </div>
                         <AnswerOptions choices={mcq.choices}/>

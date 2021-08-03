@@ -122,7 +122,6 @@ switch(action.type) {
    }
    case FETCH_MCQ_SUCCESS:
    {
-       
        return {
             ...state,
             error: null,

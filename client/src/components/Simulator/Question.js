@@ -11,6 +11,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/Inbox';
 
 import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import { EscapeSpecialCharacters } from '../../common/HelperFunctions';
 
 const Question = (props) => {
     console.log('q-props', props);
@@ -21,7 +22,7 @@ const Question = (props) => {
                 {/* {model.mcq.mcq_meta.description} */}
                 <div
                     dangerouslySetInnerHTML={{
-                        __html: model.mcq.mcq_meta.description
+                        __html: EscapeSpecialCharacters(model.mcq.mcq_meta.description)
                     }}>
                 </div>
             </Typography>
@@ -45,7 +46,7 @@ const Question = (props) => {
                                         {/* {choiceItem.content} */}
                                         <div
                                             dangerouslySetInnerHTML={{
-                                                __html: choiceItem.content
+                                                __html: EscapeSpecialCharacters(choiceItem.content)
                                             }}>
                                         </div>
                                     </div>

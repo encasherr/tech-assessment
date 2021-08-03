@@ -13,6 +13,7 @@ import { Link } from 'react-router-dom';
 import { getDateTime, formatToDecimals } from '../../Utils';
 
 import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import { EscapeSpecialCharacters } from '../../common/HelperFunctions';
 
 class CandidateResponseReport extends Component {
 
@@ -112,7 +113,7 @@ class CandidateResponseReport extends Component {
                                 </CustomTableCell>
                                 <CustomTableCell align="left"
                                     dangerouslySetInnerHTML={{
-                                        __html: mcq.description
+                                        __html: EscapeSpecialCharacters(mcq.description)
                                     }}>
                                 </CustomTableCell>
                                 {/* <CustomTableCell align="left">{mcq.description}</CustomTableCell> */}

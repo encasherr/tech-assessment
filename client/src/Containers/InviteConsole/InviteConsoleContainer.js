@@ -38,7 +38,7 @@ class InviteConsoleContainer extends React.Component {
                 <Grid item xs={12} sm={12} md={12}>
                     <Card>
                         <CardHeader
-                            title="Invitations" />
+                            title={`Invitations (${this.props.invitations ? this.props.invitations.length : 'loading..'})`} />
                         <CardContent>
                             <InviteList 
                                 invitations={this.props.invitations}

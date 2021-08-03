@@ -9,11 +9,14 @@ import { VIEW_USERS } from '../commons/RoleBasedQueries/UserQueries';
 import { getSiteUrl, encrypt, decrypt } from '../utils/general';
 import EmailHelper from '../commons/EmailHelper';
 import { EmailConfig } from '../commons/ServerConfig';
+import { getCurrentDateTime } from '../commons/HelperFunctions';
 
 class UserModel {
     entityName = 'users';
     entities = {};
     
+    constructor() {
+    }
     
     GetAll = (userEntity) => {
         let queryConfig = GetQueryConfig(VIEW_USERS);
@@ -93,7 +96,17 @@ class UserModel {
             notificationType: 'verify_user_email'
         };
         let emailHelper = new EmailHelper();
-        emailHelper.SendEmail(emailInfo);
+        emailHelper.SendEmail(emailInfo)
+                .then(() => {
+                    let entityToUpdate = {...userEntity};
+                    entityToUpdate.user_meta.emailStatus = `Verification Email Sent on ${getCurrentDateTime()}`;
+                    this.Update(entityToUpdate);
+                })
+                .catch((err) => {
+                    let entityToUpdate = {...userEntity};
+                    entityToUpdate.user_meta.emailStatus = `Email Sending Failed`;
+                    this.Update(entityToUpdate);
+                })
     }
 
     /*initializeCollection = () => {

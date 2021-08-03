@@ -5,7 +5,7 @@ import AuthHelper from '../../AuthHelper';
 import RedirectFromAction from '../../actions/RedirectFromAction';
 import config from '../../config';
 
-/*
+
 const PrivateRoute = ({ component: Component, authed, ...rest}) => {
     console.log('isauth', isAuthorized());
     return (
@@ -25,8 +25,9 @@ const isAuthorized = () => {
     }
     return false;
 }
-*/
 
+
+/*
 class PrivateRoute extends React.Component {
 
     constructor(props) {
@@ -138,5 +139,5 @@ const isdevEnv = () => {
     return (locationHref.indexOf('localhost:3000') > -1 ||
             locationHref.indexOf('localhost:3001') > -1);
 }
-
+*/
 export default PrivateRoute;

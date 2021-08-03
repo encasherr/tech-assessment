@@ -44,33 +44,42 @@ class EmailHelper {
 
     SendEmail = (emailInfo) => {
         console.log('email helper send called');
-        // let transporter = nodemailer.createTransport({
-        //     host: EmailConfig.emailSmtpHost,
-        //     port: EmailConfig.emailSmtpPort,
-        //     secure: false,
-        //     requireTLS: true,
-        //     auth: {
-        //         user: EmailConfig.emailAuthUser,
-        //         pass: EmailConfig.emailAuthPassword
-        //     }
-        // });
+        return new Promise((resolve, reject) => {
 
-        let transporter = this.CreateTransporter();
-        let mailOptions = {
-            from: EmailConfig.inviteFromEmailId,
-            to: emailInfo.to,
-            subject: emailInfo.subject,
-            // text: emailInfo.text,
-            html: this.CreateHtml(emailInfo)
-        }
-
-        transporter.sendMail(mailOptions, (error, info) => {
-            if(error) {
-                console.log('error occured in sending email');
-                console.log(error);
-                return;
+            let transporter = this.CreateTransporter();
+            let mailOptions = {
+                from: EmailConfig.inviteFromEmailId,
+                to: emailInfo.to,
+                subject: emailInfo.subject,
+                // text: emailInfo.text,
+                html: this.CreateHtml(emailInfo)
             }
-            console.log('email sent: ' + info.messageId + ', resp: ' + info.response);
+    
+            if(emailInfo.isTestMode) {
+                let fileName = 'EmailLogs.html';
+                let filePath = path.resolve(fileName);
+                console.log(`Log file path: ${filePath}`);
+                let contentToLog = '';
+                contentToLog += `From: ${mailOptions.from}\\n`;
+                contentToLog += `To: ${mailOptions.to}\\n`;
+                contentToLog += `Subject: ${mailOptions.subject}\\n`;
+                contentToLog += `\n\n${mailOptions.html}`;
+                contentToLog += `\n\n------------------End of message-------------------\n\n`;
+                fs.appendFileSync(filePath, contentToLog);
+            }
+            else {
+                transporter.sendMail(mailOptions, (error, info) => {
+                    if(error) {
+                        console.log('error occured in sending email');
+                        console.log(error);
+                        reject(error);
+                    }
+                    else {
+                        resolve();
+                        console.log('email sent: ' + info.messageId + ', resp: ' + info.response);
+                    }
+                })
+            }
         })
     }
 
@@ -94,6 +103,9 @@ class EmailHelper {
         if(emailInfo.notificationType === 'verify_user_email') {
             html = html.replace('$$user_name$$', emailInfo.user_name);
             html = html.replace('$$verification_link$$', emailInfo.verification_link);
+        }
+        if(emailInfo.notificationType === 'test_result_email') {
+            html = emailInfo.invokeReplaceFunction(html);
         }
         return html;
     }
@@ -120,6 +132,13 @@ class EmailHelper {
             case 'verify_user_email':
             {
                 let file = path.resolve(__dirname + '/EmailTemplates/VerifyUserTemplate.html');
+                console.log('template path', file); 
+                html = fs.readFileSync(file, {encoding: 'utf8'});
+                break;
+            }
+            case 'test_result_email':
+            {
+                let file = path.resolve(__dirname + '/EmailTemplates/TestResultTemplate.html');
                 console.log('template path', file); 
                 html = fs.readFileSync(file, {encoding: 'utf8'});
                 break;

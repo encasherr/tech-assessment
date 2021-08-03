@@ -11,14 +11,19 @@ import Paper from '@material-ui/core/Paper';
 
 import InviteList from '../InviteConsole/InviteList';
 import OpPublishTest from '../../OnlinePortal/Tests/OpPublishTest';
+import { GetCurrentUserRole } from '../../common/HelperFunctions';
 
 class TestConsoleCandidates extends Component {
 
     render = () => {
         let { candidates } = this.props;
+        let userRole = GetCurrentUserRole();
+
         return (
           <>
-            <OpPublishTest {...this.props} />
+            {userRole === 'teacher' &&
+              <OpPublishTest {...this.props} />
+            }
             <InviteList
                 {...this.props}
                 invitations={candidates}

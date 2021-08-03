@@ -7,7 +7,7 @@ import {
     HandlePromise,
     HandlePromiseWithParams
 } from '../commons/RoleDefinitions';
-import { VIEW_MCQS, VIEW_MCQS_BY_SKILL } from '../commons/RoleBasedQueries/McqQueries';
+import { VIEW_MCQS, VIEW_MCQS_BY_DESCRIPTION, VIEW_MCQS_BY_SKILL } from '../commons/RoleBasedQueries/McqQueries';
 
 
 class McqModel {
@@ -119,13 +119,76 @@ class McqModel {
                         if (!choice.key) {
                             choice.key = correctOptions[chIndex];
                         }
+                        if(choice.content && choice.content.indexOf('"')) {
+                            console.log('escaping double quotes from choice content');
+                            choice.content = choice.content.replace(/\"/g, '<doublequotes>');
+                        }
+                    })
+                }
+            }
+            if(entity.description && entity.description.indexOf('"') > -1) {
+                console.log('escaping double quotes');
+                entity.description = entity.description.replace(/\"/g, '<doublequotes>');
+            }
+            if (entity.choices && entity.choices.length > 0) {
+                entity.choices.map((choice, chIndex) => {
+                    console.log(`choice ${chIndex}: ${choice.content}`);
+                    console.log(`choice type ${typeof choice}`);
+                    if(choice.content && choice.content.indexOf('"') > -1) {
+                        console.log('escaping double quotes from choice content');
+                        choice.content = choice.content.replace(/\"/g, '<doublequotes>');
+                    }
+                })
+            }
+            let mcqEntity = {
+                mcq_meta: entity,
+                skill: entity.skill,
+                category: entity.category,
+                addedBy: entity.createdBy
+            }
+            //return;
+            //   db.insert(this.entityName, entity)
+            db.insertCustom(this.entityName, mcqEntity)
+                .then((insertId) => {
+                    resolve(insertId);
+                })
+                .catch((err) => {
+                    reject(err);
+                })
+
+        });
+    }
+
+    GetMcqByDescription = (userEntity, description) => {
+        let queryConfig = GetQueryConfig(VIEW_MCQS_BY_DESCRIPTION);
+        return HandlePromiseWithParams(db, queryConfig, { userEntity: userEntity, description: description });
+    }
+
+    AddAcademicMcq = (entity) => {
+        return new Promise((resolve, reject) => {
+            console.log('mcq insert called');
+            let correctOptions = ['A', 'B', 'C', 'D', 'E', 'F'];
+            if (entity.correctAnswer && correctOptions.indexOf(entity.correctAnswer) > -1) {
+                if (entity.choices && entity.choices.length > 0) {
+                    entity.choices.map((choice, chIndex) => {
+                        if (chIndex === correctOptions.indexOf(entity.correctAnswer)) {
+                            choice.isCorrect = true;
+                        }
+                        else {
+                            choice.isCorrect = false;
+                        }
+                        if (!choice.key) {
+                            choice.key = correctOptions[chIndex];
+                        }
                     })
                 }
             }
             let mcqEntity = {
                 mcq_meta: entity,
-                skill: entity.skill,
-                category: entity.category
+                grade: entity.grade,
+                subject: entity.subject,
+                category: entity.category,
+                addedBy: entity.createdBy
             }
 
             //   db.insert(this.entityName, entity)
@@ -171,6 +234,20 @@ class McqModel {
         })
     }
 
+    GetMcqById = (mcqId) => {
+        console.log('mcqentity', mcqId);
+        return new Promise((resolve, reject) => {
+            db.findOne(this.entityName, mcqId).then((mcqs) => {
+                if (mcqs && mcqs.length > 0) {
+                    console.log('mcqentity', mcqs[0]);
+                    resolve(mcqs[0]);
+                }
+            }).catch((err) => {
+                reject(err);
+            })
+        })
+    }
+
     Update = (entity) => {
         return new Promise((resolve, reject) => {
             // let mcqs = this.initializeCollection();
@@ -209,6 +286,16 @@ class McqModel {
         })
     }
 
+    DeleteById = (mcqId) => {
+        return new Promise((resolve, reject) => {
+            db.delete(this.entityName, mcqId).then((res) => {
+                resolve(res);
+            }).catch((err) => {
+                reject(err);
+            })
+        })
+    }
+
     Delete = (entity) => {
         return new Promise((resolve, reject) => {
             db.delete(this.entityName, entity.id)
@@ -218,19 +305,7 @@ class McqModel {
                 .catch((err) => {
                     reject(err);
                 })
-            //   let mcqToDelete = this.entities.chain().find({ '$loki': entity.$loki });
-            //   if(mcqToDelete) {
-            //       mcqToDelete.remove();
-            //         db.saveDatabase(() => {
-            //             this.EmailSnapshot('CategoryAdd');
-            //         });
-
-            //       resolve(true);
-            //   }
-            //   else {
-            //       console.log('nothing to delete');
-            //       reject("nothing to delete");
-            //   }
+          
         })
     }
 

@@ -27,3 +27,7 @@ export const GetCurrentUserName = () => {
     }
     return null;
 }
+export const EscapeSpecialCharacters = (stringContent) => {
+    if(!stringContent) return stringContent;
+    return stringContent.replace(/\<doublequotes>/g, '"');
+}

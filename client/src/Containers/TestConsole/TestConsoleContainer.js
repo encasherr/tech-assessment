@@ -53,6 +53,7 @@ class TestConsoleContainer extends React.Component {
     }
 
     onAddMcqToTest = (mcqItem) => {
+        console.log('adding mcq: ', mcqItem);
         let { current_test } = this.props;
         this.props.AddMcqToTest(mcqItem, this.props.current_test)
                 .then((res) => {

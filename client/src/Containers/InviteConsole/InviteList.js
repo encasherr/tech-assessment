@@ -30,7 +30,7 @@ import { getDateTime } from '../../Utils';
 
 const InviteList = (props) => {
     let { invitations } = props;
-    console.log('invitations', invitations);
+    // console.log('invitations', invitations);
     return (
         <div>
             {!invitations && <LoadingComponent />}

@@ -373,7 +373,7 @@ class Shell extends React.Component {
             );
         }
         
-        if(user && user.role === 'teacher') {
+        if(user && (user.role === 'teacher' || user.role === 'student')) {
           return (
             <div className={classes.root}>
                 <CssBaseline />

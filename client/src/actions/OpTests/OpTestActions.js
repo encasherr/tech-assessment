@@ -4,13 +4,31 @@ import { LogoutCurrentUser } from '../UserActions';
 import { FETCH_TESTS_SUCCESS, FETCH_TESTS_FAIL } from '../AdminTestActions';
 
 export const FetchPublicTests = () => dispatch => {
-    let url = config.instance.getAdminApiUrl() + 'getAllTests';
+    let url = config.instance.getAdminApiUrl() + 'testsAvailableForMe';
     repository.getData(url)
         .then((res) => {
             dispatch({
                 type: FETCH_TESTS_SUCCESS,
                 payload: res.data
             });
+        })
+        .catch((err) => {
+            if(err.data && err.data.message === 'Invalid token.') {
+                dispatch(LogoutCurrentUser());
+            }
+            else {
+                dispatch({
+                    type: FETCH_TESTS_FAIL,
+                    payload: err.statusText
+                });
+            }
+        });
+}
+
+export const RegisterForTest = () => dispatch => {
+    let url = config.instance.getAdminApiUrl() + 'testsAvailableForMe';
+    repository.getData(url)
+        .then((res) => {
         })
         .catch((err) => {
             if(err.data && err.data.message === 'Invalid token.') {
