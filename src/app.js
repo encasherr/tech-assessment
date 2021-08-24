@@ -9,6 +9,7 @@ import cors from 'cors';
 import p from './passport';
 import passport from 'passport';
 import { setConfig, createPrerequisitesDir } from "./utils/general";
+import CronScheduler from './commons/CronSheduler';
 
 let port_number = process.env.PORT || 3001;
 let app = express();
@@ -18,6 +19,7 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname)));
 
 app.use(passport.initialize());
+// app.use(CronScheduler);
 
 var corsOption = {
     origin: true,

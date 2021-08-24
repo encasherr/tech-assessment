@@ -43,6 +43,7 @@ class Evaluator {
                     responseEntity.response_meta.result = responseEntity.response_meta.scorePercentage >= passingPercentage ?
                                                                 'CLEARED' :
                                                                 'FAILED';
+                    responseEntity.evaluation_status = 'COMPLETED';
         
                 }
                 

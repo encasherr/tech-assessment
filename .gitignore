@@ -24,7 +24,7 @@ yarn-debug.log*
 yarn-error.log*
 data/dev.json
 data/dev.json
-wwwroot/*.*
+wwwroot/
 
 src/node_modules
 tools/adminarea/node_modules/

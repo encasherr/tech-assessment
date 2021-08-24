@@ -2,6 +2,7 @@
 import db from '../db/mysqldb';
 import users from '../users';
 import queries from '../db/queries';
+import { getCurrentDateTime } from '../commons/HelperFunctions';
 
 class McqResponseModel {
     entityName = 'mcqresponses';
@@ -40,13 +41,24 @@ class McqResponseModel {
         return new Promise((resolve, reject) => {
             let sql = queries.getMcqResponseByInvitationId(invitationId);
             db.executeQuery(sql).then((res) => {
-                console.log(`mcqresp: ${this.entityName} - ${res}`);
                 let data = db.serializeToJson(res, this.entityName);
                 resolve(data[0]);
             }).catch((err) => {
                 reject(err);
             })
         })
+    }
+
+    GetMcqResponsesPendingForEvaluation = () => {
+        return new Promise((resolve, reject) => {
+            let sql = queries.getMcqResponsesPendingForEvaluation();
+            db.executeQuery(sql).then((res) => {
+                let data = db.serializeToJson(res, this.entityName);
+                resolve(data);
+            }).catch((err) => {
+                reject(err);
+            })
+        }) 
     }
 
     SerializeToJson = (data, entityName) => {
@@ -83,11 +95,20 @@ class McqResponseModel {
     }
 
     Update = (entity) => {
-        entity.modifiedOn = (new Date()).toLocaleDateString();
+        entity.response_meta.modifiedOn = getCurrentDateTime();
+        // return new Promise((resolve, reject) => {
+        //     db.update(this.entityName, entity.response_meta, entity.id).then((res) => {
+        //         resolve(res);
+        //     });
+        // });
         return new Promise((resolve, reject) => {
-            db.update(this.entityName, entity.response_meta, entity.id).then((res) => {
-                resolve(res);
-            });
+            db.updateCustom(this.entityName, entity, entity.id)
+                .then((res) => {
+                    resolve(res);
+                })
+                .catch((error) => {
+                    reject(error);
+                });
         });
     }
 

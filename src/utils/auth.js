@@ -36,7 +36,7 @@ const resources = [
     },
     { 
         resource: '/candidate/sendInvite',
-        allowedRoles: [ 'admin', 'recruiter', 'teacher' ] 
+        allowedRoles: [ 'admin', 'recruiter', 'teacher', 'orgadmin' ] 
     },
     { 
         resource: '/admin/getAllTests',

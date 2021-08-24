@@ -5,6 +5,7 @@ import queries from '../db/queries';
 import { GetQueryConfig, 
     HandlePromise } from '../commons/RoleDefinitions';
 import { VIEW_INVITATIONS } from '../commons/RoleBasedQueries/InvitationQueries';
+import Constants from '../commons/Constants';
 
 class InvitationModel {
     entityName = 'invitations';
@@ -74,7 +75,7 @@ class InvitationModel {
     }
 
     Add = (entity) => {
-        entity.status = "INITIATED";
+        entity.status = Constants.InvitationTestStatus.Started;
         entity.invitedOn = (new Date()).toLocaleDateString();
         return new Promise((resolve, reject) => {
             db.insert(this.entityName, entity)

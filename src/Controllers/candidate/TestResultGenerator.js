@@ -84,7 +84,7 @@ const generateAndSendResultsForInvitationId = async (user, invitationId, isTestM
                 correctChoices.forEach((item) => {
                     responseDetailsHtml += item + '<br>';
                 })
-                responseDetailsHtml += `<p ${responseItem.isCorrect ? 'style="color:#0f0;">' : 'style="color:#f00;">'}Candidate Response</p>` 
+                responseDetailsHtml += `<p ${responseItem.isCorrect ? 'style="color:#61A910;">' : 'style="color:#BB5642;">'}Candidate Response</p>` 
                 candidateResponses.forEach((item) => {
                     responseDetailsHtml += item + '<br>';
                 })

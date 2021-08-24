@@ -128,3 +128,65 @@ TODO:
 /* Revenue generating features */
 A. Increase website audience to an extent that businesses like Employers, Schools, Coaching institutes find the website useful
 enough to find candidates there
+
+
+/* Hosting Contest - workflow */
+Concerned team shares website link in public
+Interested people visit the site - consider P1 as one of them
+P1 visits the site home page
+P1 finds a list of upcoming challenges
+Challenges can be referred as Tests or Exams also.
+Each challenge is sponsored by one or more recruiters.
+Based on the outcome of response evaluaton of all candidates, a top 10 list of candidates will be 
+shortlisted and their profiles and responses will be shared with the recruiters.
+The candidate would make to top 10 only if he has obtained minimum passing marks.
+
+Each recruiter can pick up at least 3 candidates to select for next round.
+Next round can be any of the below exercises (depends on recruiter which of these they want):
+- Coding Exercise
+- Video Interview - Virtual interview where candidate's video is recorded and he is asked questions
+by the virtual bot. For each question, bot will wait for candidate to start talking and will ask next 
+question only when candidate is done talking. Bot will allow max one minute for candidate to start talking 
+after the question is asked.
+The whole video conversation will be saved for future reference, to evaluate the candidate's performance.
+The video interview questions can be selected by recruiter from a question bank of the list of skills expected from 
+the candidate.
+
+Each challenge will have following details displayed: an example challenge below
+
+Title: Oracle PL/SQL Developer challenge
+Skills Required: Oracle PL/SQL
+Desired Experience: 3 - 6 years
+Duration: 30 minutes
+Questions: 30
+Starts At: 10-Aug-2021 11 AM IST
+Requires Video Camera On: Yes
+Action buttons:
+Register - 
+ If P1 is already signed up on website, his user id will be registered for the test else it opens signup popup
+ Visible for logged in / not logged in users
+ Not visible to already registered users
+Start Test - 
+ Opens Exam Simulator in new tab
+ Visible to only users registered for the test
+ Visible only at Start time, till then it shows "You are registered for this test"
+ 
+
+Testing Strategy:
+Create 5 candidate user accounts.
+Create 5 tests each of different skills. Each skill should have its own question bank.
+Each test should be of 30-40 MCQs. The question bank should contain at least 50 questions and each test can contain
+only 30 of the questions from question bank. When the candidate appears for test, he would get the questions in 
+a random order and the order may be saved for future reference.
+When user signs up to the website, he/she is asked for only below details:
+Full name, Email, password
+Once signed up, he/she can enroll for as many tests as they like.
+Once enrolled for a test, exam can be started at the exam time only.
+If the exam requires video camera to be on, user cannot proceed by denying camera permissions. 
+The video recording is saved and should be available for future reference by recruiter.
+Once submitted the test response, user will see a Thank you page mentioning that they will soon receive an email 
+from the recruiter.
+
+https://gototraining.webex.com/gototraining/k2/j.php?mtid=tb939a59639fd22f2ff200d7b30122f01
+
+http://devnull.crankuptheamps.com/training-connect/vnc.html?host=15.206.178.78&port=6080&encrypt=0&scaling=remote
