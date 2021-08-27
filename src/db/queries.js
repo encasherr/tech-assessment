@@ -1,3 +1,4 @@
+import Constants from "../commons/Constants";
 import { admin } from "../commons/RoleDefinitions";
 
 const queries =  {
@@ -233,6 +234,20 @@ const queries =  {
             JOIN ta_invitations i on r.invitationId = i.id
             WHERE r.id = ${responseId}
         `;
+    },
+
+    getMcqResponsesPendingForEvaluation: () => {
+        return `
+                SELECT  r.id,
+                        r.invitationId as invitationId,
+                        r.response_meta,
+                        i.invitation_meta
+                FROM ta_mcqresponses r
+                JOIN ta_invitations i on r.invitationId = i.id
+                WHERE JSON_EXTRACT(i.invitation_meta, '$.status') = '${Constants.InvitationTestStatus.Completed}'
+                AND r.evaluation_status = 'PENDING'
+                AND r.invitationId = 175
+            `;
     },
 
     getAllDbConfig: () => {

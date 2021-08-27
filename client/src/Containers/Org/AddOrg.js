@@ -59,6 +59,17 @@ const AddOrgComponent = (props) => {
                         />
                     </FormControl>
                     <br></br>
+                    <FormControl variant="outlined" style={styles.formControl}>
+                        <TextField
+                            id="outlined-email"
+                            label="Org Admin Email"
+                            value={model.org_meta ? model.org_meta.emailId : ''}
+                            onChange={(e) => props.onFieldChange(e.target.value, 'emailId', props.model)}
+                            margin="normal"
+                            variant="outlined"
+                        />
+                    </FormControl>
+                    <br></br>
                     <br></br>
                 </CardContent>
                 <CardActions style={styles.actionButton}>

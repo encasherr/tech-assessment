@@ -38,8 +38,8 @@ const OrgList = (props) => {
                                 button={true} onClick={ () => props.onOrgSelect(org) }
                             >
                             <ListItemText
-                                primary={item.name}
-                                secondary={item.city}
+                                primary={`${item.name} (${item.city})`}
+                                secondary={item.emailId}
                                 />
                             </ListItem>)
                         })}

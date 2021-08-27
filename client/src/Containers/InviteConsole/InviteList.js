@@ -96,8 +96,9 @@ const InviteList = (props) => {
                                         !invitation.result &&
                                         (invitation.invitationStatus &&
                                             invitation.invitationStatus.indexOf("COMPLETED") > -1) &&
-                                        <Button color="primary" size="small" variant="contained"
-                                            onClick={() => props.evaluateResults(invitation.responseId)} >Evaluate</Button>
+                                            'Evaluation Pending'
+                                        // <Button color="primary" size="small" variant="contained"
+                                        //     onClick={() => props.evaluateResults(invitation.responseId)} >Evaluate</Button>
                                     }
                                 </CustomTableCell>
                                 {/* <CustomTableCell align="center" scope="row" component="th">

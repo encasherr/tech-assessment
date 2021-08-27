@@ -38,6 +38,15 @@ export const CurrentOrgFieldChange = (val, field, model) => dispatch => {
             });
             break;
         }
+        case 'emailId':
+        {
+            model.org_meta.emailId = val;
+            dispatch({
+                type: CURRENT_ORG_FIELD_CHANGE,
+                payload: model
+            });
+            break;
+        }
         default:
         {
             break;

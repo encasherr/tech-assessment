@@ -105,6 +105,49 @@ const db = {
             })
         })
     },
+    updateCustom: (entityName, entity, id) => {
+        return new Promise((resolve, reject) => {
+            let fieldValueString = '';
+            Object.keys(entity).forEach((prop, index) => {
+                if(index === Object.keys(entity).length-1) {
+                    fieldValueString += `${prop} = `;
+                    let fieldVal = entity[prop];
+                    if(typeof fieldVal === 'string') {
+                        fieldValueString += `'${fieldVal}'`;
+                    }
+                    else if(typeof fieldVal === 'object') {
+                        fieldValueString += `'${JSON.stringify(fieldVal)}'`;
+                    }
+                    else {
+                        fieldValueString += `${fieldVal}`;
+                    }
+                }
+                else {
+                    fieldValueString += `${prop} = `;
+                    let fieldVal = entity[prop];
+                    if(typeof fieldVal === 'string') {
+                        fieldValueString += `'${fieldVal}'`;
+                    }
+                    else if(typeof fieldVal === 'object') {
+                        fieldValueString += `'${JSON.stringify(fieldVal)}'`;
+                    }
+                    else {
+                        fieldValueString += `${fieldVal}`;
+                    }
+                    fieldValueString += ',';
+                }
+            })
+            let sql = `update ta_${entityName} set ${fieldValueString} where id = ${id}`;
+            executeQuery(sql).then((res) => {
+                console.log(`${entityName} updated, Id: ${id}`); 
+                resolve();
+            })
+            .catch((error) => {
+                console.log(`Error while updating ${entityName}, Id: ${id}`, error); 
+                reject(error);
+            });
+        })
+    },
     delete: (entityName, id) => {
         return new Promise((resolve, reject) => {
             let sql = `delete from ta_${entityName} where id=${id};`;
