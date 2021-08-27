@@ -4,7 +4,7 @@ import UserModel from '../Models/UserModel';
 import mcqResponseRepo from '../Controllers/candidate/McqResponseRepo';
 import testResultGenerator from '../Controllers/candidate/TestResultGenerator';
 
-cron.schedule('0 */30 * * *', () => { EvaluateNewSubmissions() });
+//cron.schedule('0 */30 * * *', () => { EvaluateNewSubmissions() });
 
 const EvaluateNewSubmissions = async () => {
     console.log('Started scheduled activity of evaluating new submissions', new Date());

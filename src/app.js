@@ -9,7 +9,7 @@ import cors from 'cors';
 import p from './passport';
 import passport from 'passport';
 import { setConfig, createPrerequisitesDir } from "./utils/general";
-import CronScheduler from './commons/CronSheduler';
+// import CronScheduler from './commons/CronSheduler';
 
 let port_number = process.env.PORT || 3001;
 let app = express();
