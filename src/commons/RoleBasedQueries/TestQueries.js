@@ -6,6 +6,7 @@ export const VIEW_TESTS = 'VIEW_TESTS';
 export const VIEW_MY_TESTS = 'VIEW_MY_TESTS'; 
 export const VIEW_TESTS_BY_ID = 'VIEW_TESTS_BY_ID';
 export const VIEW_TESTS_AVAILABLE_FOR_ME = 'VIEW_TESTS_AVAILABLE_FOR_ME';
+export const VIEW_TESTS_FOR_GRADE = 'VIEW_TESTS_FOR_GRADE';
 
 export const VIEW_TESTS_QUERY = {
     key: VIEW_TESTS,
@@ -236,6 +237,50 @@ export const VIEW_TEST_BY_ID_QUERY = {
                 })
             }
             return outputArray[0];
+        }
+    }
+}
+
+export const VIEW_TESTS_FOR_GRADE_QUERY = {
+    key: VIEW_TESTS_FOR_GRADE,
+    value: {
+        getSql: (params) => {
+            let { userEntity, grade } = params;
+            switch(userEntity.role) {
+                case admin:
+                case staff:
+                case teacher:
+                case candidate:
+                case student:
+                case orgadmin: {
+                    return `SELECT 
+                        JSON_EXTRACT(t.test_meta, '$') as 'test_meta',
+                        t.id as 'id',
+                        FROM ta_tests t
+                        WHERE t.grade = ${grade}
+                    `;                                
+                }
+                default: handleRoleNotFound(userEntity.role);
+            }
+        },
+        serializeToJson: (data) => {
+            let outputArray = [];
+            console.log('data count', data.length);
+            if(data && data.length > 0) {
+                data.map((item, index) => {
+
+                    let test_meta = item['test_meta'];
+                    test_meta = test_meta.replace(/\n/g, "\\n");
+                    test_meta = test_meta.replace(/\r/g, "\\r");
+                    test_meta = test_meta.replace(/\t/g, "\\t");
+                    let output = {};
+                    output.id = item.id;
+                    output['test_meta'] = JSON.parse(test_meta);
+                    output['user_meta'] = JSON.parse(item['user_meta']);
+                    outputArray.push(output);
+                })
+            }
+            return outputArray;
         }
     }
 }

@@ -5,7 +5,7 @@ import { GetQueryConfig,
     HandlePromise, 
     HandlePromiseWithParams} from '../commons/RoleDefinitions';
 import { VIEW_TESTS, VIEW_MY_TESTS, VIEW_TESTS_BY_ID,
-    VIEW_TESTS_AVAILABLE_FOR_ME } from '../commons/RoleBasedQueries/TestQueries';
+    VIEW_TESTS_AVAILABLE_FOR_ME, VIEW_TESTS_FOR_GRADE } from '../commons/RoleBasedQueries/TestQueries';
 
 class TestModel {
     entityName = 'tests';
@@ -23,6 +23,11 @@ class TestModel {
     
     GetTestsAvailableForMe = (userEntity, grade) => {
         let queryConfig = GetQueryConfig(VIEW_TESTS_AVAILABLE_FOR_ME);
+        return HandlePromiseWithParams(db, queryConfig, { userEntity, grade });
+    }
+    
+    GetTestsForGrade = (userEntity, grade) => {
+        let queryConfig = GetQueryConfig(VIEW_TESTS_FOR_GRADE);
         return HandlePromiseWithParams(db, queryConfig, { userEntity, grade });
     }
     

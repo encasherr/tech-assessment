@@ -36,8 +36,7 @@ class InviteContainer extends React.Component {
     }
     
     onSendInvite = () => {
-        let { current_test, inviteInfo } = this.props;
-        // console.log('after send invite current_test', current_test);
+        /*let { current_test, inviteInfo } = this.props;
         
         let model = {
             testId: current_test.id,
@@ -50,7 +49,20 @@ class InviteContainer extends React.Component {
                     }
                 }
             ]
+        }*/
+
+
+        let { current_test, inviteInfo } = this.props;
+        let model = {
+            testId: current_test.id,
+            invitees: []
         }
+        let invitee = {
+            emailId: inviteInfo.emailTo,
+            name: inviteInfo.name
+        }
+        model.invitees.push(invitee);
+        
         // this.props.SendInvite(current_test, inviteInfo).then((res) => {
         this.props.SendInvite(model).then((res) => {
             this.setState({

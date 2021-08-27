@@ -265,16 +265,58 @@ const queries =  {
         `;
     },
 
-    getAllRegistrationsQuery: () => {
-        return `
-        
-        `;
+    getAllRegistrationsQuery: (filter) => {
+        let sql = `SELECT *
+            FROM ta_test_registrations tr JOIN ta_tests ts ON tr.test_id = ts.id 
+            `; 
+            if(filter) {
+                sql += ` WHERE ${filter}`;
+            }
+            return sql;
     },
 
-    getAllRegistrationsQuery: (orgId) => {
-        return `
-        
-        `;
+    getAllRegistrationsForCandidateIdQuery: (candidateId, filter) => {
+        let sql = `SELECT *
+            FROM ta_test_registrations tr JOIN ta_tests ts ON tr.test_id = ts.id 
+            WHERE candidate_id = ${candidateId}
+            `; 
+            if(filter) {
+                sql += ` AND ${filter}`;
+            }
+            return sql;
+    },
+
+    getAllRegistrationsForTestIdQuery: (testId, filter) => {
+        let sql = `SELECT *
+            FROM ta_test_registrations tr JOIN ta_tests ts ON tr.test_id = ts.id 
+            WHERE test_id = ${testId}
+            `; 
+            if(filter) {
+                sql += ` AND ${filter}`;
+            }
+            return sql;
+    },
+
+    getAllRegistrationsForAuthorQuery: (userId, filter) => {
+        let sql = `SELECT *
+            FROM ta_test_registrations tr JOIN ta_tests ts ON tr.test_id = ts.id 
+            WHERE JSON_EXTRACT(ts.test_meta, '$.createdBy') = ${userId}
+            `; 
+            if(filter) {
+                sql += ` AND ${filter}`;
+            }
+            return sql;
+    },
+
+    getAllTestsForGrade: (grade, filter) => {
+        let sql = `SELECT *
+            FROM ta_tests
+            WHERE grade = '${grade}'
+            `; 
+            if(filter) {
+                sql += ` AND ${filter}`;
+            }
+            return sql;
     }
 }
 export default queries;

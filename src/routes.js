@@ -2,7 +2,7 @@ import express  from 'express';
 import { McqController, CategoryController, SkillController,
         CandidateController, AdminTestController, InviteController,
         UserController, GradeController } from './Controllers/admin';
-import { TestInviteController } from './Controllers/candidate';
+import { TestInviteController, TestRegistrationController } from './Controllers/candidate';
 
 import { RmaRequestController } from './Controllers/hitech';
 
@@ -112,7 +112,9 @@ api.get('/candidate/getRecording', MediaController.GetRecording);
 api.post('/teacher/user', UserController.AddNewUserToBeVerified)
 api.get('/teacher/verifyUser', UserController.VerifyUser);
 api.get('/admin/testsAvailableForMe', auth, AdminTestController.GetTestsAvailableForMe);
-// api.get('/teacher/pubslisAndSendInvites', AdminTestController.PubslisAndSendInvites);
+api.get('/candidate/getAllRegistrations', auth, TestRegistrationController.GetAllRegistrations);
+api.get('/candidate/registerForTest', auth, TestRegistrationController.RegisterForTest);
+
 
 /* Candidate Response Endpoints */
 api.get('/admin/getCandidateResponseReport', auth, CandidateResponseController.GetCandidateResponse);
@@ -126,7 +128,7 @@ api.post('/candidate/sendInvite', auth, TestInviteController.SendInvite);
 api.post('/candidate/startTest', auth, TestInviteController.StartTest);
 api.post('/candidate/submitAnswers', auth, TestInviteController.SubmitAnswers);
 api.post('/candidate/evaluateAnswers', auth, TestInviteController.EvaluateAnswers);
-api.post('/candidate/registerForTest', auth, TestInviteController.RegisterForTest);
+// api.post('/candidate/registerForTest', auth, TestInviteController.RegisterForTest);
 
 api.get('/admin/dashboard/test/count', auth, DashboardController.GetTestCount);
 api.get('/admin/dashboard/mcq/count', auth, DashboardController.GetMcqCount);
