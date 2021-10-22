@@ -41,6 +41,8 @@ import OpShell from '../OnlinePortal/Home';
 import OpTestContainer from '../OnlinePortal/Tests/OpTestContainer';
 import OpTestConsole from '../OnlinePortal/Tests/OpTestConsole';
 import GradeContainer from '../Containers/GradeContainer';
+import TestsTakenContainer from '../Containers/TestsTaken/TestsTakenContainer';
+import OpProfileContainer from '../OnlinePortal/Profile/OpProfileContainer';
 
 const Routes = (props) => {
     return (
@@ -69,17 +71,21 @@ const Routes = (props) => {
             {/* <Route path="/addCandidate" component={CandidatesContainer} /> */}
 
             <Route path="/startTest/:inviteid" component={SimulatorConsoleContainer} />
+            <Route path="/startRegisteredTest/:registrationId" component={SimulatorConsoleContainer} />
             <Route path="/testLanding/:inviteid" component={TestLandingPage} />
             <Route path="/simulatorShell/:inviteid" component={SimulatorShell} />
 
             {/* Routes for OP */}
             
-            <Route path="/emailVerified" component={OpEmailVerifiedSuccess} />
+            {/* <Route path="/emailVerified" component={OpEmailVerifiedSuccess} /> */}
+            <Route path="/verifyUser/:userIv/:userContent" component={OpEmailVerifiedSuccess} />
             <PrivateRoute path="/opContent" component={OpContent} />
-            <PrivateRoute path="/ophome" component={DashboardComponent} />
+            <PrivateRoute path="/ophome" component={TestsTakenContainer} />
             <PrivateRoute path="/optests" component={OpTestContainer} />
             <PrivateRoute path="/opTestConsole" component={OpTestConsole} />
             <PrivateRoute path="/grades" component={GradeContainer} />
+            <PrivateRoute path="/myTests" component={TestsTakenContainer} />
+            <PrivateRoute path="/myProfile" component={OpProfileContainer} />
 
 
             {/* Routes for HiTech*/}

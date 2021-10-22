@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "quickstart": "node app",
     "build": "babel src -s -D -d wwwroot --presets es2015,stage-0",
     "uibuild": "cd client && npm run build",
     "wincopy": "xcopy \"/client/build/\" \"../wwwroot/\" /s",
@@ -16,6 +17,7 @@
   "author": "Alok Jha",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
     "crypto-js": "^4.0.0",

@@ -4,26 +4,65 @@ import { Book, Assessment, ViewQuilt, PermIdentity, Polymer, Airplay,
 import LoadingComponent from '../components/lib/LoadingComponent';
 import { getDateTime, sortDescending } from '../Utils';
 import { Link as InternalLink } from 'react-router-dom';
+import AuthHelper from "../AuthHelper";
 
-const TeacherDashboard = (props) => {
+class TeacherDashboard extends Component {
 
-    return (
-        <div className="container">
-           <div className="">
-                <StatisticsPanel {...props}/>
-           </div>
-           <div className="mt-4">
-             <div className="row">
-                <div className="col-md-6" style={styles.dashboardPanel}>
-                    <RecentResponses {...props} />
+    componentDidMount = () => {
+        AuthHelper.SetHistory(this.props.history);
+        this.props.fetchTestCount();
+        this.props.fetchMcqCount();
+        this.props.fetchInvitationCount();
+        this.props.fetchRecentResponses();
+    }
+
+    render = () => {
+        let { classes, testCount, mcqCount, invitationCount, 
+            recentResponses } = this.props;
+            let totalCompletedCount = 0;
+            console.log('props-ds', this.props);
+            
+            let completedTests = []; 
+            let pendingTests = [];
+            if(recentResponses && recentResponses.length) {
+                recentResponses.forEach((invitation, index) => {
+                    if(invitation.invitationStatus !== 'COMPLETED') {
+                        pendingTests.push(invitation);
+                    }
+                    else {
+                        completedTests.push(invitation);
+                    }
+                })
+                
+                if(completedTests) {
+                    totalCompletedCount = completedTests.length;
+                    // completedTests = completedTests.sort().slice(0, 5);
+                    completedTests = sortDescending(completedTests, 'completedOn');
+                    completedTests = completedTests.slice(0, 5);
+                }
+                if(pendingTests) {
+                    pendingTests = sortDescending(pendingTests, 'invitedOn');
+                    pendingTests = pendingTests.sort().slice(0, 5);
+                }
+            }
+        return (
+            <div className="container">
+            <div className="">
+                    <StatisticsPanel {...this.props}/>
+            </div>
+            <div className="mt-4">
+                <div className="row">
+                    <div className="col-md-6" style={styles.dashboardPanel}>
+                        <RecentResponses {...this.props} />
+                    </div>
+                    <div className="col-md-6" style={styles.dashboardPanel}>
+                        <PendingInvitations {...this.props} />
+                    </div>
                 </div>
-                <div className="col-md-6" style={styles.dashboardPanel}>
-                    <PendingInvitations {...props} />
-                </div>
-             </div>
-           </div>
-        </div>
-    )
+            </div>
+            </div>
+            )
+    }
 }
 
 const StatisticsPanel = (props) => {

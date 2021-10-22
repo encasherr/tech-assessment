@@ -57,7 +57,7 @@ const mapStateToProps = state => ({
     ...state.candidateConsoleReducer
 });
 const mapDispatchToProps = dispatch => ({
-    FetchCandidateResponseReport: (responseId) => dispatch(FetchCandidateResponseReport(responseId)),
+    FetchCandidateResponseReport: (responseId, candidateId) => dispatch(FetchCandidateResponseReport(responseId, candidateId)),
     FetchCandidateDetails: (candidateId) => dispatch(FetchCandidateDetails(candidateId)),
     FetchRecordings: (responseId) => dispatch(FetchRecordings(responseId))
     // FetchOrgs: () => dispatch(FetchOrgs()),

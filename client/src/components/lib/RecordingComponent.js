@@ -35,6 +35,10 @@ class RecordingComponent extends React.Component {
     }
 
     onStartRecording = (lengthInMS, responseId) => {
+        if(!navigator.mediaDevices) {
+            console.log('media disabled');
+            return;            
+        }
         navigator.mediaDevices.getUserMedia({
             video: true,
             audio: false

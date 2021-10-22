@@ -35,12 +35,27 @@ class TestModel {
         let queryConfig = GetQueryConfig(VIEW_TESTS_BY_ID);
         return HandlePromise(db, queryConfig, { userEntity: userEntity, testId: testId });
     }
+    
+    DeleteTestById = (testId) => {
+        return new Promise((resolve, reject) => {
+            db.delete(this.entityName, testId)
+               .then((res) => {
+                   resolve();
+               })
+               .catch((error) => {
+                   reject(error);
+               })
+        });
+    }
 
     GetTest = (testId) => {
         return new Promise((resolve, reject) => {
             db.findOne(this.entityName, testId)
             .then((res) => {
                 resolve(res);
+            })
+            .catch((err) => {
+                reject(err);
             });
         })
     }
@@ -93,6 +108,17 @@ class TestModel {
         });
     }
 
+    GetStudentsByTestId = (testId) => {
+        return new Promise((resolve, reject) => {
+            let sql = queries.getStudentsByTestId(testId);
+            db.executeQuery(sql).then((res) => {
+                resolve(this.mapCandidatesResult(res));
+            }).catch((err) => {
+                reject(err);
+            });
+        });
+    }
+
     mapCandidatesResult = (data) => {
             let outputArray = [];
             console.log('data count', data.length);
@@ -122,12 +148,65 @@ class TestModel {
             return outputArray;
     }
 
+    mapStudentsResult = (data) => {
+        let outputArray = [];
+        console.log('data count', data.length);
+        if(data && data.length > 0) {
+            data.map((item, index) => {
+                let output = {};
+                Object.keys(item).map((prop) => {
+                    if(prop === 'response_meta') {
+                        let metaObj = item[prop];
+                        if(metaObj) {
+                            metaObj = metaObj.replace(/\n/g, "\\n");
+                            metaObj = metaObj.replace(/\r/g, "\\r");
+                            metaObj = metaObj.replace(/\t/g, "\\t"); 
+                            let mObj = JSON.parse(metaObj);
+                            Object.keys(mObj).forEach((metaProp) => {
+                                output[metaProp] = mObj[metaProp];
+                            })
+                        }
+                    }
+                    if(prop === 'evaluation_meta') {
+                        let metaObj = item[prop];
+                        if(metaObj) {
+                            metaObj = metaObj.replace(/\n/g, "\\n");
+                            metaObj = metaObj.replace(/\r/g, "\\r");
+                            metaObj = metaObj.replace(/\t/g, "\\t"); 
+                            let mObj = JSON.parse(metaObj);
+                            Object.keys(mObj).forEach((metaProp) => {
+                                output[metaProp] = mObj[metaProp];
+                            })
+                        }
+                    }
+                    else {
+                        output[prop] = item[prop];
+                    }
+                })
+                outputArray.push(output);
+            })
+        }
+        return outputArray;
+    }
+
     Add = (entity) => {
         entity.status = "DRAFT";
         entity.addedOn = (new Date()).toLocaleDateString();
         return new Promise((resolve, reject) => {
             db.insert(this.entityName, entity);
             resolve(true);
+        });
+    }
+    
+    AddCustom = (entity) => {
+        return new Promise((resolve, reject) => {
+            db.insertCustom(this.entityName, entity)
+               .then((insertId) => {
+                   resolve(insertId);
+               })
+               .catch((error) => {
+                   reject(error);
+               })
         });
     }
 

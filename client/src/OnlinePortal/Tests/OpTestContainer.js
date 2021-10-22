@@ -57,6 +57,10 @@ class OpTestContainer extends React.Component {
         model.test_meta.settings = {
             testVisibility: config.instance.TestVisibility.Public
         }
+        model.category = 'Academic';
+        model.grade = model.test_meta.grade;
+        model.subject = model.test_meta.subject;
+        
         this.props.AddTest(model, this.props.editMode, this.props.history)
                 .then((res) => {
                     this.showMyTests();  

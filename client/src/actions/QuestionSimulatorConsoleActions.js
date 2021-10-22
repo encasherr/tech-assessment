@@ -90,6 +90,31 @@ export const LoadExamSimulator = (invitationId) => dispatch => {
             })
 }
 
+export const LoadRegisteredExamSimulator = (registrationId) => dispatch => {
+    let userInfo = AuthHelper.GetUserInfo();
+    let url = config.instance.getCandidateApiUrl() + 'startRegisteredTest';
+    let model = {
+        registrationId: registrationId
+    };
+    repository.saveData(url, model)
+            .then((res) => {
+                console.log('loadregisteredexamsimulator', res);
+                if(res && res.data && res.data.message) {
+                    dispatch({
+                        type: SUBMIT_ANSWERS_SUCCESS,
+                        payload: res.data
+                    });
+                    AuthHelper.LogOut();
+                }
+                else {
+                    dispatch({
+                        type: LOAD_EXAM_SIMULATOR_SUCCESS,
+                        payload: res.data
+                    });
+                }
+            })
+}
+
 export const GoToPrevious = (currentQuestion, mcqList) => dispatch => {
     if(mcqList && mcqList.length > 1){
         let questionOrderIndex = currentQuestion.questionOrderIndex;
@@ -120,6 +145,21 @@ export const GoToNext = (currentQuestion, mcqList) => dispatch => {
 
 export const SubmitAnswers = (candidateTestObject) => dispatch => {
     let url = config.instance.getCandidateApiUrl() + 'submitAnswers';
+    
+    repository.saveData(url, candidateTestObject)
+            .then((res) => {
+                dispatch({
+                    type: SUBMIT_ANSWERS_SUCCESS,
+                    payload: res.data
+                });
+            })
+            .then(() => {
+                AuthHelper.LogOut();
+            });
+}
+
+export const SubmitRegisteredTestAnswers = (candidateTestObject) => dispatch => {
+    let url = config.instance.getCandidateApiUrl() + 'submitRegisteredTest';
     
     repository.saveData(url, candidateTestObject)
             .then((res) => {

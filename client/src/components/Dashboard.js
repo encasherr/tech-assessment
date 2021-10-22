@@ -35,6 +35,7 @@ import { getDateTime, sortDescending } from '../Utils';
 import { GetCurrentUserRole } from '../common/HelperFunctions';
 import TeacherDashboard from './TeacherDashboard';
 import StudentDashboard from './StudentDashboard';
+import OrgAdminDashboard from './OrgAdminDashboard';
 
 const theme = {
     spacing: 4,
@@ -45,26 +46,29 @@ const theme = {
 class Dashboard extends Component {
     componentDidMount = () => {
         AuthHelper.SetHistory(this.props.history);
-        this.props.FetchTestCount();
-        this.props.FetchMcqCount();
-        this.props.FetchInvitationCount();
-        this.props.FetchRecentResponses();
+        // this.props.FetchTestCount();
+        // this.props.FetchMcqCount();
+        // this.props.FetchInvitationCount();
+        // this.props.FetchRecentResponses();
         if(GetCurrentUserRole() === 'student') {
             this.props.FetchPublicTests();
         }
     }
     
-    registerForTest = (testId) => {
-        this.props.RegisterForTest(testId)
+    registerForTest = (model) => {
+        this.props.RegisterForTest(model)
             .then(() => {
                 this.props.FetchPublicTests();
             });
     }
     
+    startRegisteredTest = (registrationId) => {
+        this.props.history.push('/startRegisteredTest/' + registrationId);
+    }
+    
     render = () => {
         let { classes, testCount, mcqCount, invitationCount, 
-            recentResponses,
-            tests } = this.props;
+            recentResponses } = this.props;
         classes = classes || {};
         let totalCompletedCount = 0;
         console.log('props-ds', this.props);
@@ -96,6 +100,27 @@ class Dashboard extends Component {
         if(GetCurrentUserRole() === 'teacher') {
             return (
                 <TeacherDashboard 
+                fetchInvitationCount={() => this.props.FetchInvitationCount()}
+                fetchMcqCount={() => this.props.FetchMcqCount()}
+                fetchTestCount={() => this.props.FetchTestCount()}
+                fetchRecentResponses={() => this.props.FetchRecentResponses()}
+                testCount={testCount}
+                mcqCount={mcqCount}
+                invitationCount={invitationCount}
+                totalCompletedCount={totalCompletedCount}
+                completedTests={completedTests}
+                pendingTests={pendingTests}
+                />
+            )
+        }
+
+        if(GetCurrentUserRole() === 'orgadmin') {
+            return (
+                <OrgAdminDashboard 
+                fetchInvitationCount={() => this.props.FetchInvitationCount()}
+                fetchMcqCount={() => this.props.FetchMcqCount()}
+                fetchTestCount={() => this.props.FetchTestCount()}
+                fetchRecentResponses={() => this.props.FetchRecentResponses()}
                 testCount={testCount}
                 mcqCount={mcqCount}
                 invitationCount={invitationCount}
@@ -107,11 +132,13 @@ class Dashboard extends Component {
         }
 
         if(GetCurrentUserRole() === 'student') {
-            console.log('student available tests: ', tests);
-            return (
-                <StudentDashboard
-                    tests={tests}
-                />
+            //console.log('student available tests: ', tests);
+            return (<div></div>
+                // <StudentDashboard
+                //     tests={tests}
+                //     registerForTest={(testId) => this.registerForTest(testId)}
+                //     startRegisteredTest={(registrationId) => this.startRegisteredTest(registrationId)}
+                // />
             )
         }
 
@@ -373,7 +400,8 @@ const mapDispatchToProps = dispatch => ({
     FetchMcqCount: () => dispatch(FetchMcqCount()),
     FetchInvitationCount: () => dispatch(FetchInvitationCount()),
     FetchRecentResponses: () => dispatch(FetchRecentResponses()),
-    FetchPublicTests: () => dispatch(FetchPublicTests())
+    FetchPublicTests: () => dispatch(FetchPublicTests()),
+    RegisterForTest: (model) => dispatch(RegisterForTest(model))
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
 

@@ -8,8 +8,8 @@ export const FETCH_CANDIDATE_DETAILS_FAIL = 'FETCH_CANDIDATE_DETAILS_FAIL';
 export const FETCH_RECORDINGS_SUCCESS = 'FETCH_RECORDINGS_SUCCESS';
 export const FETCH_RECORDINGS_FAIL = 'FETCH_RECORDINGS_FAIL';
 
-export const FetchCandidateResponseReport = (responseId) => dispatch => {
-    let url = config.instance.getAdminApiUrl() + 'getCandidateResponseReport' + '?responseId=' + responseId;
+export const FetchCandidateResponseReport = (responseId, candidateId) => dispatch => {
+    let url = `${config.instance.getAdminApiUrl()}getCandidateResponseReport?responseId=${responseId}&candidateId=${candidateId}`;
     repository.getData(url)
         .then((res) => {
             dispatch({

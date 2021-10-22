@@ -40,7 +40,8 @@ class CandidateConsoleTabs extends Component {
                 <CandidateResponseReport   
                     classes={classes}
                     responseId={this.props.responseId}
-                    fetchCandidateResponseReport={this.props.FetchCandidateResponseReport}
+                    candidateId={this.props.candidateId}
+                    fetchCandidateResponseReport={(responseId, candidateId) => this.props.FetchCandidateResponseReport(responseId, candidateId)}
                     candidateResponses={candidateResponses}
                 /> 
             </TabContainer>}

@@ -23,8 +23,15 @@ class McqSelector extends Component {
     }
 
     componentDidMount = () => {
-        let url = config.instance.getAdminApiUrl() + 'getAllMcqs';
+        let url = config.instance.getAdminApiUrl(); // + 'getAllMcqs';
+        let  { grade, skill } = this.props;
         // let url = config.instance.getAdminApiUrl() + 'getMcqsBySkill' + `${this.props.skill ? '?skill=' + this.props.skill : ''}`;
+        if(grade) { 
+            url += `getMcqsByGrade?grade=${grade}`;
+        }
+        else {
+            url += `getMcqsBySkill?skill=${skill}`;
+        }
         repository.getData(url)
             .then((res) => {
                 console.log('MCQ fetched');
@@ -73,7 +80,7 @@ class McqSelector extends Component {
                 >
                     <DialogTitle onClose={this.handleClose}>
                         <Typography variant="h6">
-                            Select MCQ to Add
+                            Select MCQ to Add ({mcqList ? mcqList.length : 0})
                         </Typography>
                         <IconButton onClick={this.handleClose} style={{right: '4%', top: '1%', position:'absolute'}}>
                             <Close />

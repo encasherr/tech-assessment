@@ -101,7 +101,7 @@ class McqItem extends Component {
                             {mcq.question}
                         </Typography>
                         <Typography variant="caption">
-                            {`${mcq.category} - ${mcq.skill}`}
+                            {`${mcq.category} - ${mcq.skill ? mcq.skill : `${mcq.grade} Chapter No:${mcq.chapterNo}`}`}
                         </Typography>
                         <IconButton onClick={this.handleClose} style={{right: '4%', top: '1%', position:'absolute'}}>
                             <Close />

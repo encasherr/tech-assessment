@@ -1,15 +1,17 @@
-import db from '../db/mysqldb';
-import users from '../users';
-import queries from '../db/queries';
+import db from '../../db/mysqldb';
+// import users from '../users';
+// import queries from '../db/queries';
 import {
     GetQueryConfig,
-    HandlePromise
-} from '../commons/RoleDefinitions';
+    HandlePromise,
+    HandlePromiseWithParams
+} from '../../commons/RoleDefinitions';
 import {
     VIEW_TEST_REGISTRATIONS, VIEW_MY_TEST_REGISTRATIONS,
-    VIEW_REGISTRATIONS_FOR_TEST
+    VIEW_REGISTRATIONS_FOR_TEST, VIEW_TEST_REGISTRATION_BY_ID
 } from '../../commons/RoleBasedQueries/TestRegistrationQueries';
 import TestModel from '../TestModel';
+import McqModel from '../McqModel';
 
 class TestRegistrationModel {
     entityName = 'test_registrations';
@@ -30,6 +32,11 @@ class TestRegistrationModel {
         return HandlePromise(db, queryConfig, userEntity);
     }
 
+    GetRegistrationById = (userEntity, registrationId) => {
+        let queryConfig = GetQueryConfig(VIEW_TEST_REGISTRATION_BY_ID);
+        return HandlePromiseWithParams(db, queryConfig, { userEntity, registrationId });
+    }
+
     Add = (entity) => {
         return new Promise((resolve, reject) => {
             db.insertCustom(this.entityName, entity)
@@ -43,7 +50,15 @@ class TestRegistrationModel {
     }
 
     Update = (entity) => {
-        
+        return new Promise((resolve, reject) => {
+            db.updateCustom(this.entityName, entity, entity.id)
+                .then((res) => {
+                    resolve(res);
+                })
+                .catch((err) => {
+                    reject(err);
+                });
+        }); 
     }
 
     Delete = (entity) => {
@@ -54,7 +69,7 @@ class TestRegistrationModel {
         });
     }
 
-    CreateResponse = async (testId) => {
+    CreateResponse = async (userEntity, testId) => {
         let testModel = new TestModel();
         let testEntity = await testModel.GetTestById(userEntity, testId);
         let mcqModel = new McqModel();

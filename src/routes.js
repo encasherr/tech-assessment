@@ -30,6 +30,7 @@ api.get('/validateUserToken', auth, UserController.LoadConfig);
 // api.get('/admin/getAllMcqs', McqController.GetAll);
 api.get('/admin/getAllMcqs', auth, McqController.GetAll);
 api.get('/admin/getMcqsBySkill', auth, McqController.GetMcqsBySkill);
+api.get('/admin/getMcqsByGrade', auth, McqController.GetMcqsByGrade);
 api.post('/admin/mcq', auth, McqController.Add);
 api.put('/admin/mcq', auth, McqController.Update);
 api.delete('/admin/mcq', auth, McqController.Delete);
@@ -69,6 +70,7 @@ api.get('/admin/getAllTests', auth, AdminTestController.GetAll);
 api.get('/admin/getMyTests', auth, AdminTestController.GetMy);
 api.get('/admin/getMcqsByTestId', auth, AdminTestController.GetMcqsByTestId);
 api.get('/admin/getCandidatesByTestId', auth, AdminTestController.GetCandidatesByTestId);
+api.get('/admin/getStudentsByTestId', auth, AdminTestController.GetStudentsByTestId);
 api.get('/admin/getTest', auth, AdminTestController.GetTest);
 api.post('/admin/test', auth, AdminTestController.Add);
 api.put('/admin/test', auth, AdminTestController.Update);
@@ -79,6 +81,7 @@ api.get('/admin/getAllUsers', auth,  UserController.GetAll);
 api.post('/admin/user', auth, UserController.Add);
 api.put('/admin/user', auth, UserController.Update);
 api.delete('/admin/user', auth, UserController.Delete);
+api.post('/admin/changePassword', auth, UserController.ChangePassword);
 
 
 /* Online portal endpoints */
@@ -113,12 +116,15 @@ api.post('/teacher/user', UserController.AddNewUserToBeVerified)
 api.get('/teacher/verifyUser', UserController.VerifyUser);
 api.get('/admin/testsAvailableForMe', auth, AdminTestController.GetTestsAvailableForMe);
 api.get('/candidate/getAllRegistrations', auth, TestRegistrationController.GetAllRegistrations);
-api.get('/candidate/registerForTest', auth, TestRegistrationController.RegisterForTest);
+api.get('/candidate/getMyRegistrations', auth, TestRegistrationController.GetMyRegistrations);
+api.post('/candidate/registerForTest', auth, TestRegistrationController.RegisterForTest);
+api.post('/candidate/startRegisteredTest', auth, TestRegistrationController.StartRegisteredTest);
+api.post('/candidate/submitRegisteredTest', auth, TestRegistrationController.SubmitRegisteredTest);
 
 
 /* Candidate Response Endpoints */
 api.get('/admin/getCandidateResponseReport', auth, CandidateResponseController.GetCandidateResponse);
-api.get('/admin/getCandidateDetails', auth, CandidateResponseController.GetCandidateDetails);
+api.get('/admin/getCandidateDetails', CandidateResponseController.GetCandidateDetails);
 
 /* Candidate Routes */
 /* Test Invite endpoints */

@@ -1,3 +1,4 @@
+import { getCurrentDateTime } from './HelperFunctions';
 import { Constants } from './ServerConfig';
 
 class Evaluator {
@@ -37,12 +38,18 @@ class Evaluator {
                     });
                     
                     let passingPercentage = Constants.PassingPercentage;
+                    let scorePercentage = (candidateScore / totalScore) * 100;
+                    let result = scorePercentage >= passingPercentage ?
+                                                        'CLEARED' :
+                                                        'FAILED';
                     responseEntity.response_meta.totalScore = totalScore;
                     responseEntity.response_meta.candidateScore = candidateScore;
-                    responseEntity.response_meta.scorePercentage = (candidateScore / totalScore) * 100;
-                    responseEntity.response_meta.result = responseEntity.response_meta.scorePercentage >= passingPercentage ?
-                                                                'CLEARED' :
-                                                                'FAILED';
+                    responseEntity.response_meta.scorePercentage = scorePercentage;
+                    responseEntity.response_meta.result = result;
+
+                    responseEntity.total_score = totalScore;
+                    responseEntity.candidate_score = candidateScore;
+                    responseEntity.result = result;                                                                
                     responseEntity.evaluation_status = 'COMPLETED';
         
                 }
@@ -53,6 +60,68 @@ class Evaluator {
                 reject(error);
             }
         });
+    }
+
+    EvaluateRegisteredTestResponse = (responseMcqs, dbMcqs) => {
+        let correctChoices = [];
+        let responseChoices = [];
+        dbMcqs.map((mcqItem) => {
+            let correctKeys = '';
+            mcqItem.mcq_meta.choices.map((choiceItem) => {
+                if(choiceItem.isCorrect) {
+                    correctKeys += choiceItem.key;
+                }
+            })
+            correctChoices.push({
+                mcqId: mcqItem.id,
+                choice: correctKeys,
+                mcqScore: !mcqItem.mcq_meta.score ? 10 : mcqItem.mcq_meta.score
+            })
+        })
+        responseMcqs.map((mcqItem) => {
+            let correctKeys = '';
+            mcqItem.candidateResponse.responseKeys.map((responseKey) => {
+                correctKeys += responseKey;
+            })
+            responseChoices.push({
+                mcqId: mcqItem.mcqId,
+                choice: correctKeys,
+                responseKeys: mcqItem.candidateResponse.responseKeys
+            })
+        })
+
+        let evaluationResult = {
+            totalScore: 0,
+            candidateScore: 0,
+            scorePercentage: 0,
+            result: ''
+        };
+        responseChoices.forEach((responseChoice) => {
+            let matchingChoice = correctChoices.filter((item) => {
+                return item.mcqId === responseChoice.mcqId;
+            })
+            let res = {
+                mcqId: responseChoice.mcqId,
+                responseKeys: responseChoice.responseKeys,
+            }
+            if(matchingChoice && matchingChoice.length > 0) {
+                let correctChoice = matchingChoice[0];
+                res.isCorrect = responseChoice.choice === correctChoice.choice;
+                evaluationResult.candidateScore += res.isCorrect ?  correctChoice.mcqScore : 0;
+                evaluationResult.totalScore +=  correctChoice.mcqScore;
+            }
+            else {
+                res.isCorrect = false;
+            }
+        });
+        
+        let passingPercentage = Constants.PassingPercentage;
+        evaluationResult.completedOn = getCurrentDateTime();
+        evaluationResult.scorePercentage = (evaluationResult.candidateScore / evaluationResult.totalScore) * 100;
+        evaluationResult.result = evaluationResult.scorePercentage >= passingPercentage ?
+                                                    'CLEARED' :
+                                                    'FAILED';
+        return evaluationResult;
     }
 
     parseScore = (stringValue) => {

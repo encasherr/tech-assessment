@@ -115,37 +115,7 @@ class TestInviteController {
             }
 
             let testEntity = await testModel.GetTest(invitationEntity.invitation_meta.testId);
-            // .then(async (testEntity) => {
-            // let selectedMcqIds = [];
-            // console.log(`testEntity: ${testEntity.test_meta}`);
-            // testEntity.test_meta.selectedMcqs.map((item, index) => {
-            //     selectedMcqIds.push(item.mcqId);
-            // });
-            // let mcqResponseMeta = {
-            //     testId: testEntity.id,
-            //     invitationId: invitationEntity.id,
-            //     mcqs: []
-            // };
-            // mcqModel.GetMcqsByIds(selectedMcqIds).then((mcqs) => {
-            //     console.log(`get mcqs by id, length: ${mcqs.length}`);
-
-            //     testEntity.test_meta.selectedMcqs.map((item, index) => {
-            //         let filteredMcq = mcqs.filter((mcqItem, index) => {
-            //             return mcqItem.id === item.mcqId;
-            //         });
-            //         if (filteredMcq && filteredMcq.length > 0) {
-            //             let item_value = filteredMcq[0];
-            //             item.mcq = item_value;
-            //             item.candidateResponse = {
-            //                 responseKeys: []
-            //             }
-            //             mcqResponseMeta.mcqs.push(item);
-            //         }
-            //     });
-            // });
-            // console.log('getting invitation entity now', invitationId);
             let mcqResponseEntity = await mcqResponseModel.GetByInvitationId(invitationId);
-            // .then((mcqResponseEntity) => {
             if (mcqResponseEntity) {
                 console.log('existing mcq response returned');
                 resp.status(200).json(mcqResponseEntity);
@@ -159,48 +129,10 @@ class TestInviteController {
                 else {
                     resp.status(500).json({ message: 'Error in loading Test' });
                 }
-                /*mcqResponseEntity = {
-                    invitationId: parseInt(invitationId),
-                    response_meta: mcqResponseMeta
-                }
-                console.log('adding new mcq invitation on invitationId: ', invitationId);
-                mcqResponseModel.Add(mcqResponseEntity).then((responseId) => {
-                    console.log('responseId', responseId);
-                    if (responseId > 0) {
-                        let updateInvitationEntity = {
-                            ...invitationEntity,
-                            status: Constants.InvitationTestStatus.Started
-                        }
-                        invitationModel.Update(updateInvitationEntity).then((res) => {
-                            let mcqResponse = {
-                                id: responseId,
-                                response_meta: mcqResponseMeta
-                            }
-                            resp.status(200).json(mcqResponse);
-                        });
-                    }
-                    else {
-                        console.log('Nothing inserted as response to table');
-                        resp.status(500).json({ message: 'Error in loading response' });
-                    }
-                }).catch((err) => {
-                    console.log('Exception in inserting response to table', err);
-                    resp.status(500).json({ message: 'Error in adding response' })
-                });*/
-
             }
-            // })
 
-            // })
-            // .catch((err) => {
-            //     console.log(`Error while loading test, error: ${err}`);
-            //     resp.status(404).json({
-            //         message: err
-            //     });
-            // });
         }
 
-        // });
     }
 
     RegisterForTest = (req, resp) => {

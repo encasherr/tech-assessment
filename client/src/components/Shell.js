@@ -345,7 +345,8 @@ class Shell extends React.Component {
           )
         }
 
-        if(user && user.role === 'candidate') {
+        if(user && (user.role === 'candidate'
+                || user.role === 'student')) {
             return (
               <div className={classes.root}>
                   <CssBaseline />
@@ -363,6 +364,13 @@ class Shell extends React.Component {
                           <div className="row">
                               <div className="col-md-2" />
                               <div className="col-md-8">
+                                <OpMenu />
+                              </div>
+                              <div className="col-md-2" />
+                          </div>
+                          <div className="row">
+                              <div className="col-md-2" />
+                              <div className="col-md-8">
                                 <Routes />
                               </div>
                               <div className="col-md-2" />
@@ -373,7 +381,7 @@ class Shell extends React.Component {
             );
         }
         
-        if(user && (user.role === 'teacher' || user.role === 'student')) {
+        if(user && (user.role === 'teacher')) {
           return (
             <div className={classes.root}>
                 <CssBaseline />

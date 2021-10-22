@@ -41,16 +41,25 @@ class OpLogin extends Component {
                 this.props.SetUserInfo(res).then((res) => {
                     let userRole = GetCurrentUserRole();
                     console.log('user role', userRole);
-                    if(userRole === 'admin') {
+                    if(userRole === 'admin' || userRole === 'orgadmin') {
                         if(this.props.history){
                             this.props.history.push({
                                 pathname: '/dashboard'
                             });  
                         }
                     }
+                    else if(userRole === config.instance.Roles.Student) {
+                        this.props.history.push({
+                            pathname: '/ophome'
+                        });
+                    }
+                    else if(userRole === config.instance.Roles.Teacher) {
+                        this.props.history.push({
+                            pathname: '/dashboard'
+                        });
+                    }
                     else {
                         this.props.history.push({
-                            // pathname: '/opContent'
                             pathname: '/ophome'
                         });
                     }

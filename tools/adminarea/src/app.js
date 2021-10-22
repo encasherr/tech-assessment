@@ -16,6 +16,7 @@ import UserModel from '../../../wwwroot/Models/UserModel';
 import invitationRepo from '../../../wwwroot/Controllers/candidate/InvitationRepo';
 import testResultGenerator from '../../../wwwroot/Controllers/candidate/TestResultGenerator';
 import mcqResponseRepo from '../../../wwwroot/Controllers/candidate/McqResponseRepo';
+import TestModel from "../../../wwwroot/Models/TestModel";
 
 console.log('Welcome to Admin area');
 let readline = readl.createInterface({
@@ -205,6 +206,10 @@ const goToSelectedOption = async (menuOption) => {
         }
         case "10": {
             console.log('delete a test')
+            let selection = await askUser(chalk.yellow.bgBlack('Enter Test Id to delete\n'));
+            let testModel = new TestModel();
+            await testModel.DeleteTestById(selection);
+            break;
         }
         case "11": {
             console.log('list all mcqs')
@@ -229,11 +234,32 @@ const goToSelectedOption = async (menuOption) => {
             break;
         }
         case "14": {
-            let invitationId = 175;
-            invitationId = await askUser('Enter invitationId to evaluate results for\n');
-            let responseEntity = await mcqResponseRepo.evaluateResults(invitationId);
-            console.log(chalk.yellow.bgBlack(`Score: ${responseEntity.response_meta.scorePercentage}`));
-            console.log(chalk.yellow.bgBlack(`Result: ${responseEntity.response_meta.result}`));
+            // let invitationId = 175;
+            // invitationId = await askUser('Enter invitationId to evaluate results for\n');
+            // let responseEntity = await mcqResponseRepo.evaluateResults(invitationId);
+            // console.log(chalk.yellow.bgBlack(`Score: ${responseEntity.response_meta.scorePercentage}`));
+            // console.log(chalk.yellow.bgBlack(`Result: ${responseEntity.response_meta.result}`));
+
+            let questionPrompt = `Which kind of user you want to evaluate results for invited / registered user?\n
+            Select the input Id that you have\n
+            1. Invitation Id\n
+            2. Registration Id\n
+            `
+            let selection = await askUser(chalk.yellow.bgBlack(questionPrompt))
+            let responseEntity = {};
+            if(selection === 1) {
+                let invitationId = await askUser('Enter invitationId to evaluate results for\n');
+                responseEntity = await mcqResponseRepo.evaluateInvitedTestResults(invitationId);
+                console.log(chalk.yellow.bgBlack(`Score: ${responseEntity.response_meta.scorePercentage}`));
+                console.log(chalk.yellow.bgBlack(`Result: ${responseEntity.response_meta.result}`));
+            }
+            else {
+                let registrationId = await askUser('Enter registrationId to evaluate results for\n');
+                responseEntity = await mcqResponseRepo.evaluateRegisteredTestResults(adminUser, registrationId);
+                console.log(chalk.yellow.bgBlack(`Score: ${responseEntity.evaluation_meta.scorePercentage}`));
+                console.log(chalk.yellow.bgBlack(`Result: ${responseEntity.evaluation_meta.result}`));
+            }
+            
             break;
         }
         case "15": {

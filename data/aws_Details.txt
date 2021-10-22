@@ -190,3 +190,101 @@ from the recruiter.
 https://gototraining.webex.com/gototraining/k2/j.php?mtid=tb939a59639fd22f2ff200d7b30122f01
 
 http://devnull.crankuptheamps.com/training-connect/vnc.html?host=15.206.178.78&port=6080&encrypt=0&scaling=remote
+
+Test User details:
+Candidates:
+Full name: Candidate1001 TestSurname
+Email: can1001@candidate.com
+Password: can1001
+
+Full name: Candidate1002 TestSurname
+Email: can100@@candidate.com
+Password: can1002
+
+Full name: Candidate1003 TestSurname
+Email: can1003@candidate.com
+Password: can1003
+
+Students:
+Full name: Student1001 TestSurname
+Email: stu1001@student.com
+Password: stu1001
+
+Full name: Student1002 TestSurname
+Email: stu1002@student.com
+Password: stu1002
+
+Full name: Student1003 TestSurname
+Email: stu1003@student.com
+Password: stu1003
+
+Milesweb Nameservers:
+Nameserver 1:
+sg.solidhosting.pro (167.99.71.43)
+Nameserver 2:
+us.solidhosting.pro (159.89.159.224)
+
+Your identification has been saved in /home/tpptxbaq/.ssh/id_rsa.
+Your public key has been saved in /home/tpptxbaq/.ssh/id_rsa.pub.
+The key fingerprint is:
+SHA256:DHh+EfsNbPUq/rdx3PIgH1kdXBgaPVtElfeYWicOJnU 
+The key's randomart image is:
++---[RSA 2048]----+
+|        .   o..=B|
+|     .   + ..+E.+|
+|    . o o +....Oo|
+|     o o +.oo.* =|
+|      . S ooo= oo|
+|       . . .. .+.|
+|          . . * +|
+|           . o.B |
+|            ..o..|
++----[SHA256]-----+
+
+user: solutions@sharingcloudbestpractices.com
+password: cloudsolutions
+
+domain names:
+testphenom
+testudinary
+testfram
+
+
+=>  Landing page:
+
+Create and share Tests in Minutes.
+Hiring IT professionals made easy, increase your reach to multiple candidates and shortlist based on their performance in the test 
+You receive the evaluation report as soon as Test taker submits the test.
+
+4 areas:
+IT Professionals - Skills like JavaScript, C#, Java, Python, Angular, React etc.
+School Students - Grade 1 to Grade 12
+College Students - Computer Engineering, BSC IT
+PG Students - PGDBA, MBA, MA, MSC
+
+How it works:
+You select multiple choice questions from the MCQ library of your selected area of test.
+If required, Add new MCQ to the library and use it in the Test.
+Once created and approved by moderator, test can be shared with the intended test takers using Send invitation tool.
+You can select your Test to be Publicly available for anyone to take the Test.
+You receive the evaluation result of individuals taken your test, and can view the detailed report.
+
+Features:
+Create Test in Minutes
+Share with individual test takers or with all individuals of the test area
+Create a contest and invite individuals or all individuals of the test area to participate
+Hiring IT professionals made easy, increase your reach to multiple candidates and shortlist based on their performance in the test
+Receive evaluation results instantly and detailed report
+Add new MCQ to the library and choose if you want to keep it private
+
+=>  About page:
+
+We are a tech company specialized in providing Software products and services.
+We also help employers of all size to find right talent for their ongoing requirements.
+
+=>  Contact page:
+Your email:
+Subject:
+Message:
+Submit
+

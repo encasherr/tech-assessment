@@ -34,9 +34,25 @@ class CandidateModel {
 
     GetCandidate = (candidateId) => {
         return new Promise((resolve, reject) => {
-            db.findOne(this.entityName, candidateId).then((res) => {
-                resolve(res);
-            });
+            let sql = `SELECT *
+            FROM ta_candidates
+            WHERE id = ${candidateId}
+            `;
+            db.executeQuery(sql)
+                .then((res) => {
+                    if(res && res.length > 0) {
+                        resolve(res[0]);
+                    }
+                    else {
+                        resolve(null);
+                    }
+                })
+                .catch((err) => {
+                    reject(err);
+                });
+            // db.findOne(this.entityName, candidateId).then((res) => {
+            //     resolve(res);
+            // });
         })
     }
     
@@ -53,6 +69,17 @@ class CandidateModel {
         return new Promise((resolve, reject) => {
             db.insert(this.entityName, entity).then((insertId) => {
                 resolve(insertId);
+            });
+        });
+    }
+
+    AddCandidate = (entity) => {
+        return new Promise((resolve, reject) => {
+            db.insertCustom(this.entityName, entity).then((insertId) => {
+                resolve(insertId);
+            })
+            .catch((err) => {
+                reject(err);
             });
         });
     }

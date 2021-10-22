@@ -31,13 +31,6 @@ class TestConsoleCandidates extends Component {
           </>
         )
 
-
-        return (
-            <div>
-                <Typography variant="subtitle1">No Invitations Sent</Typography> 
-            </div> 
-        )
-
     }
 }
 const CustomTableCell = withStyles(theme => ({

@@ -2,7 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Button } from '@material-ui/core';
 import QuestionSimulatorConsoleContainer from './QuestionSimulatorConsoleContainer';
-import { LoadExamSimulator, ResponseChange, SubmitAnswers,
+import { LoadExamSimulator, LoadRegisteredExamSimulator,
+        ResponseChange, SubmitAnswers, SubmitRegisteredTestAnswers,
         GetInvitation,
         GoToPrevious, GoToNext } from '../../actions/QuestionSimulatorConsoleActions';
 import LoadingComponent from '../../components/lib/LoadingComponent';
@@ -18,10 +19,29 @@ class SimulatorConsoleContainer extends React.Component {
             deviceAccess: 'denied'
         }
     }
+
     componentDidMount = () => {
         config.instance.initialize();
-        let { inviteid } = this.props.match.params;
-        this.props.LoadExamSimulator(inviteid);
+        let { inviteid, registrationId } = this.props.match.params;
+        console.log('this.props.location', this.props.location);
+        let pathName = (this.props.location && this.props.location.pathname) ? this.props.location.pathname : '';
+        if(pathName.indexOf('startRegisteredTest') > -1) {
+            this.props.LoadRegisteredExamSimulator(registrationId);
+        }
+        else {
+            this.props.LoadExamSimulator(inviteid, registrationId);
+        }
+    }
+
+    submitAnswers = (candidateTestObject) => {
+        console.log('this.props.location', this.props.location);
+        let pathName = (this.props.location && this.props.location.pathname) ? this.props.location.pathname : '';
+        if(pathName.indexOf('startRegisteredTest') > -1) {
+            this.props.SubmitRegisteredTestAnswers(candidateTestObject);
+        }
+        else {
+            this.props.SubmitAnswers(candidateTestObject);
+        }
     }
 
     SetDeviceAccess = (access) => {
@@ -89,7 +109,7 @@ class SimulatorConsoleContainer extends React.Component {
                 onResponseChange={ (choiceKey) => this.props.ResponseChange(choiceKey, currentQuestion, candidateTestObject.response_meta.mcqs)}
                 goToPrevious={() => this.props.GoToPrevious(currentQuestion, candidateTestObject.response_meta.mcqs)}
                 goToNext={() => this.props.GoToNext(currentQuestion, candidateTestObject.response_meta.mcqs)}
-                submitAnswers={() => this.props.SubmitAnswers(candidateTestObject)}/>
+                submitAnswers={() => this.submitAnswers(candidateTestObject)}/>
         }
         </div>
         );
@@ -103,9 +123,11 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     GetInvitation: (invitationId) => dispatch(GetInvitation(invitationId)),
     LoadExamSimulator: (invitationId) => dispatch(LoadExamSimulator(invitationId)),
+    LoadRegisteredExamSimulator: (registrationId) => dispatch(LoadRegisteredExamSimulator(registrationId)),
     ResponseChange: (choiceKey, currentQuestion, mcqList) => dispatch(ResponseChange(choiceKey, currentQuestion, mcqList)),
     GoToPrevious: (currentQuestion, mcqs) => dispatch(GoToPrevious(currentQuestion, mcqs)),
     GoToNext: (currentQuestion, mcqs) => dispatch(GoToNext(currentQuestion, mcqs)),
-    SubmitAnswers: (candidateTestObject) => dispatch(SubmitAnswers(candidateTestObject))
+    SubmitAnswers: (candidateTestObject) => dispatch(SubmitAnswers(candidateTestObject)),
+    SubmitRegisteredTestAnswers: (candidateTestObject) => dispatch(SubmitRegisteredTestAnswers(candidateTestObject))
 });
 export default connect(mapStateToProps, mapDispatchToProps)(SimulatorConsoleContainer);

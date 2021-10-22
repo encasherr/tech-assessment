@@ -8,7 +8,11 @@ const resources = [
     },
     { 
         resource: '/admin/getMcqsBySkill',
-        allowedRoles: [ 'admin', 'orgadmin', 'staff', 'teacher' ] 
+        allowedRoles: [ 'admin', 'orgadmin', 'staff' ] 
+    },
+    { 
+        resource: '/admin/getMcqsByGrade',
+        allowedRoles: [ 'admin', 'staff', 'teacher' ] 
     },
     { 
         resource: '/admin/mcq',
@@ -67,6 +71,10 @@ const resources = [
         allowedRoles: [ 'admin', 'orgadmin' ] 
     },
     { 
+        resource: '/admin/changePassword',
+        allowedRoles: [ 'admin', 'orgadmin', 'staff', 'candidate', 'student' ] 
+    },
+    { 
         resource: '/admin/getAllOrgs',
         allowedRoles: [ 'admin', 'orgadmin' ] 
     },
@@ -76,7 +84,11 @@ const resources = [
     },
     { 
         resource: '/admin/getCandidatesByTestId',
-        allowedRoles: [ 'admin', 'orgadmin', 'staff', 'teacher' ] 
+        allowedRoles: [ 'admin', 'orgadmin', 'staff' ] 
+    },
+    { 
+        resource: '/admin/getStudentsByTestId',
+        allowedRoles: [ 'admin', 'staff', 'teacher' ] 
     },
     { 
         resource: '/admin/getMcqsByTestId',
@@ -129,6 +141,22 @@ const resources = [
     { 
         resource: '/admin/grade',
         allowedRoles: [ 'admin', 'teacher' ] 
+    },
+    {
+        resource: '/candidate/registerForTest',
+        allowedRoles: [ 'admin', 'student', 'candidate' ]
+    },
+    {
+        resource: '/candidate/startRegisteredTest',
+        allowedRoles: [ 'admin', 'student', 'candidate' ]
+    },
+    {
+        resource: '/candidate/submitRegisteredTest',
+        allowedRoles: [ 'admin', 'student', 'candidate' ]
+    },
+    {
+        resource: '/candidate/getMyRegistrations',
+        allowedRoles: [ 'admin', 'student', 'candidate' ]
     }
 ];
 

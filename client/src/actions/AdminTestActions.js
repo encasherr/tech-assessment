@@ -91,7 +91,6 @@ export const AddTest = (testModel, editMode) => dispatch => {
             type: ADD_TEST_BEGIN
         });
         let url = config.instance.getAdminApiUrl() + 'test';
-        testModel.test_meta.status = 'draft';
         
         repository.saveData(url, testModel)
             .then((res) => {

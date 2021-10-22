@@ -50,36 +50,29 @@ class EmailHelper {
             let mailOptions = {
                 from: EmailConfig.inviteFromEmailId,
                 to: emailInfo.to,
+                bcc: EmailConfig.inviteFromEmailId,
+                enevelope: {
+                    from: EmailConfig.inviteFromEmailId,
+                    to: emailInfo.to
+                },
                 subject: emailInfo.subject,
                 // text: emailInfo.text,
                 html: this.CreateHtml(emailInfo)
             }
     
-            if(emailInfo.isTestMode) {
-                let fileName = 'EmailLogs.html';
-                let filePath = path.resolve(fileName);
-                console.log(`Log file path: ${filePath}`);
-                let contentToLog = '';
-                contentToLog += `From: ${mailOptions.from}\\n`;
-                contentToLog += `To: ${mailOptions.to}\\n`;
-                contentToLog += `Subject: ${mailOptions.subject}\\n`;
-                contentToLog += `\n\n${mailOptions.html}`;
-                contentToLog += `\n\n------------------End of message-------------------\n\n`;
-                fs.appendFileSync(filePath, contentToLog);
-            }
-            else {
-                transporter.sendMail(mailOptions, (error, info) => {
-                    if(error) {
-                        console.log('error occured in sending email');
-                        console.log(error);
-                        reject(error);
-                    }
-                    else {
-                        resolve();
-                        console.log('email sent: ' + info.messageId + ', resp: ' + info.response);
-                    }
-                })
-            }
+            transporter.sendMail(mailOptions, (error, info) => {
+                if(error) {
+                    console.log('error occured in sending email');
+                    console.log(error);
+                    reject(error);
+                }
+                else {
+                    resolve();
+                    console.log('email sent: ' + info.messageId + ', resp: ' + info.response);
+                }
+            })
+            
+            this.LogEmail(mailOptions);
         })
     }
 
@@ -108,6 +101,20 @@ class EmailHelper {
             html = emailInfo.invokeReplaceFunction(html);
         }
         return html;
+    }
+
+    LogEmail = (mailOptions) => {
+        let fileName = 'EmailLogs.html';
+        let filePath = path.resolve(fileName);
+        console.log(`Log file path: ${filePath}`);
+        let contentToLog = '';
+        contentToLog += `From: ${mailOptions.from}\\n`;
+        contentToLog += `To: ${mailOptions.to}\\n`;
+        contentToLog += `Subject: ${mailOptions.subject}\\n`;
+        contentToLog += `\n\n${mailOptions.html}`;
+        contentToLog += `\n\n------------------End of message-------------------\n\n`;
+        fs.appendFileSync(filePath, contentToLog);
+
     }
 
     GetHtmlTemplateByType = (emailInfo) => {

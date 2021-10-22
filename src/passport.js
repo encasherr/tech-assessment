@@ -33,10 +33,34 @@ var localOptions = {
     usernameField: 'emailId',
     passwordField: 'password'
 };
-passport.use(new LocalStrategy(localOptions, function(emailId, password, done) {
+passport.use(new LocalStrategy(localOptions, async function(emailId, password, done) {
         console.log('local strategy being used');
         let userModel = new UserModel();
-        // let existingUser = users.GetUser(emailId);
+        let existingUser = await userModel.CheckUserCredentials(emailId, password);
+
+        if(existingUser) {
+            console.log('existingUser', existingUser);
+            let userMeta = JSON.parse(existingUser.user_meta);
+                                    let userEntity = {
+                                        id: existingUser.id,
+                                        emailId: emailId,
+                                        name: userMeta.name ? userMeta.name : emailId,
+                                        role: userMeta.role,
+                                        orgId: userMeta.orgId
+                                    };
+            done(null, userEntity);
+        }
+        else {
+            const newUser = {
+                emailId: emailId,
+                status: 'not found',
+                name: emailId,
+                role: 'guest'
+            }
+            
+            done(null, newUser);
+        }
+        /*
         userModel.GetUserByEmail(emailId)
                             .then((users) => {
                                 let existingUser = users[0];
@@ -65,7 +89,7 @@ passport.use(new LocalStrategy(localOptions, function(emailId, password, done) {
                                     done(null, newUser);
                                 }
                             });
-        
+        */
         /*if(emailId === Constants.AdminEmailId) {
             console.log('admin user being added');
             let userEntity = {

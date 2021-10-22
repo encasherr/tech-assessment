@@ -17,14 +17,19 @@ const OpMenu = (props) => {
             menuItems = candidateMenu;
             break;
         }
+        case config.instance.Roles.Student:
+        {
+            menuItems = studentMenu;
+            break;
+        }
     }
     return (
         <>
             <ul className="nav justify-content-end">
                 {menuItems && menuItems.length > 0 &&
-                    menuItems.map((menuItem) => {
+                    menuItems.map((menuItem, index) => {
                         return (
-                            <li className="nav-item">
+                            <li className="nav-item" key={index}>
                                 <a className="nav-link active" href={menuItem.path}>{menuItem.caption}</a>
                             </li>
                         )
@@ -57,12 +62,16 @@ const candidateMenu = [
     {
         caption: "Tests",
         path: "/optests"
+    },
+    {
+        caption: "My Profile",
+        path: "/myProfile"
     }
 ]
 const teacherMenu = [
     {
         caption: "Home",
-        path: "/ophome"
+        path: "/dashboard"
     },
     {
         caption: "Tests",
@@ -71,5 +80,23 @@ const teacherMenu = [
     {
         caption: "MCQ Library",
         path: "/mcqs"
+    }
+]
+const studentMenu = [
+    {
+        caption: "Home",
+        path: "/ophome"
+    },
+    // {
+    //     caption: "Upcoming Tests",
+    //     path: "/dashboard"
+    // },
+    {
+        caption: "My Tests",
+        path: "/myTests"
+    },
+    {
+        caption: "My Profile",
+        path: "/myProfile"
     }
 ]

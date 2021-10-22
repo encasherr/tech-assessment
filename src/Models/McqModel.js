@@ -7,7 +7,8 @@ import {
     HandlePromise,
     HandlePromiseWithParams
 } from '../commons/RoleDefinitions';
-import { VIEW_MCQS, VIEW_MCQS_BY_DESCRIPTION, VIEW_MCQS_BY_SKILL } from '../commons/RoleBasedQueries/McqQueries';
+import { VIEW_MCQS, VIEW_MCQS_BY_DESCRIPTION, VIEW_MCQS_BY_SKILL,
+    VIEW_MCQS_BY_GRADE } from '../commons/RoleBasedQueries/McqQueries';
 
 
 class McqModel {
@@ -67,6 +68,11 @@ class McqModel {
     GetMcqsBySkill = (userEntity, skill) => {
         let queryConfig = GetQueryConfig(VIEW_MCQS_BY_SKILL);
         return HandlePromiseWithParams(db, queryConfig, { userEntity: userEntity, skill: skill });
+    }
+
+    GetMcqsByGrade = (userEntity, grade) => {
+        let queryConfig = GetQueryConfig(VIEW_MCQS_BY_GRADE);
+        return HandlePromiseWithParams(db, queryConfig, { userEntity: userEntity, grade: grade });
     }
     /*GetMcqsByUser = (userEntity) => {
         if(this.entities.data && this.entities.data.length > 0 && userEntity) {
@@ -228,6 +234,16 @@ class McqModel {
 
                 resolve(mcqsWithIndex);
                 // resolve(mcqs);
+            }).catch((err) => {
+                reject(err);
+            })
+        })
+    }
+
+    GetMcqsByMcqIds = (mcqIds) => {
+        return new Promise((resolve, reject) => {
+            db.getByIds(this.entityName, mcqIds).then((mcqs) => {
+                resolve(mcqs);
             }).catch((err) => {
                 reject(err);
             })

@@ -3,13 +3,18 @@ import db from '../db/mysqldb';
 import users from '../users';
 import queries from '../db/queries';
 
-import { GetQueryConfig, 
-    HandlePromise } from '../commons/RoleDefinitions';
+import { candidate, GetQueryConfig, 
+    HandlePromise, 
+    student} from '../commons/RoleDefinitions';
 import { VIEW_USERS } from '../commons/RoleBasedQueries/UserQueries';
-import { getSiteUrl, encrypt, decrypt } from '../utils/general';
+import { getSiteUrl, encrypt, decrypt,
+    comparePasswordHash, 
+    createPasswordHash} from '../utils/general';
 import EmailHelper from '../commons/EmailHelper';
 import { EmailConfig } from '../commons/ServerConfig';
 import { getCurrentDateTime } from '../commons/HelperFunctions';
+import DbConfig from '../commons/DbConfig';
+import CandidateModel from './CandidateModel';
 
 class UserModel {
     entityName = 'users';
@@ -40,15 +45,92 @@ class UserModel {
         })
     }
 
-    Add = (entity) => {
+    CheckUserCredentials = (emailId, password) => {
         return new Promise((resolve, reject) => {
-            db.insert(this.entityName, entity).then((insertId) => {
-                resolve(insertId);
+            let sql = queries.checkUserCredentials(emailId);
+            db.executeQuery(sql).then((res) => {
+                if(res && res.length > 0) {
+                    let userRow = res[0];
+                    console.log('userRow', userRow);
+                    let compareResult = comparePasswordHash(password, userRow.password);
+                    console.log('compareResult', compareResult);
+                    if(compareResult) {
+                        resolve(res[0]);
+                    }
+                    else {
+                        resolve(null);
+                    }
+                }
+                else {
+                    resolve(null);
+                }
             })
             .catch((err) => {
                 reject(err);
-            })
+            });
+        })
+    }
+
+    ChangePassword = (currentPassword, password, userEntity) => {
+        return new Promise(async (resolve, reject) => {
+            let currentUser = await this.CheckUserCredentials(userEntity.emailId, currentPassword);
+            if(currentUser) {
+                let newPassword = createPasswordHash(password);
+                let sql = `update ta_users set password = '${newPassword}' where id = ${userEntity.id}`;
+                db.executeQuery(sql)
+                    .then((res) => {
+                        resolve(true);
+                    })
+            }
+            else {
+                reject('Current password is invalid');
+            }
+        })
+    }
+
+    Add = (entity) => {
+        return new Promise((resolve, reject) => {
+            db.insert(this.entityName, entity)
+                .then(async (insertId) => {
+                    if(insertId) {
+                        await this.CreateCandidateOrStudent(insertId);
+                        resolve(insertId);
+                    }
+                })
+                .catch((err) => {
+                    reject(err);
+                })
         });
+    }
+
+    AddCustom = (entity) => {
+        return new Promise((resolve, reject) => {
+            db.insertCustom(this.entityName, entity)
+                .then(async (insertId) => {
+                    if(insertId) {
+                        await this.CreateCandidateOrStudent(insertId);
+                        resolve(insertId);
+                    }
+                })
+                .catch((err) => {
+                    reject(err);
+                })
+        });
+    }
+
+    CreateCandidateOrStudent = async (userId) => {
+        let userToAdd = await this.GetUser(userId);
+        if(userToAdd.user_meta.role === candidate || userToAdd.user_meta.role === student) {
+            let candidateModel = new CandidateModel();
+            let candEntity = {
+                candidate_meta : {
+                    name: userToAdd.user_meta.name,
+                    email: userToAdd.user_meta.emailId
+                },
+                user_id: userId
+            }
+            await candidateModel.AddCandidate(candEntity);
+        }
     }
 
     Update = (entity) => {
@@ -56,6 +138,19 @@ class UserModel {
         return new Promise((resolve, reject) => {
             db.update(this.entityName, entity.user_meta, entity.id).then((res) => {
                 resolve(res);
+            });
+        });
+    }
+
+    UpdateCustom = (entity) => {
+        entity.user_meta.modifiedOn = (new Date()).toLocaleDateString();
+        return new Promise((resolve, reject) => {
+            db.updateCustom(this.entityName, entity, entity.id)
+            .then((res) => {
+                resolve(res);
+            })
+            .catch((err) => {
+                reject(err);
             });
         });
     }
@@ -78,6 +173,9 @@ class UserModel {
     }
 
     SendVerificationEmail = async (userId) => {
+        let dbConfig = new DbConfig();
+        let KeyValues = await dbConfig.Initialize();
+        let siteUrl = KeyValues ? (KeyValues.site_url ? KeyValues.site_url : '') : '';
         let userEntity = await this.GetUser(userId);
         let userDetail = {
             userId: userId, 
@@ -86,7 +184,7 @@ class UserModel {
         }
         let encryptedObject = encrypt(`${userDetail.userId}`); 
         console.log('encryptedObject in model: ', encryptedObject);
-        let verificationLink = EmailConfig.getVerificationLink(await getSiteUrl(), encryptedObject);
+        let verificationLink = EmailConfig.getVerificationLink(siteUrl, encryptedObject);
         console.log('verification link: ', verificationLink);
         let emailInfo = {
             to: userDetail.email,

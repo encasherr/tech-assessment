@@ -9,6 +9,7 @@ class TestConsoleQuestions extends Component {
 
     render = () => {
         let { selectedMcqs, currentTest } = this.props;
+        let { grade, skill } = currentTest;
         return (
             <Card>
                 {currentTest && 
@@ -16,7 +17,9 @@ class TestConsoleQuestions extends Component {
                     action={
                         currentTest.test_meta.status==='draft' &&
                         <McqSelector 
-                            skill={currentTest.test_meta.skill}
+                            // skill={currentTest.test_meta.skill}
+                            grade={grade}
+                            skill={skill}
                             onSelectMcq={(mcqItem) => this.props.onSelectMcq(mcqItem)} 
                             selectedMcqs={selectedMcqs}
                         />

@@ -20,8 +20,10 @@ class TestConsoleSettings extends Component {
         console.log('settings', currentTest);
         let emailSubject = (currentTest.test_meta && currentTest.test_meta.settings && currentTest.test_meta.settings.emailSubject) || '';
         let testVisibility = (currentTest && currentTest.test_meta.settings && currentTest.test_meta.settings.testVisibility) ? currentTest.test_meta.settings.testVisibility : '';
-        let testSkill = (currentTest && currentTest.test_meta && currentTest.test_meta.skill) ? currentTest.test_meta.skill : '';
-        let testCategory = (currentTest && currentTest.test_meta && currentTest.test_meta.category) ? currentTest.test_meta.category : '';
+        let testSkill = (currentTest && currentTest.skill) ? currentTest.skill : '';
+        let testGrade = (currentTest && currentTest.grade) ? currentTest.grade : '';
+        let testSubject = (currentTest && currentTest.subject) ? currentTest.subject : '';
+        let testCategory = (currentTest && currentTest.category) ? currentTest.category : '';
         let testDuration = (currentTest && currentTest.test_meta && currentTest.test_meta.duration) ? currentTest.test_meta.duration : '-';
         let experienceYears = (currentTest && currentTest.test_meta && currentTest.test_meta.experienceYears) ? currentTest.test_meta.experienceYears : '-';
         let createdOn = (currentTest && currentTest.test_meta && currentTest.test_meta.createdOn) ? getDateTime(currentTest.test_meta.createdOn) : '-';
@@ -47,16 +49,6 @@ class TestConsoleSettings extends Component {
                                         variant="outlined"
                                     />
                                 </FormControl> */}
-                                <div className="form-group row">
-                                    <label className="col-md-5 col-form-label">Invite-Email Subject</label>
-                                    <div className="col-md-7">
-                                        <input  type="text" 
-                                                className="form-control"
-                                                value={emailSubject}
-                                                onChange={(e) => this.props.onFieldChange(e.target.value, 'emailSubject')}
-                                                />
-                                    </div>
-                                </div>
                             {/* </div>
                             <div className="row"> */}
                                 {/* <FormControl variant="outlined" style={styles.formControl}>
@@ -71,39 +63,6 @@ class TestConsoleSettings extends Component {
                                     />
                                 </FormControl> */}
                                  <div className="form-group row">
-                                    <label for="inputEmail3" className="col-md-5 col-form-label">Test Duration (Minutes)</label>
-                                    <div className="col-md-7">
-                                        <input  type="number" 
-                                                className="form-control"
-                                                value={testDuration}
-                                                onChange={(e) => this.props.onFieldChange(e.target.value, 'duration')}
-                                                />
-                                    </div>
-                                </div>
-                            {/* </div> */}
-                            {/* <div className="row"> */}
-                                {/* <FormControl variant="outlined" style={styles.formControl}>
-                                    <TextField
-                                        disabled
-                                        id="outlined-name"
-                                        label="Skill"
-                                        value={testSkill}
-                                        onChange={(e) => this.props.onFieldChange(e.target.value, 'skill')}
-                                        margin="normal"
-                                        variant="outlined"
-                                    />
-                                </FormControl> */}
-                                 <div className="form-group row">
-                                    <label for="inputEmail3" className="col-md-5 col-form-label">Skill</label>
-                                    <div className="col-md-7">
-                                        <input  type="text" 
-                                                className="form-control"
-                                                value={testSkill}
-                                                onChange={(e) => this.props.onFieldChange(e.target.value, 'skill')}
-                                                />
-                                    </div>
-                                </div>
-                                 <div className="form-group row">
                                     <label for="inputEmail3" className="col-md-5 col-form-label">Category</label>
                                     <div className="col-md-7">
                                         <input  type="text" 
@@ -113,20 +72,47 @@ class TestConsoleSettings extends Component {
                                                 />
                                     </div>
                                 </div>
-                            {/* </div>
-                            <div className="row"> */}
-                                {/* <FormControl variant="outlined" style={styles.formControl}>
-                                    <TextField
-                                        disabled
-                                        id="outlined-name"
-                                        label="Experience (Years)"
-                                        value={experienceYears}
-                                        onChange={(e) => this.props.onFieldChange(e.target.value, 'experienceYears')}
-                                        margin="normal"
-                                        variant="outlined"
-                                    />
-                                </FormControl> */}
+                                {testCategory === 'Programming' && <div className="form-group row">
+                                    <label for="inputEmail3" className="col-md-5 col-form-label">Skill</label>
+                                    <div className="col-md-7">
+                                        <input  type="text" 
+                                                className="form-control"
+                                                value={testSkill}
+                                                onChange={(e) => this.props.onFieldChange(e.target.value, 'skill')}
+                                                />
+                                    </div>
+                                </div>}
+                                {testCategory === 'Academic' && <div className="form-group row">
+                                    <label for="inputEmail3" className="col-md-5 col-form-label">Grade</label>
+                                    <div className="col-md-7">
+                                        <input  type="text" 
+                                                className="form-control"
+                                                value={testGrade}
+                                                onChange={(e) => this.props.onFieldChange(e.target.value, 'grade')}
+                                                />
+                                    </div>
+                                </div>}
+                                {testCategory === 'Academic' && <div className="form-group row">
+                                    <label for="inputEmail3" className="col-md-5 col-form-label">Subject</label>
+                                    <div className="col-md-7">
+                                        <input  type="text" 
+                                                className="form-control"
+                                                value={testSubject}
+                                                onChange={(e) => this.props.onFieldChange(e.target.value, 'subject')}
+                                                />
+                                    </div>
+                                </div>}
                                  <div className="form-group row">
+                                    <label for="inputEmail3" className="col-md-5 col-form-label">Test Duration (Minutes)</label>
+                                    <div className="col-md-7">
+                                        <input  type="number" 
+                                                className="form-control"
+                                                value={testDuration}
+                                                onChange={(e) => this.props.onFieldChange(e.target.value, 'duration')}
+                                                />
+                                    </div>
+                                </div>
+                                {testCategory === 'Programming' && <div className="form-group row">
                                     <label for="inputEmail3" className="col-md-5 col-form-label">Experience (Years)</label>
                                     <div className="col-md-7">
                                         <input  type="number" 
@@ -135,28 +121,11 @@ class TestConsoleSettings extends Component {
                                                 onChange={(e) => this.props.onFieldChange(e.target.value, 'experienceYears')}
                                                 />
                                     </div>
-                                </div>
-                            {/* </div> */}
-                            {/* </div> */}
-                        {/* <div className="row mt-5"> */}
-                            {/* <div className="col-md-3">
-                                <FormControl variant="outlined" style={styles.formControl}>
-                                    <InputLabel htmlFor="testVisibility">Test Visibility</InputLabel>
-                                    <Select
-                                        value={testVisibility}
-                                        onChange={(e) => this.props.onFieldChange(e.target.value, 'testVisibility')}
-                                        input={<Input id="testVisibility" />}
-                                    >
-                                    {['Public', 'InvitedCandidates'].map((item, index) => {
-                                    return <MenuItem key={index} value={item}>{item}</MenuItem>
-                                    })}
-                                    </Select>
-                                </FormControl>
-                            </div> */}
-                            <div className="form-group row">
+                                </div>}
+                                <div className="form-group row">
                                     <label for="inputEmail3" className="col-md-5 col-form-label">Test Visibility</label>
                                     <div className="col-md-7">
-                                    <select class="form-control" 
+                                    <select className="form-control" 
                                         value={testVisibility}
                                         onChange={(e) => this.props.onFieldChange(e.target.value, 'testVisibility')}
                                         >
@@ -182,16 +151,26 @@ class TestConsoleSettings extends Component {
                                 </FormControl>
                             </div> */}
                             <div class="form-group row">
-                                <label class="col-md-6 col-form-label form-check-label" >
+                                <label class="col-md-5 col-form-label" >
                                 Video Monitoring Required
                                 </label>
-                                <div className="col-md-6">
-                                    <input class="form-check-input" type="checkbox" 
+                                <div className="col-md-7">
+                                    <input className="form-check-input ml-1" type="checkbox" 
                                             checked={videoMonitoringRequired}
                                             onChange={(e) => this.props.onFieldChange(e.target.checked, 'videoMonitoringRequired')}
                                             />
                                 </div>
                             </div>
+                            {testCategory === 'Programming' && <div className="form-group row">
+                                <label className="col-md-5 col-form-label">Invite-Email Subject</label>
+                                <div className="col-md-7">
+                                    <input  type="text" 
+                                            className="form-control"
+                                            value={emailSubject}
+                                            onChange={(e) => this.props.onFieldChange(e.target.value, 'emailSubject')}
+                                            />
+                                </div>
+                            </div>}
                             <div className="col-md-3"></div>
                             <div className="col-md-3"></div>
                             

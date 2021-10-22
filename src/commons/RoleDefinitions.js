@@ -3,6 +3,7 @@ import { VIEW_DASHBOARD_INVITATION,
         VIEW_DASHBOARD_TESTS,
         VIEW_DASHBOARD_MCQ } from './RoleBasedQueries/DashboardQueries';
 import { VIEW_MCQS_QUERY, VIEW_MCQS_BY_SKILL_QUERY,
+    VIEW_MCQS_BY_GRADE_QUERY,
     VIEW_MCQS_BY_DESCRIPTION_QUERY } from './RoleBasedQueries/McqQueries';
 import { VIEW_TESTS, VIEW_TESTS_QUERY, VIEW_TEST_BY_ID_QUERY, 
     VIEW_MY_TESTS_QUERY, VIEW_TESTS_AVAILABLE_FOR_ME_QUERY } from './RoleBasedQueries/TestQueries';
@@ -10,6 +11,8 @@ import { VIEW_INVITATIONS_QUERY } from './RoleBasedQueries/InvitationQueries';
 import { VIEW_USERS_QUERY } from './RoleBasedQueries/UserQueries';
 import { VIEW_ORGS_QUERY } from './RoleBasedQueries/OrgQueries';
 import { VIEW_GRADES_QUERY } from './RoleBasedQueries/GradeQueries';
+import { VIEW_TEST_REGISTRATIONS_QUERY, VIEW_MY_TEST_REGISTRATIONS_QUERY,
+    VIEW_REGISTRATIONS_FOR_TEST_QUERY, VIEW_TEST_REGISTRATION_BY_ID_QUERY } from './RoleBasedQueries/TestRegistrationQueries';
 
 export const admin = 'admin';
 export const orgadmin = 'orgadmin';
@@ -84,6 +87,7 @@ export const RoleDefinitions = {
         queries: [
             VIEW_MCQS_QUERY,
             VIEW_MCQS_BY_SKILL_QUERY,
+            VIEW_MCQS_BY_GRADE_QUERY,
             VIEW_MCQS_BY_DESCRIPTION_QUERY,
             VIEW_TESTS_QUERY,
             VIEW_TESTS_AVAILABLE_FOR_ME_QUERY,
@@ -95,7 +99,11 @@ export const RoleDefinitions = {
             VIEW_DASHBOARD_INVITATION,
             VIEW_DASHBOARD_TESTS,
             VIEW_DASHBOARD_MCQ,
-            VIEW_GRADES_QUERY
+            VIEW_GRADES_QUERY,
+            VIEW_TEST_REGISTRATIONS_QUERY,
+            VIEW_MY_TEST_REGISTRATIONS_QUERY,
+            VIEW_REGISTRATIONS_FOR_TEST_QUERY,
+            VIEW_TEST_REGISTRATION_BY_ID_QUERY
         ]
     }
    

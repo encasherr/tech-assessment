@@ -18,7 +18,9 @@ import { EscapeSpecialCharacters } from '../../common/HelperFunctions';
 class CandidateResponseReport extends Component {
 
     componentDidMount = () => {
-        this.props.fetchCandidateResponseReport(this.props.responseId);
+        console.log('this.props.candidateId', this.props.candidateId);
+        console.log('this.props.responseId', this.props.responseId);
+        this.props.fetchCandidateResponseReport(this.props.responseId, this.props.candidateId);
     }
 
     // formatScore = (score) => {
@@ -27,21 +29,65 @@ class CandidateResponseReport extends Component {
     // }
 
     render = () => {
-        let { candidateResponses, classes } = this.props;
-        console.log('candidateResponses', candidateResponses);
-        let { response_meta, invitation_meta } = candidateResponses || {}; 
+        let { candidateResponses } = this.props;
+        let { response_meta, invitation_meta, evaluation_meta,
+              mcqCorrectAnswers } = candidateResponses || {}; 
         let { mcqs } = response_meta || {}; 
-        console.log('mcq count', mcqs ? mcqs.length : 0);
 
-        let totalQuestions = mcqs ? mcqs.length : 0;
-        let candidateScore = response_meta ? formatToDecimals(response_meta.scorePercentage, 2) : 'NA';
-        let completedOn = invitation_meta ? getDateTime(invitation_meta.completedOn, true) : 'NA';
-        let result = response_meta ? response_meta.result : 'NA';
-
-        // let resultCss = classNames(classes.paletteReportBox, classes.palettePrimaryDark);
-        // if(result === 'CLEARED') {
-        //     resultCss = classNames(classes.paletteReportBox, classes.bgSuccessMain);
-        // }
+        let summary = {
+            totalQuestions:  mcqs ? mcqs.length : 0,
+            correctAnswersCount: 0,
+            totalScore: 'NA', 
+            candidateScore: 'NA', 
+            result: 'NA', 
+            completedOn: 'NA'
+        };
+        let responsesToRender = [];
+        if(mcqs && mcqs.length > 0){
+            mcqs.map((mcqItem, index) => {
+                let mcq = mcqItem.mcq.mcq_meta;
+                let candidateResponse = mcqItem.candidateResponse ? mcqItem.candidateResponse.responseKeys.sort().join("") : '';
+                let matchingMcqItem = mcqCorrectAnswers.filter((item) => {
+                    return item.mcqId === mcqItem.mcq.id;
+                })
+                let correctAnswer = '';
+                if(matchingMcqItem && matchingMcqItem.length > 0) {
+                    correctAnswer = matchingMcqItem[0].correctAnswer;
+                }
+                if(!correctAnswer) { // for unregistered candidates
+                    mcq.choices.forEach((choiceItem) => {
+                        if(choiceItem.isCorrect === true) {
+                            correctAnswer += choiceItem.key;
+                        }
+                    })
+                }
+                if(candidateResponse === correctAnswer) {
+                    summary.correctAnswersCount++;
+                }
+                responsesToRender.push({
+                    mcq,
+                    candidateResponse,
+                    correctAnswer,
+                    isCorrect: candidateResponse === correctAnswer,
+                })
+            });
+        }
+        if(response_meta && response_meta.scorePercentage) {
+            summary.candidateScore = formatToDecimals(response_meta.scorePercentage, 2);
+            summary.totalScore = response_meta.totalScore;
+            summary.result = response_meta.result;
+        }
+        else if(evaluation_meta && evaluation_meta.scorePercentage) {
+            summary.candidateScore = formatToDecimals(evaluation_meta.scorePercentage, 2);
+            summary.totalScore = evaluation_meta.totalScore;
+            summary.result = evaluation_meta.result;
+        }
+        if(invitation_meta && invitation_meta.completedOn) {
+            summary.completedOn = getDateTime(invitation_meta.completedOn);
+        }
+        else if(evaluation_meta && evaluation_meta.completedOn) {
+            summary.completedOn = getDateTime(evaluation_meta.completedOn);
+        }
 
         return (
             <div>
@@ -49,39 +95,7 @@ class CandidateResponseReport extends Component {
                 {mcqs && mcqs.length === 0 && <Typography align="center" variant="subtitle1">No Responses Found </Typography>}
                 {mcqs && mcqs.length > 0 &&
                 <>
-                <div className="card bg-secondary text-light">
-                    <div className="card-body">
-                        <div className="row">
-                            <div className="col-md-4">
-                                <div className="row">
-                                    <div className="col-md-10">
-                                        Total Questions: {totalQuestions} ({response_meta.totalScore})
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-md-4">
-                                <div className="row">
-                                    <div className="col-md-10">
-                                    Correct: {candidateScore} %
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-md-4">
-                                <div className="row">
-                                    <div className="col-md-10">
-                                    Result: {result}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div className="row mt-4">
-                            <div className="col-md-12">
-                            Completed On: {completedOn}
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {this.renderSummary(summary)}
                 <Table>
                     <TableHead>
                         <TableRow>
@@ -94,31 +108,42 @@ class CandidateResponseReport extends Component {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {mcqs.map((mcqItem, index) => {
-                            let mcq = mcqItem.mcq.mcq_meta;
-                            let candidateResponse = mcqItem.candidateResponse ? mcqItem.candidateResponse.responseKeys.sort().join("") : '';
-                            let correctAnswer = '';
-                            mcq.choices.forEach((choiceItem) => {
-                                if(choiceItem.isCorrect === true) {
-                                    correctAnswer += choiceItem.key;
-                                }
-                            })
-                            console.log('mcq_meta', mcq);
+                        {responsesToRender.map((responseItem, index) => {
+                            // let mcq = mcqItem.mcq.mcq_meta;
+                            // let candidateResponse = mcqItem.candidateResponse ? mcqItem.candidateResponse.responseKeys.sort().join("") : '';
+                            // let matchingMcqItem = mcqCorrectAnswers.filter((item) => {
+                            //     return item.mcqId === mcqItem.mcq.id;
+                            // })
+                            // let correctAnswer = '';
+                            // if(matchingMcqItem && matchingMcqItem.length > 0) {
+                            //     correctAnswer = matchingMcqItem[0].correctAnswer;
+                            // }
+                            // if(!correctAnswer) {
+                            //     mcq.choices.forEach((choiceItem) => {
+                            //         if(choiceItem.isCorrect === true) {
+                            //             correctAnswer += choiceItem.key;
+                            //         }
+                            //     })
+                            // }
+                            // if(candidateResponse === correctAnswer) {
+                            //     correctAnswersCount++;
+                            // }
+                            // console.log('mcq_meta', mcq);
                         return (
                             <TableRow key={index}
-                                className={candidateResponse===correctAnswer ? 'bg-warning' : 'bg-danger text-white'}    
+                                className={responseItem.isCorrect ? 'bg-warning' : 'bg-danger text-white'}    
                             >
-                                <CustomTableCell align="center">{mcqItem.questionOrderIndex+1}</CustomTableCell>
-                                <CustomTableCell align="left">{mcq.question}
+                                <CustomTableCell align="center">{responseItem.mcq.questionOrderIndex+1}</CustomTableCell>
+                                <CustomTableCell align="left">{responseItem.mcq.question}
                                 </CustomTableCell>
                                 <CustomTableCell align="left"
                                     dangerouslySetInnerHTML={{
-                                        __html: EscapeSpecialCharacters(mcq.description)
+                                        __html: EscapeSpecialCharacters(responseItem.mcq.description)
                                     }}>
                                 </CustomTableCell>
                                 {/* <CustomTableCell align="left">{mcq.description}</CustomTableCell> */}
-                                <CustomTableCell align="center">{correctAnswer}</CustomTableCell>
-                                <CustomTableCell align="center">{candidateResponse}</CustomTableCell>
+                                <CustomTableCell align="center">{responseItem.correctAnswer}</CustomTableCell>
+                                <CustomTableCell align="center">{responseItem.candidateResponse}</CustomTableCell>
                             </TableRow>
                         )})}
                     </TableBody>
@@ -126,6 +151,46 @@ class CandidateResponseReport extends Component {
                 </>
                 }
             </div>
+        )
+    }
+
+    renderSummary = (summary) => {
+        return (
+            <>
+                <div className="card bg-secondary text-light">
+                    <div className="card-body">
+                        <div className="row">
+                            <div className="col-md-4">
+                                <div className="row">
+                                    <div className="col-md-10">
+                                        Correct Response: {summary.correctAnswersCount} / {summary.totalQuestions}
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-md-4">
+                                <div className="row">
+                                    <div className="col-md-10">
+                                    Score: {summary.candidateScore} %
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-md-4">
+                                <div className="row">
+                                    <div className="col-md-10">
+                                    Result: {summary.result}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div className="row mt-4">
+                            <div className="col-md-12">
+                            Completed On: {summary.completedOn}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </>
         )
     }
 }

@@ -22,6 +22,39 @@ export const getTwoDigitTime = (seconds) => {
     return str;
 }
 
+export const getNextAvailableTimeSlots = () => {
+    let dailyTimeSlots = [ 8, 13, 21 ];
+    let nowAvailableTimeSlots = [];
+    let now = new Date();
+    let today = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()}`;
+    let nextDay = `${now.getFullYear()}-${now.getMonth()+1}-${now.getDate()+1}`;
+    let currentHour = now.getHours();
+    if(currentHour > dailyTimeSlots[2]) {
+        nowAvailableTimeSlots.push(`${nextDay} ${dailyTimeSlots[0]}:00`);
+        nowAvailableTimeSlots.push(`${nextDay} ${dailyTimeSlots[1]}:00`);
+        nowAvailableTimeSlots.push(`${nextDay} ${dailyTimeSlots[2]}:00`);
+        return nowAvailableTimeSlots;
+    }
+    if(currentHour > dailyTimeSlots[1]) {
+        nowAvailableTimeSlots.push(`${today} ${dailyTimeSlots[2]}:00`);
+        nowAvailableTimeSlots.push(`${nextDay} ${dailyTimeSlots[0]}:00`);
+        nowAvailableTimeSlots.push(`${nextDay} ${dailyTimeSlots[1]}:00`);
+        return nowAvailableTimeSlots;
+    }
+    if(currentHour > dailyTimeSlots[0]) {
+        nowAvailableTimeSlots.push(`${today} ${dailyTimeSlots[1]}:00`);
+        nowAvailableTimeSlots.push(`${today} ${dailyTimeSlots[2]}:00`);
+        nowAvailableTimeSlots.push(`${nextDay} ${dailyTimeSlots[0]}:00`);
+        return nowAvailableTimeSlots;
+    }
+    if(currentHour < dailyTimeSlots[0]) {
+        nowAvailableTimeSlots.push(`${today} ${dailyTimeSlots[0]}:00`);
+        nowAvailableTimeSlots.push(`${today} ${dailyTimeSlots[1]}:00`);
+        nowAvailableTimeSlots.push(`${today} ${dailyTimeSlots[2]}:00`);
+        return nowAvailableTimeSlots;
+    }
+}
+
 export const formatToDecimals = (score, places) => {
     if (score && !isNaN(score)) return score.toFixed(places);
     return 'NA';

@@ -1,5 +1,5 @@
 const fs = require('fs');
-let gradesToUse = ["grade_1"];
+let gradesToUse = ["grade_8"];
 
 const getAllQuestions = (importPath) => {
     console.log('importPath', importPath);

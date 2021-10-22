@@ -140,7 +140,12 @@ const db = {
             let sql = `update ta_${entityName} set ${fieldValueString} where id = ${id}`;
             executeQuery(sql).then((res) => {
                 console.log(`${entityName} updated, Id: ${id}`); 
-                resolve();
+                findOneRecord(entityName, id)
+                    .then((updatedRecord) => {
+                        resolve(updatedRecord);    
+                    }).catch((err) => {
+                        reject(err);  
+                    });
             })
             .catch((error) => {
                 console.log(`Error while updating ${entityName}, Id: ${id}`, error); 
@@ -250,6 +255,7 @@ const EntityFieldMapping = {
     candidates: 'candidate_meta',
     mcqresponses: 'response_meta',
     org: 'org_meta',
-    grade: 'grade_meta'
+    grade: 'grade_meta',
+    test_registrations: 'response_meta'
 }
 export default db;

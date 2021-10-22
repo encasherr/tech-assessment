@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import config from '../../config';
 import axios from 'axios';
-import { CardContent, FormControl, TextField, CardActions, Button, CardHeader } from '@material-ui/core';
+import { CardContent, FormControl, TextField, 
+    FormLabel, RadioGroup, Radio, FormControlLabel } from '@material-ui/core';
 
 import { AddUser, CurrentUserFieldChange,
      } from '../../actions/UserActions';
@@ -11,21 +12,53 @@ const OpSignup  = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [userType, setUserType] = useState('');
     const [signupButtonText, setSignupButtonText] = useState('SIGN UP');
     const [signupStatus, setSignupStatus] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
         config.instance.initialize();
     }, []);
 
+    const validateInputs = () => {
+        let errors = [];
+        if(!name) {
+            errors.push('Name is required');
+        }
+        if(!email) {
+            errors.push('Email is required');
+        }
+        if(!password) {
+            errors.push('Password is required');
+        }
+        if(!userType) {
+            errors.push('Select either Student or Professional')
+        }
+        if(name && name.length < 5) {
+            errors.push('Please enter valid name');
+        }
+        if(email && !/\S+@\S+\.\S+/.test(email)) {
+            errors.push('Please enter valid email id');
+        }
+        if(password && password.length < 6) {
+            errors.push('Password length should be at least 6');
+        }
+        return errors;
+    }
+
     const localHandler = (event) => {
         event.preventDefault()
-
+        let errors = validateInputs();
+        if(errors && errors.length > 0) {
+            setErrorMessage(errors.join('\n'));
+            return;
+        }
         let data = {
             name: name,
             emailId: email,
             password: password,
-            role: config.instance.Roles.Candidate
+            role: userType
         }
         setSignupButtonText('Working..');
         let model ={
@@ -99,6 +132,16 @@ const OpSignup  = () => {
                                             variant="outlined" />
                                     </FormControl>
                                 </div>
+                                <div className="row">
+                                    <FormControl className="col-md-12" variant="outlined">
+                                        {/* <FormLabel component="legend">Pop quiz: Material-UI is...</FormLabel> */}
+                                        <RadioGroup aria-label="quiz" name="quiz" value={userType} 
+                                                    onChange={(e) => setUserType(e.target.value)}>
+                                            <FormControlLabel value="student" control={<Radio />} label="Student" />
+                                            <FormControlLabel value="candidate" control={<Radio />} label="Professional" />
+                                        </RadioGroup>
+                                    </FormControl>
+                                </div>
                                 <div className="row mt-4">
                                     <button className="btn btn-primary btn-block" type="submit">
                                         {signupButtonText}
@@ -106,6 +149,7 @@ const OpSignup  = () => {
                                 </div>
                                 </form>
                             </div>
+                        <pre className="col-md-12 text-danger">{errorMessage}</pre>
                         </div>
 
                     }

@@ -4,6 +4,7 @@ import BaseController from '../BaseController';
 import TestModel from '../../Models/TestModel';
 import InvitationModel from '../../Models/InvitationModel';
 import McqModel from '../../Models/McqModel';
+import { getCurrentDateTime } from '../../commons/HelperFunctions';
 
 class AdminTestController extends BaseController {
     entityName = 'tests';
@@ -86,6 +87,9 @@ class AdminTestController extends BaseController {
                 });
                 let mcqModel = new McqModel();
                 mcqModel.GetMcqsByIds(selectedMcqIds).then((mcqs) => {
+                    if(mcqs && mcqs.length === 0) {
+                        console.log('No MCQs found for selected MCQ Ids in Test');
+                    }
                     resp.status(200).send(mcqs);
                 }).catch((err) => {
                     console.log('error in get mcqs by test id');
@@ -113,14 +117,49 @@ class AdminTestController extends BaseController {
         });
     }
 
+    GetStudentsByTestId = (req, resp) => {
+        let testId = req.query.testId;
+        console.log('get candidates by testid called: ', testId);
+
+        let testModel = new TestModel();
+        testModel.GetStudentsByTestId(testId).then((students) => {
+            if(!students) {
+                console.log('no students found');
+                resp.status(200).send([]);
+            }
+            else {
+                console.log('students found: ', students.length);
+                resp.status(200).send(students);
+            }
+        });
+    }
+
+    // Add = (req, resp) => {
+    //     console.log('Add Test called');
+    //     console.log(req.body);
+    //     let { test_meta } = req.body;
+    //     test_meta.createdOn = (new Date()).toLocaleDateString();
+    //     test_meta.createdBy = req.user.id ? req.user.id : '';
+    //     db.insert(this.entityName, req.body.test_meta);
+    //     resp.status(200).send('success');
+    // }
+
     Add = (req, resp) => {
         console.log('Add Test called');
         console.log(req.body);
-        let { test_meta } = req.body;
-        test_meta.createdOn = (new Date()).toLocaleDateString();
-        test_meta.createdBy = req.user.id ? req.user.id : '';
-        db.insert(this.entityName, req.body.test_meta);
-        resp.status(200).send('success');
+        let testEntity = req.body;
+        testEntity.test_meta.createdOn = getCurrentDateTime();
+        testEntity.test_meta.createdBy = req.user.id;
+        testEntity.test_meta.status = 'draft';
+        let testModel = new TestModel();
+        testModel.AddCustom(testEntity)
+                 .then((res) => {
+                    resp.status(200).send('success');
+                 })
+                 .catch((error) => {
+                    resp.status(500).send(error);         
+                 })
+        
     }
 
     Update = (req, resp) => {

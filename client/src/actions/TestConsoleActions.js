@@ -66,40 +66,65 @@ export const SettingsFieldChange = (val, field, model) => dispatch => {
 }
 
 export const FetchTest = (testId) => dispatch => {
-    let url = config.instance.getAdminApiUrl() + 'getTest' + '?testId=' + testId;
-    repository.getData(url, history)
-        .then((res) => {
-            dispatch({
-                type: FETCH_TEST_SUCCESS,
-                payload: res.data
+    return new Promise((resolve, reject) => {
+        let url = config.instance.getAdminApiUrl() + 'getTest' + '?testId=' + testId;
+        repository.getData(url, history)
+            .then((res) => {
+                dispatch({
+                    type: FETCH_TEST_SUCCESS,
+                    payload: res.data
+                });
+                resolve(true);
+            })
+            .catch((err) => {
+                dispatch({
+                    type: FETCH_TEST_FAIL,
+                    payload: err
+                });
+                reject(err);
             });
-        })
-        .catch((err) => {
-            dispatch({
-                type: FETCH_TEST_FAIL,
-                payload: err
-            });
-        });
+
+    })
 }
 
 export const LoadTestMcqs = (testId) => dispatch => {
-    let url = config.instance.getAdminApiUrl() + `getMcqsByTestId?testId=${testId}`;
+    return new Promise((resolve, reject) => {
+        let url = config.instance.getAdminApiUrl() + `getMcqsByTestId?testId=${testId}`;
+        repository.getData(url)
+            .then((res) => {
+                dispatch({
+                    type: FETCH_TEST_MCQS_SUCCESS,
+                    payload: res.data
+                });
+                resolve(true);
+            }).catch((err) => {
+                dispatch({
+                    type: FETCH_TEST_MCQS_FAIL,
+                    payload: err
+                })
+                reject(err);
+            });
+    })
+}
+
+export const LoadTestCandidates = (testId) => dispatch => {
+    let url = config.instance.getAdminApiUrl() + `getCandidatesByTestId?testId=${testId}`;
     repository.getData(url)
         .then((res) => {
             dispatch({
-                type: FETCH_TEST_MCQS_SUCCESS,
+                type: FETCH_TEST_CANDIDATES_SUCCESS,
                 payload: res.data
             });
         }).catch((err) => {
             dispatch({
-                type: FETCH_TEST_MCQS_FAIL,
+                type: FETCH_TEST_CANDIDATES_FAIL,
                 payload: err
             })
         });
 }
 
-export const LoadTestCandidates = (testId) => dispatch => {
-    let url = config.instance.getAdminApiUrl() + `getCandidatesByTestId?testId=${testId}`;
+export const LoadTestStudents = (testId) => dispatch => {
+    let url = config.instance.getAdminApiUrl() + `getStudentsByTestId?testId=${testId}`;
     repository.getData(url)
         .then((res) => {
             dispatch({

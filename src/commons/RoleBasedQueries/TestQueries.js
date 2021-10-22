@@ -135,15 +135,38 @@ export const VIEW_TESTS_AVAILABLE_FOR_ME_QUERY = {
                         WHERE u.id = ${userEntity.id}
                     `;                                
                 }
+                // case student: {
+                //     return `SELECT 
+                //         JSON_EXTRACT(t.test_meta, '$') as 'test_meta',
+                //         t.id as 'id',
+                //         JSON_EXTRACT(u.user_meta, '$') as 'user_meta',
+                //         tr.id as registrationId,
+                //         tr.status as registrationStatus,
+                //         tr.scheduled_start as scheduledStart,
+                //         tr.created_on as registeredOn,
+                //         tr.modified_on as modifiedOn
+                //         FROM ta_tests t
+                //         JOIN ta_users u ON JSON_EXTRACT(t.test_meta, '$.createdBy') = u.id
+                //         LEFT JOIN ta_test_registrations tr ON t.id = tr.test_id
+                //         WHERE JSON_EXTRACT(t.test_meta, '$.grade') = '${grade}'
+                //     `;                                
+                // }
                 case student: {
                     return `SELECT 
                         JSON_EXTRACT(t.test_meta, '$') as 'test_meta',
                         t.id as 'id',
-                        JSON_EXTRACT(u.user_meta, '$') as 'user_meta' 
+                        JSON_EXTRACT(u.user_meta, '$') as 'user_meta'
                         FROM ta_tests t
-                        JOIN ta_users u ON JSON_EXTRACT(t.test_meta, '$.createdBy') = u.id
-                        WHERE JSON_EXTRACT(t.test_meta, '$.grade') = '${grade}'
-                    `;                                
+                        JOIN ta_candidates ca ON t.grade = ca.grade
+                        JOIN ta_users u ON ca.user_id = u.id 
+                        WHERE
+                        JSON_EXTRACT(t.test_meta, '$.status') = 'published'
+                        AND t.id NOT IN (SELECT test_id FROM ta_test_registrations tr
+                            JOIN ta_candidates can ON tr.candidate_id = can.id
+                            JOIN ta_users ui ON can.user_id = ui.id
+                            WHERE ui.id = ${userEntity.id}
+                            )
+                    `;              
                 }
                 default: handleRoleNotFound(userEntity.role);
             }
@@ -187,7 +210,10 @@ export const VIEW_TEST_BY_ID_QUERY = {
                     return `SELECT 
                     JSON_EXTRACT(t.test_meta, '$') as 'test_meta',
                     t.id as 'id',
-                    JSON_EXTRACT(u.user_meta, '$') as 'user_meta' 
+                    JSON_EXTRACT(u.user_meta, '$') as 'user_meta',
+                    t.category,
+                    t.grade,
+                    t.subject
                     FROM ta_tests t
                     JOIN ta_users u ON JSON_EXTRACT(t.test_meta, '$.createdBy') = u.id
                     WHERE t.id = ${testId}
@@ -205,6 +231,7 @@ export const VIEW_TEST_BY_ID_QUERY = {
                         AND t.id = ${testId}
                     `;                                
                 }
+                case student:
                 case candidate: {
                     return `SELECT 
                     JSON_EXTRACT(t.test_meta, '$') as 'test_meta',
@@ -233,6 +260,11 @@ export const VIEW_TEST_BY_ID_QUERY = {
                     output.id = item.id;
                     output['test_meta'] = JSON.parse(test_meta);
                     output['user_meta'] = JSON.parse(item['user_meta']);
+                    Object.keys(item).forEach((key) => {
+                        if(key !== 'test_meta' && key !== 'user_meta') {
+                            output[key] = item[key];
+                        }
+                    })
                     outputArray.push(output);
                 })
             }

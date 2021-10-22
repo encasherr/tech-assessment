@@ -1,12 +1,21 @@
 import mysql from 'mysql';
 
-// const connection = mysql.createConnection({
+// const mysql_pool  = mysql.createPool({
+//     connectionLimit: 50,
+//     host: '95.216.2.208', // cloud2.zolahost.net
+//     user: 'cashfrom_profile',
+//     password: 'Encasherr123',
+//     database: 'cashfrom_profiledb_dev',
+//     acquireTimeout: 1000000
+// });
+
 const mysql_pool  = mysql.createPool({
     connectionLimit: 50,
-    host: '95.216.2.208', // cloud2.zolahost.net
-    user: 'cashfrom_profile',
+    host: 'localhost',
+    // host: '103.212.121.53', 
+    user: 'tpptxbaq_app_write',
     password: 'Encasherr123',
-    database: 'cashfrom_profiledb'
+    database: 'tpptxbaq_profiledb'
 });
 
 const getData = (query) => {

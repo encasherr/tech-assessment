@@ -6,6 +6,7 @@ const secretKey = 'vOVH6sdmpNWjRRIqCc7rdxs01lwHzfr3';
 const iv = crypto.randomBytes(16);
 const path = require('path');
 const fs = require('fs');
+const bcrypt = require('bcryptjs');
 
 export const encrypt = (text) => {
 
@@ -89,6 +90,20 @@ export const createPrerequisitesDir = () => {
 export const getAbsolutePath = (relativePath) => {
     let absolutePath = path.resolve(relativePath);
     return absolutePath;    
+}
+
+export const createPasswordHash = (plainPassword) => {
+    let salt = bcrypt.genSaltSync(10);
+    let hash = bcrypt.hashSync(plainPassword, salt);
+    return hash;
+}
+
+export const comparePasswordHash = (plainPassword, passwordHash) => {
+    let salt = bcrypt.genSaltSync(10);
+    let hash = bcrypt.hashSync(plainPassword, salt);
+    console.log('DBhash', passwordHash);
+    console.log('userhash', hash);
+    return bcrypt.compareSync(plainPassword, passwordHash);
 }
 
 // module.exports = {

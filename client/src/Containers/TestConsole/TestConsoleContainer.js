@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import {    FetchTest, AddMcqToTest, PublishTest, CloseSnackbar, SetHistory,
-    RemoveMcqFromTest, LoadTestMcqs, LoadTestCandidates, OpenSnackbar,
+    RemoveMcqFromTest, LoadTestMcqs, LoadTestCandidates, LoadTestStudents, OpenSnackbar,
     SettingsFieldChange, UpdateTestSettings } from '../../actions/TestConsoleActions';            
 import { SendInvite, EvaluateResults } from '../../actions/InviteConsoleActions';
 // import Link from '@material-ui/core/Link';
@@ -42,9 +42,16 @@ class TestConsoleContainer extends React.Component {
     reload = () => {
         let { state } = this.props.location;
         if(state){
-            this.props.FetchTest(state.testId, this.props.history);
             this.props.LoadTestMcqs(state.testId);
-            this.props.LoadTestCandidates(state.testId);
+            this.props.FetchTest(state.testId, this.props.history)
+                    .then(() => {
+                        if(this.props.current_test.category === 'Academic') {
+                            this.props.LoadTestStudents(state.testId);
+                        }
+                        else {
+                            this.props.LoadTestCandidates(state.testId);
+                        }
+                    })
         }
     }
 
@@ -57,11 +64,13 @@ class TestConsoleContainer extends React.Component {
         let { current_test } = this.props;
         this.props.AddMcqToTest(mcqItem, this.props.current_test)
                 .then((res) => {
-                    this.props.LoadTestMcqs(current_test.id);  
-                    this.setState({
-                        snackOpen: true,
-                        snackMessage: 'MCQ added to test'
-                    });
+                    this.props.LoadTestMcqs(current_test.id)
+                    .then(() => {
+                        this.setState({
+                            snackOpen: true,
+                            snackMessage: `Test updated - ${this.props.selectedMcqs ? this.props.selectedMcqs.length : 0} MCQs`
+                        });
+                    })
                 });
     }
     
@@ -69,12 +78,14 @@ class TestConsoleContainer extends React.Component {
         let { current_test } = this.props;
         this.props.RemoveMcqFromTest(mcqItem, this.props.current_test)
                     .then((res) => {
-                        this.props.LoadTestMcqs(current_test.id);  
-                        this.setState({
-                            snackOpen: true,
-                            snackMessage: 'MCQ removed from test'
-                        });
+                        this.props.LoadTestMcqs(current_test.id) 
+                        .then(() => {
+                            this.setState({
+                                snackOpen: true,
+                                snackMessage: `Test updated - ${this.props.selectedMcqs ? this.props.selectedMcqs.length : 0} MCQs`
+                            });
                     })
+                })
     }
 
     onPublish = () => {
@@ -197,6 +208,7 @@ const mapDispatchToProps = dispatch => ({
     FetchTest: (testId, history) => dispatch(FetchTest(testId, history)),
     LoadTestMcqs: (testId) => dispatch(LoadTestMcqs(testId)),
     LoadTestCandidates: (testId) => dispatch(LoadTestCandidates(testId)),
+    LoadTestStudents: (testId) => dispatch(LoadTestStudents(testId)),
     SettingsFieldChange: (val, field, model) => dispatch(SettingsFieldChange(val, field, model)),
     UpdateTestSettings: (testModel) => dispatch(UpdateTestSettings(testModel)),
     SendInvite: (model) => dispatch(SendInvite(model)),

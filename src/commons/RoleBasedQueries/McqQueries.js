@@ -1,8 +1,9 @@
 import queries from '../../db/queries';
 import { handleRoleNotFound, admin, orgadmin, staff, teacher } from '../RoleDefinitions';
 
-export const VIEW_MCQS = 'VIEW_MCQS'; 
+export const VIEW_MCQS = 'VIEW_MCQS';
 export const VIEW_MCQS_BY_SKILL = 'VIEW_MCQS_BY_SKILL';
+export const VIEW_MCQS_BY_GRADE = 'VIEW_MCQS_BY_GRADE';
 export const VIEW_MCQS_BY_DESCRIPTION = 'VIEW_MCQS_BY_DESCRIPTION';
 
 const orgAdminQueryFilter = `SELECT * FROM ta_mcq m 
@@ -16,14 +17,14 @@ export const VIEW_MCQS_QUERY = {
     value: {
         getSql: (userEntity) => {
             console.log(`getsql for user: ${userEntity}`);
-            switch(userEntity.role) {
+            switch (userEntity.role) {
                 case admin: {
                     return `SELECT * FROM ta_mcq m`;
                 }
                 case staff:
                 case orgadmin: {
                     return orgAdminQueryFilter.replace('paramOrgId', userEntity.orgId)
-                                                .replace('paramAdminRole', admin);
+                        .replace('paramAdminRole', admin);
                 }
                 case teacher: {
                     return `SELECT m.* FROM ta_mcq m 
@@ -51,7 +52,7 @@ export const VIEW_MCQS_QUERY = {
                         output['mcq_meta'] = JSON.parse(mcq_meta);
                         outputArray.push(output);
                     }
-                    catch(exception) {
+                    catch (exception) {
                         console.log('exception in parsing mcqMeta', mcq_meta);
                         console.log(exception);
                     }
@@ -67,14 +68,14 @@ export const VIEW_MCQS_BY_SKILL_QUERY = {
     value: {
         getSql: (params) => {
             console.log(`getsql for user: ${params.userEntity}`);
-            if(!params.userEntity) {
+            if (!params.userEntity) {
                 return handleRoleNotFound('null userEntity');
             }
-            if(!params.skill) {
+            if (!params.skill) {
                 return handleRoleNotFound('null skill');
             }
             let skill = params.skill.toLowerCase();
-            switch(params.userEntity.role) {
+            switch (params.userEntity.role) {
                 case admin: {
                     return `SELECT * FROM ta_mcq m
                     WHERE LOWER(m.skill) = '${skill}'
@@ -88,7 +89,7 @@ export const VIEW_MCQS_BY_SKILL_QUERY = {
                     //     AND LOWER(m.skill) = '${skill}'
                     // `;
                     return `${orgAdminQueryFilter.replace('paramOrgId', userEntity.orgId)
-                                                .replace('paramAdminRole', admin)}
+                        .replace('paramAdminRole', admin)}
                                                 AND LOWER(m.skill) = '${skill}'`;
                 }
                 case teacher: {
@@ -108,18 +109,87 @@ export const VIEW_MCQS_BY_SKILL_QUERY = {
 }
 
 
+export const VIEW_MCQS_BY_GRADE_QUERY = {
+    key: VIEW_MCQS_BY_GRADE,
+    value: {
+        getSql: (params) => {
+            console.log(`getsql for user: ${params.userEntity}`);
+            if (!params.userEntity) {
+                return handleRoleNotFound('null userEntity');
+            }
+            if (!params.grade) {
+                return handleRoleNotFound('grade is mandatory');
+            }
+            let grade = params.grade.toLowerCase();
+            switch (params.userEntity.role) {
+                case admin: {
+                    return `SELECT * FROM ta_mcq m
+                    WHERE LOWER(m.grade) = '${grade}'
+                    `;
+                }
+                case staff:
+                case orgadmin: {
+                    // return `SELECT * FROM ta_mcq m 
+                    //     JOIN ta_users u ON m.addedBy = u.id
+                    //     WHERE JSON_EXTRACT(u.user_meta, '$.orgId') = ${params.userEntity.orgId}
+                    //     AND LOWER(m.skill) = '${skill}'
+                    // `;
+                    return `${orgAdminQueryFilter.replace('paramOrgId', userEntity.orgId)
+                        .replace('paramAdminRole', admin)}
+                                                AND LOWER(m.grade) = '${grade}'`;
+                }
+                case teacher: {
+                    return `SELECT m.* FROM ta_mcq m 
+                        JOIN ta_users u ON m.addedBy = u.id
+                        WHERE LOWER(m.grade) = '${grade}'
+                        AND (u.id = ${params.userEntity.id} OR JSON_EXTRACT(u.user_meta, '$.role') = '${admin}')
+                    `;
+                }
+                default: return handleRoleNotFound(params.userEntity.role);
+            }
+        },
+        serializeToJson: (data) => {
+            let outputArray = [];
+            console.log('data count', data.length);
+            if (data && data.length > 0) {
+                data.map((item, index) => {
+                    let mcq_meta = item['mcq_meta'];
+                    mcq_meta = mcq_meta.replace(/\n/g, "\\n");
+                    mcq_meta = mcq_meta.replace(/\r/g, "\\r");
+                    mcq_meta = mcq_meta.replace(/\t/g, "\\t");
+                    let output = {};
+                    output.id = item.id;
+                    try {
+                        output['mcq_meta'] = JSON.parse(mcq_meta);
+                        outputArray.push(output);
+                        Object.keys(item).forEach((key) => {
+                            if(key !== 'mcq_meta' && key !== 'user_meta') {
+                                output[key] = item[key];
+                            }
+                        })
+                    }
+                    catch (exception) {
+                        console.log('exception in parsing mcqMeta', mcq_meta);
+                    }
+                })
+            }
+            return outputArray;
+        }
+    }
+}
+
 export const VIEW_MCQS_BY_DESCRIPTION_QUERY = {
     key: VIEW_MCQS_BY_DESCRIPTION,
     value: {
         getSql: (params) => {
             console.log(`getsql for user: ${params.userEntity}`);
-            if(!params.userEntity) {
+            if (!params.userEntity) {
                 return handleRoleNotFound('null userEntity');
             }
-            if(!params.description) {
+            if (!params.description) {
                 return handleRoleNotFound('null description');
             }
-            switch(params.userEntity.role) {
+            switch (params.userEntity.role) {
                 case admin: {
                     return `SELECT * FROM ta_mcq m
                     WHERE JSON_EXTRACT(m.mcq_meta, '$.description') = '${params.description}'
@@ -133,7 +203,7 @@ export const VIEW_MCQS_BY_DESCRIPTION_QUERY = {
                     //     AND JSON_EXTRACT(m.mcq_meta, '$.description') = '${params.description}'
                     // `;
                     return `${orgAdminQueryFilter.replace('paramOrgId', userEntity.orgId)
-                                                .replace('paramAdminRole', admin)}
+                        .replace('paramAdminRole', admin)}
                                 AND JSON_EXTRACT(m.mcq_meta, '$.description') = '${params.description}'`;
                 }
                 case teacher: {
@@ -168,7 +238,7 @@ const serializeToJson = (data) => {
                 output['mcq_meta'] = JSON.parse(mcq_meta);
                 outputArray.push(output);
             }
-            catch(exception) {
+            catch (exception) {
                 console.log('exception in parsing mcqMeta', mcq_meta);
             }
         })
