@@ -69,8 +69,9 @@ https://www.linkedin.com/company/milesweb-internet-services
 
 
 Setup Instructions:
+Server: 103.212.120.231
 
-Login as root user
+Login as "root" user or "ta_admin" user
 
 curl -sL https://rpm.nodesource.com/setup_14.x | bash -
 
@@ -80,10 +81,64 @@ yum install gcc-c++ make
 
 yum install git -y
 
- // git clone git@github.com:encasherr/tech-assessment.git
+=> Setup the NodeJs App:
+mkdir ta_apps
+cd ta_apps
+git clone https://github.com/encasherr/tech-assessment.git
+-username: encasherr
+-personal access token: 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
+cd tech-assessment
+npm install
+npm run build
+cd client
+npm install
+npm run build
+cd ..
+cd ..
+mkdir approot
+cp -r tech-assessment/node_modules/ approot/
+cp -r tech-assessment/wwwroot/. approot/
+cp -r tech-assessment/client/build/. approot/
+
+
+=> Setup Docker on CentOs 7
+sudo yum check-update
+sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+sudo yum install docker
+sudo systemctl start docker
+sudo systemctl enable docker
+sudo systemctl status docker
+sudo docker pull mysql
+sudo docker run --name ta-mysql -e MYSQL_ROOT_PASSWORD=tech -d mysql:latest
+-- sudo docker run -it --rm mysql mysql -hta-mysql -uroot -p
+sudo docker ps
+sudo docker exec -it ta-mysql bash
+mysql -u root -p
+CREATE DATABASE ta_profiledb
+--update mysql.user set host = ‘%’ where user=’root’;
+
+sudo docker volume create phpmyadmin-volume
+sudo docker run --name ta-phpmyadmin -v phpmyadmin-volume:/etc/phpmyadmin/config.user.inc.php --link ta-mysql:db -p 82:80 -d phpmyadmin/phpmyadmin
+
+MySql DB root user:
+user: root
+password: tech
+
+->run the above exsting containers whenever restarted
+sudo docker start ta-mysql
+sudo docker start ta-phpmyadmin
+
+-> open GUI with root access
+sudo -i nautilus
+
+-> switch to another login user
+su [username]
+
+------------------------------------------------------------------------------------------
 
 Git Personal access token:
- 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
+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
 
 git clone https://github.com/encasherr/tech-assessment.git
 enter username
@@ -96,3 +151,45 @@ To  delete the cache record:
 $ git config --global --unset credential.helper
 $ git config --system --unset credential.helper
 
+=>install and start mysql:
+wget https://repo.mysql.com/mysql80-community-release-el7-1.noarch.rpm
+yum localinstall mysql80-community-release-el7-1.noarch.rpm
+yum install mysql-community-server
+service mysqld start
+->enter mysql command shell
+/usr/bin/mysql -u root -p
+->mysql temporary password check:
+sudo grep ‘temporary password’ /var/log/mysqld.log
+password: &6m(7fsLduk
+
+-> stop / start mysql
+systemctl stop mysqld
+systemctl start mysqld
+
+-> change password of mysql
+systemctl stop mysqld
+systemctl set-environment MYSQLD_OPTS=”--skip-grant-tables”
+systemctl start mysqld
+
+
+todo:
+create a new database
+create new user on that database
+run script on that database
+
+
+=>Install and setup GNome UI on CentOs 7:
+sudo yum groups install "GNOME Desktop"
+sudo systemctl start graphical.target
+
+=>Install and setup PhpMyAdmin:
+yum install httpd -y
+systemctl start httpd.service
+systemctl status httpd
+systemctl enable httpd.service
+sudo yum install epel-release
+sudo yum install phpmyadmin
+vim /etc/httpd/conf.d/phpMyAdmin.conf
+
+->remove phpmyadmin
+sudo yum remove phpmyadmin

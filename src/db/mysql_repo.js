@@ -9,13 +9,21 @@ import mysql from 'mysql';
 //     acquireTimeout: 1000000
 // });
 
+// const mysql_pool  = mysql.createPool({
+//     connectionLimit: 50,
+//     host: 'localhost',
+//     // host: '103.212.121.53', 
+//     user: 'tpptxbaq_app_write',
+//     password: 'Encasherr123',
+//     database: 'tpptxbaq_profiledb'
+// });
+
 const mysql_pool  = mysql.createPool({
     connectionLimit: 50,
     host: 'localhost',
-    // host: '103.212.121.53', 
-    user: 'tpptxbaq_app_write',
+    user: 'ta_app_write',
     password: 'Encasherr123',
-    database: 'tpptxbaq_profiledb'
+    database: 'ta_profiledb'
 });
 
 const getData = (query) => {
