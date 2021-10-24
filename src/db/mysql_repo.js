@@ -20,7 +20,8 @@ import mysql from 'mysql';
 
 const mysql_pool  = mysql.createPool({
     connectionLimit: 50,
-    host: 'localhost',
+    host: '172.17.0.2',
+    port: 3306,
     user: 'ta_app_write',
     password: 'Encasherr123',
     database: 'ta_profiledb'
