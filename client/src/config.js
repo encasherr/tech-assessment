@@ -73,7 +73,8 @@ export default class config {
         let locationHref = window.location.href;
         if(locationHref.indexOf('localhost:3000') > -1) return `http://localhost:3000`
         if(locationHref.indexOf('localhost:3001') > -1) return `http://localhost:3001`
-        return configValues.site_url;
+        // return configValues.site_url;
+        return '';
     }
 
     getApiHomeUrl = () => {

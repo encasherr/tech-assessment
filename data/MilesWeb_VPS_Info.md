@@ -150,12 +150,16 @@ sudo docker run --name ta-phpmyadmin -v phpmyadmin-volume:/etc/phpmyadmin/config
 
 Todo via phpmyadmin:
 create a new database
-create new user on that database ta_app_write
+create new user on that database ta_app1
 run application DB schema script on that database
 
 
--> We need to change Mysql authentication to plain old password authentication because it by default uses cache authentication. Run this script in phpmyadmin:
-ALTER USER 'ta_app_write' IDENTIFIED WITH mysql_native_password BY 'Encasherr123';
+-> We need to change Mysql authentication to plain old password authentication because it by default uses cache authentication. Run this script in phpmyadmin (if errors out in phpmyadmin, go to mysql bash via terminal and then run the alter statement):
+ALTER USER 'ta_app_write' IDENTIFIED WITH mysql_native_password BY '[password]';
+-> via terminal
+sudo docker exec -it ta-mysql bash
+mysql -u root -p
+ALTER USER 'ta_app_write' IDENTIFIED WITH mysql_native_password BY '[password]';
 
 => We need to open port number 3001 to be able to access application externally
 sudo iptables -I INPUT -p tcp -–dport 3001 -j ACCEPT
