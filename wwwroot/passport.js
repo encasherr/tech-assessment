@@ -16,6 +16,8 @@ var _UserModel2 = _interopRequireDefault(_UserModel);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
+
 var GoogleTokenStrategy = require('passport-google-token').Strategy;
 
 var LocalStrategy = require('passport-local').Strategy;
@@ -45,48 +47,98 @@ var localOptions = {
     usernameField: 'emailId',
     passwordField: 'password'
 };
-_passport2.default.use(new LocalStrategy(localOptions, function (emailId, password, done) {
-    console.log('local strategy being used');
-    var userModel = new _UserModel2.default();
-    // let existingUser = users.GetUser(emailId);
-    userModel.GetUserByEmail(emailId).then(function (users) {
-        var existingUser = users[0];
-        if (existingUser) {
-            var userMeta = JSON.parse(existingUser.user_meta);
-            var userEntity = {
-                id: existingUser.id,
-                emailId: emailId,
-                name: userMeta.name ? userMeta.name : emailId,
-                role: userMeta.role,
-                orgId: userMeta.orgId
-            };
-            console.log('user found', userEntity);
-            done(null, userEntity);
-        } else {
-            console.log('unknown user login being attempted');
+_passport2.default.use(new LocalStrategy(localOptions, function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(emailId, password, done) {
+        var userModel, existingUser, userMeta, userEntity, newUser;
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+            while (1) {
+                switch (_context.prev = _context.next) {
+                    case 0:
+                        console.log('local strategy being used');
+                        userModel = new _UserModel2.default();
+                        _context.next = 4;
+                        return userModel.CheckUserCredentials(emailId, password);
 
-            var newUser = {
-                emailId: emailId,
-                status: 'not found',
-                name: emailId,
-                role: 'guest'
-            };
+                    case 4:
+                        existingUser = _context.sent;
 
-            done(null, newUser);
-        }
-    });
 
-    /*if(emailId === Constants.AdminEmailId) {
-        console.log('admin user being added');
-        let userEntity = {
-            emailId: emailId,
-            name: Constants.AdminEmailId,
-            role: Constants.AdminRole
-        };
-        users.Add(userEntity);
-        return done(null, userEntity);
-    }*/
-}));
+                        if (existingUser) {
+                            console.log('existingUser', existingUser);
+                            userMeta = JSON.parse(existingUser.user_meta);
+                            userEntity = {
+                                id: existingUser.id,
+                                emailId: emailId,
+                                name: userMeta.name ? userMeta.name : emailId,
+                                role: userMeta.role,
+                                orgId: userMeta.orgId
+                            };
+
+                            done(null, userEntity);
+                        } else {
+                            newUser = {
+                                emailId: emailId,
+                                status: 'not found',
+                                name: emailId,
+                                role: 'guest'
+                            };
+
+
+                            done(null, newUser);
+                        }
+                        /*
+                        userModel.GetUserByEmail(emailId)
+                                            .then((users) => {
+                                                let existingUser = users[0];
+                                                if(existingUser) {
+                                                    let userMeta = JSON.parse(existingUser.user_meta);
+                                                    let userEntity = {
+                                                        id: existingUser.id,
+                                                        emailId: emailId,
+                                                        name: userMeta.name ? userMeta.name : emailId,
+                                                        role: userMeta.role,
+                                                        orgId: userMeta.orgId
+                                                    };
+                                                    console.log('user found', userEntity);
+                                                    done(null, userEntity);
+                                                }
+                                                else {
+                                                    console.log('unknown user login being attempted');
+                                                    
+                                                    const newUser = {
+                                                        emailId: emailId,
+                                                        status: 'not found',
+                                                        name: emailId,
+                                                        role: 'guest'
+                                                    }
+                                                    
+                                                    done(null, newUser);
+                                                }
+                                            });
+                        */
+                        /*if(emailId === Constants.AdminEmailId) {
+                            console.log('admin user being added');
+                            let userEntity = {
+                                emailId: emailId,
+                                name: Constants.AdminEmailId,
+                                role: Constants.AdminRole
+                            };
+                            users.Add(userEntity);
+                            return done(null, userEntity);
+                        }*/
+
+                    case 6:
+                    case 'end':
+                        return _context.stop();
+                }
+            }
+        }, _callee, this);
+    }));
+
+    return function (_x, _x2, _x3) {
+        return _ref.apply(this, arguments);
+    };
+}()));
 /*
 passport.use('google-token',new GoogleTokenStrategy({
         clientID: AuthConfig.clientId,

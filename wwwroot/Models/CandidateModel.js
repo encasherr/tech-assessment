@@ -55,9 +55,19 @@ var CandidateModel = function CandidateModel() {
 
     this.GetCandidate = function (candidateId) {
         return new Promise(function (resolve, reject) {
-            _mysqldb2.default.findOne(_this.entityName, candidateId).then(function (res) {
-                resolve(res);
+            var sql = 'SELECT *\n            FROM ta_candidates\n            WHERE id = ' + candidateId + '\n            ';
+            _mysqldb2.default.executeQuery(sql).then(function (res) {
+                if (res && res.length > 0) {
+                    resolve(res[0]);
+                } else {
+                    resolve(null);
+                }
+            }).catch(function (err) {
+                reject(err);
             });
+            // db.findOne(this.entityName, candidateId).then((res) => {
+            //     resolve(res);
+            // });
         });
     };
 
@@ -74,6 +84,16 @@ var CandidateModel = function CandidateModel() {
         return new Promise(function (resolve, reject) {
             _mysqldb2.default.insert(_this.entityName, entity).then(function (insertId) {
                 resolve(insertId);
+            });
+        });
+    };
+
+    this.AddCandidate = function (entity) {
+        return new Promise(function (resolve, reject) {
+            _mysqldb2.default.insertCustom(_this.entityName, entity).then(function (insertId) {
+                resolve(insertId);
+            }).catch(function (err) {
+                reject(err);
             });
         });
     };

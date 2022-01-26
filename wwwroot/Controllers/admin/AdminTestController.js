@@ -24,6 +24,8 @@ var _McqModel = require('../../Models/McqModel');
 
 var _McqModel2 = _interopRequireDefault(_McqModel);
 
+var _HelperFunctions = require('../../commons/HelperFunctions');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -81,6 +83,18 @@ var AdminTestController = function (_BaseController) {
                 console.log(err);
                 resp.status(500).send(err);
             });
+        }, _this.GetTestsAvailableForMe = function (req, resp) {
+            console.log('GetTestsAvailableForMe called', req.user);
+            var model = new _TestModel2.default();
+            var grade = '6';
+            model.GetTestsAvailableForMe(req.user, grade).then(function (res) {
+                console.log('fetched tests');
+                resp.send(res);
+            }).catch(function (err) {
+                console.log('error in get my tests', err);
+                var obj = { status: 500, message: err };
+                resp.status(500).send(obj);
+            });
         }, _this.GetMcqsByTestId = function (req, resp) {
             var testId = req.query.testId;
             console.log('get mcqs by testid called: ', testId);
@@ -96,6 +110,9 @@ var AdminTestController = function (_BaseController) {
                     });
                     var mcqModel = new _McqModel2.default();
                     mcqModel.GetMcqsByIds(selectedMcqIds).then(function (mcqs) {
+                        if (mcqs && mcqs.length === 0) {
+                            console.log('No MCQs found for selected MCQ Ids in Test');
+                        }
                         resp.status(200).send(mcqs);
                     }).catch(function (err) {
                         console.log('error in get mcqs by test id');
@@ -118,15 +135,33 @@ var AdminTestController = function (_BaseController) {
                     resp.status(200).send(candidates);
                 }
             });
+        }, _this.GetStudentsByTestId = function (req, resp) {
+            var testId = req.query.testId;
+            console.log('get candidates by testid called: ', testId);
+
+            var testModel = new _TestModel2.default();
+            testModel.GetStudentsByTestId(testId).then(function (students) {
+                if (!students) {
+                    console.log('no students found');
+                    resp.status(200).send([]);
+                } else {
+                    console.log('students found: ', students.length);
+                    resp.status(200).send(students);
+                }
+            });
         }, _this.Add = function (req, resp) {
             console.log('Add Test called');
             console.log(req.body);
-            var test_meta = req.body.test_meta;
-
-            test_meta.createdOn = new Date().toLocaleDateString();
-            test_meta.createdBy = req.user.id ? req.user.id : '';
-            _mysqldb2.default.insert(_this.entityName, req.body.test_meta);
-            resp.status(200).send('success');
+            var testEntity = req.body;
+            testEntity.test_meta.createdOn = (0, _HelperFunctions.getCurrentDateTime)();
+            testEntity.test_meta.createdBy = req.user.id;
+            testEntity.test_meta.status = 'draft';
+            var testModel = new _TestModel2.default();
+            testModel.AddCustom(testEntity).then(function (res) {
+                resp.status(200).send('success');
+            }).catch(function (error) {
+                resp.status(500).send(error);
+            });
         }, _this.Update = function (req, resp) {
             console.log('update test called');
             console.log(req.body);
@@ -180,6 +215,16 @@ var AdminTestController = function (_BaseController) {
             return oldEntity;
         }, _temp), _possibleConstructorReturn(_this, _ret);
     }
+
+    // Add = (req, resp) => {
+    //     console.log('Add Test called');
+    //     console.log(req.body);
+    //     let { test_meta } = req.body;
+    //     test_meta.createdOn = (new Date()).toLocaleDateString();
+    //     test_meta.createdBy = req.user.id ? req.user.id : '';
+    //     db.insert(this.entityName, req.body.test_meta);
+    //     resp.status(200).send('success');
+    // }
 
     return AdminTestController;
 }(_BaseController3.default);

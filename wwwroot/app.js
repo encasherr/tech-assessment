@@ -40,6 +40,8 @@ var _general = require("./utils/general");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+// import CronScheduler from './commons/CronSheduler';
+
 var port_number = process.env.PORT || 3001;
 var app = (0, _express2.default)();
 
@@ -48,6 +50,7 @@ app.use(_bodyParser2.default.json());
 app.use(_express2.default.static(_path2.default.join(__dirname)));
 
 app.use(_passport4.default.initialize());
+// app.use(CronScheduler);
 
 var corsOption = {
     origin: true,

@@ -20,6 +20,10 @@ var _RoleDefinitions = require('../commons/RoleDefinitions');
 
 var _InvitationQueries = require('../commons/RoleBasedQueries/InvitationQueries');
 
+var _Constants = require('../commons/Constants');
+
+var _Constants2 = _interopRequireDefault(_Constants);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } } // import db from './db';
@@ -92,7 +96,7 @@ var InvitationModel = function InvitationModel() {
     };
 
     this.Add = function (entity) {
-        entity.status = "INITIATED";
+        entity.status = _Constants2.default.InvitationTestStatus.Started;
         entity.invitedOn = new Date().toLocaleDateString();
         return new Promise(function (resolve, reject) {
             _mysqldb2.default.insert(_this.entityName, entity).then(function (insertId) {

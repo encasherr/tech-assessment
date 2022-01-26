@@ -33,9 +33,9 @@ var OrgModel = function OrgModel() {
         return (0, _RoleDefinitions.HandlePromise)(_mysqldb2.default, queryConfig, userEntity);
     };
 
-    this.GetCandidate = function (candidateId) {
+    this.GetOrg = function (orgId) {
         return new Promise(function (resolve, reject) {
-            _mysqldb2.default.findOne(_this.entityName, candidateId).then(function (res) {
+            _mysqldb2.default.findOne(_this.entityName, orgId).then(function (res) {
                 resolve(res);
             });
         });

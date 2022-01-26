@@ -62,33 +62,34 @@ var EmailHelper = function EmailHelper() {
 
     this.SendEmail = function (emailInfo) {
         console.log('email helper send called');
-        // let transporter = nodemailer.createTransport({
-        //     host: EmailConfig.emailSmtpHost,
-        //     port: EmailConfig.emailSmtpPort,
-        //     secure: false,
-        //     requireTLS: true,
-        //     auth: {
-        //         user: EmailConfig.emailAuthUser,
-        //         pass: EmailConfig.emailAuthPassword
-        //     }
-        // });
+        return new Promise(function (resolve, reject) {
 
-        var transporter = _this.CreateTransporter();
-        var mailOptions = {
-            from: _ServerConfig.EmailConfig.inviteFromEmailId,
-            to: emailInfo.to,
-            subject: emailInfo.subject,
-            // text: emailInfo.text,
-            html: _this.CreateHtml(emailInfo)
-        };
+            var transporter = _this.CreateTransporter();
+            var mailOptions = {
+                from: _ServerConfig.EmailConfig.inviteFromEmailId,
+                to: emailInfo.to,
+                bcc: _ServerConfig.EmailConfig.inviteFromEmailId,
+                enevelope: {
+                    from: _ServerConfig.EmailConfig.inviteFromEmailId,
+                    to: emailInfo.to
+                },
+                subject: emailInfo.subject,
+                // text: emailInfo.text,
+                html: _this.CreateHtml(emailInfo)
+            };
 
-        transporter.sendMail(mailOptions, function (error, info) {
-            if (error) {
-                console.log('error occured in sending email');
-                console.log(error);
-                return;
-            }
-            console.log('email sent: ' + info.messageId + ', resp: ' + info.response);
+            transporter.sendMail(mailOptions, function (error, info) {
+                if (error) {
+                    console.log('error occured in sending email');
+                    console.log(error);
+                    reject(error);
+                } else {
+                    resolve();
+                    console.log('email sent: ' + info.messageId + ', resp: ' + info.response);
+                }
+            });
+
+            _this.LogEmail(mailOptions);
         });
     };
 
@@ -113,7 +114,23 @@ var EmailHelper = function EmailHelper() {
             html = html.replace('$$user_name$$', emailInfo.user_name);
             html = html.replace('$$verification_link$$', emailInfo.verification_link);
         }
+        if (emailInfo.notificationType === 'test_result_email') {
+            html = emailInfo.invokeReplaceFunction(html);
+        }
         return html;
+    };
+
+    this.LogEmail = function (mailOptions) {
+        var fileName = 'EmailLogs.html';
+        var filePath = _path2.default.resolve(fileName);
+        console.log('Log file path: ' + filePath);
+        var contentToLog = '';
+        contentToLog += 'From: ' + mailOptions.from + '\\n';
+        contentToLog += 'To: ' + mailOptions.to + '\\n';
+        contentToLog += 'Subject: ' + mailOptions.subject + '\\n';
+        contentToLog += '\n\n' + mailOptions.html;
+        contentToLog += '\n\n------------------End of message-------------------\n\n';
+        fs.appendFileSync(filePath, contentToLog);
     };
 
     this.GetHtmlTemplateByType = function (emailInfo) {
@@ -139,6 +156,13 @@ var EmailHelper = function EmailHelper() {
                     var _file2 = _path2.default.resolve(__dirname + '/EmailTemplates/VerifyUserTemplate.html');
                     console.log('template path', _file2);
                     html = fs.readFileSync(_file2, { encoding: 'utf8' });
+                    break;
+                }
+            case 'test_result_email':
+                {
+                    var _file3 = _path2.default.resolve(__dirname + '/EmailTemplates/TestResultTemplate.html');
+                    console.log('template path', _file3);
+                    html = fs.readFileSync(_file3, { encoding: 'utf8' });
                     break;
                 }
         }

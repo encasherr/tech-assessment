@@ -34,6 +34,10 @@ var _McqResponseRepo = require("../../../wwwroot/Controllers/candidate/McqRespon
 
 var _McqResponseRepo2 = _interopRequireDefault(_McqResponseRepo);
 
+var _TestModel = require("../../../wwwroot/Models/TestModel");
+
+var _TestModel2 = _interopRequireDefault(_TestModel);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
@@ -131,7 +135,7 @@ var askUser = function askUser(query) {
 
 var goToSelectedOption = function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(menuOption) {
-        var mcqImportPath, programmingMcqs, _mcqImportPath, academicMcqs, mcqId, model, testId, emailId, inviteeName, invitees, invitationId, testLink, _mcqId, _model, entity, _invitationId, responseEntity, _invitationId2;
+        var mcqImportPath, programmingMcqs, _mcqImportPath, academicMcqs, mcqId, model, testId, emailId, inviteeName, invitees, invitationId, testLink, selection, testModel, _mcqId, _model, entity, questionPrompt, _selection, responseEntity, _invitationId, registrationId, _invitationId2;
 
         return regeneratorRuntime.wrap(function _callee2$(_context2) {
             while (1) {
@@ -146,7 +150,7 @@ var goToSelectedOption = function () {
 
                     case 2:
                         _context2.t0 = menuOption.optionIndex;
-                        _context2.next = _context2.t0 === "1" ? 5 : _context2.t0 === "2" ? 10 : _context2.t0 === "3" ? 15 : _context2.t0 === "4" ? 16 : _context2.t0 === "5" ? 17 : _context2.t0 === "6" ? 27 : _context2.t0 === "7" ? 40 : _context2.t0 === "8" ? 50 : _context2.t0 === "9" ? 51 : _context2.t0 === "10" ? 52 : _context2.t0 === "11" ? 53 : _context2.t0 === "12" ? 54 : _context2.t0 === "14" ? 67 : _context2.t0 === "15" ? 77 : _context2.t0 === "16" ? 84 : 86;
+                        _context2.next = _context2.t0 === "1" ? 5 : _context2.t0 === "2" ? 10 : _context2.t0 === "3" ? 15 : _context2.t0 === "4" ? 16 : _context2.t0 === "5" ? 17 : _context2.t0 === "6" ? 27 : _context2.t0 === "7" ? 40 : _context2.t0 === "8" ? 50 : _context2.t0 === "9" ? 51 : _context2.t0 === "10" ? 52 : _context2.t0 === "11" ? 60 : _context2.t0 === "12" ? 61 : _context2.t0 === "14" ? 74 : _context2.t0 === "15" ? 99 : _context2.t0 === "16" ? 106 : 108;
                         break;
 
                     case 5:
@@ -169,7 +173,7 @@ var goToSelectedOption = function () {
                                 console.log(msg);
                             });
                         });
-                        return _context2.abrupt("break", 86);
+                        return _context2.abrupt("break", 108);
 
                     case 10:
                         _mcqImportPath = _path2.default.resolve(config.default.academic.mcqImportPath);
@@ -200,7 +204,7 @@ var goToSelectedOption = function () {
                                 }
                             });
                         });
-                        return _context2.abrupt("break", 86);
+                        return _context2.abrupt("break", 108);
 
                     case 15:
                         console.log('edit programming mcq');
@@ -223,7 +227,7 @@ var goToSelectedOption = function () {
 
                     case 25:
                         console.log('MCQ deleted');
-                        return _context2.abrupt("break", 86);
+                        return _context2.abrupt("break", 108);
 
                     case 27:
                         testId = 21;
@@ -256,7 +260,7 @@ var goToSelectedOption = function () {
                             console.log(response);
                             console.log("Failed registering test for email: " + invitees[0].emailId);
                         });
-                        return _context2.abrupt("break", 86);
+                        return _context2.abrupt("break", 108);
 
                     case 40:
                         invitationId = 164;
@@ -275,7 +279,7 @@ var goToSelectedOption = function () {
 
                         console.log(testLink);
 
-                        return _context2.abrupt("break", 86);
+                        return _context2.abrupt("break", 108);
 
                     case 50:
                         console.log('create a test');
@@ -285,26 +289,37 @@ var goToSelectedOption = function () {
 
                     case 52:
                         console.log('delete a test');
+                        _context2.next = 55;
+                        return askUser(_chalk2.default.yellow.bgBlack('Enter Test Id to delete\n'));
 
-                    case 53:
+                    case 55:
+                        selection = _context2.sent;
+                        testModel = new _TestModel2.default();
+                        _context2.next = 59;
+                        return testModel.DeleteTestById(selection);
+
+                    case 59:
+                        return _context2.abrupt("break", 108);
+
+                    case 60:
                         console.log('list all mcqs');
 
-                    case 54:
+                    case 61:
                         _mcqId = 153;
-                        _context2.next = 57;
+                        _context2.next = 64;
                         return askUser('Enter MCQ Id to retrieve details for\n');
 
-                    case 57:
+                    case 64:
                         _mcqId = _context2.sent;
 
                         console.log("you entered " + _mcqId);
                         _model = new _McqModel2.default();
 
                         console.log('get mcq', _mcqId);
-                        _context2.next = 63;
+                        _context2.next = 70;
                         return _model.GetMcqById(_mcqId);
 
-                    case 63:
+                    case 70:
                         entity = _context2.sent;
 
                         // .then((entity) => {
@@ -316,43 +331,80 @@ var goToSelectedOption = function () {
                             console.log("MCQ Id " + _mcqId + " not found");
                         }
                         // });
-                        return _context2.abrupt("break", 86);
+                        return _context2.abrupt("break", 108);
 
-                    case 67:
-                        _invitationId = 175;
-                        _context2.next = 70;
+                    case 74:
+                        // let invitationId = 175;
+                        // invitationId = await askUser('Enter invitationId to evaluate results for\n');
+                        // let responseEntity = await mcqResponseRepo.evaluateResults(invitationId);
+                        // console.log(chalk.yellow.bgBlack(`Score: ${responseEntity.response_meta.scorePercentage}`));
+                        // console.log(chalk.yellow.bgBlack(`Result: ${responseEntity.response_meta.result}`));
+
+                        questionPrompt = "Which kind of user you want to evaluate results for invited / registered user?\n\n            Select the input Id that you have\n\n            1. Invitation Id\n\n            2. Registration Id\n\n            ";
+                        _context2.next = 77;
+                        return askUser(_chalk2.default.yellow.bgBlack(questionPrompt));
+
+                    case 77:
+                        _selection = _context2.sent;
+                        responseEntity = {};
+
+                        if (!(_selection === 1)) {
+                            _context2.next = 90;
+                            break;
+                        }
+
+                        _context2.next = 82;
                         return askUser('Enter invitationId to evaluate results for\n');
 
-                    case 70:
+                    case 82:
                         _invitationId = _context2.sent;
-                        _context2.next = 73;
-                        return _McqResponseRepo2.default.evaluateResults(_invitationId);
+                        _context2.next = 85;
+                        return _McqResponseRepo2.default.evaluateInvitedTestResults(_invitationId);
 
-                    case 73:
+                    case 85:
                         responseEntity = _context2.sent;
 
                         console.log(_chalk2.default.yellow.bgBlack("Score: " + responseEntity.response_meta.scorePercentage));
                         console.log(_chalk2.default.yellow.bgBlack("Result: " + responseEntity.response_meta.result));
-                        return _context2.abrupt("break", 86);
+                        _context2.next = 98;
+                        break;
 
-                    case 77:
+                    case 90:
+                        _context2.next = 92;
+                        return askUser('Enter registrationId to evaluate results for\n');
+
+                    case 92:
+                        registrationId = _context2.sent;
+                        _context2.next = 95;
+                        return _McqResponseRepo2.default.evaluateRegisteredTestResults(adminUser, registrationId);
+
+                    case 95:
+                        responseEntity = _context2.sent;
+
+                        console.log(_chalk2.default.yellow.bgBlack("Score: " + responseEntity.evaluation_meta.scorePercentage));
+                        console.log(_chalk2.default.yellow.bgBlack("Result: " + responseEntity.evaluation_meta.result));
+
+                    case 98:
+                        return _context2.abrupt("break", 108);
+
+                    case 99:
                         _invitationId2 = 175;
-                        _context2.next = 80;
+                        _context2.next = 102;
                         return askUser('Enter invitationId to send results for\n');
 
-                    case 80:
+                    case 102:
                         _invitationId2 = _context2.sent;
-                        _context2.next = 83;
+                        _context2.next = 105;
                         return _TestResultGenerator2.default.generateAndSendResultsForInvitationId(adminUser, _invitationId2, true);
 
-                    case 83:
-                        return _context2.abrupt("break", 86);
+                    case 105:
+                        return _context2.abrupt("break", 108);
 
-                    case 84:
+                    case 106:
                         console.log('Have a good day!');
                         exitUserInteraction();
 
-                    case 86:
+                    case 108:
                     case "end":
                         return _context2.stop();
                 }

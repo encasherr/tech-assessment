@@ -18,14 +18,29 @@ import mysql from 'mysql';
 //     database: 'tpptxbaq_profiledb'
 // });
 
-const mysql_pool  = mysql.createPool({
+// const mysql_pool  = mysql.createPool({
+//     connectionLimit: 50,
+//     host: '172.17.0.2',
+//     port: 3306,
+//     user: 'ta_app_write',
+//     password: 'Encasherr123',
+//     database: 'ta_profiledb'
+// });
+var mysqlHost = process.env.MYSQL_HOST || 'localhost';
+var mysqlPort = process.env.MYSQL_PORT || '3306';
+var mysqlUser = process.env.MYSQL_USER || 'tp_app1';
+var mysqlPass = process.env.MYSQL_PASS || 'tech';
+var mysqlDB   = process.env.MYSQL_DB   || 'ta_profiledb';
+
+var connectionOptions = {
     connectionLimit: 50,
-    host: '172.17.0.2',
-    port: 3306,
-    user: 'ta_app_write',
-    password: 'Encasherr123',
-    database: 'ta_profiledb'
-});
+    host: mysqlHost,
+    port: mysqlPort,
+    user: mysqlUser,
+    password: mysqlPass,
+    database: mysqlDB
+};
+const mysql_pool  = mysql.createPool(connectionOptions);
 
 const getData = (query) => {
     // connection.connect((err) => {

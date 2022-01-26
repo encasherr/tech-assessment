@@ -44,6 +44,7 @@ var EmailConfig = {
             domainUrl = 'http://localhost:3001';
         }
         var verificationLink = domainUrl + '/api/candidate/verifyUser?userIv=' + encryptedObject.iv + '&userContent=' + encryptedObject.content;
+        verificationLink = domainUrl + '/verifyUser/' + encryptedObject.iv + '/' + encryptedObject.content;
         return verificationLink;
     }
 };

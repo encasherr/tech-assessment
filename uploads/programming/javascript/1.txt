@@ -1,0 +1,7 @@
+q1:
+Which of the following ES6 code is not a valid Export statement?
+ch1:
+A: `export let Skill = 'JavaScript';`
+A: `export const Skill = 'JavaScript';`
+A: `export { Skill: 'JavaScript' };`
+A: `export let MyName;`

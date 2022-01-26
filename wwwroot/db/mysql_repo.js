@@ -11,14 +11,47 @@ var _mysql2 = _interopRequireDefault(_mysql);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// const connection = mysql.createConnection({
-var mysql_pool = _mysql2.default.createPool({
+// const mysql_pool  = mysql.createPool({
+//     connectionLimit: 50,
+//     host: '95.216.2.208', // cloud2.zolahost.net
+//     user: 'cashfrom_profile',
+//     password: 'Encasherr123',
+//     database: 'cashfrom_profiledb_dev',
+//     acquireTimeout: 1000000
+// });
+
+// const mysql_pool  = mysql.createPool({
+//     connectionLimit: 50,
+//     host: 'localhost',
+//     // host: '103.212.121.53', 
+//     user: 'tpptxbaq_app_write',
+//     password: 'Encasherr123',
+//     database: 'tpptxbaq_profiledb'
+// });
+
+// const mysql_pool  = mysql.createPool({
+//     connectionLimit: 50,
+//     host: '172.17.0.2',
+//     port: 3306,
+//     user: 'ta_app_write',
+//     password: 'Encasherr123',
+//     database: 'ta_profiledb'
+// });
+var mysqlHost = process.env.MYSQL_HOST || 'localhost';
+var mysqlPort = process.env.MYSQL_PORT || '3306';
+var mysqlUser = process.env.MYSQL_USER || 'tp_app1';
+var mysqlPass = process.env.MYSQL_PASS || 'tech';
+var mysqlDB = process.env.MYSQL_DB || 'ta_profiledb';
+
+var connectionOptions = {
     connectionLimit: 50,
-    host: '95.216.2.208', // cloud2.zolahost.net
-    user: 'cashfrom_profile',
-    password: 'Encasherr123',
-    database: 'cashfrom_profiledb'
-});
+    host: mysqlHost,
+    port: mysqlPort,
+    user: mysqlUser,
+    password: mysqlPass,
+    database: mysqlDB
+};
+var mysql_pool = _mysql2.default.createPool(connectionOptions);
 
 var getData = function getData(query) {
     // connection.connect((err) => {

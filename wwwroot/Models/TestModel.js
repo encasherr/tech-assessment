@@ -38,17 +38,45 @@ var TestModel = function TestModel() {
         return (0, _RoleDefinitions.HandlePromise)(_mysqldb2.default, queryConfig, userEntity);
     };
 
+    this.GetTestsAvailableForMe = function (userEntity, grade) {
+        var queryConfig = (0, _RoleDefinitions.GetQueryConfig)(_TestQueries.VIEW_TESTS_AVAILABLE_FOR_ME);
+        return (0, _RoleDefinitions.HandlePromiseWithParams)(_mysqldb2.default, queryConfig, { userEntity: userEntity, grade: grade });
+    };
+
+    this.GetTestsForGrade = function (userEntity, grade) {
+        var queryConfig = (0, _RoleDefinitions.GetQueryConfig)(_TestQueries.VIEW_TESTS_FOR_GRADE);
+        return (0, _RoleDefinitions.HandlePromiseWithParams)(_mysqldb2.default, queryConfig, { userEntity: userEntity, grade: grade });
+    };
+
     this.GetTestById = function (userEntity, testId) {
         var queryConfig = (0, _RoleDefinitions.GetQueryConfig)(_TestQueries.VIEW_TESTS_BY_ID);
         return (0, _RoleDefinitions.HandlePromise)(_mysqldb2.default, queryConfig, { userEntity: userEntity, testId: testId });
+    };
+
+    this.DeleteTestById = function (testId) {
+        return new Promise(function (resolve, reject) {
+            _mysqldb2.default.delete(_this.entityName, testId).then(function (res) {
+                resolve();
+            }).catch(function (error) {
+                reject(error);
+            });
+        });
     };
 
     this.GetTest = function (testId) {
         return new Promise(function (resolve, reject) {
             _mysqldb2.default.findOne(_this.entityName, testId).then(function (res) {
                 resolve(res);
+            }).catch(function (err) {
+                reject(err);
             });
         });
+    };
+
+    this.DeleteMcqFromTestsIfExists = function (mcqId) {
+        // return new Promise((resolve, reject) => {
+
+        // })
     };
 
     this.serializeToJson = function (data) {
@@ -92,6 +120,17 @@ var TestModel = function TestModel() {
         });
     };
 
+    this.GetStudentsByTestId = function (testId) {
+        return new Promise(function (resolve, reject) {
+            var sql = _queries2.default.getStudentsByTestId(testId);
+            _mysqldb2.default.executeQuery(sql).then(function (res) {
+                resolve(_this.mapCandidatesResult(res));
+            }).catch(function (err) {
+                reject(err);
+            });
+        });
+    };
+
     this.mapCandidatesResult = function (data) {
         var outputArray = [];
         console.log('data count', data.length);
@@ -120,12 +159,62 @@ var TestModel = function TestModel() {
         return outputArray;
     };
 
+    this.mapStudentsResult = function (data) {
+        var outputArray = [];
+        console.log('data count', data.length);
+        if (data && data.length > 0) {
+            data.map(function (item, index) {
+                var output = {};
+                Object.keys(item).map(function (prop) {
+                    if (prop === 'response_meta') {
+                        var metaObj = item[prop];
+                        if (metaObj) {
+                            metaObj = metaObj.replace(/\n/g, "\\n");
+                            metaObj = metaObj.replace(/\r/g, "\\r");
+                            metaObj = metaObj.replace(/\t/g, "\\t");
+                            var mObj = JSON.parse(metaObj);
+                            Object.keys(mObj).forEach(function (metaProp) {
+                                output[metaProp] = mObj[metaProp];
+                            });
+                        }
+                    }
+                    if (prop === 'evaluation_meta') {
+                        var _metaObj = item[prop];
+                        if (_metaObj) {
+                            _metaObj = _metaObj.replace(/\n/g, "\\n");
+                            _metaObj = _metaObj.replace(/\r/g, "\\r");
+                            _metaObj = _metaObj.replace(/\t/g, "\\t");
+                            var _mObj = JSON.parse(_metaObj);
+                            Object.keys(_mObj).forEach(function (metaProp) {
+                                output[metaProp] = _mObj[metaProp];
+                            });
+                        }
+                    } else {
+                        output[prop] = item[prop];
+                    }
+                });
+                outputArray.push(output);
+            });
+        }
+        return outputArray;
+    };
+
     this.Add = function (entity) {
         entity.status = "DRAFT";
         entity.addedOn = new Date().toLocaleDateString();
         return new Promise(function (resolve, reject) {
             _mysqldb2.default.insert(_this.entityName, entity);
             resolve(true);
+        });
+    };
+
+    this.AddCustom = function (entity) {
+        return new Promise(function (resolve, reject) {
+            _mysqldb2.default.insertCustom(_this.entityName, entity).then(function (insertId) {
+                resolve(insertId);
+            }).catch(function (error) {
+                reject(error);
+            });
         });
     };
 
@@ -155,19 +244,7 @@ var TestModel = function TestModel() {
         });
         return promise;
     };
-}
-/*GetTestsByUser = (userEntity) => {
-    if(this.entities.data && this.entities.data.length > 0 && userEntity) {
-        let filteredTests = this.entities.data.filter((item, index) => {
-            return item.test_meta.addedBy = userEntity.emailId;
-        });
-        console.log(filteredTests.length);
-        return filteredTests;
-    }
-    return [];
-}*/
-
-;
+};
 
 exports.default = TestModel;
 //# sourceMappingURL=TestModel.js.map

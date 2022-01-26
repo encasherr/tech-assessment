@@ -226,34 +226,6 @@ var TestInviteController = function TestInviteController() {
                             } else {
                                 resp.status(500).json({ message: 'Error in loading Test' });
                             }
-                            /*mcqResponseEntity = {
-                                invitationId: parseInt(invitationId),
-                                response_meta: mcqResponseMeta
-                            }
-                            console.log('adding new mcq invitation on invitationId: ', invitationId);
-                            mcqResponseModel.Add(mcqResponseEntity).then((responseId) => {
-                                console.log('responseId', responseId);
-                                if (responseId > 0) {
-                                    let updateInvitationEntity = {
-                                        ...invitationEntity,
-                                        status: Constants.InvitationTestStatus.Started
-                                    }
-                                    invitationModel.Update(updateInvitationEntity).then((res) => {
-                                        let mcqResponse = {
-                                            id: responseId,
-                                            response_meta: mcqResponseMeta
-                                        }
-                                        resp.status(200).json(mcqResponse);
-                                    });
-                                }
-                                else {
-                                    console.log('Nothing inserted as response to table');
-                                    resp.status(500).json({ message: 'Error in loading response' });
-                                }
-                            }).catch((err) => {
-                                console.log('Exception in inserting response to table', err);
-                                resp.status(500).json({ message: 'Error in adding response' })
-                            });*/
 
                         case 36:
                         case 'end':
@@ -268,20 +240,14 @@ var TestInviteController = function TestInviteController() {
         };
     }();
 
-    this.SendInvite = function (req, resp) {
-        console.log('send invite called');
-        console.log(req.body);
-        // let entity = req.body.invitation_meta;
-        var _req$body = req.body,
-            testId = _req$body.testId,
-            invitees = _req$body.invitees;
+    this.RegisterForTest = function (req, resp) {
+        console.log('RegisterForTest called');
+        var testId = req.body.testId;
 
-        if (!invitees || invitees && invitees.length === 0) {
-            var response = { message: 'No invitees to send email to.' };
-            console.log(response);
-            resp.status(500).json(response);
-            return;
-        }
+        var invitees = [{
+            emailId: req.user.emailId,
+            name: req.user.name
+        }];
 
         _InvitationRepo2.default.sendInvite(req.user.id, invitees, testId).then(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
             var testModel, testEntity;
@@ -304,6 +270,50 @@ var TestInviteController = function TestInviteController() {
                     }
                 }
             }, _callee2, _this);
+        }))).catch(function (err) {
+            var response = { message: 'Error occured in register for test:' + err };
+            console.log(response);
+            resp.status(500).json(response);
+            return;
+        });
+    };
+
+    this.SendInvite = function (req, resp) {
+        console.log('send invite called');
+        console.log(req.body);
+        // let entity = req.body.invitation_meta;
+        var _req$body = req.body,
+            testId = _req$body.testId,
+            invitees = _req$body.invitees;
+
+        if (!invitees || invitees && invitees.length === 0) {
+            var response = { message: 'No invitees to send email to.' };
+            console.log(response);
+            resp.status(500).json(response);
+            return;
+        }
+
+        _InvitationRepo2.default.sendInvite(req.user.id, invitees, testId).then(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
+            var testModel, testEntity;
+            return regeneratorRuntime.wrap(function _callee3$(_context3) {
+                while (1) {
+                    switch (_context3.prev = _context3.next) {
+                        case 0:
+                            testModel = new _TestModel2.default();
+                            _context3.next = 3;
+                            return testModel.GetTest(testId);
+
+                        case 3:
+                            testEntity = _context3.sent;
+
+                            resp.status(200).json(testEntity);
+
+                        case 5:
+                        case 'end':
+                            return _context3.stop();
+                    }
+                }
+            }, _callee3, _this);
         }))).catch(function (err) {
             var response = { message: 'Error occured in sending invite:' + err };
             console.log(response);

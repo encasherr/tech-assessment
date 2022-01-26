@@ -6,6 +6,8 @@ Object.defineProperty(exports, "__esModule", {
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var _mysqldb = require('../db/mysqldb');
 
 var _mysqldb2 = _interopRequireDefault(_mysqldb);
@@ -85,6 +87,11 @@ var McqModel = function McqModel() {
         return (0, _RoleDefinitions.HandlePromiseWithParams)(_mysqldb2.default, queryConfig, { userEntity: userEntity, skill: skill });
     };
 
+    this.GetMcqsByGrade = function (userEntity, grade) {
+        var queryConfig = (0, _RoleDefinitions.GetQueryConfig)(_McqQueries.VIEW_MCQS_BY_GRADE);
+        return (0, _RoleDefinitions.HandlePromiseWithParams)(_mysqldb2.default, queryConfig, { userEntity: userEntity, grade: grade });
+    };
+
     this.BulkAddMcq = function (jsonData) {
         return new Promise(function (resolve, reject) {
             var mcqs = jsonData.mcqs;
@@ -117,13 +124,71 @@ var McqModel = function McqModel() {
                         if (!choice.key) {
                             choice.key = correctOptions[chIndex];
                         }
+                        if (choice.content && choice.content.indexOf('"')) {
+                            console.log('escaping double quotes from choice content');
+                            choice.content = choice.content.replace(/\"/g, '<doublequotes>');
+                        }
+                    });
+                }
+            }
+            if (entity.description && entity.description.indexOf('"') > -1) {
+                console.log('escaping double quotes');
+                entity.description = entity.description.replace(/\"/g, '<doublequotes>');
+            }
+            if (entity.choices && entity.choices.length > 0) {
+                entity.choices.map(function (choice, chIndex) {
+                    console.log('choice ' + chIndex + ': ' + choice.content);
+                    console.log('choice type ' + (typeof choice === 'undefined' ? 'undefined' : _typeof(choice)));
+                    if (choice.content && choice.content.indexOf('"') > -1) {
+                        console.log('escaping double quotes from choice content');
+                        choice.content = choice.content.replace(/\"/g, '<doublequotes>');
+                    }
+                });
+            }
+            var mcqEntity = {
+                mcq_meta: entity,
+                skill: entity.skill,
+                category: entity.category,
+                addedBy: entity.createdBy
+                //return;
+                //   db.insert(this.entityName, entity)
+            };_mysqldb2.default.insertCustom(_this.entityName, mcqEntity).then(function (insertId) {
+                resolve(insertId);
+            }).catch(function (err) {
+                reject(err);
+            });
+        });
+    };
+
+    this.GetMcqByDescription = function (userEntity, description) {
+        var queryConfig = (0, _RoleDefinitions.GetQueryConfig)(_McqQueries.VIEW_MCQS_BY_DESCRIPTION);
+        return (0, _RoleDefinitions.HandlePromiseWithParams)(_mysqldb2.default, queryConfig, { userEntity: userEntity, description: description });
+    };
+
+    this.AddAcademicMcq = function (entity) {
+        return new Promise(function (resolve, reject) {
+            console.log('mcq insert called');
+            var correctOptions = ['A', 'B', 'C', 'D', 'E', 'F'];
+            if (entity.correctAnswer && correctOptions.indexOf(entity.correctAnswer) > -1) {
+                if (entity.choices && entity.choices.length > 0) {
+                    entity.choices.map(function (choice, chIndex) {
+                        if (chIndex === correctOptions.indexOf(entity.correctAnswer)) {
+                            choice.isCorrect = true;
+                        } else {
+                            choice.isCorrect = false;
+                        }
+                        if (!choice.key) {
+                            choice.key = correctOptions[chIndex];
+                        }
                     });
                 }
             }
             var mcqEntity = {
                 mcq_meta: entity,
-                skill: entity.skill,
-                category: entity.category
+                grade: entity.grade,
+                subject: entity.subject,
+                category: entity.category,
+                addedBy: entity.createdBy
 
                 //   db.insert(this.entityName, entity)
             };_mysqldb2.default.insertCustom(_this.entityName, mcqEntity).then(function (insertId) {
@@ -158,6 +223,30 @@ var McqModel = function McqModel() {
 
                 resolve(mcqsWithIndex);
                 // resolve(mcqs);
+            }).catch(function (err) {
+                reject(err);
+            });
+        });
+    };
+
+    this.GetMcqsByMcqIds = function (mcqIds) {
+        return new Promise(function (resolve, reject) {
+            _mysqldb2.default.getByIds(_this.entityName, mcqIds).then(function (mcqs) {
+                resolve(mcqs);
+            }).catch(function (err) {
+                reject(err);
+            });
+        });
+    };
+
+    this.GetMcqById = function (mcqId) {
+        console.log('mcqentity', mcqId);
+        return new Promise(function (resolve, reject) {
+            _mysqldb2.default.findOne(_this.entityName, mcqId).then(function (mcqs) {
+                if (mcqs && mcqs.length > 0) {
+                    console.log('mcqentity', mcqs[0]);
+                    resolve(mcqs[0]);
+                }
             }).catch(function (err) {
                 reject(err);
             });
@@ -201,6 +290,16 @@ var McqModel = function McqModel() {
         });
     };
 
+    this.DeleteById = function (mcqId) {
+        return new Promise(function (resolve, reject) {
+            _mysqldb2.default.delete(_this.entityName, mcqId).then(function (res) {
+                resolve(res);
+            }).catch(function (err) {
+                reject(err);
+            });
+        });
+    };
+
     this.Delete = function (entity) {
         return new Promise(function (resolve, reject) {
             _mysqldb2.default.delete(_this.entityName, entity.id).then(function (res) {
@@ -208,19 +307,6 @@ var McqModel = function McqModel() {
             }).catch(function (err) {
                 reject(err);
             });
-            //   let mcqToDelete = this.entities.chain().find({ '$loki': entity.$loki });
-            //   if(mcqToDelete) {
-            //       mcqToDelete.remove();
-            //         db.saveDatabase(() => {
-            //             this.EmailSnapshot('CategoryAdd');
-            //         });
-
-            //       resolve(true);
-            //   }
-            //   else {
-            //       console.log('nothing to delete');
-            //       reject("nothing to delete");
-            //   }
         });
     };
 

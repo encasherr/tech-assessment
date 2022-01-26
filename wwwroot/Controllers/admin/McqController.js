@@ -81,6 +81,19 @@ var McqController = function (_BaseController) {
                 console.log(msg);
                 resp.status(500).send(msg);
             });
+        }, _this.GetMcqsByGrade = function (req, resp) {
+            console.log('get mcqsByGrade called', req.user);
+            var grade = req.query.grade;
+
+            var model = new _McqModel2.default();
+            model.GetMcqsByGrade(req.user, grade).then(function (res) {
+                console.log('mcq by grade retrieved');
+                resp.status(200).send(res);
+            }).catch(function (error) {
+                var msg = "Error in fetch MCQs by grade: " + error;
+                console.log(msg);
+                resp.status(500).send(msg);
+            });
         }, _this.Add = function (req, resp) {
             console.log('Add Mcq called');
             console.log(req.body);

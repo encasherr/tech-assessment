@@ -10,7 +10,10 @@ var resources = [{
     allowedRoles: ['admin', 'orgadmin', 'staff', 'teacher']
 }, {
     resource: '/admin/getMcqsBySkill',
-    allowedRoles: ['admin', 'orgadmin', 'staff', 'teacher']
+    allowedRoles: ['admin', 'orgadmin', 'staff']
+}, {
+    resource: '/admin/getMcqsByGrade',
+    allowedRoles: ['admin', 'staff', 'teacher']
 }, {
     resource: '/admin/mcq',
     allowedRoles: ['admin', 'orgadmin', 'staff', 'teacher']
@@ -31,10 +34,13 @@ var resources = [{
     allowedRoles: ['admin', 'recruiter']
 }, {
     resource: '/candidate/sendInvite',
-    allowedRoles: ['admin', 'recruiter', 'teacher']
+    allowedRoles: ['admin', 'recruiter', 'teacher', 'orgadmin']
 }, {
     resource: '/admin/getAllTests',
     allowedRoles: ['admin', 'orgadmin', 'staff', 'candidate', 'teacher']
+}, {
+    resource: '/admin/testsAvailableForMe',
+    allowedRoles: ['admin', 'orgadmin', 'staff', 'candidate', 'teacher', 'student']
 }, {
     resource: '/admin/getMyTests',
     allowedRoles: ['admin', 'orgadmin', 'staff', 'candidate', 'teacher']
@@ -51,6 +57,9 @@ var resources = [{
     resource: '/admin/user',
     allowedRoles: ['admin', 'orgadmin']
 }, {
+    resource: '/admin/changePassword',
+    allowedRoles: ['admin', 'orgadmin', 'staff', 'candidate', 'student']
+}, {
     resource: '/admin/getAllOrgs',
     allowedRoles: ['admin', 'orgadmin']
 }, {
@@ -58,7 +67,10 @@ var resources = [{
     allowedRoles: ['admin']
 }, {
     resource: '/admin/getCandidatesByTestId',
-    allowedRoles: ['admin', 'orgadmin', 'staff', 'teacher']
+    allowedRoles: ['admin', 'orgadmin', 'staff']
+}, {
+    resource: '/admin/getStudentsByTestId',
+    allowedRoles: ['admin', 'staff', 'teacher']
 }, {
     resource: '/admin/getMcqsByTestId',
     allowedRoles: ['admin', 'orgadmin', 'staff', 'teacher']
@@ -98,6 +110,18 @@ var resources = [{
 }, {
     resource: '/admin/grade',
     allowedRoles: ['admin', 'teacher']
+}, {
+    resource: '/candidate/registerForTest',
+    allowedRoles: ['admin', 'student', 'candidate']
+}, {
+    resource: '/candidate/startRegisteredTest',
+    allowedRoles: ['admin', 'student', 'candidate']
+}, {
+    resource: '/candidate/submitRegisteredTest',
+    allowedRoles: ['admin', 'student', 'candidate']
+}, {
+    resource: '/candidate/getMyRegistrations',
+    allowedRoles: ['admin', 'student', 'candidate']
 }];
 
 var isTokenExpired = function isTokenExpired(decodedToken) {

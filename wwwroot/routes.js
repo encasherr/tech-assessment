@@ -68,6 +68,7 @@ api.get('/validateUserToken', _auth2.default, _admin.UserController.LoadConfig);
 // api.get('/admin/getAllMcqs', McqController.GetAll);
 api.get('/admin/getAllMcqs', _auth2.default, _admin.McqController.GetAll);
 api.get('/admin/getMcqsBySkill', _auth2.default, _admin.McqController.GetMcqsBySkill);
+api.get('/admin/getMcqsByGrade', _auth2.default, _admin.McqController.GetMcqsByGrade);
 api.post('/admin/mcq', _auth2.default, _admin.McqController.Add);
 api.put('/admin/mcq', _auth2.default, _admin.McqController.Update);
 api.delete('/admin/mcq', _auth2.default, _admin.McqController.Delete);
@@ -107,6 +108,7 @@ api.get('/admin/getAllTests', _auth2.default, _admin.AdminTestController.GetAll)
 api.get('/admin/getMyTests', _auth2.default, _admin.AdminTestController.GetMy);
 api.get('/admin/getMcqsByTestId', _auth2.default, _admin.AdminTestController.GetMcqsByTestId);
 api.get('/admin/getCandidatesByTestId', _auth2.default, _admin.AdminTestController.GetCandidatesByTestId);
+api.get('/admin/getStudentsByTestId', _auth2.default, _admin.AdminTestController.GetStudentsByTestId);
 api.get('/admin/getTest', _auth2.default, _admin.AdminTestController.GetTest);
 api.post('/admin/test', _auth2.default, _admin.AdminTestController.Add);
 api.put('/admin/test', _auth2.default, _admin.AdminTestController.Update);
@@ -117,6 +119,7 @@ api.get('/admin/getAllUsers', _auth2.default, _admin.UserController.GetAll);
 api.post('/admin/user', _auth2.default, _admin.UserController.Add);
 api.put('/admin/user', _auth2.default, _admin.UserController.Update);
 api.delete('/admin/user', _auth2.default, _admin.UserController.Delete);
+api.post('/admin/changePassword', _auth2.default, _admin.UserController.ChangePassword);
 
 /* Online portal endpoints */
 api.post('/candidate/user', _admin.UserController.AddNewUserToBeVerified);
@@ -148,11 +151,16 @@ api.get('/candidate/getRecording', _MediaController2.default.GetRecording);
 
 api.post('/teacher/user', _admin.UserController.AddNewUserToBeVerified);
 api.get('/teacher/verifyUser', _admin.UserController.VerifyUser);
-// api.get('/teacher/pubslisAndSendInvites', AdminTestController.PubslisAndSendInvites);
+api.get('/admin/testsAvailableForMe', _auth2.default, _admin.AdminTestController.GetTestsAvailableForMe);
+api.get('/candidate/getAllRegistrations', _auth2.default, _candidate.TestRegistrationController.GetAllRegistrations);
+api.get('/candidate/getMyRegistrations', _auth2.default, _candidate.TestRegistrationController.GetMyRegistrations);
+api.post('/candidate/registerForTest', _auth2.default, _candidate.TestRegistrationController.RegisterForTest);
+api.post('/candidate/startRegisteredTest', _auth2.default, _candidate.TestRegistrationController.StartRegisteredTest);
+api.post('/candidate/submitRegisteredTest', _auth2.default, _candidate.TestRegistrationController.SubmitRegisteredTest);
 
 /* Candidate Response Endpoints */
 api.get('/admin/getCandidateResponseReport', _auth2.default, _CandidateResponseController2.default.GetCandidateResponse);
-api.get('/admin/getCandidateDetails', _auth2.default, _CandidateResponseController2.default.GetCandidateDetails);
+api.get('/admin/getCandidateDetails', _CandidateResponseController2.default.GetCandidateDetails);
 
 /* Candidate Routes */
 /* Test Invite endpoints */
@@ -162,6 +170,7 @@ api.post('/candidate/sendInvite', _auth2.default, _candidate.TestInviteControlle
 api.post('/candidate/startTest', _auth2.default, _candidate.TestInviteController.StartTest);
 api.post('/candidate/submitAnswers', _auth2.default, _candidate.TestInviteController.SubmitAnswers);
 api.post('/candidate/evaluateAnswers', _auth2.default, _candidate.TestInviteController.EvaluateAnswers);
+// api.post('/candidate/registerForTest', auth, TestInviteController.RegisterForTest);
 
 api.get('/admin/dashboard/test/count', _auth2.default, _DashboardController2.default.GetTestCount);
 api.get('/admin/dashboard/mcq/count', _auth2.default, _DashboardController2.default.GetMcqCount);

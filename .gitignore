@@ -12,6 +12,9 @@
 # production
 /build
 
+/starter
+/uploads/responseRecordings
+
 # misc
 .DS_Store
 .env.local

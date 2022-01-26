@@ -106,6 +106,47 @@ var db = {
             });
         });
     },
+    updateCustom: function updateCustom(entityName, entity, id) {
+        return new Promise(function (resolve, reject) {
+            var fieldValueString = '';
+            Object.keys(entity).forEach(function (prop, index) {
+                if (index === Object.keys(entity).length - 1) {
+                    fieldValueString += prop + ' = ';
+                    var fieldVal = entity[prop];
+                    if (typeof fieldVal === 'string') {
+                        fieldValueString += '\'' + fieldVal + '\'';
+                    } else if ((typeof fieldVal === 'undefined' ? 'undefined' : _typeof(fieldVal)) === 'object') {
+                        fieldValueString += '\'' + JSON.stringify(fieldVal) + '\'';
+                    } else {
+                        fieldValueString += '' + fieldVal;
+                    }
+                } else {
+                    fieldValueString += prop + ' = ';
+                    var _fieldVal2 = entity[prop];
+                    if (typeof _fieldVal2 === 'string') {
+                        fieldValueString += '\'' + _fieldVal2 + '\'';
+                    } else if ((typeof _fieldVal2 === 'undefined' ? 'undefined' : _typeof(_fieldVal2)) === 'object') {
+                        fieldValueString += '\'' + JSON.stringify(_fieldVal2) + '\'';
+                    } else {
+                        fieldValueString += '' + _fieldVal2;
+                    }
+                    fieldValueString += ',';
+                }
+            });
+            var sql = 'update ta_' + entityName + ' set ' + fieldValueString + ' where id = ' + id;
+            (0, _mysql_repo.executeQuery)(sql).then(function (res) {
+                console.log(entityName + ' updated, Id: ' + id);
+                findOneRecord(entityName, id).then(function (updatedRecord) {
+                    resolve(updatedRecord);
+                }).catch(function (err) {
+                    reject(err);
+                });
+            }).catch(function (error) {
+                console.log('Error while updating ' + entityName + ', Id: ' + id, error);
+                reject(error);
+            });
+        });
+    },
     delete: function _delete(entityName, id) {
         return new Promise(function (resolve, reject) {
             var sql = 'delete from ta_' + entityName + ' where id=' + id + ';';
@@ -207,7 +248,8 @@ var EntityFieldMapping = {
     candidates: 'candidate_meta',
     mcqresponses: 'response_meta',
     org: 'org_meta',
-    grade: 'grade_meta'
+    grade: 'grade_meta',
+    test_registrations: 'response_meta'
 };
 exports.default = db;
 //# sourceMappingURL=mysqldb.js.map

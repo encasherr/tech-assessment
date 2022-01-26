@@ -1,0 +1,216 @@
+q:1
+Which of the following types of decorators are supported in Angular?
+1: Class Decorators
+2: Property Decorators
+3: Method Decorators
+4: Parameter Decorators
+ch:1
+FA: 1 and 2
+FB: 1 and 3
+FC: 2 and 4
+TD: 1,2,3 and 4
+
+q:2
+When does the lifecycle of Angular component instance start?
+ch:2
+FA: During the build process of Angular app
+FB: When the application is first time loaded, regardless of whether the component is rendered or not
+TC: When Angular instantiates the component class and renders the component view
+FD: None of the above
+
+q:3
+Which of the following is a Component lifecycle hook interface?
+ch:3
+TA: OnInit
+FB: ngOnInit
+FC: Init
+FD: ngInit
+
+q:4
+Which of the following statements is true regarding component lifecyclye hook?
+ch:4
+FA: It is mandatory for every Component to implement OnInit interface
+FB: It is mandatory for every Component to implement AfterContentInit interface
+TC: A Component does not have to implement all or any of the lifecycle hooks
+FD: None of the above
+
+q:5
+Which of the following statements are true?
+ch:5
+FA: ngOnChanges() is called immmediately after ngDoCheck() on every change detection run.
+TB: ngDoCheck hook is used to detect and act upon changes that Anfular cannot or would not detect on its own.
+TC: ngDoCheck() is called immediately after ngOnChanges() on every change detection run and immediately after ngOnInit() on the first run.
+FD: Component's constructor is called after all the implemented hook methods are called.
+
+q:6
+Which of the following statements are true?
+ch:6
+FA: The styles of components with ViewEncapsulation.Emulated are added to the <head> of the document, making them available throughout the application, 
+but their selectors only affect elements within their respective components' templates.
+FB: The styles of components with ViewEncapsulation.None are added to the <head> of the document, making them available throughout the application, 
+so are completely global and affect any matching elements within the document.
+FC: The styles of components with ViewEncapsulation.ShadowDom are only added to the shadow DOM host, ensuring that they only affect elements within their 
+respective components' views.
+TD: All of the above
+
+q:7
+Which of the following ways are available in Angular for Component inreraction?
+ch:7
+TA: Sharing data via @Input() properties from parent to child component
+TB: Using @ViewChild() in parent component to get reference to the child component
+FC: Using @ChildInstance() in parent component to get reference to the child component
+FD: None of the above
+
+q:8
+Which of the following ways can be used in Angular for sharing data among unrelated components i.e. components that do not have parent-child relation?
+ch:8
+FA: Using @ComponentInstance decorator
+TB: Sharing data using a Service with the help of BehaviourSubject and Observable
+FC: Sharing data using a Module with the help of BehaviourSubject and Observable
+FD: None of the above
+
+q:9
+Which of the following statements are true in the context of Scope of Component styles?
+ch:9
+TA: Class names and selectors are local to the component and do not collide with classes and selectors used elsewhere in the application
+TB: Changes to styles elsewhere in the application do not affect the component's styles
+FC: Styles are inherited by all components that are nested within the component template
+TD: The styles specified in @Component metadata apply only within the template of that component
+
+q:10
+Which of the following statements are true?
+ch:10
+TA: The :host pseudo-class selector may be used to create styles that target the host element itself, as opposed to targeting elements inside the host.
+TB: The :host selector only targets the host element of a component. Any styles within the :host block of a child component will not affect parent components.
+TC: The :host-context() selector looks for a CSS class in any ancestor of the component host element, up to the document root.
+FD: None of the above
+
+q:11
+Which of the following statements are true?
+ch:11
+TA: @Output() marks a property in a child component as a doorway through which data can travel from the child to the parent.
+TB: To raise an event and notify parent component, child component uses the @Output() property of type EventEmitter.
+TC: @Input() marks a property in a child component as a doorway through whuch data can travel from parent to the child.
+FD: @Input() properties can be of type number, string, boolean but not of type object.
+
+q:12
+Which of the following statements are true?
+ch:12
+TA: Two-way binding in Angular with form elements requires NgModel.
+FB: Two-way binding is a combination of Property binding and template binding.
+TC: Two-way binding is a combination of Property binding and Event binding.
+FD: None of the above
+
+q:13
+Which of the following statements are true?
+ch:13
+FA: Conditional content projection is a type in which components use <ng-template> to explicitly render content from just one fixed source.
+TB: Angular does not initialize the content of an <g-template> element until that element is explicitly rendered.
+FC: @ContentChildren() property in a component gets a QueryList of of projected elements in single-slot content projection.
+TD: If the component includes an <ng-content> element without a select attribute, that instance receives all projected components that do not match any of the other <ng-content> elements.
+
+q:14
+Which of the following statements are true?
+ch:14
+FA: ng-container element is a physical construct that is used to wrap all other elements and render itself as parent of those elements.
+TB: @ContentChild() property in a component is used to get the reference of the template of the projected content.
+TC: ng-container element is a logical construct that is used to group other DOM elements and it itself is not rendered in the DOM tree.
+TD: Content projection is a pattern in which you project, the content you want to use inside another component.
+
+q:15
+Which of the following statements are true?
+ch:15
+TA: @ViewChild() property in a component references one HTML/DOM element in the component.
+TB: @ViewChildren() property in a component references a collection of elements in the component.
+FC: If multiple elements are detected by @ViewChild(), the operation fails with an exception.
+TD: If multiple elements are detected by @ViewChild(), it will only reference the first element.
+
+q:16
+Which of the following statements are true?
+ch:16
+TA: To incorporate dynamic string values into your HTMLtemplates, you can use Text interpolation.
+TB: Interpolation uses double curly braces as delimiters.
+TC: With Interpolation, Angular evaluates all expressions in double curly braces.
+TD: With Interpolation, Angular converts the expression results to strings and links the results to any adjacent literal strings.
+
+q:17
+Which of the following statements are true?
+ch:17
+TA: Pipes are functions to use in template expressions to accept and input value and return a transformed value.
+TB: To apply the Angular's built-in DatePipe, use the | operator within a template expression along with pipe name 'date'.
+FC: You cannot select a currency different than USD by using the Angular's built-in CurrencyPipe.
+FD: Angular's built-in SlicePipe requires at least 2 parameters and allows more optional parameters.
+
+q:18
+Which of the following statements are true?
+ch:18
+FA: Two pipes cannot be used in one single template expression.
+TB: Pipes can be chained so that the output of one pipe becomes the input to the next.
+TC: Custom pipes can be created to encapsulate transformations that are not provided with the built-in pipes.
+FD: Non of the above
+
+q:19
+Which of the following statements are true?
+ch:19
+FA: To create a custom pipe, you have to use @CustomPipe decorator.
+TB: To create a custom pipe, you have to use @Pipe decorator.
+FC: Custom pipes are available in any template by default, like built-in pipes.
+TD: Custom pipes are required to be included in declarations field of the NgModule metadata in order for it to be available to a template.
+
+q:20
+Which of the following statements are true?
+ch:20
+TA: Pure pipes are in general more efficient thatn impure pipes.
+FB: Pure pipes are called for every change in the comnponent while impure pipes are called only when component is loaded.
+TC: Pure pipes are called when component is loaded while impure pipes are called for every change in the component.
+TD: Pure pipes are instantiated only once regardless of number of times it is used in a template.
+
+q:21
+Which of the following statements are true?
+ch:21
+TA: In a custom pipe, you can define it to be a pure or impure pipe by using pure attribute in @Pipe decorator.
+FB: You cannot define a custom pipe to be impure.
+TC: When you want your pipe to track every change in an Array or Object data, an Impure pipe is more relevant.
+FD: When you want your pipe to track every change in an Array or Object data, a Pure pipe is more relevant.
+
+q:22
+Which of the following statements are true?
+ch:22
+TA: A pure pipe is only called when Angular detects a change in the value or the parameters passed to a pipe.
+FB: An impure pipe is only called when Angular detects a change in the value or the parameters passed to a pipe.
+TC: An impure pipe is called for every change detection cycle no matter whether the value or parameters change.
+FD: A pure pipe is called for every change detection cycle no matter whether the value or parameters change.
+
+q:23
+Which of the following statements are true?
+ch:23
+FA: AsyncPipe is an example of a built-in pure pipe.
+TB: AsyncPipe is an example of a built-in impure pipe.
+TC: AsyncPipe is used to accept an observable as input and subscribe to the input automatically.
+FD: AsyncPipe is used to accept a function as input which is called only when the component is loaded.
+
+q:24
+Which of the following statements are true?
+ch:24
+TA: Observables are used to pass messages between parts of application.
+TB: A handler for receiving observable notifications implements the Observer interface.
+TC: An observable can send following three types of notifications to the Observer handler: next, error and complete.
+FD: An observable can send following three types of notifications to the Observer handler: next, previous and complete.
+
+q:25
+What will be displayed when following expression is evaluated in a component template?
+Today is {{ day === 'wed' ? 'Wednesday' : 'Not Wednesday' | uppercase }}
+ch:25
+TA: When day is set to 'wed', it will display Today is Wednesday
+FB: When day is set to 'wed', it will display Today is WEDNESDAY
+TC: When day is set to 'tue', it will display Today is NOT WEDNESDAY
+FD: When day is set to 'tue', it will display Today is Not Wednesday
+
+q:26
+What will be displayed when following expression is evaluated in a component template?
+Today is {{ (day === 'fri' ? 'Friday' : 'Not Friday') | lowercase }}
+ch:26
+FA: When day is set to 'fri', it will display Today is Friday
+TB: When day is set to 'fri', it will display Today is friday
+TC: When day is set to 'sat', it will display Today is not friday
+FD: When day is set to 'sat', it will display Today is Not Friday
