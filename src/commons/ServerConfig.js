@@ -7,7 +7,7 @@ const EmailConfig = {
     emailSmtpHost: 'smtp.gmail.com',
     emailSmtpPort: 587,
     emailAuthUser: 'encasherr@gmail.com',
-    emailAuthPassword: 'CFT@12345',
+    emailAuthPassword: 'azdwezfcclolbuku',
     inviteFromEmailId: 'encasherr@gmail.com',
     getTestLink: (domainUrl, invitationId) => {
         if(!domainUrl) {
