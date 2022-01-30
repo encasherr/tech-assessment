@@ -32,6 +32,9 @@ var DbConfig = function DbConfig() {
                         _this.KeyValues[item.meta_key] = item.meta_value;
                     });
                     console.log('Db config values set');
+                    if (process.env.MYSQL_HOST && process.env.MYSQL_HOST === 'localhost') {
+                        _this.KeyValues.site_url = 'http://localhost:3001';
+                    }
                     resolve(_this.KeyValues);
                 }
             }).catch(function (err) {

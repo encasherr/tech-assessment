@@ -114,7 +114,7 @@ class Dashboard extends Component {
             )
         }
 
-        if(GetCurrentUserRole() === 'orgadmin') {
+        if(GetCurrentUserRole() === 'orgadmin' || GetCurrentUserRole() === 'admin') {
             return (
                 <OrgAdminDashboard 
                 fetchInvitationCount={() => this.props.FetchInvitationCount()}

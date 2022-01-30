@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { Book, Assessment, ViewQuilt, PermIdentity, Polymer, Airplay,
-    SupervisorAccount, Work, Launch  } from '@material-ui/icons';
+    SupervisorAccount, Work, Launch, Dehaze  } from '@material-ui/icons';
 import LoadingComponent from '../components/lib/LoadingComponent';
 import { getDateTime, sortDescending } from '../Utils';
 import { Link as InternalLink } from 'react-router-dom';
+import { ListItem, ListItemText } from '@material-ui/core';
 import AuthHelper from "../AuthHelper";
 
 class OrgAdminDashboard extends Component {
@@ -74,32 +75,41 @@ const StatisticsPanel = (props) => {
             <div className="col-md-3">
                 <div className="card">
                     <div className="card-body">
+                    <InternalLink style={styles.customLink} to="/tests">
                         <h5 className="card-title text-center"><Assessment color="primary" />  Tests </h5>
                         <p className="card-text text-center font-weight-bold">{props.testCount}</p>
+                    </InternalLink>
+                        
                     </div>
                 </div>
             </div>
             <div className="col-md-3">
                 <div className="card">
                     <div className="card-body">
-                        <h5 className="card-title text-center"><Assessment color="primary" />  MCQ Library</h5>
-                        <p className="card-text text-center font-weight-bold">{props.mcqCount}</p>
+                        <InternalLink style={styles.customLink} to="/mcqs">
+                            <h5 className="card-title text-center"><Assessment color="primary" />  MCQ Library</h5>
+                            <p className="card-text text-center font-weight-bold">{props.mcqCount}</p>
+                        </InternalLink>
                     </div>
                 </div>
             </div>
             <div className="col-md-3">
                 <div className="card">
                     <div className="card-body">
-                        <h5 className="card-title text-center"><Assessment color="primary" />  Invited</h5>
-                        <p className="card-text text-center font-weight-bold">{props.invitationCount}</p>
+                        <InternalLink style={styles.customLink} to="/invitations">
+                            <h5 className="card-title text-center"><Assessment color="primary" />  Invited</h5>
+                            <p className="card-text text-center font-weight-bold">{props.invitationCount}</p>
+                        </InternalLink>
                     </div>
                 </div>
             </div>
             <div className="col-md-3">
                 <div className="card">
                     <div className="card-body">
-                        <h5 className="card-title text-center"><Assessment color="primary" />  Completed</h5>
-                        <p className="card-text text-center font-weight-bold">{props.totalCompletedCount}</p>
+                        <InternalLink style={styles.customLink} to="/invitations">
+                            <h5 className="card-title text-center"><Assessment color="primary" />  Completed</h5>
+                            <p className="card-text text-center font-weight-bold">{props.totalCompletedCount}</p>
+                        </InternalLink>
                     </div>
                 </div>
             </div>
@@ -113,13 +123,16 @@ const RecentResponses = (props) => {
             <div className="card h-100">
                 <div className="card-header">
                     <p>Completed Tests</p>
+
                 </div>
                 <div className="card-body">
+                    <div className="list-group">
                     {!props.completedTests && <LoadingComponent /> }
                     {props.recentResponses && props.recentResponses.length === 0 && <div className="alert alert-info">No recent candidate actions </div> }
                     {props.completedTests && props.completedTests.length > 0 &&
                         props.completedTests.map((invitation, index) => {
                             return (
+                                <div className="list-group-item">
                                 <div className="row">
                                     <div className="col-md-10">
                                         {invitation.candidateName} completed test on &nbsp;
@@ -131,13 +144,15 @@ const RecentResponses = (props) => {
                                             to={ {pathname: "/candidateConsole", state: { responseId: invitation.responseId,
                                                 candidateId: invitation.candidateId, backLink: 'invitations' } }}
                                             >
-                                            <Launch  variant="filled" color="primary" />
+                                            <Dehaze  variant="filled" color="primary" />
                                         </InternalLink>
                                     </div>
+                                </div>
                                 </div>
                             )
                         })
                     }
+                    </div>
                 </div>
             </div>
                         
@@ -153,17 +168,21 @@ const PendingInvitations = (props) => {
                 <p>Invitations Sent</p>
             </div>
             <div className="card-body">
+                <div className="list-group">
                 {!props.pendingTests && <LoadingComponent /> }
                 {props.pendingTests && props.pendingTests.length === 0 && <div className="alert alert-info">No recent candidate actions </div> }
                 {props.pendingTests && props.pendingTests.length > 0 &&
                     props.pendingTests.map((invitation, index) => {
                         return (
-                            <div className="text-dark">
-                                {invitation.candidateName} invited on <span className="font-italic">{getDateTime(invitation.invitedOn, true)}</span>
+                            <div className="list-group-item">
+                                <div className="text-dark">
+                                    {invitation.candidateName} invited on <span className="font-italic">{getDateTime(invitation.invitedOn, true)}</span>
+                                </div>
                             </div>
                         )
                     })
                 }
+                </div>
             </div>
         </div>
                     
@@ -174,6 +193,10 @@ const PendingInvitations = (props) => {
 const styles = {
     dashboardPanel: {
         minHeight: '300px'
+    },
+    customLink: {
+        color: '#000',
+        textDecoration: 'none'
     }
 }
 

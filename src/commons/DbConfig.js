@@ -12,6 +12,9 @@ class DbConfig {
                         this.KeyValues[item.meta_key] = item.meta_value;
                     });
                     console.log('Db config values set');
+                    if(process.env.MYSQL_HOST && process.env.MYSQL_HOST === 'localhost') {
+                        this.KeyValues.site_url = 'http://localhost:3001';
+                    }
                     resolve(this.KeyValues);
                 }
             }).catch((err) => {

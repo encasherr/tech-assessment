@@ -71,8 +71,24 @@ https://www.linkedin.com/company/milesweb-internet-services
 Setup Instructions:
 Server: 103.212.120.231
 
-Login as "root" user or "tp_app1" user (Action_321)
+-> To create new user:
+$ adduser <username>
+-> To add user to the sudo group:
+$ usermod -aG sudo <username>
+-> To set password for new user:
+$ sudo passwd <username>
 
+Login as "root" user or "tp_app1" user
+
+-> To allow remote desktop connection from anywhere
+$ sudo apt install xrdp
+$ sudo systemctl enable --now xrdp
+$ sudo ufw allow from any to any port 3389 proto tcp
+
+-> Go to terminal and install docker, refer "to install docker" section in this file
+--------
+
+-> Setup NodeJs and Git client (search for ubuntu specific instructions online)
 curl -sL https://rpm.nodesource.com/setup_14.x | bash -
 
 yum -y install nodejs
@@ -85,41 +101,69 @@ yum install git -y
 mkdir ta_apps
 cd ta_apps
 git clone https://github.com/encasherr/tech-assessment.git
--username: encasherr
--personal access token: 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
+
 cd tech-assessment
 npm install
 npm run build
 cd client
 npm install
 npm run build
-cd ..
-cd ..
-mkdir approot
-cp -r tech-assessment/node_modules/ approot/
-cp -r tech-assessment/wwwroot/. approot/
-cp -r tech-assessment/client/build/. approot/
+
 
 => We will use npm package PM2 to make our node js server run continuously in the background without blocking the terminal
-npm install -g pm2
-go to approot
-pm2 start app.js
+$ sudo npm install -g pm2
+$ sudo pm2 start app.js
+$ sudo pm2 start npm --name "tapp" -- run start1
+
+=> Setup docker, pull mysql and phpmyadmin images and run them as containers, use host ip in node js db connectionstring, scroll below and refer sections for setting up docker,mysql,phpmyadmin
+
 you can use below pm2 commands
 pm2 logs
 pm2 status
 
 => We will use Apache as reverse proxy for our node js application
--> Set virtual host config in Apache to redirect all Apache requests to runnig NodeJs server
-go to etc/httpd/conf.d/ directory
-create new tapp.conf file
-paste following content in the new file:
+-> Before starting server configuration, ensure ufw is installed
+$ sudo ufw status
+it should show a table allow/deny from
+-> To install Apache
+$ sudo apt install apache2
+-> Now enable ufw for Apache server to allow port 80 and port 443 by running  below
+$ sudo ufw allow 'Apache Full'
+-> Now configure Apache to be used as a reverse proxy server
+$ sudo a2enmod proxy proxy_http rewrite headers expires
+-> Now add Apache virtual host configuration
+$ sudo nano /etc/apache2/sites-available/tapp.conf
+-> paste/type following content in the tapp.conf file
 <VirtualHost *:80>
-  ProxyRequests On
+  ServerName sharingcloudbestpractices.com
+  ServerAlias www.sharingcloudbestpractices.com
+
+  ProxyRequests Off
+  ProxyPreserveHost On
+  ProxyVia Full
+
+  <Proxy *>
+    Require all granted
+  </Proxy>
+
   ProxyPass / http://localhost:3001/
   ProxyPassReverse / http://localhost:3001/
 </VirtualHost>
-Save the file
-restart apache -> sudo systemctl restart httpd.service
+-> Now disable default apache website and enable the Node js website
+$ sudo a2dissite 000-default
+$ sudo a2ensite tapp.conf
+$ sudo systemctl restart apache2
+
+-> To install ssl and allow https connection
+$ sudo apt install certbot python3-certbot-apache
+
+-> This command will create .conf file for ssl and redirect tapp.conf settings to use ssl, no manual change required
+$ sudo certbot -d sharingcloudbestpractices.com -d www.sharingcloudbestpractices.com --apache --agree-tos -m encasherr@gmail.com --no-eff-email --redirect
+
+-> To renew certificate
+$ sudo certbot renew --dry-run
+
+**** that's all to configure Apache to host the node js application running at localhost:3001*******
 
 
 => Setup Docker on CentOs 7
@@ -132,17 +176,19 @@ sudo systemctl enable docker
 sudo systemctl status docker
 
 -> download mysql image and run a new mysql container
-sudo docker pull mysql
-sudo docker run --name ta-mysql -e MYSQL_ROOT_PASSWORD=tech -d mysql:latest
--- sudo docker run -it --rm mysql mysql -hta-mysql -uroot -p
-sudo docker ps
+$ sudo docker pull mysql
+$ sudo docker run --name ta-mysql -e MYSQL_ROOT_PASSWORD=tech -d mysql:latest
+$ sudo docker run -it --rm mysql mysql -hta-mysql -uroot -p
+$ sudo docker ps
+-> To go to mysql command line
 sudo docker exec -it ta-mysql bash
--> setup mysql instance
+-> To get the IP address and port number of mysql container, so that we use it in Node Js to connect
+sudo docker inspect ta-mysql
+-> setup mysql instance (not required if doing via phpmyadmin)
 mysql -u root -p
 CREATE DATABASE ta_profiledb
 --update mysql.user set host = ‘%’ where user=’root’;
--> To get the IP address and port number of mysql container, so that we use it in Node Js to connect
-sudo docker inspect ta-mysql
+
 
 -> download phpmyadmin image and run a new container
 sudo docker volume create phpmyadmin-volume
@@ -157,55 +203,9 @@ run application DB schema script on that database
 -> We need to change Mysql authentication to plain old password authentication because it by default uses cache authentication. Run this script in phpmyadmin (if errors out in phpmyadmin, go to mysql bash via terminal and then run the alter statement):
 ALTER USER 'ta_app_write' IDENTIFIED WITH mysql_native_password BY '[password]';
 -> via terminal
-sudo docker exec -it ta-mysql bash
+$ sudo docker exec -it ta-mysql bash
 mysql -u root -p
 ALTER USER 'ta_app_write' IDENTIFIED WITH mysql_native_password BY '[password]';
-
-=> We need to open port number 3001 to be able to access application externally
-sudo iptables -I INPUT -p tcp -–dport 3001 -j ACCEPT
--> run this command to push the allow rule above reject rule, in this case line number 11 already has Reject all 
-rule, so by this command we are pushing reject all rule below and adding allow port 80 rule
-sudo iptables -I INPUT 11 -i eth0 -p tcp --dport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
--> query iptables
-sudo iptables --line -vnL
--> we need to allow port 80 & 443 to enable SSL request to server/website, this is done via firewall
-sudo firewall-cmd --permanent --zone=public --add-port=80/tcp
-sudo firewall-cmd --permanent --zone=public --add-port=443/tcp
-sudo firewall-cmd --reload
-
-=> To redirect all http requests to https, make following entry in tapp.conf file (complete content, for reference)
-<VirtualHost *:80>
-ServerName sharingcloudbestpractices.com
-Redirect permanent / https://www.sharingcloudbestpractices.com/
-ProxyRequests On
-ProxyPass / http://localhost:3001/
-ProxyPassReverse / http://localhost:3001/
-RewriteEngine on
-RewriteCond %{SERVER_NAME} =sharingcloudbestpractices.com
-RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
-</VirtualHost>
-<VirtualHost *:443>
-ServerName sharingcloudbestpractices.com
-ProxyRequests On
-ProxyPass / http://localhost:3001/
-ProxyPassReverse / http://localhost:3001/
-
-SSLCertificateFile /etc/letsencrypt/live/sharingcloudbestpractices.com/cert.pem
-SSLCertificateKeyFile /etc/letsencrypt/live/sharingcloudbestpractices.com/private.pem
-Include /etc/letsencrypt/options-ssl-apache.conf
-SSLCertificateChainFile /etc/letsencrypt/live/sharingcloudbestpractices.com/chain.pem
-</VirtualHost>
-
-
-=> to setup and enable SSL using Lets Encrypt
-sudo yum update -y && sudo yum upgrade -y
-sudo yum install epel-release -y
-sudo yum install certbot python2-certbot-apache mod_ssl -y
-sudo certbot --version
-sudo certbot --apache -d sharingcloudbestpractices.com
-sudo systemctl restart httpd
--> we need to allow port 443 to enable SSL request to server/website, this is done via firewall
-sudo firewall-cmd --permanent --zone=public --addport=443/tcp
 
 
 MySql DB root user:
@@ -229,10 +229,7 @@ Type A, name: @, content: 103.212.120.231, Proxy: No (DNS only), TTL: Auto
 Type A, name: www, content: 103.212.120.231, Proxy: No (DNS only), TTL: Auto 
 
 
-------------------------------------------------------------------------------------------
-
-Git Personal access token:
-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
+-----below are for references only-------------------------------------------------------------------------------
 
 git clone https://github.com/encasherr/tech-assessment.git
 enter username
@@ -285,9 +282,53 @@ vim /etc/httpd/conf.d/phpMyAdmin.conf
 ->remove phpmyadmin
 sudo yum remove phpmyadmin
 
--> Cloudflare Login
-user: encasherr@gmail.om
-password: Action@123
+
+=> We need to open port number 3001 to be able to access application externally (not needed if using ufw)
+sudo iptables -I INPUT -p tcp -–dport 3001 -j ACCEPT
+-> run this command to push the allow rule above reject rule, in this case line number 11 already has Reject all 
+rule, so by this command we are pushing reject all rule below and adding allow port 80 rule
+sudo iptables -I INPUT 11 -i eth0 -p tcp --dport 80 -m state --state NEW,ESTABLISHED -j ACCEPT
+-> query iptables
+sudo iptables --line -vnL
+-> we need to allow port 80 & 443 to enable SSL request to server/website, this is done via firewall
+sudo firewall-cmd --permanent --zone=public --add-port=80/tcp
+sudo firewall-cmd --permanent --zone=public --add-port=443/tcp
+sudo firewall-cmd --reload
+
+=> To redirect all http requests to https, make following entry in tapp.conf file (complete content, for reference)
+<VirtualHost *:80>
+ServerName sharingcloudbestpractices.com
+Redirect permanent / https://www.sharingcloudbestpractices.com/
+ProxyRequests On
+ProxyPass / http://localhost:3001/
+ProxyPassReverse / http://localhost:3001/
+RewriteEngine on
+RewriteCond %{SERVER_NAME} =sharingcloudbestpractices.com
+RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
+</VirtualHost>
+<VirtualHost *:443>
+ServerName sharingcloudbestpractices.com
+ProxyRequests On
+ProxyPass / http://localhost:3001/
+ProxyPassReverse / http://localhost:3001/
+
+SSLCertificateFile /etc/letsencrypt/live/sharingcloudbestpractices.com/cert.pem
+SSLCertificateKeyFile /etc/letsencrypt/live/sharingcloudbestpractices.com/private.pem
+Include /etc/letsencrypt/options-ssl-apache.conf
+SSLCertificateChainFile /etc/letsencrypt/live/sharingcloudbestpractices.com/chain.pem
+</VirtualHost>
+
+
+=> to setup and enable SSL using Lets Encrypt
+sudo yum update -y && sudo yum upgrade -y
+sudo yum install epel-release -y
+sudo yum install certbot python2-certbot-apache mod_ssl -y
+sudo certbot --version
+sudo certbot --apache -d sharingcloudbestpractices.com
+sudo systemctl restart httpd
+-> we need to allow port 443 to enable SSL request to server/website, this is done via firewall
+sudo firewall-cmd --permanent --zone=public --addport=443/tcp
+
 
 unix commands:
 to come back to command promp:
@@ -304,7 +345,8 @@ to set password for new user:
 sudo passwd <username>
 to delete an exiting user:
 deluser <username>
-to install docker:
+
+*******to install Docker:*********
 sudo apt update
 sudo apt install apt-transport-https ca-certificates curl software-properties-common
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
@@ -318,7 +360,7 @@ to view active docker containers:
 sudo docker ps
 to view all (even stopped) containers:
 sudo docker ps -a
-
+*********Docker setup complete****************************
 Install git:
 sudo apt install -y
 Steps to Containerize a node js and mysql application:
