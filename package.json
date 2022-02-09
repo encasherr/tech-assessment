@@ -9,11 +9,11 @@
     "uibuild": "cd client && npm run build",
     "wincopy": "xcopy \"client\\build\\\" \"wwwroot\\\" /E",
     "lincopy": "cp -a client/build/. \"wwwroot/\"",
-    "start": "npm run uibuild && npm run wincopy && npm run build && node wwwroot/app.js",
+    "start1": "npm run uibuild && npm run wincopy && npm run build && node wwwroot/app.js",
     "linuxstart": "npm run uibuild && npm run lincopy && npm run build && node wwwroot/app.js",
     "serverstart": "npm run build && set ENV=dev && node wwwroot/app.js",
     "devserverstart": "npm run build && node wwwroot/app.js",
-    "start1": "npm run lincopy && npm run build && MYSQL_HOST=172.17.0.2 node wwwroot/app.js",
+    "start": "npm run lincopy && npm run build && MYSQL_HOST=172.17.0.2 node wwwroot/app.js",
     "start2": "npm run build && set ENV=dev && node wwwroot/app.js"
   },
   "author": "Alok Jha",
