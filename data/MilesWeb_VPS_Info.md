@@ -80,10 +80,19 @@ $ sudo passwd <username>
 
 Login as "root" user or "tp_app1" user
 
+-> To install ubuntu desktop
+$ sudo apt-get install lightdm
+$ sudo systemctl start lightdm
+$ sudo apt-get install ubuntu-desktop
+$ sudo systemctl set-default graphical.target
+reboot
+
 -> To allow remote desktop connection from anywhere
 $ sudo apt install xrdp
 $ sudo systemctl enable --now xrdp
 $ sudo ufw allow from any to any port 3389 proto tcp
+(check if this is required, if above alone does not work)
+sudo adduser xrdp ssl-cert
 
 -> Go to terminal and install docker, refer "to install docker" section in this file
 --------
@@ -115,16 +124,24 @@ $ sudo npm install -g pm2
 $ sudo pm2 start app.js
 $ sudo pm2 start npm --name "tapp" -- run start1
 
+-> to remove app from pm2 
+$ sudo om2 delete tapp
+
 => Setup docker, pull mysql and phpmyadmin images and run them as containers, use host ip in node js db connectionstring, scroll below and refer sections for setting up docker,mysql,phpmyadmin
 
 you can use below pm2 commands
 pm2 logs
 pm2 status
 
+********************Apache configuration****************************
 => We will use Apache as reverse proxy for our node js application
 -> Before starting server configuration, ensure ufw is installed
 $ sudo ufw status
 it should show a table allow/deny from
+-> Before starting Apache setup, ensure ssh connection is enabled to server, you can enable ssh connection using ufw
+$ sudo ufw allow ssh
+-> you can enable remote desktop connection using ufw
+$ sudo ufw allow from any to any port 3389 proto tcp
 -> To install Apache
 $ sudo apt install apache2
 -> Now enable ufw for Apache server to allow port 80 and port 443 by running  below
@@ -160,20 +177,12 @@ $ sudo apt install certbot python3-certbot-apache
 -> This command will create .conf file for ssl and redirect tapp.conf settings to use ssl, no manual change required
 $ sudo certbot -d sharingcloudbestpractices.com -d www.sharingcloudbestpractices.com --apache --agree-tos -m encasherr@gmail.com --no-eff-email --redirect
 
+$ sudo certbot -d tests.sharingcloudbestpractices.com -d www.tests.sharingcloudbestpractices.com --apache --agree-tos -m encasherr@gmail.com --no-eff-email --redirect
+
 -> To renew certificate
 $ sudo certbot renew --dry-run
 
 **** that's all to configure Apache to host the node js application running at localhost:3001*******
-
-
-=> Setup Docker on CentOs 7
-sudo yum check-update
-sudo yum install -y yum-utils device-mapper-persistent-data lvm2
-sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-sudo yum install docker
-sudo systemctl start docker
-sudo systemctl enable docker
-sudo systemctl status docker
 
 -> download mysql image and run a new mysql container
 $ sudo docker pull mysql
@@ -196,7 +205,7 @@ sudo docker run --name ta-phpmyadmin -v phpmyadmin-volume:/etc/phpmyadmin/config
 
 Todo via phpmyadmin:
 create a new database
-create new user on that database ta_app1
+create new user on that database tp_app1
 run application DB schema script on that database
 
 
@@ -204,8 +213,8 @@ run application DB schema script on that database
 ALTER USER 'ta_app_write' IDENTIFIED WITH mysql_native_password BY '[password]';
 -> via terminal
 $ sudo docker exec -it ta-mysql bash
-mysql -u root -p
-ALTER USER 'ta_app_write' IDENTIFIED WITH mysql_native_password BY '[password]';
+mysql -u tp_app1 -p
+ALTER USER 'tp_app1' IDENTIFIED WITH mysql_native_password BY '[password]';
 
 
 MySql DB root user:
@@ -228,6 +237,13 @@ modify the A record for root and A record for www as follows:
 Type A, name: @, content: 103.212.120.231, Proxy: No (DNS only), TTL: Auto
 Type A, name: www, content: 103.212.120.231, Proxy: No (DNS only), TTL: Auto 
 
+/***** Wordpress setup *********/
+$ sudo docker pull wordpress
+$ sudo docker run --name ta-wp -e WORDPRESS_DB_HOST=172.17.0.2 -e WORDPRESS_DB_USER=tp_app1 -e WORDPRESS_DB_PASSWORD=tech -e WORDPRESS_DB_NAME=ta_profiledb -e WORDPRESS_TABLE_PREFIX=wp_ -p 8080:80 -d wordpress
+
+sudo docker run --name ta-wp -e WORDPRESS_DB_HOST=172.17.0.2 -e WORDPRESS_DB_USER=tp_app1 -e WORDPRESS_DB_PASSWORD=tech -e WORDPRESS_DB_NAME=ta_profiledb -e WORDPRESS_TABLE_PREFIX=wp_ -p 80:80 -d wordpress
+
+/**** end of wordpress setup ********/
 
 -----below are for references only-------------------------------------------------------------------------------
 
@@ -331,7 +347,7 @@ sudo firewall-cmd --permanent --zone=public --addport=443/tcp
 
 
 unix commands:
-to come back to command promp:
+to come back to command prompt:
 :q
 to see the contents of a file for e.g. syslog:
 less syslog
@@ -347,19 +363,30 @@ to delete an exiting user:
 deluser <username>
 
 *******to install Docker:*********
-sudo apt update
-sudo apt install apt-transport-https ca-certificates curl software-properties-common
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
-apt-cache policy docker-ce
-sudo apt install docker-ce
-sudo systemctl status docker
-sudo docker run hello-world
+$ sudo apt update
+$ sudo apt install apt-transport-https ca-certificates curl software-properties-common
+$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+$ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+$ apt-cache policy docker-ce
+$ sudo apt install docker-ce
+$ sudo systemctl status docker
+$ sudo docker run hello-world
 
 to view active docker containers:
 sudo docker ps
 to view all (even stopped) containers:
 sudo docker ps -a
+
+
+=> Setup Docker on CentOs 7
+sudo yum check-update
+sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+sudo yum install docker
+sudo systemctl start docker
+sudo systemctl enable docker
+sudo systemctl status docker
+
 *********Docker setup complete****************************
 Install git:
 sudo apt install -y

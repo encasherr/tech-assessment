@@ -11,7 +11,7 @@ import passport from 'passport';
 import { setConfig, createPrerequisitesDir } from "./utils/general";
 // import CronScheduler from './commons/CronSheduler';
 
-let port_number = process.env.PORT || 3001;
+let port_number = process.env.PORT || 8005;
 let app = express();
 
 app.server = http.createServer(app);
