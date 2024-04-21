@@ -10,13 +10,14 @@ import p from './passport';
 import passport from 'passport';
 import { setConfig, createPrerequisitesDir } from "./utils/general";
 // import CronScheduler from './commons/CronSheduler';
-
-let port_number = process.env.PORT || 8005;
+console.log(`process.env.PORT: ${process.env.PORT}`);
+let port_number = process.env.PORT || 3001 || 8005;
 let app = express();
 
 app.server = http.createServer(app);
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname)));
+app.use(express.static(path.resolve(__dirname + '/landing/')));
 
 app.use(passport.initialize());
 // app.use(CronScheduler);
@@ -45,8 +46,22 @@ app.use('/api', routes);
 global.appRoot = path.resolve(__dirname);
 console.log('global.appRoot', global.appRoot);
 
+app.use('/home', (req, resp) => {
+    // let fileName = path.resolve(__dirname + '/index.html');
+    let fileName = path.resolve(__dirname + '/landing/index.html');
+    console.log('request in /', fileName);
+    resp.sendFile(fileName);
+});
+
+// app.use('/tests', (req, resp) => {
+//     let fileName = path.resolve(__dirname + '/index.html');
+//     console.log('request in /', fileName);
+//     resp.sendFile(fileName);
+// });
+
 app.use('/*', (req, resp) => {
     let fileName = path.resolve(__dirname + '/index.html');
+    console.log('request in /*', fileName);
     resp.sendFile(fileName);
 });
 

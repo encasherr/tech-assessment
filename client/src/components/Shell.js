@@ -417,7 +417,7 @@ class Shell extends React.Component {
         return (
           <div className={classes.root}>
             <CssBaseline />
-            <Header classes={classes} 
+            {/* <Header classes={classes} 
                     openState={this.state.open} 
                     onDrawerOpen={this.handleDrawerOpen}
                     onLogout={() => this.Logout()}
@@ -427,11 +427,20 @@ class Shell extends React.Component {
                     isTokenExpired={isTokenExpired}
                     />
             <Router>
+              {user && (user.role === 'admin') &&
               <SideDrawer classes={classes} 
                       openState={this.state.open} 
                       onDrawerClose={this.handleDrawerClose}
                       theme={theme}
                       />
+              }
+              <main className={classes.content}>
+                  <div className={classes.toolbar} />
+                      <Routes classes={classes}/>
+                  
+              </main>
+            </Router> */}
+            <Router>
               <main className={classes.content}>
                   <div className={classes.toolbar} />
                       <Routes classes={classes}/>

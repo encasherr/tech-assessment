@@ -1,0 +1,68 @@
+Plan of Action:
+
+Recruitment Solution for Small & Midsize Business
+
+Are you running an IT/Software services company?
+
+Recruitment Process:
+
+    Once the hiring need is identified and job description is finalized, talent aquisition team starts
+    searching from sourced resumes and the process continues as following:
+        Shortlisting resumes based on skill match
+        Screening the shortlisted candidates
+        Interview the candidates
+        Evaluation & Employment Offer
+
+
+Challenges faced by recruitment teams:
+    Extended amount of time spent in shortlisting resumes:
+        Most recruiters spend a lot of time searching for perfect resumes and end up spending extended amount of time in looking at irrelevant resumes.
+
+    Lack of Productivity:
+        The recruiters may focus more on less critical tasks like reviewing the candidate’s resumes, again and again, sourcing potentially talented candidates can take hours. That apart, the companies spend a lot of time, energy, and costs in traditional processes like written tests.
+    
+    Quality of Hire:
+        In general, recruiters tend to recruit a candidate as early as possible, and there is always an urge to get
+        the best possible talent. However, there are multiple steps involved in the process, such as validating the technical skills of the candidate, evaluating the candidate’s behavioral and aptitude skills, ensuring that the hiring managers don’t end up spending a lot of time in interviewing non-relevant candidates, etc.
+
+    Hard to keep right candidates engaged during the entire hiring process:
+        The top candidate may not be available when companies finally decide to extend the offer after several weeks of interviews. The delay in hiring process severely hampers the candidate experience, and companies eventually lose on the top talent.
+
+    Sub-optimal candidate experience during the hiring process:
+        In the current trend, digitally savvy candidates expect organizations to offer a highly digital and smooth hiring experience. The age-old and lengthy hiring methods lead to candidate dissatisfaction.
+
+    Dynamic Tech Skills in Demand:
+        The skills required to work on new technologies are hard to find and measure. Besides, these new technical skills are challenging to quantify and qualify. The subject matter expertise needed to evaluate and interview for such modern skills may not exist within the company.
+
+
+Benefits of using Tech Assessment Services:
+    You can identify & shortlist the best candidates
+    Candidate assessment:
+        Enables HR managers to create and administer online assessments, including skill tests, aptitude tests, and personality assessments.
+    Customized Assessments:
+        Create tailor-made assessments to evaluate specific skills, competencies required for a given role.
+    Automated Evaluation:
+        Automatically score and evaluate candidates' responses, saving time and providing objective results.
+    Unbiased Selection:
+        Ensures fair and objective candidate evaluation, focusing solely on assessment results.
+    Streamlined Process:
+        Manage candidate profiles, track assessment progress, and communicate with candidates seamlessly.
+
+
+    User Friendly interface to create & administer customized assessments
+
+    Candidate Evaluation:
+        Evaluate candidates objectively through standardized assessments, ensuring fair and consistent evaluation
+        across the board.
+
+    Saving Time & Cost:
+        Stramline your hiring process, save time, reduce recruitment costs by efficiently assessing candidates' skills and qualifications.
+
+    
+How it Works:
+    Tech Assessment tool provides a user friendly interface to create & administer customised assessments.
+    Target Candidates are invited to take assessments
+    Candidates can access the assessments remotely, complete and submit them within a specified timeframe
+    Automated evaluation is triggered to generate assessment results of the candidate
+    The results along with detailed insights are available for review
+    

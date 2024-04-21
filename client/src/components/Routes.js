@@ -43,16 +43,28 @@ import OpTestConsole from '../OnlinePortal/Tests/OpTestConsole';
 import GradeContainer from '../Containers/GradeContainer';
 import TestsTakenContainer from '../Containers/TestsTaken/TestsTakenContainer';
 import OpProfileContainer from '../OnlinePortal/Profile/OpProfileContainer';
+import OnlinePortalLandingPage from '../OnlinePortal/lib/landingPage/OnlinePortalLandingPage';
+import AboutPage from '../OnlinePortal/lib/landingPage/About';
+import ServicesPage from '../OnlinePortal/lib/landingPage/Services';
+import AcademicPage from '../OnlinePortal/lib/landingPage/Academic';
+import PricingPage from '../OnlinePortal/lib/landingPage/Pricing';
 
 const Routes = (props) => {
     return (
         <div>
-            <PrivateRoute exact path="/" component={DashboardComponent} />
+            <Route exact path="/" component={OnlinePortalLandingPage} />
             {/* <Route path="/login" component={LocalLoginComponent} /> */}
+            <Route path="/home" component={OnlinePortalLandingPage} />
+            <Route path="/academic" component={AcademicPage} />
+            <Route path="/about" component={AboutPage} />
+            <Route path="/services" component={ServicesPage} />
+            <Route path="/pricing" component={PricingPage} />
             <Route path="/login" component={OpLoginSignup} />
+            <Route path="/signup" component={OpSignup} />
             <Route path="/unauthorizedUser" component={User401} />
             <Route path="/userForbidden" component={UserForbidden} />
             <Route path="/notFound" component={ResourceNotFound} />
+            <PrivateRoute {...props} path="/professional" component={DashboardComponent} />
             <PrivateRoute {...props} path="/dashboard" component={DashboardComponent} />
             <PrivateRoute path="/tests" component={AdminTestContainer} />
             <PrivateRoute {...props} path="/testConsole" component={TestConsoleContainer} />

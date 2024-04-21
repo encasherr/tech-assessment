@@ -122,7 +122,7 @@ var buildMenu = function buildMenu(menuOptions) {
     return finalStr;
 };
 
-var menuOptions = [{ optionIndex: "1", optionText: "Create a Programming MCQ" }, { optionIndex: "2", optionText: "Create an Academic MCQ" }, { optionIndex: "3", optionText: "Edit a Programming MCQ" }, { optionIndex: "4", optionText: "Edit an Academic MCQ" }, { optionIndex: "5", optionText: "Delete a MCQ" }, { optionIndex: "6", optionText: "Send Invitation" }, { optionIndex: "7", optionText: "Get Test Link" }, { optionIndex: "8", optionText: "Create a Test" }, { optionIndex: "9", optionText: "Edit a Test" }, { optionIndex: "10", optionText: "Delete a Test" }, { optionIndex: "11", optionText: "List All MCQs" }, { optionIndex: "12", optionText: "Get MCQ" }, { optionIndex: "13", optionText: "List All Tests" }, { optionIndex: "14", optionText: "Evaluate Test" }, { optionIndex: "15", optionText: "Send Test Results to Org" }, { optionIndex: "16", optionText: "Exit" }];
+var menuOptions = [{ optionIndex: "1", optionText: "Create a Programming MCQ" }, { optionIndex: "2", optionText: "Create an Academic MCQ" }, { optionIndex: "3", optionText: "Edit a Programming MCQ" }, { optionIndex: "4", optionText: "Edit an Academic MCQ" }, { optionIndex: "5", optionText: "Delete a MCQ" }, { optionIndex: "6", optionText: "Send Invitation" }, { optionIndex: "7", optionText: "Get Test Link" }, { optionIndex: "8", optionText: "Create a Test" }, { optionIndex: "9", optionText: "Edit a Test" }, { optionIndex: "10", optionText: "Delete a Test" }, { optionIndex: "11", optionText: "List All MCQs" }, { optionIndex: "12", optionText: "Get MCQ" }, { optionIndex: "13", optionText: "List All Tests" }, { optionIndex: "14", optionText: "Evaluate Test" }, { optionIndex: "15", optionText: "Send Test Results to Org" }, { optionIndex: "16", optionText: "Send Verification Email" }, { optionIndex: "17", optionText: "Exit" }];
 
 var askUser = function askUser(query) {
     return new Promise(function (resolve, reject) {
@@ -135,7 +135,7 @@ var askUser = function askUser(query) {
 
 var goToSelectedOption = function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(menuOption) {
-        var mcqImportPath, programmingMcqs, _mcqImportPath, academicMcqs, mcqId, model, testId, emailId, inviteeName, invitees, invitationId, testLink, selection, testModel, _mcqId, _model, entity, questionPrompt, _selection, responseEntity, _invitationId, registrationId, _invitationId2;
+        var mcqImportPath, programmingMcqs, _mcqImportPath, academicMcqs, mcqId, model, testId, emailId, inviteeName, invitees, invitationId, testLink, selection, testModel, _mcqId, _model, entity, questionPrompt, _selection, responseEntity, _invitationId, registrationId, _invitationId2, adminEmail, userModel, users, existingUser;
 
         return regeneratorRuntime.wrap(function _callee2$(_context2) {
             while (1) {
@@ -150,7 +150,7 @@ var goToSelectedOption = function () {
 
                     case 2:
                         _context2.t0 = menuOption.optionIndex;
-                        _context2.next = _context2.t0 === "1" ? 5 : _context2.t0 === "2" ? 10 : _context2.t0 === "3" ? 15 : _context2.t0 === "4" ? 16 : _context2.t0 === "5" ? 17 : _context2.t0 === "6" ? 27 : _context2.t0 === "7" ? 40 : _context2.t0 === "8" ? 50 : _context2.t0 === "9" ? 51 : _context2.t0 === "10" ? 52 : _context2.t0 === "11" ? 60 : _context2.t0 === "12" ? 61 : _context2.t0 === "14" ? 74 : _context2.t0 === "15" ? 99 : _context2.t0 === "16" ? 106 : 108;
+                        _context2.next = _context2.t0 === "1" ? 5 : _context2.t0 === "2" ? 10 : _context2.t0 === "3" ? 15 : _context2.t0 === "4" ? 16 : _context2.t0 === "5" ? 17 : _context2.t0 === "6" ? 27 : _context2.t0 === "7" ? 40 : _context2.t0 === "8" ? 50 : _context2.t0 === "9" ? 51 : _context2.t0 === "10" ? 52 : _context2.t0 === "11" ? 60 : _context2.t0 === "12" ? 61 : _context2.t0 === "14" ? 74 : _context2.t0 === "15" ? 99 : _context2.t0 === "16" ? 106 : _context2.t0 === "17" ? 117 : 119;
                         break;
 
                     case 5:
@@ -173,7 +173,7 @@ var goToSelectedOption = function () {
                                 console.log(msg);
                             });
                         });
-                        return _context2.abrupt("break", 108);
+                        return _context2.abrupt("break", 119);
 
                     case 10:
                         _mcqImportPath = _path2.default.resolve(config.default.academic.mcqImportPath);
@@ -204,7 +204,7 @@ var goToSelectedOption = function () {
                                 }
                             });
                         });
-                        return _context2.abrupt("break", 108);
+                        return _context2.abrupt("break", 119);
 
                     case 15:
                         console.log('edit programming mcq');
@@ -227,7 +227,7 @@ var goToSelectedOption = function () {
 
                     case 25:
                         console.log('MCQ deleted');
-                        return _context2.abrupt("break", 108);
+                        return _context2.abrupt("break", 119);
 
                     case 27:
                         testId = 21;
@@ -260,7 +260,7 @@ var goToSelectedOption = function () {
                             console.log(response);
                             console.log("Failed registering test for email: " + invitees[0].emailId);
                         });
-                        return _context2.abrupt("break", 108);
+                        return _context2.abrupt("break", 119);
 
                     case 40:
                         invitationId = 164;
@@ -279,7 +279,7 @@ var goToSelectedOption = function () {
 
                         console.log(testLink);
 
-                        return _context2.abrupt("break", 108);
+                        return _context2.abrupt("break", 119);
 
                     case 50:
                         console.log('create a test');
@@ -299,7 +299,7 @@ var goToSelectedOption = function () {
                         return testModel.DeleteTestById(selection);
 
                     case 59:
-                        return _context2.abrupt("break", 108);
+                        return _context2.abrupt("break", 119);
 
                     case 60:
                         console.log('list all mcqs');
@@ -331,7 +331,7 @@ var goToSelectedOption = function () {
                             console.log("MCQ Id " + _mcqId + " not found");
                         }
                         // });
-                        return _context2.abrupt("break", 108);
+                        return _context2.abrupt("break", 119);
 
                     case 74:
                         // let invitationId = 175;
@@ -385,7 +385,7 @@ var goToSelectedOption = function () {
                         console.log(_chalk2.default.yellow.bgBlack("Result: " + responseEntity.evaluation_meta.result));
 
                     case 98:
-                        return _context2.abrupt("break", 108);
+                        return _context2.abrupt("break", 119);
 
                     case 99:
                         _invitationId2 = 175;
@@ -398,13 +398,37 @@ var goToSelectedOption = function () {
                         return _TestResultGenerator2.default.generateAndSendResultsForInvitationId(adminUser, _invitationId2, true);
 
                     case 105:
-                        return _context2.abrupt("break", 108);
+                        return _context2.abrupt("break", 119);
 
                     case 106:
+                        adminEmail = 'encasherr@gmail.com';
+                        userModel = new _UserModel2.default();
+                        _context2.next = 110;
+                        return userModel.GetUserByEmail(adminEmail);
+
+                    case 110:
+                        users = _context2.sent;
+                        existingUser = users[0];
+
+                        if (!existingUser) {
+                            _context2.next = 116;
+                            break;
+                        }
+
+                        _context2.next = 115;
+                        return userModel.SendVerificationEmail(existingUser.id);
+
+                    case 115:
+                        console.log('email sent');
+
+                    case 116:
+                        return _context2.abrupt("break", 119);
+
+                    case 117:
                         console.log('Have a good day!');
                         exitUserInteraction();
 
-                    case 108:
+                    case 119:
                     case "end":
                         return _context2.stop();
                 }

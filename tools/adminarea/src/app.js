@@ -79,7 +79,8 @@ let menuOptions = [
     { optionIndex: "13", optionText: "List All Tests" },
     { optionIndex: "14", optionText: "Evaluate Test" },
     { optionIndex: "15", optionText: "Send Test Results to Org" },
-    { optionIndex: "16", optionText: "Exit" }
+    { optionIndex: "16", optionText: "Send Verification Email" },
+    { optionIndex: "17", optionText: "Exit" }
 ];
 
 const askUser = (query) => {
@@ -269,6 +270,17 @@ const goToSelectedOption = async (menuOption) => {
             break;
         }
         case "16": {
+            let adminEmail = 'encasherr@gmail.com';
+            let userModel = new UserModel();
+            let users = await userModel.GetUserByEmail(adminEmail)
+            let existingUser = users[0];
+            if(existingUser) {
+                await userModel.SendVerificationEmail(existingUser.id);
+                console.log('email sent');
+            }
+            break;
+        }
+        case "17": {
             console.log('Have a good day!');
             exitUserInteraction();
         }

@@ -128,7 +128,7 @@ const RecentResponses = (props) => {
                 <div className="card-body">
                     <div className="list-group">
                     {!props.completedTests && <LoadingComponent /> }
-                    {props.recentResponses && props.recentResponses.length === 0 && <div className="alert alert-info">No recent candidate actions </div> }
+                    {props.completedTests && props.completedTests.length === 0 && <div className="alert alert-info">No recent candidate actions </div> }
                     {props.completedTests && props.completedTests.length > 0 &&
                         props.completedTests.map((invitation, index) => {
                             return (
@@ -170,7 +170,7 @@ const PendingInvitations = (props) => {
             <div className="card-body">
                 <div className="list-group">
                 {!props.pendingTests && <LoadingComponent /> }
-                {props.pendingTests && props.pendingTests.length === 0 && <div className="alert alert-info">No recent candidate actions </div> }
+                {props.pendingTests && props.pendingTests.length === 0 && <div className="alert alert-info">No candidates invited recently</div> }
                 {props.pendingTests && props.pendingTests.length > 0 &&
                     props.pendingTests.map((invitation, index) => {
                         return (

@@ -35,8 +35,8 @@ export default class config {
             if (configValues && configValues.site_url) return;
 
             
-            var apiUrl = this.isdevEnv() ? domain : '';
-                
+            // var apiUrl = this.isdevEnv() ? domain : '';
+            let apiUrl = this.getApiHomeUrl()    
             let url = apiUrl + '/api/loadConfig';
             axios.get(url)
                 .then((res) => {
@@ -71,17 +71,28 @@ export default class config {
     getSiteUrl = () => {
         // if(this.isdevEnv()) return domain;
         let locationHref = window.location.href;
-        if(locationHref.indexOf('localhost:3000') > -1) return `http://localhost:3000`
+        if(locationHref.indexOf('localhost:3000') > -1) return `http://localhost:3001`
         if(locationHref.indexOf('localhost:3001') > -1) return `http://localhost:3001`
         // return configValues.site_url;
-        return '';
+        return locationHref;
+    }
+
+    getSiteHomeUrl = () => {
+        let siteUrl = new URL(configValues.site_url);
+        let sitePort = window.location.port 
+        let host = `${siteUrl.protocol}//${siteUrl.hostname}:${sitePort}`
+        console.log('site home', host)
+        return `${host}/home`
     }
 
     getApiHomeUrl = () => {
-        let apiHomeUrl = this.getSiteUrl();
-        let locationHref = window.location.href;
-        if(locationHref.indexOf('localhost:3000') > -1) apiHomeUrl = `http://localhost:3001`;
-        if(locationHref.indexOf('localhost:3001') > -1) apiHomeUrl = `http://localhost:3001`;
+        // let apiHomeUrl = this.getSiteUrl();
+        // let locationHref = window.location.href;
+        // if(locationHref.indexOf('localhost:3000') > -1) apiHomeUrl = `http://localhost:3001`;
+        // if(locationHref.indexOf('localhost:3001') > -1) apiHomeUrl = `http://localhost:3001`;
+        let apiPort = 3001
+        let apiHomeUrl = `${window.location.protocol}//${window.location.hostname}:${apiPort}` 
+        console.log('apiHomeUrl', apiHomeUrl);
         return apiHomeUrl;
     }
 

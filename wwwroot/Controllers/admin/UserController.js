@@ -228,7 +228,7 @@ var UserController = function (_BaseController) {
                                                             url = siteUrl + 'emailVerified';
 
                                                             console.log('User Updated, redirecting to ', url);
-                                                            resp.redirect(url);
+                                                            // resp.redirect(url);
                                                             resp.status(200).send('Email Id is verifed successfully. You can use your credentials to log in now.');
                                                         }
 

@@ -1,0 +1,121 @@
+{
+    "exams": [
+        {
+            "category": "Academic",
+            "gradeId": 10,
+            "gradeName": "Grade 10",
+            "subject": "Science",
+            "board": "NCERT",
+            "topics": ["Chapter 1", "Chapter 2", "Chapter 3", "Chapter 4"]
+        },
+        {
+            "category": "Academic",
+            "gradeId": 10,
+            "gradeName": "Grade 10",
+            "subject": "English",
+            "board": "NCERT",
+            "topics": ["Chapter 1", "Chapter 2", "Chapter 3", "Chapter 4"],
+            "sellingPrice": 30,
+            "originalPrice": 50,
+            "sellingCurrency": "&#x20B9;"
+        },
+        {
+            "category": "Academic",
+            "gradeId": 10,
+            "gradeName": "Grade 10",
+            "subject": "Social Science",
+            "board": "NCERT",
+            "topics": ["Chapter 1", "Chapter 2", "Chapter 3", "Chapter 4"]
+        },
+        {
+            "category": "Academic",
+            "gradeId": 10,
+            "gradeName": "Grade 10",
+            "subject": "Maths",
+            "board": "NCERT",
+            "topics": ["Chapter 1", "Chapter 2", "Chapter 3", "Chapter 4"]
+        },
+        {
+            "category": "Programming",
+            "skill": "Angular",
+            "level": "Beginner"
+        },
+        {
+            "category": "Programming",
+            "skill": "ReactJs",
+            "level": "Beginner"
+        }
+    ],
+    "features": [
+        {
+            "parameter": "Exams",
+            "basicPlan": 5,
+            "advancedPlan": 50,
+            "premiumPlan": 500,
+            "enterprisePlan": "Unlimited"
+        },
+        {
+            "parameter": "Number of Candidates",
+            "basicPlan": 20,
+            "advancedPlan": 50,
+            "premiumPlan": 1000,
+            "enterprisePlan": "Unlimited"
+        },
+        {
+            "parameter": "Groups",
+            "basicPlan": "Unlimited",
+            "advancedPlan": "Unlimited",
+            "premiumPlan": "Unlimited",
+            "enterprisePlan": "Unlimited"
+        },
+        {
+            "parameter": "Employee Accounts",
+            "basicPlan": "No",
+            "advancedPlan": 5,
+            "premiumPlan": 20,
+            "enterprisePlan": "Unlimited"
+        },
+        {
+            "parameter": "Exam Monitor",
+            "basicPlan": "No",
+            "advancedPlan": "Yes",
+            "premiumPlan": "Yes",
+            "enterprisePlan": "Yes"
+        },
+        {
+            "parameter": "Number of Questions",
+            "basicPlan": 1000,
+            "advancedPlan": 5000,
+            "premiumPlan": 10000,
+            "enterprisePlan": 50000
+        },
+        {
+            "parameter": "Detailed Analysis",
+            "basicPlan": "No",
+            "advancedPlan": "Yes",
+            "premiumPlan": "Yes",
+            "enterprisePlan": "Yes"
+        },
+        {
+            "parameter": "Multiple Choice Questions",
+            "basicPlan": "Yes",
+            "advancedPlan": "Yes",
+            "premiumPlan": "Yes",
+            "enterprisePlan": "Yes"
+        },
+        {
+            "parameter": "Subjective Questions",
+            "basicPlan": "No",
+            "advancedPlan": "No",
+            "premiumPlan": "Yes",
+            "enterprisePlan": "Yes"
+        },
+        {
+            "parameter": "Email Support",
+            "basicPlan": "Yes",
+            "advancedPlan": "Yes",
+            "premiumPlan": "Yes",
+            "enterprisePlan": "Yes"
+        }
+    ]
+}

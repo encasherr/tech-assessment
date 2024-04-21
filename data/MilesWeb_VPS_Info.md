@@ -98,13 +98,14 @@ sudo adduser xrdp ssl-cert
 --------
 
 -> Setup NodeJs and Git client (search for ubuntu specific instructions online)
-curl -sL https://rpm.nodesource.com/setup_14.x | bash -
-
 yum -y install nodejs
+(u) sudo apt -y install nodejs
 
 yum install gcc-c++ make
+(u) sudo apt install npm
 
 yum install git -y
+(u) sudo apt install git -y
 
 => Setup the NodeJs App:
 mkdir ta_apps
@@ -112,20 +113,25 @@ cd ta_apps
 git clone https://github.com/encasherr/tech-assessment.git
 
 cd tech-assessment
-npm install
-npm run build
+sudo npm install
+sudo npm run build
 cd client
-npm install
-npm run build
-
+sudo npm install
+sudo npm run build
+cd..
+sudo cp -r client/build/* wwwroot
+sudo node app 
 
 => We will use npm package PM2 to make our node js server run continuously in the background without blocking the terminal
 $ sudo npm install -g pm2
 $ sudo pm2 start app.js
 $ sudo pm2 start npm --name "tapp" -- run start1
 
+$ cd /
+$ sudo MYSQL_HOST=172.17.0.2 MYSQL_USER=tp_app1 MYSQL_PASS=tech MYSQL_DB=ta_profiledb PORT=3000 pm2 start /home/tp_app1/tech-assessment/wwwroot/app.js --name "tapp"
+
 -> to remove app from pm2 
-$ sudo om2 delete tapp
+$ sudo pm2 delete tapp
 
 => Setup docker, pull mysql and phpmyadmin images and run them as containers, use host ip in node js db connectionstring, scroll below and refer sections for setting up docker,mysql,phpmyadmin
 
@@ -203,10 +209,17 @@ CREATE DATABASE ta_profiledb
 sudo docker volume create phpmyadmin-volume
 sudo docker run --name ta-phpmyadmin -v phpmyadmin-volume:/etc/phpmyadmin/config.user.inc.php --link ta-mysql:db -p 82:80 -d phpmyadmin/phpmyadmin
 
+Open PhpMyadmin by opening below url in the browser:
+http://91.107.226.228:82/  (91.107.226.228 is the VPS host staic IP)
+
 Todo via phpmyadmin:
 create a new database
 create new user on that database tp_app1
 run application DB schema script on that database
+
+Include following in the create Database script, to create new user and assign privileges:
+CREATE USER ‘tp_app1’@'91.107.%' IDENTIFIED BY ‘tech’;
+ALTER USER 'tp_app1' IDENTIFIED WITH mysql_native_password BY 'tech';
 
 
 -> We need to change Mysql authentication to plain old password authentication because it by default uses cache authentication. Run this script in phpmyadmin (if errors out in phpmyadmin, go to mysql bash via terminal and then run the alter statement):
@@ -237,6 +250,14 @@ modify the A record for root and A record for www as follows:
 Type A, name: @, content: 103.212.120.231, Proxy: No (DNS only), TTL: Auto
 Type A, name: www, content: 103.212.120.231, Proxy: No (DNS only), TTL: Auto 
 
+Nameservers of clouflare for old sharingcloudbestpractices.com
+shane.ns.cloudflare.com
+zelda.ns.cloudflare.com
+
+New ones:
+leanna.ns.cloudflare.com
+rocky.ns.cloudflare.com
+
 /***** Wordpress setup *********/
 $ sudo docker pull wordpress
 $ sudo docker run --name ta-wp -e WORDPRESS_DB_HOST=172.17.0.2 -e WORDPRESS_DB_USER=tp_app1 -e WORDPRESS_DB_PASSWORD=tech -e WORDPRESS_DB_NAME=ta_profiledb -e WORDPRESS_TABLE_PREFIX=wp_ -p 8080:80 -d wordpress
@@ -247,9 +268,17 @@ sudo docker run --name ta-wp -e WORDPRESS_DB_HOST=172.17.0.2 -e WORDPRESS_DB_USE
 
 -----below are for references only-------------------------------------------------------------------------------
 
+/*****Node Js Dockerized************/
+$ sudo docker run --name ta-node -p 49160:8005 10101983/t_apps
+
+/*************End of Node Js Dockerization**************/
+
 git clone https://github.com/encasherr/tech-assessment.git
 enter username
 enter above personal access token
+
+zolahost personal access token:
+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
 
 To cache the given record in your computer to remembers the token:
 git config --global credential.helper cache
@@ -365,9 +394,9 @@ deluser <username>
 *******to install Docker:*********
 $ sudo apt update
 $ sudo apt install apt-transport-https ca-certificates curl software-properties-common
-$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+$ sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 $ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
-$ apt-cache policy docker-ce
+$ sudo apt-cache policy docker-ce
 $ sudo apt install docker-ce
 $ sudo systemctl status docker
 $ sudo docker run hello-world
@@ -392,3 +421,54 @@ Install git:
 sudo apt install -y
 Steps to Containerize a node js and mysql application:
 https://www.bezkoder.com/docker-compose-nodejs-mysql/
+
+/***********************MySql database backup and restore**************************/
+docker exec [mysql_container_name] /usr/bin/mysqldump -u [mysql_username] --password=[mysql_password] [database_name] > [destination_path]
+
+sudo docker exec ta-mysql /usr/bin/mysqldump -u [mysql_username] --password=[mysql_password] ta_profiledb > backup_19March.sql
+
+./gdrive upload backup_19March.sql
+
+/********************end of db backup & restore************************************/
+
+Nginx reverse proxy configuration:
+cd /
+sudo nano /etc/nginx/conf.d/91.107.226.228.conf
+# Paste the following:
+server {
+        listen 91.107.226.228:80 default_server;
+        server_name _;
+        access_log off;
+        error_log /dev/null;
+
+        location / {
+        #       proxy_pass http://91.107.226.228:8080;
+                proxy_pass http://127.0.0.1:3000;
+   }
+}
+
+server {
+        listen 91.107.226.228:443 default_server ssl;
+        server_name _;
+        access_log off;
+        error_log /dev/null;
+
+        ssl_certificate     /usr/local/hestia/ssl/certificate.crt;
+        ssl_certificate_key /usr/local/hestia/ssl/certificate.key;
+
+        return 301 http://$host$request_uri;
+
+        location / {
+                root /var/www/document_errors/;
+                proxy_pass http://127.0.0.1:3000;
+        }
+
+        location /error/ {
+                alias /var/www/document_errors/;
+        }
+}
+# until here
+
+Node App startup command with environment variables:
+tp_app1@server:~/tech-assessment/wwwroot$ MYSQL_HOST=172.17.0.2 MYSQL_USER=tp_app1 MYSQL_PASS=tech MYSQL_DB=ta_profiledb node app
+sudo nginx -s reload

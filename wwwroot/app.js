@@ -41,13 +41,14 @@ var _general = require("./utils/general");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // import CronScheduler from './commons/CronSheduler';
-
-var port_number = process.env.PORT || 3001;
+console.log("process.env.PORT: " + process.env.PORT);
+var port_number = process.env.PORT || 3001 || 8005;
 var app = (0, _express2.default)();
 
 app.server = _http2.default.createServer(app);
 app.use(_bodyParser2.default.json());
 app.use(_express2.default.static(_path2.default.join(__dirname)));
+app.use(_express2.default.static(_path2.default.resolve(__dirname + '/landing/')));
 
 app.use(_passport4.default.initialize());
 // app.use(CronScheduler);
@@ -75,8 +76,22 @@ app.use('/api', _routes2.default);
 global.appRoot = _path2.default.resolve(__dirname);
 console.log('global.appRoot', global.appRoot);
 
+app.use('/home', function (req, resp) {
+    // let fileName = path.resolve(__dirname + '/index.html');
+    var fileName = _path2.default.resolve(__dirname + '/landing/index.html');
+    console.log('request in /', fileName);
+    resp.sendFile(fileName);
+});
+
+// app.use('/tests', (req, resp) => {
+//     let fileName = path.resolve(__dirname + '/index.html');
+//     console.log('request in /', fileName);
+//     resp.sendFile(fileName);
+// });
+
 app.use('/*', function (req, resp) {
     var fileName = _path2.default.resolve(__dirname + '/index.html');
+    console.log('request in /*', fileName);
     resp.sendFile(fileName);
 });
 

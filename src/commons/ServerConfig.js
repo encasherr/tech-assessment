@@ -25,6 +25,9 @@ const EmailConfig = {
         if(!domainUrl) {
             domainUrl = 'http://localhost:3001'
         }
+        if(domainUrl.endsWith("/")) {
+            domainUrl = domainUrl.substring(0, domainUrl.length - 2);
+        }
         let verificationLink = `${domainUrl}/api/candidate/verifyUser?userIv=${encryptedObject.iv}&userContent=${encryptedObject.content}`;
         verificationLink = `${domainUrl}/verifyUser/${encryptedObject.iv}/${encryptedObject.content}`;
         return verificationLink;

@@ -1,0 +1,33 @@
+Dear Customer,
+We are pleased to tell you that the Cloud VPS -V1 you ordered has now been set up and is operational.
+
+Vesta Control Panel:
+-----------------------------------------------------
+https://91.107.226.228:8083/
+User: admin
+Password: 2ZVKt3UqNRchAh
+
+FTP Login:
+-----------------------------------------------------
+Host:91.107.226.228
+User: admin
+Password: 2ZVKt3UqNRchAh
+
+Name Servers:
+-----------------------------------------------------
+ns1
+ns2
+
+SSH Login:
+-----------------------------------------------------
+Host/IP: 91.107.226.228
+User: root
+Password: 2ZVKt3UqNRchAh
+Port: 22
+
+We would like to thank you for choosing ZolaHost services. Please don't hesitate to contact us if you have any help.
+
+Best Regards,
+ZolaHost.com
+
+sudo user: tp_app1 

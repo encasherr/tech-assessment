@@ -98,12 +98,14 @@ export const createPasswordHash = (plainPassword) => {
     return hash;
 }
 
-export const comparePasswordHash = (plainPassword, passwordHash) => {
+export const comparePasswordHash = (plainPassword, dbHash) => {
     let salt = bcrypt.genSaltSync(10);
-    let hash = bcrypt.hashSync(plainPassword, salt);
-    console.log('DBhash', passwordHash);
+    //let hash = bcrypt.hashSync(plainPassword, salt);
+    let hash = bcrypt.hashSync(plainPassword, bcrypt.getSalt(dbHash));
+    console.log('DBhash', dbHash);
     console.log('userhash', hash);
-    return bcrypt.compareSync(plainPassword, passwordHash);
+    console.log('dcrypt dbhash', bcrypt.getSalt(dbHash) );
+    return dbHash === hash;
 }
 
 // module.exports = {

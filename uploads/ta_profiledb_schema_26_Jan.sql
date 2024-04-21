@@ -74,7 +74,7 @@ CREATE TABLE `ta_config` (
 --
 
 INSERT INTO `ta_config` (`id`, `meta_key`, `meta_value`) VALUES
-(1, 'site_url', 'http://localhost:3000'),
+(1, 'site_url', 'http://tests.sharingcloudbestpractices.com'),
 (2, 'faq_link', '/candidateFaq/'),
 (3, 'admin_api', '/api/admin/'),
 (4, 'candidate_api', '/api/candidate/'),

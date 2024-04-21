@@ -76,7 +76,7 @@ export default function OpLoginSignup(props) {
                             onChange={(e, newVal) => setValue(newVal)}>
                         <LinkTab label="LOG IN" href="page1" />
                         <LinkTab disabled={false} label="SIGN UP" href="page2" />
-                        {/* <LinkTab disabled={false} label="INSTITUTE SIGN UP" href="page3" /> */}
+                        <LinkTab disabled={false} label="PARENT / INSTITUTE SIGN UP" href="page3" />
                     </Tabs>
                 </AppBar>
                 {value === 0 && 

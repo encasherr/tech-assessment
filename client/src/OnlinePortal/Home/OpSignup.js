@@ -8,11 +8,14 @@ import { AddUser, CurrentUserFieldChange,
      } from '../../actions/UserActions';
 import repository from '../../repository';
 
+import { SiteTitle, SellingCurrency } from '../lib/landingPage/CommonLayout'
+
 const OpSignup  = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [userType, setUserType] = useState('');
+    const [membershipType, setMembershipType] = useState('');
     const [signupButtonText, setSignupButtonText] = useState('SIGN UP');
     const [signupStatus, setSignupStatus] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
@@ -34,6 +37,9 @@ const OpSignup  = () => {
         }
         if(!userType) {
             errors.push('Select either Student or Professional')
+        }
+        if(!membershipType) {
+            errors.push('Select Membership Type')
         }
         if(name && name.length < 5) {
             errors.push('Please enter valid name');
@@ -58,7 +64,8 @@ const OpSignup  = () => {
             name: name,
             emailId: email,
             password: password,
-            role: userType
+            role: userType,
+            membershipType: membershipType
         }
         setSignupButtonText('Working..');
         let model ={
@@ -78,7 +85,8 @@ const OpSignup  = () => {
 
         return (
             <div>
-                <div className="row">
+                <h1 className="logo me-auto text-center"><a href="/home">{SiteTitle}</a></h1>
+                <div className="row mt-5">
                     <div className="col-md-12">
                     {signupStatus && signupStatus === 'success' &&
                         <div className="alert alert-success">
@@ -91,63 +99,111 @@ const OpSignup  = () => {
                         </div>
                     }
                     {signupStatus !== 'success' &&
-                        <div className="card">
-                        <div className="card-body">
-                            <form noValidate autoComplete="off" onSubmit={(e) => localHandler(e)}>
-                                {/* <div className="row">
-                                    <h2 className="col-md-12 text-center">Sign Up</h2>
-                                </div> */}
+                        <div className="container bg-light">
+
+                            <div className="signup-section">
                                 <div className="row">
-                                    <FormControl variant="outlined" className="col-md-12" >
-                                        <TextField
-                                            id="outlined-name"
-                                            label="Full Name"
-                                            value={name}
-                                            onChange={(e) => setName(e.target.value)}
-                                            margin="normal"
-                                            variant="outlined"
-                                        />
-                                    </FormControl>
+                                    <div className="col-md-6 signup-form">
+
+                                        <form noValidate autoComplete="off" onSubmit={(e) => localHandler(e)}>
+                                            <div className="row">
+                                                <FormControl variant="outlined" className="col-md-12" >
+                                                    <TextField
+                                                        id="outlined-name"
+                                                        label="Full Name"
+                                                        value={name}
+                                                        onChange={(e) => setName(e.target.value)}
+                                                        margin="normal"
+                                                        variant="outlined"
+                                                    />
+                                                </FormControl>
+                                            </div>
+                                            <div className="row">
+                                                <FormControl className="col-md-12" variant="outlined">
+                                                    <TextField
+                                                        label="Email Id"
+                                                        value={email}
+                                                        onChange={(e) => setEmail(e.target.value)}
+                                                        margin="normal"
+                                                        variant="outlined"
+                                                        className="text-lg"
+                                                    />
+                                                </FormControl>
+                                            </div>
+                                            <div className="row">
+                                                <FormControl className="col-md-12" variant="outlined">
+                                                    <TextField
+                                                        label="Password"
+                                                        type="password"
+                                                        value={password}
+                                                        onChange={(e) => setPassword(e.target.value)}
+                                                        margin="normal"
+                                                        variant="outlined" />
+                                                </FormControl>
+                                            </div>
+                                            <div className="row">
+                                                <FormControl className="col-md-12" variant="outlined">
+                                                    {/* <FormLabel component="legend">Pop quiz: Material-UI is...</FormLabel> */}
+                                                    <RadioGroup aria-label="quiz" name="quiz" value={userType} 
+                                                                onChange={(e) => setUserType(e.target.value)}>
+                                                        <FormControlLabel value="student" control={<Radio />} label="Student" />
+                                                        <FormControlLabel value="candidate" control={<Radio />} label="Professional" />
+                                                    </RadioGroup>
+                                                </FormControl>
+                                            </div>
+                                            <div className="row mt-4">
+                                                <button className="btn btn-primary btn-block" type="submit">
+                                                    {signupButtonText}
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div className="col-md-6 membership-form">
+                                        <FormControl className="col-md-12" variant="outlined">
+                                            {/* <FormLabel component="legend">Pop quiz: Material-UI is...</FormLabel> */}
+                                            {console.log('membership:', membershipType)}
+                                            <RadioGroup aria-label="quiz" name="quiz" value={membershipType} 
+                                                        onChange={(e) => console.log('changed') }>
+                                                <FormControlLabel onClick={() => setMembershipType('basic')} className={`list-group-item ${membershipType==='basic' ? 'selected' : ''}`} value="basic" 
+                                                    control={<div className="row">
+                                                                {/* <div className="col-md-2"><Radio /></div> */}
+                                                                <div className="col-md-12">
+                                                            <h4>Basic</h4> 
+                                                            <h5>Free Plan. No Charges. Free Forever.</h5>
+                                                            <ul>
+                                                                <li>25 Exams per month</li>
+                                                                <li>3 Candidates</li>
+                                                            </ul>
+                                                            </div>
+                                                            </div>} />
+                                                <FormControlLabel onClick={() => setMembershipType('premium')} className={`list-group-item ${membershipType==='premium' ? 'selected' : ''}`} value="premium" 
+                                                    control={<div className="row">
+                                                                {/* <div className="col-md-2"><Radio /></div> */}
+                                                                <div className="col-md-12">
+                                                            <h4>Premium</h4> 
+                                                            <h5><span dangerouslySetInnerHTML={{ __html: SellingCurrency }}></span>&nbsp;1000<span> / month</span></h5>
+                                                            <ul>
+                                                                <li>500 Exams per month</li>
+                                                                <li>1000 Candidates</li>
+                                                            </ul>
+                                                            </div>
+                                                            </div>} />
+                                                <FormControlLabel onClick={() => setMembershipType('ultimate')} className={`list-group-item ${membershipType==='ultimate' ? 'selected' : ''}`} value="ultimate" 
+                                                    control={<div className="row">
+                                                                {/* <div className="col-md-2"><Radio /></div> */}
+                                                                <div className="col-md-12">
+                                                                <h4>Unlimited</h4> 
+                                                            <h5><span dangerouslySetInnerHTML={{ __html: SellingCurrency }}></span>&nbsp;5000<span> / month</span></h5>
+                                                            <ul>
+                                                                <li>Unlimited Exams per month</li>
+                                                                <li>Unlimited Candidates</li>
+                                                            </ul>
+                                                            </div>
+                                                            </div>} />
+                                            </RadioGroup>
+                                        </FormControl>
+                                    </div>
                                 </div>
-                                <div className="row">
-                                    <FormControl className="col-md-12" variant="outlined">
-                                        <TextField
-                                            label="Email Id"
-                                            value={email}
-                                            onChange={(e) => setEmail(e.target.value)}
-                                            margin="normal"
-                                            variant="outlined"
-                                            className="text-lg"
-                                        />
-                                    </FormControl>
-                                </div>
-                                <div className="row">
-                                    <FormControl className="col-md-12" variant="outlined">
-                                        <TextField
-                                            label="Password"
-                                            type="password"
-                                            value={password}
-                                            onChange={(e) => setPassword(e.target.value)}
-                                            margin="normal"
-                                            variant="outlined" />
-                                    </FormControl>
-                                </div>
-                                <div className="row">
-                                    <FormControl className="col-md-12" variant="outlined">
-                                        {/* <FormLabel component="legend">Pop quiz: Material-UI is...</FormLabel> */}
-                                        <RadioGroup aria-label="quiz" name="quiz" value={userType} 
-                                                    onChange={(e) => setUserType(e.target.value)}>
-                                            <FormControlLabel value="student" control={<Radio />} label="Student" />
-                                            <FormControlLabel value="candidate" control={<Radio />} label="Professional" />
-                                        </RadioGroup>
-                                    </FormControl>
-                                </div>
-                                <div className="row mt-4">
-                                    <button className="btn btn-primary btn-block" type="submit">
-                                        {signupButtonText}
-                                    </button>
-                                </div>
-                                </form>
                             </div>
                         <pre className="col-md-12 text-danger">{errorMessage}</pre>
                         </div>

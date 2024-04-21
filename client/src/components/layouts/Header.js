@@ -53,7 +53,10 @@ const Header = (props) => {
                     </IconButton>
                 }
             <Typography  style={styles.paddingLeft} variant="h6" color="inherit" noWrap>
-                    <a href={config.instance.getValue('site_url')} style={{color: '#fff'}}>
+                    {/* <a href={config.instance.getValue('site_url')} style={{color: '#fff'}}>
+                        {config.instance.getValue('site_title')}
+                    </a> */}
+                    <a href={config.instance.getSiteHomeUrl()} style={{color: '#fff'}}>
                         {config.instance.getValue('site_title')}
                     </a>
             </Typography>
